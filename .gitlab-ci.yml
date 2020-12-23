@@ -277,7 +277,7 @@ Test:Sonarcube:
     - cat /sys/fs/cgroup/memory/memory.limit_in_bytes
     - java -XX:+PrintFlagsFinal -version | grep -Ei "maxheapsize|maxram"
     - mvn -ntp -q --fail-at-end clean install
-    - mvn -ntp -q sonar:sonar -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_TOKEN}
+    - mvn -ntp sonar:sonar -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_TOKEN} -Dorg.slf4j.simpleLogger.defaultLogLevel=error
   variables:
     TESTCONTAINERS_RYUK_DISABLED: "true"
 
