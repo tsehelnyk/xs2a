@@ -30,13 +30,11 @@ import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
+import de.adorsys.psd2.xs2a.service.SpiService;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.consent.Xs2aPiisConsentService;
-import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
 import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPiisConsentMapper;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
-import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiCheckConfirmationCodeRequest;
@@ -75,9 +73,7 @@ class PiisAuthorisationConfirmationServiceTest {
     @Mock
     private AspspProfileServiceWrapper aspspProfileServiceWrapper;
     @Mock
-    private SpiContextDataProvider spiContextDataProvider;
-    @Mock
-    private SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory;
+    private SpiService spiService;
     @Mock
     private Xs2aAuthorisationService authorisationService;
     @Mock
@@ -86,8 +82,6 @@ class PiisAuthorisationConfirmationServiceTest {
     private PiisConsentSpi piisConsentSpi;
     @Mock
     private Xs2aToSpiPiisConsentMapper piisConsentMapper;
-    @Mock
-    private SpiErrorMapper spiErrorMapper;
     @Mock
     private AuthorisationServiceEncrypted authorisationServiceEncrypted;
     @Mock
@@ -115,9 +109,9 @@ class PiisAuthorisationConfirmationServiceTest {
         when(piisConsentService.getPiisConsentById(CONSENT_ID))
             .thenReturn(Optional.of(consent));
         when(aspspProfileServiceWrapper.isAuthorisationConfirmationCheckByXs2a()).thenReturn(false);
-        when(spiContextDataProvider.provideWithPsuIdData(psuIdData))
+        when(spiService.provideWithPsuIdData(psuIdData))
             .thenReturn(contextData);
-        when(aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(CONSENT_ID))
+        when(spiService.getSpiAspspDataProviderFor(CONSENT_ID))
             .thenReturn(aspspConsentDataProvider);
         when(piisConsentSpi.checkConfirmationCode(contextData, spiCheckConfirmationCodeRequest, aspspConsentDataProvider))
             .thenReturn(SpiResponse.<SpiConsentConfirmationCodeValidationResponse>builder()
@@ -316,12 +310,12 @@ class PiisAuthorisationConfirmationServiceTest {
         PiisConsent consent = createConsent();
         SpiContextData contextData = getSpiContextData();
         when(piisConsentService.getPiisConsentById(CONSENT_ID)).thenReturn(Optional.of(consent));
-        when(spiContextDataProvider.provideWithPsuIdData(buildPsuIdData())).thenReturn(contextData);
+        when(spiService.provideWithPsuIdData(buildPsuIdData())).thenReturn(contextData);
         when(piisConsentMapper.mapToSpiPiisConsent(consent)).thenReturn(spiPiisConsent);
-        when(aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(CONSENT_ID)).thenReturn(aspspConsentDataProvider);
+        when(spiService.getSpiAspspDataProviderFor(CONSENT_ID)).thenReturn(aspspConsentDataProvider);
         SpiResponse<SpiConsentConfirmationCodeValidationResponse> spiResponse = SpiResponse.<SpiConsentConfirmationCodeValidationResponse>builder().error(new TppMessage(SCA_INVALID)).build();
         when(piisConsentSpi.notifyConfirmationCodeValidation(contextData, false, spiPiisConsent, aspspConsentDataProvider)).thenReturn(spiResponse);
-        when(spiErrorMapper.mapToErrorHolder(spiResponse, ServiceType.PIIS)).thenReturn(errorHolder);
+        when(spiService.mapToErrorHolder(spiResponse, ServiceType.PIIS)).thenReturn(errorHolder);
 
         // when
         ResponseObject<UpdateConsentPsuDataResponse> actualResult = piisAuthorisationConfirmationService.processAuthorisationConfirmation(request);
@@ -359,13 +353,13 @@ class PiisAuthorisationConfirmationServiceTest {
         when(piisConsentService.getPiisConsentById(CONSENT_ID))
             .thenReturn(Optional.of(consent));
         when(aspspProfileServiceWrapper.isAuthorisationConfirmationCheckByXs2a()).thenReturn(false);
-        when(spiContextDataProvider.provideWithPsuIdData(psuIdData))
+        when(spiService.provideWithPsuIdData(psuIdData))
             .thenReturn(contextData);
-        when(aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(CONSENT_ID))
+        when(spiService.getSpiAspspDataProviderFor(CONSENT_ID))
             .thenReturn(aspspConsentDataProvider);
         when(piisConsentSpi.checkConfirmationCode(contextData, spiCheckConfirmationCodeRequest, aspspConsentDataProvider))
             .thenReturn(spiResponse);
-        when(spiErrorMapper.mapToErrorHolder(spiResponse, ServiceType.PIIS)).thenReturn(errorHolder);
+        when(spiService.mapToErrorHolder(spiResponse, ServiceType.PIIS)).thenReturn(errorHolder);
 
         // when
         ResponseObject<UpdateConsentPsuDataResponse> actualResult = piisAuthorisationConfirmationService.processAuthorisationConfirmation(request);
@@ -419,9 +413,9 @@ class PiisAuthorisationConfirmationServiceTest {
         SpiContextData contextData = getSpiContextData();
 
         when(piisConsentService.getPiisConsentById(CONSENT_ID)).thenReturn(Optional.of(consent));
-        when(spiContextDataProvider.provideWithPsuIdData(buildPsuIdData())).thenReturn(contextData);
+        when(spiService.provideWithPsuIdData(buildPsuIdData())).thenReturn(contextData);
         when(piisConsentMapper.mapToSpiPiisConsent(consent)).thenReturn(spiPiisConsent);
-        when(aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(CONSENT_ID)).thenReturn(aspspConsentDataProvider);
+        when(spiService.getSpiAspspDataProviderFor(CONSENT_ID)).thenReturn(aspspConsentDataProvider);
 
         return confirmationCodeValidationResult
                    ? new SpiConsentConfirmationCodeValidationResponse(ScaStatus.FINALISED, ConsentStatus.VALID)

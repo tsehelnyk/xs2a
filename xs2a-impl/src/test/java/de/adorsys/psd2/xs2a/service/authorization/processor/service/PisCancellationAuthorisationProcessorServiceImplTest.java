@@ -23,19 +23,17 @@ import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
+import de.adorsys.psd2.xs2a.service.PaymentServicesHolder;
+import de.adorsys.psd2.xs2a.service.PisMappersHolder;
+import de.adorsys.psd2.xs2a.service.SpiService;
+import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorRequest;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.PisAuthorisationProcessorRequest;
-import de.adorsys.psd2.xs2a.service.consent.Xs2aPisCommonPaymentService;
-import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiToXs2aCurrencyConversionInfoMapper;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPaymentMapper;
-import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiCurrencyConversionInfo;
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiAmount;
 import de.adorsys.psd2.xs2a.spi.domain.payment.SpiSinglePayment;
 import de.adorsys.psd2.xs2a.spi.domain.response.SpiResponse;
-import de.adorsys.psd2.xs2a.spi.service.CurrencyConversionInfoSpi;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -62,17 +60,13 @@ class PisCancellationAuthorisationProcessorServiceImplTest {
     @InjectMocks
     private PisCancellationAuthorisationProcessorServiceImpl pisCancellationAuthorisationProcessorService;
     @Mock
-    private CurrencyConversionInfoSpi currencyConversionInfoSpi;
+    private SpiService spiService;
     @Mock
-    private SpiToXs2aCurrencyConversionInfoMapper spiToXs2aCurrencyConversionInfoMapper;
+    private PaymentServicesHolder paymentServicesHolder;
     @Mock
-    private Xs2aPisCommonPaymentService xs2aPisCommonPaymentService;
+    private Xs2aAuthorisationService xs2aAuthorisationService;
     @Mock
-    private Xs2aToSpiPaymentMapper xs2aToSpiPaymentMapper;
-    @Mock
-    private SpiContextDataProvider spiContextDataProvider;
-    @Mock
-    private SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory;
+    private PisMappersHolder pisMappersHolder;
 
     @Test
     void doScaExempted_success() {
@@ -92,12 +86,12 @@ class PisCancellationAuthorisationProcessorServiceImplTest {
     void doScaFinalised_success() {
         // Given
         PisCommonPaymentResponse pisCommonPaymentResponse = new PisCommonPaymentResponse();
-        when(xs2aPisCommonPaymentService.getPisCommonPaymentById(TEST_PAYMENT_ID)).thenReturn(Optional.of(pisCommonPaymentResponse));
-        when(xs2aToSpiPaymentMapper.mapToSpiPayment(pisCommonPaymentResponse)).thenReturn(new SpiSinglePayment("sepa-credit-transfers"));
+        when(paymentServicesHolder.getPisCommonPaymentById(TEST_PAYMENT_ID)).thenReturn(Optional.of(pisCommonPaymentResponse));
+        when(pisMappersHolder.mapToSpiPayment(pisCommonPaymentResponse)).thenReturn(new SpiSinglePayment("sepa-credit-transfers"));
 
         SpiAmount spiAmount = new SpiAmount(Currency.getInstance("EUR"), BigDecimal.valueOf(34));
         SpiCurrencyConversionInfo spiCurrencyConversionInfo = new SpiCurrencyConversionInfo(spiAmount, spiAmount, spiAmount, spiAmount);
-        when(currencyConversionInfoSpi.getCurrencyConversionInfo(any(), any(), any(), any()))
+        when(paymentServicesHolder.getCurrencyConversionInfo(any(), any(), any(), any()))
             .thenReturn(SpiResponse.<SpiCurrencyConversionInfo>builder()
                             .payload(spiCurrencyConversionInfo)
                             .build());

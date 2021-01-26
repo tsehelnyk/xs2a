@@ -24,18 +24,14 @@ import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
+import de.adorsys.psd2.xs2a.service.ConsentMappersHolder;
+import de.adorsys.psd2.xs2a.service.PiisServicesHolder;
+import de.adorsys.psd2.xs2a.service.SpiService;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
-import de.adorsys.psd2.xs2a.service.authorization.piis.CommonDecoupledPiisService;
 import de.adorsys.psd2.xs2a.service.authorization.piis.PiisAuthorizationService;
 import de.adorsys.psd2.xs2a.service.authorization.piis.PiisScaAuthorisationService;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorRequest;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
-import de.adorsys.psd2.xs2a.service.consent.Xs2aPiisConsentService;
-import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPiisConsentMapper;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPsuDataMapper;
-import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiAuthorizationCodeResult;
@@ -44,7 +40,6 @@ import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiPsuAuthorisationResponse
 import de.adorsys.psd2.xs2a.spi.domain.consent.SpiVerifyScaAuthorisationResponse;
 import de.adorsys.psd2.xs2a.spi.domain.psu.SpiPsuData;
 import de.adorsys.psd2.xs2a.spi.domain.response.SpiResponse;
-import de.adorsys.psd2.xs2a.spi.service.PiisConsentSpi;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,30 +48,19 @@ import java.util.Optional;
 @Service
 public class PiisAuthorisationProcessorServiceImpl extends ConsentAuthorisationProcessorService<PiisConsent> {
     private final List<PiisAuthorizationService> services;
-    private final Xs2aPiisConsentService piisConsentService;
-    private final PiisConsentSpi piisConsentSpi;
-    private final Xs2aToSpiPiisConsentMapper xs2aToSpiPiisConsentMapper;
-    private final CommonDecoupledPiisService commonDecoupledPiisService;
+    private final PiisServicesHolder piisServicesHolder;
     private final PiisScaAuthorisationService piisScaAuthorisationService;
+    private final ConsentMappersHolder consentMappersHolder;
 
-    public PiisAuthorisationProcessorServiceImpl(Xs2aAuthorisationService authorisationService,
-                                                 SpiContextDataProvider spiContextDataProvider,
-                                                 SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory,
-                                                 SpiErrorMapper spiErrorMapper,
-                                                 Xs2aToSpiPsuDataMapper psuDataMapper,
-                                                 List<PiisAuthorizationService> services,
-                                                 Xs2aPiisConsentService piisConsentService,
-                                                 PiisConsentSpi piisConsentSpi,
-                                                 Xs2aToSpiPiisConsentMapper xs2aToSpiPiisConsentMapper,
-                                                 CommonDecoupledPiisService commonDecoupledPiisService,
+    public PiisAuthorisationProcessorServiceImpl(Xs2aAuthorisationService authorisationService, SpiService spiService,
+                                                 ConsentMappersHolder consentMappersHolder, List<PiisAuthorizationService> services,
+                                                 PiisServicesHolder piisServicesHolder,
                                                  PiisScaAuthorisationService piisScaAuthorisationService) {
-        super(authorisationService, spiContextDataProvider, aspspConsentDataProviderFactory, spiErrorMapper, psuDataMapper);
+        super(authorisationService, spiService, consentMappersHolder);
         this.services = services;
-        this.piisConsentService = piisConsentService;
-        this.piisConsentSpi = piisConsentSpi;
-        this.xs2aToSpiPiisConsentMapper = xs2aToSpiPiisConsentMapper;
-        this.commonDecoupledPiisService = commonDecoupledPiisService;
+        this.piisServicesHolder = piisServicesHolder;
         this.piisScaAuthorisationService = piisScaAuthorisationService;
+        this.consentMappersHolder = consentMappersHolder;
     }
 
     @Override
@@ -107,12 +91,12 @@ public class PiisAuthorisationProcessorServiceImpl extends ConsentAuthorisationP
 
     @Override
     void updateConsentStatus(String consentId, ConsentStatus responseConsentStatus) {
-        piisConsentService.updateConsentStatus(consentId, responseConsentStatus);
+        piisServicesHolder.updateConsentStatus(consentId, responseConsentStatus);
     }
 
     @Override
     void updateMultilevelScaRequired(String consentId, boolean multilevelScaRequired) {
-        piisConsentService.updateMultilevelScaRequired(consentId, true);
+        piisServicesHolder.updateMultilevelScaRequired(consentId, true);
     }
 
     @Override
@@ -122,35 +106,35 @@ public class PiisAuthorisationProcessorServiceImpl extends ConsentAuthorisationP
 
     @Override
     SpiResponse<SpiVerifyScaAuthorisationResponse> verifyScaAuthorisation(SpiContextData spiContextData, UpdateAuthorisationRequest request, PsuIdData psuData, PiisConsent consent, SpiAspspConsentDataProvider spiAspspConsentDataProvider) {
-        return piisConsentSpi.verifyScaAuthorisation(spiContextData,
-                                                     xs2aToSpiPiisConsentMapper.toSpiScaConfirmation(request, psuData),
-                                                     xs2aToSpiPiisConsentMapper.mapToSpiPiisConsent(consent),
-                                                     spiAspspConsentDataProvider);
+        return piisServicesHolder.verifyScaAuthorisation(spiContextData,
+                                                         consentMappersHolder.toSpiScaConfirmation(request, psuData),
+                                                         consentMappersHolder.mapToSpiPiisConsent(consent),
+                                                         spiAspspConsentDataProvider);
     }
 
     @Override
     UpdateConsentPsuDataResponse proceedDecoupledApproach(String consentId, String authorisationId, PiisConsent consent, String authenticationMethodId, PsuIdData psuData) {
-        return commonDecoupledPiisService.proceedDecoupledApproach(consentId, authorisationId,
-                                                                   xs2aToSpiPiisConsentMapper.mapToSpiPiisConsent(consent),
-                                                                   authenticationMethodId, psuData);
+        return piisServicesHolder.proceedDecoupledApproach(consentId, authorisationId,
+                                                           consentMappersHolder.mapToSpiPiisConsent(consent),
+                                                           authenticationMethodId, psuData);
     }
 
     @Override
     Optional<PiisConsent> getConsentByIdFromCms(String consentId) {
-        return piisConsentService.getPiisConsentById(consentId);
+        return piisServicesHolder.getPiisConsentById(consentId);
     }
 
     @Override
     SpiResponse<SpiAuthorizationCodeResult> requestAuthorisationCode(SpiContextData spiContextData, String authenticationMethodId, PiisConsent consent, SpiAspspConsentDataProvider spiAspspConsentDataProvider) {
-        return piisConsentSpi.requestAuthorisationCode(spiContextData,
-                                                       authenticationMethodId,
-                                                       xs2aToSpiPiisConsentMapper.mapToSpiPiisConsent(consent),
-                                                       spiAspspConsentDataProvider);
+        return piisServicesHolder.requestAuthorisationCode(spiContextData,
+                                                           authenticationMethodId,
+                                                           consentMappersHolder.mapToSpiPiisConsent(consent),
+                                                           spiAspspConsentDataProvider);
     }
 
     @Override
     UpdateConsentPsuDataResponse proceedDecoupledApproach(String consentId, String authorisationId, PiisConsent consent, PsuIdData psuData) {
-        return commonDecoupledPiisService.proceedDecoupledApproach(consentId, authorisationId,  xs2aToSpiPiisConsentMapper.mapToSpiPiisConsent(consent), psuData);
+        return piisServicesHolder.proceedDecoupledApproach(consentId, authorisationId, consentMappersHolder.mapToSpiPiisConsent(consent), psuData);
     }
 
     @Override
@@ -160,18 +144,18 @@ public class PiisAuthorisationProcessorServiceImpl extends ConsentAuthorisationP
 
     @Override
     SpiResponse<SpiPsuAuthorisationResponse> authorisePsu(SpiContextData spiContextData, String authorisationId, SpiPsuData spiPsuData, String password, PiisConsent consent, SpiAspspConsentDataProvider spiAspspConsentDataProvider) {
-        return piisConsentSpi.authorisePsu(spiContextData,
-                                           authorisationId,
-                                           spiPsuData,
-                                           password,
-                                           xs2aToSpiPiisConsentMapper.mapToSpiPiisConsent(consent),
-                                           spiAspspConsentDataProvider);
+        return piisServicesHolder.authorisePsu(spiContextData,
+                                               authorisationId,
+                                               spiPsuData,
+                                               password,
+                                               consentMappersHolder.mapToSpiPiisConsent(consent),
+                                               spiAspspConsentDataProvider);
     }
 
     @Override
     SpiResponse<SpiAvailableScaMethodsResponse> requestAvailableScaMethods(SpiContextData spiContextData, PiisConsent consent, SpiAspspConsentDataProvider spiAspspConsentDataProvider) {
-        return piisConsentSpi.requestAvailableScaMethods(spiContextData,
-                                                         xs2aToSpiPiisConsentMapper.mapToSpiPiisConsent(consent),
-                                                         spiAspspConsentDataProvider);
+        return piisServicesHolder.requestAvailableScaMethods(spiContextData,
+                                                             consentMappersHolder.mapToSpiPiisConsent(consent),
+                                                             spiAspspConsentDataProvider);
     }
 }

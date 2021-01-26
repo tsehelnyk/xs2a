@@ -30,13 +30,11 @@ import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
+import de.adorsys.psd2.xs2a.service.ConsentMappersHolder;
+import de.adorsys.psd2.xs2a.service.SpiService;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorRequest;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
-import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPsuDataMapper;
-import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiAuthorisationStatus;
@@ -55,20 +53,14 @@ public abstract class ConsentAuthorisationProcessorService<T extends Consent> ex
     private static final String CONSENT_NOT_FOUND_LOG_MESSAGE = "Apply authorisation when update consent PSU data has failed. Consent not found by id.";
 
     private final Xs2aAuthorisationService authorisationService;
-    private final SpiContextDataProvider spiContextDataProvider;
-    private final SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory;
-    private final SpiErrorMapper spiErrorMapper;
-    private final Xs2aToSpiPsuDataMapper psuDataMapper;
+    private final SpiService spiService;
+    private final ConsentMappersHolder consentMappersHolder;
 
     protected ConsentAuthorisationProcessorService(Xs2aAuthorisationService authorisationService,
-                                                SpiContextDataProvider spiContextDataProvider,
-                                                SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory,
-                                                SpiErrorMapper spiErrorMapper, Xs2aToSpiPsuDataMapper psuDataMapper) {
+                                                   SpiService spiService, ConsentMappersHolder consentMappersHolder) {
         this.authorisationService = authorisationService;
-        this.spiContextDataProvider = spiContextDataProvider;
-        this.aspspConsentDataProviderFactory = aspspConsentDataProviderFactory;
-        this.spiErrorMapper = spiErrorMapper;
-        this.psuDataMapper = psuDataMapper;
+        this.spiService = spiService;
+        this.consentMappersHolder = consentMappersHolder;
     }
 
     @Override
@@ -129,14 +121,14 @@ public abstract class ConsentAuthorisationProcessorService<T extends Consent> ex
 
         PsuIdData psuData = extractPsuIdData(request, authorisationProcessorRequest.getAuthorisation());
 
-        SpiResponse<SpiVerifyScaAuthorisationResponse> spiResponse = verifyScaAuthorisation(spiContextDataProvider.provideWithPsuIdData(psuData),
+        SpiResponse<SpiVerifyScaAuthorisationResponse> spiResponse = verifyScaAuthorisation(spiService.provideWithPsuIdData(psuData),
                                                                                             request,
                                                                                             psuData,
                                                                                             consent,
-                                                                                            aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(consentId));
+                                                                                            spiService.getSpiAspspDataProviderFor(consentId));
 
         if (spiResponse.hasError()) {
-            ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(spiResponse, getServiceType());
+            ErrorHolder errorHolder = spiService.mapToErrorHolder(spiResponse, getServiceType());
             writeErrorLog(authorisationProcessorRequest, request.getPsuData(), errorHolder, "Verify SCA authorisation failed when update PSU data.");
 
             SpiVerifyScaAuthorisationResponse spiAuthorisationResponse = spiResponse.getPayload();
@@ -178,14 +170,14 @@ public abstract class ConsentAuthorisationProcessorService<T extends Consent> ex
 
     private UpdateConsentPsuDataResponse proceedEmbeddedApproach(AuthorisationProcessorRequest authorisationProcessorRequest, String authenticationMethodId, T consent, PsuIdData psuData) {
         UpdateAuthorisationRequest request = authorisationProcessorRequest.getUpdateAuthorisationRequest();
-        SpiResponse<SpiAuthorizationCodeResult> spiResponse = requestAuthorisationCode(spiContextDataProvider.provideWithPsuIdData(psuData),
+        SpiResponse<SpiAuthorizationCodeResult> spiResponse = requestAuthorisationCode(spiService.provideWithPsuIdData(psuData),
                                                                                        authenticationMethodId,
                                                                                        consent,
-                                                                                       aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(request.getBusinessObjectId()));
+                                                                                       spiService.getSpiAspspDataProviderFor(request.getBusinessObjectId()));
 
 
         if (spiResponse.hasError()) {
-            ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(spiResponse, getServiceType());
+            ErrorHolder errorHolder = spiService.mapToErrorHolder(spiResponse, getServiceType());
             writeErrorLog(authorisationProcessorRequest, psuData, errorHolder, "Proceed embedded approach when performs authorisation depending on selected SCA method has failed.");
 
             Optional<MessageErrorCode> first = errorHolder.getFirstErrorCode();
@@ -220,22 +212,22 @@ public abstract class ConsentAuthorisationProcessorService<T extends Consent> ex
         Authorisation authorisation = authorisationProcessorRequest.getAuthorisation();
         PsuIdData psuData = extractPsuIdData(request, authorisation);
         T consent = consentOptional.get();
-        SpiResponse<SpiPsuAuthorisationResponse> authorisationStatusSpiResponse = authorisePsu(spiContextDataProvider.provideWithPsuIdData(psuData),
+        SpiResponse<SpiPsuAuthorisationResponse> authorisationStatusSpiResponse = authorisePsu(spiService.provideWithPsuIdData(psuData),
                                                                                                authorisation.getAuthorisationId(),
-                                                                                               psuDataMapper.mapToSpiPsuData(psuData),
+                                                                                               consentMappersHolder.mapToSpiPsuData(psuData),
                                                                                                request.getPassword(),
                                                                                                consent,
-                                                                                               aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(consentId));
+                                                                                               spiService.getSpiAspspDataProviderFor(consentId));
 
         if (authorisationStatusSpiResponse.hasError()) {
-            ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(authorisationStatusSpiResponse, getServiceType());
+            ErrorHolder errorHolder = spiService.mapToErrorHolder(authorisationStatusSpiResponse, getServiceType());
             writeErrorLog(authorisationProcessorRequest, psuData, errorHolder, "Authorise PSU when apply authorisation has failed.");
             return new UpdateConsentPsuDataResponse(errorHolder, consentId, authorisationId, psuData);
         }
 
         SpiPsuAuthorisationResponse spiAuthorisationResponse = authorisationStatusSpiResponse.getPayload();
         if (spiAuthorisationResponse.getSpiAuthorisationStatus() == SpiAuthorisationStatus.ATTEMPT_FAILURE) {
-            ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(authorisationStatusSpiResponse, getServiceType());
+            ErrorHolder errorHolder = spiService.mapToErrorHolder(authorisationStatusSpiResponse, getServiceType());
             return new UpdateConsentPsuDataResponse(authorisationProcessorRequest.getScaStatus(), errorHolder, consentId, authorisationId, psuData);
         }
 
@@ -261,12 +253,12 @@ public abstract class ConsentAuthorisationProcessorService<T extends Consent> ex
     }
 
     private UpdateConsentPsuDataResponse requestAvailableScaMethods(AuthorisationProcessorRequest authorisationProcessorRequest, String consentId, String authorisationId, PsuIdData psuData, T consent) {
-        SpiResponse<SpiAvailableScaMethodsResponse> spiResponse = requestAvailableScaMethods(spiContextDataProvider.provideWithPsuIdData(psuData),
+        SpiResponse<SpiAvailableScaMethodsResponse> spiResponse = requestAvailableScaMethods(spiService.provideWithPsuIdData(psuData),
                                                                                              consent,
-                                                                                             aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(consentId));
+                                                                                             spiService.getSpiAspspDataProviderFor(consentId));
 
         if (spiResponse.hasError()) {
-            ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(spiResponse, getServiceType());
+            ErrorHolder errorHolder = spiService.mapToErrorHolder(spiResponse, getServiceType());
             writeErrorLog(authorisationProcessorRequest, psuData, errorHolder, "Request available SCA methods when apply authorisation has failed.");
             return new UpdateConsentPsuDataResponse(errorHolder, consentId, authorisationId, psuData);
         }

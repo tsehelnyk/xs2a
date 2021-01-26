@@ -22,13 +22,11 @@ import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.service.authorization.ConsentAuthorisationConfirmationService;
+import de.adorsys.psd2.xs2a.service.SpiService;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.consent.Xs2aAisConsentService;
-import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
 import de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers.Xs2aAisConsentMapper;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
-import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiCheckConfirmationCodeRequest;
@@ -45,16 +43,12 @@ public class AisAuthorisationConfirmationService extends ConsentAuthorisationCon
     private final AisConsentSpi aisConsentSpi;
     private final Xs2aAisConsentMapper aisConsentMapper;
 
-    public AisAuthorisationConfirmationService(AspspProfileServiceWrapper aspspProfileServiceWrapper,
-                                               SpiContextDataProvider spiContextDataProvider,
-                                               SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory,
+    public AisAuthorisationConfirmationService(SpiService spiService, AspspProfileServiceWrapper aspspProfileServiceWrapper,
                                                Xs2aAuthorisationService authorisationService,
-                                               SpiErrorMapper spiErrorMapper,
                                                AuthorisationServiceEncrypted authorisationServiceEncrypted,
                                                Xs2aAisConsentService aisConsentService,
-                                               AisConsentSpi aisConsentSpi,
-                                               Xs2aAisConsentMapper aisConsentMapper) {
-        super(aspspProfileServiceWrapper, spiContextDataProvider, aspspConsentDataProviderFactory, authorisationService, spiErrorMapper, authorisationServiceEncrypted);
+                                               AisConsentSpi aisConsentSpi, Xs2aAisConsentMapper aisConsentMapper) {
+        super(spiService, aspspProfileServiceWrapper, authorisationService, authorisationServiceEncrypted);
         this.aisConsentService = aisConsentService;
         this.aisConsentSpi = aisConsentSpi;
         this.aisConsentMapper = aisConsentMapper;

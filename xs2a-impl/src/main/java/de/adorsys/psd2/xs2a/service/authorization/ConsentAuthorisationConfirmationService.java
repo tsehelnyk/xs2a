@@ -29,10 +29,8 @@ import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
-import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
+import de.adorsys.psd2.xs2a.service.SpiService;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
-import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiCheckConfirmationCodeRequest;
@@ -50,12 +48,9 @@ import static de.adorsys.psd2.xs2a.core.error.MessageErrorCode.SCA_INVALID;
 @Slf4j
 @RequiredArgsConstructor
 public abstract class ConsentAuthorisationConfirmationService<T extends Consent> {
-
+    private final SpiService spiService;
     private final AspspProfileServiceWrapper aspspProfileServiceWrapper;
-    private final SpiContextDataProvider spiContextDataProvider;
-    private final SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory;
     private final Xs2aAuthorisationService authorisationService;
-    private final SpiErrorMapper spiErrorMapper;
     private final AuthorisationServiceEncrypted authorisationServiceEncrypted;
 
     /**
@@ -110,11 +105,11 @@ public abstract class ConsentAuthorisationConfirmationService<T extends Consent>
             return buildConsentNotFoundErrorResponse(consentId, authorisationId, psuData);
         }
 
-        SpiAspspConsentDataProvider aspspConsentDataProvider = aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(consentId);
+        SpiAspspConsentDataProvider aspspConsentDataProvider = spiService.getSpiAspspDataProviderFor(consentId);
         boolean codeCorrect = checkConfirmationCodeInternally(authorisationId, request.getConfirmationCode(), confirmationCodeFromDb, aspspConsentDataProvider);
 
         SpiResponse<SpiConsentConfirmationCodeValidationResponse> spiResponse =
-            notifyConfirmationCodeValidation(spiContextDataProvider.provideWithPsuIdData(psuData),
+            notifyConfirmationCodeValidation(spiService.provideWithPsuIdData(psuData),
                                              codeCorrect, consentOptional.get(),
                                              aspspConsentDataProvider);
 
@@ -150,9 +145,9 @@ public abstract class ConsentAuthorisationConfirmationService<T extends Consent>
 
         SpiCheckConfirmationCodeRequest spiCheckConfirmationCodeRequest = new SpiCheckConfirmationCodeRequest(request.getConfirmationCode(), authorisationId);
 
-        SpiResponse<SpiConsentConfirmationCodeValidationResponse> spiResponse = checkConfirmationCode(spiContextDataProvider.provideWithPsuIdData(request.getPsuData()),
+        SpiResponse<SpiConsentConfirmationCodeValidationResponse> spiResponse = checkConfirmationCode(spiService.provideWithPsuIdData(request.getPsuData()),
                                                                                                       spiCheckConfirmationCodeRequest,
-                                                                                                      aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(consentId));
+                                                                                                      spiService.getSpiAspspDataProviderFor(consentId));
 
         UpdateConsentPsuDataResponse updateConsentPsuDataResponse;
         if (spiResponse.hasError()) {
@@ -183,7 +178,7 @@ public abstract class ConsentAuthorisationConfirmationService<T extends Consent>
 
     private UpdateConsentPsuDataResponse buildConfirmationCodeSpiErrorResponse(SpiResponse<SpiConsentConfirmationCodeValidationResponse> spiResponse,
                                                                                String consentId, String authorisationId, PsuIdData psuIdData) {
-        ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(spiResponse, getServiceType());
+        ErrorHolder errorHolder = spiService.mapToErrorHolder(spiResponse, getServiceType());
 
         log.info("Authorisation-ID: [{}]. Update consent PSU data failed: error occurred at SPI.", authorisationId);
 
