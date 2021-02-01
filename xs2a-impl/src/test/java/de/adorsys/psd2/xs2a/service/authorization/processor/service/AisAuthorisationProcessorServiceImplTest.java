@@ -1149,7 +1149,7 @@ class AisAuthorisationProcessorServiceImplTest {
     }
 
     @Test
-    void doScaPsuIdentified_withPsuAuthorisationRequest_withAttemptureFailedPsuAuthorisation_shouldReturnError() {
+    void doScaPsuIdentified_withPsuAuthorisationRequest_withAttemptFailedPsuAuthorisation_shouldReturnError() {
         // Given
         UpdateConsentPsuDataReq updateAuthorisationRequest = buildUpdateConsentPsuDataReq();
         updateAuthorisationRequest.setPassword(PSU_PASSWORD);
@@ -1195,6 +1195,7 @@ class AisAuthorisationProcessorServiceImplTest {
 
         verify(aisConsentSpi, never()).requestAvailableScaMethods(any(), any(), any());
         verify(aisConsentSpi, never()).requestAuthorisationCode(any(), any(), any(), any());
+        verify(xs2aAuthorisationService, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FAILED);
     }
 
     @Test

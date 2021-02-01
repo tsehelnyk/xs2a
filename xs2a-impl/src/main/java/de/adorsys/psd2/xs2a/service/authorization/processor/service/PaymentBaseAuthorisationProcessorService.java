@@ -165,6 +165,7 @@ abstract class PaymentBaseAuthorisationProcessorService extends BaseAuthorisatio
 
             SpiPaymentExecutionResponse spiPaymentResponse = spiResponse.getPayload();
             if (spiPaymentResponse != null && spiPaymentResponse.getSpiAuthorisationStatus() == SpiAuthorisationStatus.ATTEMPT_FAILURE) {
+                xs2aAuthorisationService.updateAuthorisationStatus(authorisationId, FAILED);
                 return new Xs2aUpdatePisCommonPaymentPsuDataResponse(authorisationProcessorRequest.getScaStatus(), errorHolder, paymentId, authorisationId, psuData);
             }
 
