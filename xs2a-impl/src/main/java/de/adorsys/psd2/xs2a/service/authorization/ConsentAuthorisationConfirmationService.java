@@ -29,7 +29,7 @@ import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
-import de.adorsys.psd2.xs2a.service.SpiService;
+import de.adorsys.psd2.xs2a.service.SpiCommonService;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
@@ -48,7 +48,7 @@ import static de.adorsys.psd2.xs2a.core.error.MessageErrorCode.SCA_INVALID;
 @Slf4j
 @RequiredArgsConstructor
 public abstract class ConsentAuthorisationConfirmationService<T extends Consent> {
-    private final SpiService spiService;
+    private final SpiCommonService spiService;
     private final AspspProfileServiceWrapper aspspProfileServiceWrapper;
     private final Xs2aAuthorisationService authorisationService;
     private final AuthorisationServiceEncrypted authorisationServiceEncrypted;

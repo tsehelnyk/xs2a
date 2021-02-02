@@ -29,7 +29,7 @@ import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuData
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.PaymentServicesHolder;
 import de.adorsys.psd2.xs2a.service.PisMappersHolder;
-import de.adorsys.psd2.xs2a.service.SpiService;
+import de.adorsys.psd2.xs2a.service.SpiCommonService;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.authorization.pis.PisScaAuthorisationService;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorRequest;
@@ -51,7 +51,7 @@ import static de.adorsys.psd2.xs2a.core.sca.ScaStatus.PSUAUTHENTICATED;
 @Service
 public class PisAuthorisationProcessorServiceImpl extends PaymentBaseAuthorisationProcessorService {
 
-    private final SpiService spiService;
+    private final SpiCommonService spiService;
     private final PaymentAuthorisationSpi paymentAuthorisationSpi;
     private final PisMappersHolder pisMappersHolder;
     private final Xs2aAuthorisationService xs2aAuthorisationService;
@@ -60,7 +60,7 @@ public class PisAuthorisationProcessorServiceImpl extends PaymentBaseAuthorisati
     public PisAuthorisationProcessorServiceImpl(List<PisScaAuthorisationService> services,
                                                 Xs2aAuthorisationService xs2aAuthorisationService,
                                                 PaymentServicesHolder paymentServicesHolder,
-                                                PisMappersHolder pisMappersHolder, SpiService spiService,
+                                                PisMappersHolder pisMappersHolder, SpiCommonService spiService,
                                                 PaymentAuthorisationSpi paymentAuthorisationSpi) {
         super(services, xs2aAuthorisationService, paymentServicesHolder, pisMappersHolder, spiService);
         this.spiService = spiService;

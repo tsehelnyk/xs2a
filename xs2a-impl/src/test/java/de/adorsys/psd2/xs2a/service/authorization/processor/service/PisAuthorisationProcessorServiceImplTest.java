@@ -35,7 +35,7 @@ import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuData
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.PaymentServicesHolder;
 import de.adorsys.psd2.xs2a.service.PisMappersHolder;
-import de.adorsys.psd2.xs2a.service.SpiService;
+import de.adorsys.psd2.xs2a.service.SpiCommonService;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.authorization.pis.DecoupledPisScaAuthorisationService;
 import de.adorsys.psd2.xs2a.service.authorization.pis.EmbeddedPisScaAuthorisationService;
@@ -92,7 +92,7 @@ class PisAuthorisationProcessorServiceImplTest {
     @Mock
     private Xs2aAuthorisationService xs2aAuthorisationService;
     @Mock
-    private SpiService spiService;
+    private SpiCommonService spiService;
     @Mock
     private PaymentAuthorisationSpi paymentAuthorisationSpi;
     @Mock

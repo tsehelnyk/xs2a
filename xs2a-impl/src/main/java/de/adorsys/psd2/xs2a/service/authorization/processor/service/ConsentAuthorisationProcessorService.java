@@ -31,7 +31,7 @@ import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.ConsentMappersHolder;
-import de.adorsys.psd2.xs2a.service.SpiService;
+import de.adorsys.psd2.xs2a.service.SpiCommonService;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorRequest;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
@@ -53,11 +53,11 @@ public abstract class ConsentAuthorisationProcessorService<T extends Consent> ex
     private static final String CONSENT_NOT_FOUND_LOG_MESSAGE = "Apply authorisation when update consent PSU data has failed. Consent not found by id.";
 
     private final Xs2aAuthorisationService authorisationService;
-    private final SpiService spiService;
+    private final SpiCommonService spiService;
     private final ConsentMappersHolder consentMappersHolder;
 
     protected ConsentAuthorisationProcessorService(Xs2aAuthorisationService authorisationService,
-                                                   SpiService spiService, ConsentMappersHolder consentMappersHolder) {
+                                                   SpiCommonService spiService, ConsentMappersHolder consentMappersHolder) {
         this.authorisationService = authorisationService;
         this.spiService = spiService;
         this.consentMappersHolder = consentMappersHolder;

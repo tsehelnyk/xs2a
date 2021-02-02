@@ -22,7 +22,7 @@ import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.service.authorization.ConsentAuthorisationConfirmationService;
-import de.adorsys.psd2.xs2a.service.SpiService;
+import de.adorsys.psd2.xs2a.service.SpiCommonService;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.consent.Xs2aPiisConsentService;
 import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPiisConsentMapper;
@@ -43,7 +43,7 @@ public class PiisAuthorisationConfirmationService extends ConsentAuthorisationCo
     private final PiisConsentSpi piisConsentSpi;
     private final Xs2aToSpiPiisConsentMapper piisConsentMapper;
 
-    public PiisAuthorisationConfirmationService(SpiService spiService, AspspProfileServiceWrapper aspspProfileServiceWrapper,
+    public PiisAuthorisationConfirmationService(SpiCommonService spiService, AspspProfileServiceWrapper aspspProfileServiceWrapper,
                                                 Xs2aAuthorisationService authorisationService,
                                                 AuthorisationServiceEncrypted authorisationServiceEncrypted,
                                                 Xs2aPiisConsentService xs2aPiisConsentService,
