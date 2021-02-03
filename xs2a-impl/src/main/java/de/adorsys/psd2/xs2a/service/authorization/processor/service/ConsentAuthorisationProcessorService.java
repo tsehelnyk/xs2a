@@ -161,7 +161,6 @@ public abstract class ConsentAuthorisationProcessorService<T extends Consent> ex
 
     private AuthorisationProcessorResponse getSpiErrorResponse(AuthorisationProcessorRequest authorisationProcessorRequest, String consentId, String authorisationId, PsuIdData psuData, ErrorHolder errorHolder, SpiVerifyScaAuthorisationResponse spiAuthorisationResponse) {
         if (spiAuthorisationResponse != null && spiAuthorisationResponse.getSpiAuthorisationStatus() == SpiAuthorisationStatus.ATTEMPT_FAILURE) {
-            authorisationService.updateAuthorisationStatus(authorisationId, ScaStatus.FAILED);
             return new UpdateConsentPsuDataResponse(authorisationProcessorRequest.getScaStatus(), errorHolder, consentId, authorisationId, psuData);
         }
 
@@ -239,7 +238,6 @@ public abstract class ConsentAuthorisationProcessorService<T extends Consent> ex
         SpiPsuAuthorisationResponse spiAuthorisationResponse = authorisationStatusSpiResponse.getPayload();
         if (spiAuthorisationResponse.getSpiAuthorisationStatus() == SpiAuthorisationStatus.ATTEMPT_FAILURE) {
             ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(authorisationStatusSpiResponse, getServiceType());
-            authorisationService.updateAuthorisationStatus(authorisationId, ScaStatus.FAILED);
             return new UpdateConsentPsuDataResponse(authorisationProcessorRequest.getScaStatus(), errorHolder, consentId, authorisationId, psuData);
         }
 

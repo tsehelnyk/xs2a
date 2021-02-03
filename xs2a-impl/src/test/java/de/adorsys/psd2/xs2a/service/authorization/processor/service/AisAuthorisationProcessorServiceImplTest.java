@@ -1195,7 +1195,6 @@ class AisAuthorisationProcessorServiceImplTest {
 
         verify(aisConsentSpi, never()).requestAvailableScaMethods(any(), any(), any());
         verify(aisConsentSpi, never()).requestAuthorisationCode(any(), any(), any(), any());
-        verify(xs2aAuthorisationService, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FAILED);
     }
 
     @Test

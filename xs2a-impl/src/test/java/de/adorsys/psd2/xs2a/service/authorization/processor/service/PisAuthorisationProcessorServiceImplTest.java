@@ -1448,8 +1448,6 @@ class PisAuthorisationProcessorServiceImplTest {
         assertThat(actual.getPaymentId()).isEqualTo(TEST_PAYMENT_ID);
         assertThat(actual.getPsuData()).isEqualTo(TEST_PSU_DATA);
         verify(spiErrorMapper).mapToErrorHolder(any(), any());
-
-        verify(xs2aAuthorisationService, times(1)).updateAuthorisationStatus(TEST_AUTHORISATION_ID, ScaStatus.FAILED);
     }
 
     @Test

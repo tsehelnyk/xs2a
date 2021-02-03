@@ -4,7 +4,6 @@
 
 * Improved decoupled approach
 * Updated mapstruct version to 1.4.1.RELEASE
-* Bugfix: Updated authorisation status after ATTEMPT_FAILURE
 
 == Improved decoupled approach
 
@@ -14,7 +13,3 @@ Response SCA status will be retrieved from SPI level.
 == Updated mapstruct version to 1.4.1.RELEASE
 
 Mapstruct version was updated to 1.4.1.RELEASE.
-
-== Bugfix: Updated authorisation status after ATTEMPT_FAILURE
-
-From now on, when ASPSP returns `ATTEMPT_FAILURE` status, SCA status of authorisation in CMS will be set as `FAILED`.
