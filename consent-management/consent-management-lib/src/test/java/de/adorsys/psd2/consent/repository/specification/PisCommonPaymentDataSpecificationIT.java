@@ -98,12 +98,13 @@ class PisCommonPaymentDataSpecificationIT extends BaseTest {
         OffsetDateTime from = pisCommonPaymentData.getCreationTimestamp().minusDays(1);
         OffsetDateTime to = pisCommonPaymentData.getCreationTimestamp().plusMinutes(1);
         List<PisCommonPaymentData> actual = pisCommonPaymentDataRepository.findAll(
-            pisCommonPaymentDataSpecification.byTppIdAndCreationPeriodAndPsuIdDataAndInstanceId(
+            pisCommonPaymentDataSpecification.byTppIdAndCreationPeriodAndPsuIdDataAndInstanceIdAndAdditionalTppInfo(
                 TPP_AUTHORISATION_NUMBER,
                 from.toLocalDate(),
                 to.toLocalDate(),
                 psuIdData,
-                INSTANCE_ID
+                INSTANCE_ID,
+                null
             )
         );
 
@@ -123,11 +124,12 @@ class PisCommonPaymentDataSpecificationIT extends BaseTest {
         OffsetDateTime from = pisCommonPaymentData.getCreationTimestamp().minusMinutes(1);
         OffsetDateTime to = pisCommonPaymentData.getCreationTimestamp().plusMinutes(1);
         List<PisCommonPaymentData> actual = pisCommonPaymentDataRepository.findAll(
-            pisCommonPaymentDataSpecification.byPsuIdDataAndCreationPeriodAndInstanceId(
+            pisCommonPaymentDataSpecification.byPsuIdDataAndCreationPeriodAndInstanceIdAndAdditionalTppInfo(
                 psuIdData,
                 from.toLocalDate(),
                 to.toLocalDate(),
-                INSTANCE_ID
+                INSTANCE_ID,
+                null
             )
         );
 
@@ -145,11 +147,12 @@ class PisCommonPaymentDataSpecificationIT extends BaseTest {
         OffsetDateTime from = pisCommonPaymentData.getCreationTimestamp().minusMinutes(1);
         OffsetDateTime to = pisCommonPaymentData.getCreationTimestamp().plusMinutes(1);
         List<PisCommonPaymentData> actual = pisCommonPaymentDataRepository.findAll(
-            pisCommonPaymentDataSpecification.byAspspAccountIdAndCreationPeriodAndInstanceId(
+            pisCommonPaymentDataSpecification.byAspspAccountIdAndCreationPeriodAndInstanceIdAndAdditionalTppInfo(
                 ASPSP_ACCOUNT_ID,
                 from.toLocalDate(),
                 to.toLocalDate(),
-                INSTANCE_ID
+                INSTANCE_ID,
+                null
             )
         );
 

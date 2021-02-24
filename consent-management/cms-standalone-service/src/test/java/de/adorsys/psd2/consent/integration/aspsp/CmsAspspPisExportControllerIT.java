@@ -107,7 +107,7 @@ public class CmsAspspPisExportControllerIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().json(jsonReader.getStringFromFile("json/consent/integration/aspsp/expect/cms-payment.json")));
 
-        verify(pisCommonPaymentDataSpecification).byTppIdAndCreationPeriodAndPsuIdDataAndInstanceId(TPP_AUTHORISATION_NUMBER, LocalDate.parse(START_DATE), LocalDate.parse(END_DATE), psuIdData, INSTANCE_ID);
+        verify(pisCommonPaymentDataSpecification).byTppIdAndCreationPeriodAndPsuIdDataAndInstanceIdAndAdditionalTppInfo(TPP_AUTHORISATION_NUMBER, LocalDate.parse(START_DATE), LocalDate.parse(END_DATE), psuIdData, INSTANCE_ID, null);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class CmsAspspPisExportControllerIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().json(jsonReader.getStringFromFile("json/consent/integration/aspsp/expect/cms-payment.json")));
 
-        verify(pisCommonPaymentDataSpecification).byPsuIdDataAndCreationPeriodAndInstanceId(psuIdData, LocalDate.parse(START_DATE), LocalDate.parse(END_DATE), INSTANCE_ID);
+        verify(pisCommonPaymentDataSpecification).byPsuIdDataAndCreationPeriodAndInstanceIdAndAdditionalTppInfo(psuIdData, LocalDate.parse(START_DATE), LocalDate.parse(END_DATE), INSTANCE_ID, null);
     }
 
     @Test
@@ -133,6 +133,6 @@ public class CmsAspspPisExportControllerIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().json(jsonReader.getStringFromFile("json/consent/integration/aspsp/expect/cms-payment.json")));
 
-        verify(pisCommonPaymentDataSpecification).byAspspAccountIdAndCreationPeriodAndInstanceId(ACCOUNT_ID, LocalDate.parse(START_DATE), LocalDate.parse(END_DATE), INSTANCE_ID);
+        verify(pisCommonPaymentDataSpecification).byAspspAccountIdAndCreationPeriodAndInstanceIdAndAdditionalTppInfo(ACCOUNT_ID, LocalDate.parse(START_DATE), LocalDate.parse(END_DATE), INSTANCE_ID, null);
     }
 }

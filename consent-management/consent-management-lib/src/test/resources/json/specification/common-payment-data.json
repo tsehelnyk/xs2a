@@ -53,5 +53,6 @@
   "multilevelScaRequired": false,
   "aspspAccountId": "123-DEDE89370400440532013000-EUR",
   "statusChangeTimestamp": "2019-08-22T11:01:27Z",
-  "authorisationTemplate": {}
+  "authorisationTemplate": {},
+  "additionalInfo": "NONE"
 }

@@ -36,5 +36,6 @@
   "multilevelScaRequired": false,
   "aspspAccountId": "some account id",
   "contentType": "application/json",
-  "tppBrandLoggingInformation" : "tppBrandLoggingInformation"
+  "tppBrandLoggingInformation" : "tppBrandLoggingInformation",
+  "additionalInfo": "NONE"
 }

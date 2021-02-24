@@ -16,6 +16,7 @@
 
 package de.adorsys.psd2.consent.service.mapper;
 
+import de.adorsys.psd2.consent.api.ais.AdditionalTppInfo;
 import de.adorsys.psd2.consent.api.pis.CmsRemittance;
 import de.adorsys.psd2.consent.api.pis.PisPayment;
 import de.adorsys.psd2.consent.api.pis.proto.PisCommonPaymentResponse;
@@ -70,6 +71,7 @@ public class PisCommonPaymentMapper {
         commonPaymentData.setContentType(paymentInfo.getContentType());
         commonPaymentData.setTppBrandLoggingInformation(paymentInfo.getTppBrandLoggingInformation());
         commonPaymentData.setInstanceId(paymentInfo.getInstanceId());
+        commonPaymentData.setAdditionalInfo(AdditionalTppInfo.NONE);
 
         return commonPaymentData;
     }

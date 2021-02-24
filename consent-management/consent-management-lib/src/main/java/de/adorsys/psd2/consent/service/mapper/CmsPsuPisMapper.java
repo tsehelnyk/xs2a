@@ -56,6 +56,7 @@ public class CmsPsuPisMapper {
         cmsCommonPayment.setCreationTimestamp(paymentData.getCreationTimestamp());
         cmsCommonPayment.setStatusChangeTimestamp(paymentData.getStatusChangeTimestamp());
         cmsCommonPayment.setTppBrandLoggingInformation(paymentData.getTppBrandLoggingInformation());
+        cmsCommonPayment.setAdditionalTppInfo(paymentData.getAdditionalInfo());
         return cmsCommonPayment;
     }
 

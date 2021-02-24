@@ -35,4 +35,6 @@ public abstract class BaseCmsPayment implements CmsPayment {
     private OffsetDateTime statusChangeTimestamp;
     @Nullable
     private String tppBrandLoggingInformation;
+    @Nullable
+    private String additionalTppInfo;
 }

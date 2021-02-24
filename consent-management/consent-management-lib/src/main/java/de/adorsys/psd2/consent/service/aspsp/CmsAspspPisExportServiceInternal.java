@@ -47,38 +47,47 @@ public class CmsAspspPisExportServiceInternal implements CmsAspspPisExportServic
 
 
     @Override
-    public Collection<CmsPayment> exportPaymentsByTpp(String tppAuthorisationNumber, @Nullable LocalDate createDateFrom, @Nullable LocalDate createDateTo, @Nullable PsuIdData psuIdData, @NotNull String instanceId) {
+    public Collection<CmsPayment> exportPaymentsByTpp(String tppAuthorisationNumber, @Nullable LocalDate createDateFrom,
+                                                      @Nullable LocalDate createDateTo, @Nullable PsuIdData psuIdData,
+                                                      @NotNull String instanceId, @Nullable String additionalTppInfo) {
         if (StringUtils.isBlank(tppAuthorisationNumber) || StringUtils.isBlank(instanceId)) {
             log.info("InstanceId: [{}], TPP ID: [{}]. Export payments by TPP failed, TPP ID or instanceId is empty or null.", instanceId,
                      tppAuthorisationNumber);
             return Collections.emptyList();
         }
 
-        List<PisCommonPaymentData> commonPayments = pisCommonPaymentDataRepository.findAll(pisCommonPaymentDataSpecification.byTppIdAndCreationPeriodAndPsuIdDataAndInstanceId(tppAuthorisationNumber, createDateFrom, createDateTo, psuIdData, instanceId));
+        List<PisCommonPaymentData> commonPayments = pisCommonPaymentDataRepository.findAll(
+            pisCommonPaymentDataSpecification.byTppIdAndCreationPeriodAndPsuIdDataAndInstanceIdAndAdditionalTppInfo(tppAuthorisationNumber, createDateFrom, createDateTo, psuIdData, instanceId, additionalTppInfo));
         return cmsPsuPisMapper.mapPaymentDataToCmsPayments(commonPayments);
     }
 
     @Override
-    public Collection<CmsPayment> exportPaymentsByPsu(PsuIdData psuIdData, @Nullable LocalDate createDateFrom, @Nullable LocalDate createDateTo, @NotNull String instanceId) {
+    public Collection<CmsPayment> exportPaymentsByPsu(PsuIdData psuIdData, @Nullable LocalDate createDateFrom,
+                                                      @Nullable LocalDate createDateTo, @NotNull String instanceId,
+                                                      @Nullable String additionalTppInfo) {
         if (psuIdData == null || psuIdData.isEmpty() || StringUtils.isBlank(instanceId)) {
             log.info("InstanceId: [{}]. Export payments by psu failed, psuIdData or instanceId is empty or null.",
                      instanceId);
             return Collections.emptyList();
         }
 
-        List<PisCommonPaymentData> commonPayments = pisCommonPaymentDataRepository.findAll(pisCommonPaymentDataSpecification.byPsuIdDataAndCreationPeriodAndInstanceId(psuIdData, createDateFrom, createDateTo, instanceId));
+        List<PisCommonPaymentData> commonPayments = pisCommonPaymentDataRepository.findAll(
+            pisCommonPaymentDataSpecification.byPsuIdDataAndCreationPeriodAndInstanceIdAndAdditionalTppInfo(psuIdData, createDateFrom, createDateTo, instanceId, additionalTppInfo));
         return cmsPsuPisMapper.mapPaymentDataToCmsPayments(commonPayments);
     }
 
     @Override
-    public Collection<CmsPayment> exportPaymentsByAccountId(@NotNull String aspspAccountId, @Nullable LocalDate createDateFrom, @Nullable LocalDate createDateTo, @NotNull String instanceId) {
+    public Collection<CmsPayment> exportPaymentsByAccountId(@NotNull String aspspAccountId, @Nullable LocalDate createDateFrom,
+                                                            @Nullable LocalDate createDateTo, @NotNull String instanceId,
+                                                            @Nullable String additionalTppInfo) {
         if (StringUtils.isBlank(aspspAccountId) || StringUtils.isBlank(instanceId)) {
             log.info("InstanceId: [{}], aspspAccountId: [{}]. Export payments by accountId failed, aspspAccountId or instanceId is empty or null.",
                      instanceId, aspspAccountId);
             return Collections.emptyList();
         }
 
-        List<PisCommonPaymentData> commonPayments = pisCommonPaymentDataRepository.findAll(pisCommonPaymentDataSpecification.byAspspAccountIdAndCreationPeriodAndInstanceId(aspspAccountId, createDateFrom, createDateTo, instanceId));
+        List<PisCommonPaymentData> commonPayments = pisCommonPaymentDataRepository.findAll(
+            pisCommonPaymentDataSpecification.byAspspAccountIdAndCreationPeriodAndInstanceIdAndAdditionalTppInfo(aspspAccountId, createDateFrom, createDateTo, instanceId, additionalTppInfo));
         return cmsPsuPisMapper.mapPaymentDataToCmsPayments(commonPayments);
     }
 }

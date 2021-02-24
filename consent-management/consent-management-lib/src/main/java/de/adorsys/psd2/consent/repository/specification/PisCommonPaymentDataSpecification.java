@@ -54,17 +54,20 @@ public class PisCommonPaymentDataSpecification {
      * @param createDateTo           optional creation date that limits results to payments created before this date(inclusive)
      * @param psuIdData              optional PSU ID data
      * @param instanceId             optional instance ID
+     * @param additionalTppInfo      Additional TPP information
      * @return resulting specification for PisCommonPaymentData entity
      */
-    public Specification<PisCommonPaymentData> byTppIdAndCreationPeriodAndPsuIdDataAndInstanceId(@NotNull String tppAuthorisationNumber,
-                                                                                                 @Nullable LocalDate createDateFrom,
-                                                                                                 @Nullable LocalDate createDateTo,
-                                                                                                 @Nullable PsuIdData psuIdData,
-                                                                                                 @Nullable String instanceId) {
+    public Specification<PisCommonPaymentData> byTppIdAndCreationPeriodAndPsuIdDataAndInstanceIdAndAdditionalTppInfo(@NotNull String tppAuthorisationNumber,
+                                                                                                                     @Nullable LocalDate createDateFrom,
+                                                                                                                     @Nullable LocalDate createDateTo,
+                                                                                                                     @Nullable PsuIdData psuIdData,
+                                                                                                                     @Nullable String instanceId,
+                                                                                                                     @Nullable String additionalTppInfo) {
         return Specification.where(byTppAuthorisationNumber(tppAuthorisationNumber))
                    .and(commonSpecification.byCreationTimestamp(createDateFrom, createDateTo))
                    .and(commonSpecification.byPsuIdDataInList(psuIdData))
-                   .and(commonSpecification.byInstanceId(instanceId));
+                   .and(commonSpecification.byInstanceId(instanceId))
+                   .and(byAdditionalTppInfo(additionalTppInfo));
     }
 
     /**
@@ -74,13 +77,16 @@ public class PisCommonPaymentDataSpecification {
      * @param createDateFrom optional creation date that limits resulting data to payments created after this date(inclusive)
      * @param createDateTo   optional creation date that limits resulting data to payments created before this date(inclusive)
      * @param instanceId     optional instance ID
+     * @param additionalTppInfo      Additional TPP information
      * @return resulting specification for PisCommonPaymentData entity
      */
-    public Specification<PisCommonPaymentData> byPsuIdDataAndCreationPeriodAndInstanceId(@NotNull PsuIdData psuIdData,
-                                                                                         @Nullable LocalDate createDateFrom,
-                                                                                         @Nullable LocalDate createDateTo,
-                                                                                         @Nullable String instanceId) {
-        return commonSpecification.byPsuIdDataAndCreationPeriodAndInstanceId(psuIdData, createDateFrom, createDateTo, instanceId);
+    public Specification<PisCommonPaymentData> byPsuIdDataAndCreationPeriodAndInstanceIdAndAdditionalTppInfo(@NotNull PsuIdData psuIdData,
+                                                                                                             @Nullable LocalDate createDateFrom,
+                                                                                                             @Nullable LocalDate createDateTo,
+                                                                                                             @Nullable String instanceId,
+                                                                                                             @Nullable String additionalTppInfo) {
+        return commonSpecification.byPsuIdDataAndCreationPeriodAndInstanceId(psuIdData, createDateFrom, createDateTo, instanceId)
+            .and(byAdditionalTppInfo(additionalTppInfo));
     }
 
     /**
@@ -90,15 +96,18 @@ public class PisCommonPaymentDataSpecification {
      * @param createDateFrom optional creation date that limits resulting data to payments created after this date(inclusive)
      * @param createDateTo   optional creation date that limits resulting data to payments created before this date(inclusive)
      * @param instanceId     optional instance ID
+     * @param additionalTppInfo      Additional TPP information
      * @return resulting specification for PisCommonPaymentData entity
      */
-    public Specification<PisCommonPaymentData> byAspspAccountIdAndCreationPeriodAndInstanceId(@NotNull String aspspAccountId,
-                                                                                              @Nullable LocalDate createDateFrom,
-                                                                                              @Nullable LocalDate createDateTo,
-                                                                                              @Nullable String instanceId) {
+    public Specification<PisCommonPaymentData> byAspspAccountIdAndCreationPeriodAndInstanceIdAndAdditionalTppInfo(@NotNull String aspspAccountId,
+                                                                                                                  @Nullable LocalDate createDateFrom,
+                                                                                                                  @Nullable LocalDate createDateTo,
+                                                                                                                  @Nullable String instanceId,
+                                                                                                                  @Nullable String additionalTppInfo) {
         return Specification.where(byAspspAccountId(aspspAccountId))
                    .and(commonSpecification.byCreationTimestamp(createDateFrom, createDateTo))
-                   .and(commonSpecification.byInstanceId(instanceId));
+                   .and(commonSpecification.byInstanceId(instanceId))
+                   .and(byAdditionalTppInfo(additionalTppInfo));
     }
 
     private Specification<PisCommonPaymentData> byAspspAccountId(@Nullable String aspspAccountId) {
@@ -120,5 +129,9 @@ public class PisCommonPaymentDataSpecification {
             return provideSpecificationForJoinedEntityAttribute(tppInfoJoin, TPP_INFO_AUTHORISATION_NUMBER_ATTRIBUTE, tppAuthorisationNumber)
                        .toPredicate(root, query, cb);
         };
+    }
+
+    private Specification<PisCommonPaymentData> byAdditionalTppInfo(@Nullable String additionalTppInfo) {
+        return provideSpecificationForEntityAttribute(ADDITIONAL_TPP_INFORMATION_ATTRIBUTE, additionalTppInfo);
     }
 }
