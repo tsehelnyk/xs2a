@@ -25,7 +25,7 @@ import de.adorsys.psd2.consent.service.mapper.PiisConsentMapper;
 import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
 import de.adorsys.psd2.consent.service.migration.PiisConsentLazyMigrationService;
 import de.adorsys.psd2.consent.service.psu.util.PageRequestBuilder;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -109,6 +109,6 @@ public class CmsPsuPiisServiceInternal implements CmsPsuPiisService {
 
     private void revokeConsent(ConsentEntity consent) {
         consent.setLastActionDate(LocalDate.now());
-        consent.setConsentStatus(ConsentStatus.REVOKED_BY_PSU);
+        consent.setConsentStatus(Xs2aConsentStatus.REVOKED_BY_PSU);
     }
 }

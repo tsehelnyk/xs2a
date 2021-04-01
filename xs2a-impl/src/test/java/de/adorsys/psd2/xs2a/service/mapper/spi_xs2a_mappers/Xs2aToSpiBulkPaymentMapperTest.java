@@ -16,9 +16,9 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.domain.pis.BulkPayment;
 import de.adorsys.psd2.xs2a.domain.pis.SinglePayment;
@@ -54,7 +54,7 @@ class Xs2aToSpiBulkPaymentMapperTest {
     private static final String PSU_ID_1 = "First";
     private static final String PSU_ID_2 = "Second";
     private final Currency EUR_CURRENCY = Currency.getInstance("EUR");
-    private static final TransactionStatus TRANSACTION_STATUS = TransactionStatus.RCVD;
+    private static final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.RCVD;
     private static final LocalDate REQUESTED_EXECUTION_DATE = LocalDate.now();
     private static final OffsetDateTime REQUESTED_EXECUTION_TIME = OffsetDateTime.now();
     private static final List<PsuIdData> psuDataList = new ArrayList<>();
@@ -137,8 +137,8 @@ class Xs2aToSpiBulkPaymentMapperTest {
         return amount;
     }
 
-    private AccountReference buildAccountReference(String accountId) {
-        AccountReference reference = new AccountReference();
+    private Xs2aAccountReference buildAccountReference(String accountId) {
+        Xs2aAccountReference reference = new Xs2aAccountReference();
         reference.setIban(IBAN);
         reference.setCurrency(EUR_CURRENCY);
         reference.setAspspAccountId(accountId);

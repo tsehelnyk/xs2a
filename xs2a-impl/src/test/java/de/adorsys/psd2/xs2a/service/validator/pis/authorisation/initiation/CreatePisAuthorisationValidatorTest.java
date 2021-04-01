@@ -22,9 +22,9 @@ import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.service.validator.authorisation.AuthorisationPsuDataChecker;
@@ -50,8 +50,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CreatePisAuthorisationValidatorTest {
-    private static final TransactionStatus TRANSACTION_STATUS = TransactionStatus.RCVD;
-    private static final TransactionStatus REJECTED_TRANSACTION_STATUS = TransactionStatus.RJCT;
+    private static final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.RCVD;
+    private static final Xs2aTransactionStatus REJECTED_TRANSACTION_STATUS = Xs2aTransactionStatus.RJCT;
     private static final TppInfo TPP_INFO = buildTppInfo("authorisation number");
     private static final TppInfo INVALID_TPP_INFO = buildTppInfo("invalid authorisation number");
 
@@ -219,7 +219,7 @@ class CreatePisAuthorisationValidatorTest {
         // Given
         PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TRANSACTION_STATUS, TPP_INFO);
         commonPaymentResponse.setPsuData(Collections.singletonList(PSU_DATA_1));
-        commonPaymentResponse.setAuthorisations(Collections.singletonList(new Authorisation("1", PSU_DATA_1, "paymentID", AuthorisationType.PIS_CREATION, ScaStatus.FINALISED)));
+        commonPaymentResponse.setAuthorisations(Collections.singletonList(new Authorisation("1", PSU_DATA_1, "paymentID", AuthorisationType.PIS_CREATION, Xs2aScaStatus.FINALISED)));
         when(authorisationStatusChecker.isFinalised(any(PsuIdData.class), anyList(), eq(AuthorisationType.PIS_CREATION))).thenReturn(true);
         when(pisTppInfoValidator.validateTpp(TPP_INFO))
             .thenReturn(ValidationResult.valid());
@@ -260,7 +260,7 @@ class CreatePisAuthorisationValidatorTest {
         return tppInfo;
     }
 
-    private PisCommonPaymentResponse buildPisCommonPaymentResponse(TransactionStatus transactionStatus, TppInfo tppInfo) {
+    private PisCommonPaymentResponse buildPisCommonPaymentResponse(Xs2aTransactionStatus transactionStatus, TppInfo tppInfo) {
         PisCommonPaymentResponse pisCommonPaymentResponse = new PisCommonPaymentResponse();
         pisCommonPaymentResponse.setTransactionStatus(transactionStatus);
         pisCommonPaymentResponse.setTppInfo(tppInfo);

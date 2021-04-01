@@ -19,7 +19,7 @@ package de.adorsys.psd2.consent.service.mapper;
 import de.adorsys.psd2.consent.api.CmsAddress;
 import de.adorsys.psd2.consent.api.pis.*;
 import de.adorsys.psd2.consent.domain.AccountReferenceEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.TppInfoEntity;
 import de.adorsys.psd2.consent.domain.payment.PisAddress;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
@@ -27,8 +27,8 @@ import de.adorsys.psd2.consent.domain.payment.PisPaymentData;
 import de.adorsys.psd2.consent.domain.payment.PisRemittance;
 import de.adorsys.psd2.xs2a.core.pis.PisDayOfExecution;
 import de.adorsys.psd2.xs2a.core.pis.PisExecutionRule;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
@@ -59,7 +59,7 @@ class CmsPsuPisMapperTest {
     private static final PaymentType PAYMENT_TYPE_SINGLE = PaymentType.SINGLE;
     private static final PaymentType PAYMENT_TYPE_PERIODIC = PaymentType.PERIODIC;
     private static final PaymentType PAYMENT_TYPE_BULK = PaymentType.BULK;
-    private static final TransactionStatus TRANSACTION_STATUS = TransactionStatus.ACCP;
+    private static final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.ACCP;
     private static final byte[] PAYMENT_DATA = "PAYMENT_DATA".getBytes();
     private static final String TPP_AUTHORISATION_NUMBER = "TPP_AUTHORISATION_NUMBER";
     private static final String TPP_AUTHORITY_ID = "TPP_AUTHORITY_ID";
@@ -71,9 +71,9 @@ class CmsPsuPisMapperTest {
     private static final String PSU_CORPORATE_ID = "PSU_CORPORATE_ID";
     private static final String PSU_CORPORATE_ID_TYPE = "PSU_CORPORATE_ID_TYPE";
     private static final String PSU_IP_ADDRESS = "PSU_IP_ADDRESS";
-    private static final PsuData PSU_DATA = buildPsuData();
+    private static final CmsPsuData PSU_DATA = buildPsuData();
     private static final PsuIdData PSU_ID_DATA = buildPsuIdData();
-    private static final List<PsuData> PSU_DATA_LIST = Collections.singletonList(PSU_DATA);
+    private static final List<CmsPsuData> PSU_DATA_LIST = Collections.singletonList(PSU_DATA);
     private static final List<PsuIdData> PSU_ID_DATA_LIST = Collections.singletonList(PSU_ID_DATA);
     private static final OffsetDateTime CREATION_TIMESTAMP = OffsetDateTime.now();
     private static final OffsetDateTime STATUS_CHANGE_TIMESTAMP = OffsetDateTime.now();
@@ -84,8 +84,8 @@ class CmsPsuPisMapperTest {
     private static final String INSTRUCTION_IDENTIFICATION = "INSTRUCTION_IDENTIFICATION";
     private static final AccountReferenceEntity DEBTOR_ACCOUNT = buildAccountReferenceEntity();
     private static final AccountReferenceEntity CREDITOR_ACCOUNT = buildAccountReferenceEntity();
-    private static final AccountReference DEBTOR_CMS_ACCOUNT = buildAccountReference();
-    private static final AccountReference CREDITOR_CMS_ACCOUNT = buildAccountReference();
+    private static final Xs2aAccountReference DEBTOR_CMS_ACCOUNT = buildAccountReference();
+    private static final Xs2aAccountReference CREDITOR_CMS_ACCOUNT = buildAccountReference();
     private static final String IBAN = "IBAN";
     private static final Currency CURRENCY = Currency.getInstance(Locale.GERMANY);
     private static final BigDecimal AMOUNT = BigDecimal.TEN;
@@ -290,8 +290,8 @@ class CmsPsuPisMapperTest {
         return tppInfo;
     }
 
-    private static PsuData buildPsuData() {
-        PsuData psuData = new PsuData();
+    private static CmsPsuData buildPsuData() {
+        CmsPsuData psuData = new CmsPsuData();
         psuData.setPsuId(PSU_ID);
         psuData.setPsuIdType(PSU_ID_TYPE);
         psuData.setPsuCorporateId(PSU_CORPORATE_ID);
@@ -341,8 +341,8 @@ class CmsPsuPisMapperTest {
         return accountReferenceEntity;
     }
 
-    private static AccountReference buildAccountReference() {
-        AccountReference accountReference = new AccountReference();
+    private static Xs2aAccountReference buildAccountReference() {
+        Xs2aAccountReference accountReference = new Xs2aAccountReference();
         accountReference.setIban(IBAN);
         return accountReference;
     }

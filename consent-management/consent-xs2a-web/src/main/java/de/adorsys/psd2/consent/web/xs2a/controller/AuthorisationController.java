@@ -28,7 +28,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
@@ -80,7 +80,7 @@ public class AuthorisationController implements AuthorisationApi {
     @Override
     public ResponseEntity<Void> updateAuthorisationStatus(String authorisationId, String scaStatus) {
         try {
-            CmsResponse<Boolean> response = authorisationServiceEncrypted.updateAuthorisationStatus(authorisationId, ScaStatus.valueOf(scaStatus));
+            CmsResponse<Boolean> response = authorisationServiceEncrypted.updateAuthorisationStatus(authorisationId, Xs2aScaStatus.valueOf(scaStatus));
             if (response.isSuccessful() && BooleanUtils.isTrue(response.getPayload())) {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
@@ -92,8 +92,8 @@ public class AuthorisationController implements AuthorisationApi {
     }
 
     @Override
-    public ResponseEntity<ScaStatus> getAuthorisationScaStatus(AuthorisationType authorisationType, String parentId, String authorisationId) {
-        CmsResponse<ScaStatus> response = authorisationServiceEncrypted.getAuthorisationScaStatus(authorisationId, new AuthorisationParentHolder(authorisationType, parentId));
+    public ResponseEntity<Xs2aScaStatus> getAuthorisationScaStatus(AuthorisationType authorisationType, String parentId, String authorisationId) {
+        CmsResponse<Xs2aScaStatus> response = authorisationServiceEncrypted.getAuthorisationScaStatus(authorisationId, new AuthorisationParentHolder(authorisationType, parentId));
 
         if (response.hasError()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

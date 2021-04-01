@@ -17,10 +17,10 @@
 package de.adorsys.psd2.consent.api.ais;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationTemplate;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -37,7 +37,7 @@ public class CmsConsent {
     private String id;
     private byte[] consentData;
     private byte[] checksum;
-    private ConsentStatus consentStatus;
+    private Xs2aConsentStatus consentStatus;
     private ConsentType consentType;
     private ConsentTppInformation tppInformation;
     private AuthorisationTemplate authorisationTemplate;
@@ -53,8 +53,8 @@ public class CmsConsent {
     private OffsetDateTime statusChangeTimestamp;
     private List<Authorisation> authorisations;
     private Map<String, Integer> usages;
-    private AccountAccess tppAccountAccesses;
-    private AccountAccess aspspAccountAccesses;
+    private Xs2aConsentAccountAccess tppAccountAccesses;
+    private Xs2aConsentAccountAccess aspspAccountAccesses;
     private String instanceId;
     private boolean signingBasketBlocked;
     private boolean signingBasketAuthorised;

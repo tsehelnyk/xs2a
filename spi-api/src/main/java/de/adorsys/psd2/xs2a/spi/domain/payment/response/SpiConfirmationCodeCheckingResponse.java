@@ -16,14 +16,14 @@
 
 package de.adorsys.psd2.xs2a.spi.domain.payment.response;
 
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.Value;
 
 @Value
 public class SpiConfirmationCodeCheckingResponse {
 
-    private ScaStatus scaStatus;
-    private ConsentStatus consentStatus;
+    private Xs2aScaStatus scaStatus;
+    private Xs2aConsentStatus consentStatus;
 
 }

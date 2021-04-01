@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.link;
 
 import de.adorsys.psd2.aspsp.profile.domain.AspspSettings;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentAuthorizationResponse;
@@ -118,7 +118,7 @@ class ConsentAspectServiceTest {
         when(aspspProfileServiceWrapper.getXs2aBaseLinksUrl())
             .thenReturn(aspspSettings.getCommon().getXs2aBaseLinksUrl());
 
-        when(updateConsentPsuDataResponse.getScaStatus()).thenReturn(ScaStatus.RECEIVED);
+        when(updateConsentPsuDataResponse.getScaStatus()).thenReturn(Xs2aScaStatus.RECEIVED);
 
         ResponseObject<AuthorisationResponse> responseObject = ResponseObject.<AuthorisationResponse>builder()
                                                                    .body(updateConsentPsuDataResponse)
@@ -190,7 +190,7 @@ class ConsentAspectServiceTest {
         when(aspspProfileServiceWrapper.getXs2aBaseLinksUrl())
             .thenReturn(aspspSettings.getCommon().getXs2aBaseLinksUrl());
 
-        when(updateConsentPsuDataResponse.getScaStatus()).thenReturn(ScaStatus.RECEIVED);
+        when(updateConsentPsuDataResponse.getScaStatus()).thenReturn(Xs2aScaStatus.RECEIVED);
 
         ResponseObject<UpdateConsentPsuDataResponse> responseObject = ResponseObject.<UpdateConsentPsuDataResponse>builder()
                                                                           .body(updateConsentPsuDataResponse)

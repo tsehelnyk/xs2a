@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
 import de.adorsys.psd2.core.data.ais.AisConsent;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAdditionalInformationAccess;
 import de.adorsys.psd2.xs2a.spi.domain.consent.SpiAccountAccess;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class Xs2aToSpiAccountAccessMapper {
         );
     }
 
-    private SpiAdditionalInformationAccess mapToSpiAdditionalInformationAccess(AdditionalInformationAccess additionalInformationAccess) {
+    private SpiAdditionalInformationAccess mapToSpiAdditionalInformationAccess(Xs2aAdditionalInformationAccess additionalInformationAccess) {
         return Optional.ofNullable(additionalInformationAccess)
                    .map(info -> new SpiAdditionalInformationAccess(xs2aToSpiAccountReferenceMapper.mapToSpiAccountReferencesOrDefault(info.getOwnerName(), null),
                                                                    xs2aToSpiAccountReferenceMapper.mapToSpiAccountReferencesOrDefault(info.getTrustedBeneficiaries(), null)))

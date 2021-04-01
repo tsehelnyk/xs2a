@@ -26,13 +26,13 @@ import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.AisConsentServiceEncrypted;
 import de.adorsys.psd2.consent.api.service.ConsentServiceEncrypted;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.logger.context.LoggingContextService;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aCreatePiisConsentResponse;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
@@ -63,7 +63,7 @@ class Xs2aPiisConsentServiceTest {
     private static final String REDIRECT_URI = "request/redirect_uri";
     private static final String NOK_REDIRECT_URI = "request/nok_redirect_uri";
     private static final ScaApproach SCA_APPROACH = ScaApproach.DECOUPLED;
-    private static final ScaStatus SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus SCA_STATUS = Xs2aScaStatus.RECEIVED;
     private static final PsuIdData PSU_ID_DATA = new PsuIdData(CORRECT_PSU_ID, null, null, null, null);
     private static final CreateAuthorisationRequest CONSENT_AUTHORISATION_REQUEST = buildConsentAuthorisationRequest();
     private final TppInfo tppInfo = buildTppInfo();
@@ -177,25 +177,25 @@ class Xs2aPiisConsentServiceTest {
         CmsResponse<Boolean> cmsResponse = CmsResponse.<Boolean>builder()
                                                .payload(true)
                                                .build();
-        when(consentService.updateConsentStatusById(CONSENT_ID, ConsentStatus.PARTIALLY_AUTHORISED)).thenReturn(cmsResponse);
+        when(consentService.updateConsentStatusById(CONSENT_ID, Xs2aConsentStatus.PARTIALLY_AUTHORISED)).thenReturn(cmsResponse);
         //When
-        xs2aPiisConsentService.updateConsentStatus(CONSENT_ID, ConsentStatus.PARTIALLY_AUTHORISED);
+        xs2aPiisConsentService.updateConsentStatus(CONSENT_ID, Xs2aConsentStatus.PARTIALLY_AUTHORISED);
         //Then
-        verify(consentService, atLeastOnce()).updateConsentStatusById(CONSENT_ID, ConsentStatus.PARTIALLY_AUTHORISED);
+        verify(consentService, atLeastOnce()).updateConsentStatusById(CONSENT_ID, Xs2aConsentStatus.PARTIALLY_AUTHORISED);
     }
 
     @Test
     void updateConsentStatus_WrongChecksumException() throws WrongChecksumException {
         // Given
-        when(consentService.updateConsentStatusById(CONSENT_ID, ConsentStatus.PARTIALLY_AUTHORISED))
+        when(consentService.updateConsentStatusById(CONSENT_ID, Xs2aConsentStatus.PARTIALLY_AUTHORISED))
             .thenThrow(new WrongChecksumException());
 
         // When
-        xs2aPiisConsentService.updateConsentStatus(CONSENT_ID, ConsentStatus.PARTIALLY_AUTHORISED);
+        xs2aPiisConsentService.updateConsentStatus(CONSENT_ID, Xs2aConsentStatus.PARTIALLY_AUTHORISED);
 
         // Then
-        verify(consentService, times(1)).updateConsentStatusById(CONSENT_ID, ConsentStatus.PARTIALLY_AUTHORISED);
-        verify(loggingContextService, never()).storeConsentStatus(any(ConsentStatus.class));
+        verify(consentService, times(1)).updateConsentStatusById(CONSENT_ID, Xs2aConsentStatus.PARTIALLY_AUTHORISED);
+        verify(loggingContextService, never()).storeConsentStatus(any(Xs2aConsentStatus.class));
     }
 
     @Test
@@ -219,7 +219,7 @@ class Xs2aPiisConsentServiceTest {
 
     @Test
     void updateAspspAccountAccess() throws WrongChecksumException {
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", Xs2aConsentAccountAccess.class);
 
         CmsConsent cmsConsent = new CmsConsent();
         when(aisConsentServiceEncrypted.updateAspspAccountAccess(CONSENT_ID, accountAccess))
@@ -234,7 +234,7 @@ class Xs2aPiisConsentServiceTest {
 
     @Test
     void updateAspspAccountAccess_checksumError() throws WrongChecksumException {
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", Xs2aConsentAccountAccess.class);
 
         when(aisConsentServiceEncrypted.updateAspspAccountAccess(CONSENT_ID, accountAccess))
             .thenThrow(new WrongChecksumException());
@@ -247,7 +247,7 @@ class Xs2aPiisConsentServiceTest {
 
     @Test
     void updateAspspAccountAccess_updateError() throws WrongChecksumException {
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", Xs2aConsentAccountAccess.class);
 
         when(aisConsentServiceEncrypted.updateAspspAccountAccess(CONSENT_ID, accountAccess))
             .thenReturn(CmsResponse.<CmsConsent>builder().error(CmsError.TECHNICAL_ERROR).build());
@@ -324,6 +324,6 @@ class Xs2aPiisConsentServiceTest {
     }
 
     private static CreateAuthorisationResponse buildCreateConsentAuthorizationResponse() {
-        return new CreateAuthorisationResponse(AUTHORISATION_ID, ScaStatus.RECEIVED, "", null);
+        return new CreateAuthorisationResponse(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, "", null);
     }
 }

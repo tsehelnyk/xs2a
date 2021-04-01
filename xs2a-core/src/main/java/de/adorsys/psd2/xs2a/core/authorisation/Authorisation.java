@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.core.authorisation;
 
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -42,7 +42,7 @@ public class Authorisation {
     private AuthorisationType authorisationType;
 
     @ApiModelProperty(value = "The following code values are permitted 'received', 'psuIdentified', 'psuAuthenticated', 'scaMethodSelected', 'started', 'finalised' 'failed' 'exempted'.", required = true, example = "STARTED")
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
 
     @ApiModelProperty(value = "An identification provided by the ASPSP for the later identification of the authentication method selection.")
     private String authenticationMethodId;
@@ -56,7 +56,7 @@ public class Authorisation {
     @ApiModelProperty(value = "Chosen SCA approach")
     private ScaApproach chosenScaApproach;
 
-    public Authorisation(String authorisationId, PsuIdData psuIdData, String parentId, AuthorisationType authorisationType, ScaStatus scaStatus) {
+    public Authorisation(String authorisationId, PsuIdData psuIdData, String parentId, AuthorisationType authorisationType, Xs2aScaStatus scaStatus) {
         this.authorisationId = authorisationId;
         this.psuIdData = psuIdData;
         this.parentId = parentId;

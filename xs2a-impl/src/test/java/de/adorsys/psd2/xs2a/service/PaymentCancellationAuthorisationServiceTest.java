@@ -24,10 +24,10 @@ import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
@@ -77,7 +77,7 @@ class PaymentCancellationAuthorisationServiceTest {
     private static final PsuIdData PSU_ID_DATA = new PsuIdData(CORRECT_PSU_ID, null, null, null, null);
     private static final String WRONG_CANCELLATION_AUTHORISATION_ID = "wrong cancellation authorisation id";
     private static final String CANCELLATION_AUTHORISATION_ID = "dd5d766f-eeb7-4efe-b730-24d5ed53f537";
-    private static final TransactionStatus TRANSACTION_STATUS = TransactionStatus.RCVD;
+    private static final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.RCVD;
 
     private static final PisCommonPaymentResponse PIS_COMMON_PAYMENT_RESPONSE = buildPisCommonPaymentResponse();
     private static final PisCommonPaymentResponse INVALID_PIS_COMMON_PAYMENT_RESPONSE = buildInvalidPisCommonPaymentResponse();
@@ -87,7 +87,7 @@ class PaymentCancellationAuthorisationServiceTest {
     private static final MessageError UNKNOWN_PAYMENT_ERROR = new MessageError(ErrorType.PIS_404, TppMessageInformation.of(RESOURCE_UNKNOWN_404_NO_PAYMENT));
     private static final MessageError INVALID_FLOW_ERROR = new MessageError(ErrorType.PIS_403, TppMessageInformation.of(FORBIDDEN_INCORRECT_FLOW));
     private static final MessageError SCA_STATUS_ERROR = new MessageError(ErrorType.PIS_403, of(RESOURCE_UNKNOWN_403));
-    private static final ScaStatus SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus SCA_STATUS = Xs2aScaStatus.RECEIVED;
 
     @InjectMocks
     private PaymentCancellationAuthorisationServiceImpl paymentCancellationAuthorisationService;
@@ -142,7 +142,7 @@ class PaymentCancellationAuthorisationServiceTest {
     @Test
     void createPisCancellationAuthorisation_success() {
         // Given
-        ScaStatus scaStatus = ScaStatus.RECEIVED;
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.RECEIVED;
         PaymentType paymentType = PaymentType.SINGLE;
 
         when(pisScaAuthorisationServiceResolver.getService())
@@ -176,7 +176,7 @@ class PaymentCancellationAuthorisationServiceTest {
     @Test
     void createPisCancellationAuthorisation_shouldStoreStatusesInLoggingContext() {
         // Given:
-        ScaStatus authorisationStatus = ScaStatus.PSUIDENTIFIED;
+        Xs2aScaStatus authorisationStatus = Xs2aScaStatus.PSUIDENTIFIED;
 
         when(pisScaAuthorisationServiceResolver.getService())
             .thenReturn(pisScaAuthorisationService);
@@ -244,9 +244,9 @@ class PaymentCancellationAuthorisationServiceTest {
         when(createPisCancellationAuthorisationValidator.validate(any(CreatePisCancellationAuthorisationObject.class))).thenReturn(ValidationResult.valid());
 
         when(pisScaAuthorisationService.updateCommonPaymentCancellationPsuData(any()))
-            .thenReturn(new Xs2aUpdatePisCommonPaymentPsuDataResponse(ScaStatus.RECEIVED, PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, PSU_ID_DATA, null));
+            .thenReturn(new Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus.RECEIVED, PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, PSU_ID_DATA, null));
 
-        ScaStatus scaStatus = ScaStatus.RECEIVED;
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.RECEIVED;
 
         when(pisScaAuthorisationService.createCommonPaymentCancellationAuthorisation(anyString(), any(), any()))
             .thenReturn(Optional.of(new Xs2aCreatePisCancellationAuthorisationResponse(CANCELLATION_AUTHORISATION_ID, scaStatus, PaymentType.SINGLE, null)));
@@ -300,7 +300,7 @@ class PaymentCancellationAuthorisationServiceTest {
         when(updatePisCancellationPsuDataValidator.validate(any(UpdatePaymentPsuDataPO.class)))
             .thenReturn(ValidationResult.invalid(VALIDATION_ERROR));
 
-        ScaStatus scaStatus = ScaStatus.RECEIVED;
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.RECEIVED;
 
         when(pisScaAuthorisationService.createCommonPaymentCancellationAuthorisation(anyString(), any(), any()))
             .thenReturn(Optional.of(new Xs2aCreatePisCancellationAuthorisationResponse(CANCELLATION_AUTHORISATION_ID, scaStatus, PaymentType.SINGLE, null)));
@@ -331,7 +331,7 @@ class PaymentCancellationAuthorisationServiceTest {
         when(createPisCancellationAuthorisationValidator.validate(any(CreatePisCancellationAuthorisationObject.class))).thenReturn(ValidationResult.valid());
 
         when(pisScaAuthorisationService.updateCommonPaymentCancellationPsuData(any()))
-            .thenReturn(new Xs2aUpdatePisCommonPaymentPsuDataResponse(ScaStatus.RECEIVED, PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, PSU_ID_DATA, null));
+            .thenReturn(new Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus.RECEIVED, PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, PSU_ID_DATA, null));
         ErrorHolder errorHolder = ErrorHolder.builder(AUTHORISATION_SERVICE_ERROR.getErrorType())
                                       .tppMessages(AUTHORISATION_SERVICE_ERROR.getTppMessage())
                                       .build();
@@ -340,7 +340,7 @@ class PaymentCancellationAuthorisationServiceTest {
         when(updatePisCancellationPsuDataValidator.validate(any()))
             .thenReturn(ValidationResult.valid());
 
-        ScaStatus scaStatus = ScaStatus.RECEIVED;
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.RECEIVED;
 
         when(pisScaAuthorisationService.createCommonPaymentCancellationAuthorisation(anyString(), any(), any()))
             .thenReturn(Optional.of(new Xs2aCreatePisCancellationAuthorisationResponse(CANCELLATION_AUTHORISATION_ID, scaStatus, PaymentType.SINGLE, null)));
@@ -366,7 +366,7 @@ class PaymentCancellationAuthorisationServiceTest {
             .thenReturn(ValidationResult.valid());
 
         when(pisScaAuthorisationService.updateCommonPaymentCancellationPsuData(any()))
-            .thenReturn(new Xs2aUpdatePisCommonPaymentPsuDataResponse(ScaStatus.RECEIVED, PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, PSU_ID_DATA, null));
+            .thenReturn(new Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus.RECEIVED, PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, PSU_ID_DATA, null));
 
         // Given:
         Xs2aUpdatePisCommonPaymentPsuDataRequest request = buildXs2aUpdatePisPsuDataRequest();
@@ -446,14 +446,14 @@ class PaymentCancellationAuthorisationServiceTest {
             .thenReturn(ValidationResult.invalid(VALIDATION_ERROR));
 
         // When
-        ArgumentCaptor<TransactionStatus> transactionStatusArgumentCaptor = ArgumentCaptor.forClass(TransactionStatus.class);
+        ArgumentCaptor<Xs2aTransactionStatus> transactionStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aTransactionStatus.class);
         ResponseObject<Xs2aUpdatePisCommonPaymentPsuDataResponse> actualResponse =
             paymentCancellationAuthorisationService.updatePisCancellationPsuData(updatePisPsuDataRequest);
 
         // Then
         assertTrue(actualResponse.hasError());
         verify(loggingContextService).storeTransactionStatus(transactionStatusArgumentCaptor.capture());
-        assertThat(transactionStatusArgumentCaptor.getValue()).isEqualTo(TransactionStatus.RCVD);
+        assertThat(transactionStatusArgumentCaptor.getValue()).isEqualTo(Xs2aTransactionStatus.RCVD);
     }
 
     @Test
@@ -474,7 +474,7 @@ class PaymentCancellationAuthorisationServiceTest {
                                       .build();
         when(pisScaAuthorisationService.updateCommonPaymentCancellationPsuData(any(Xs2aUpdatePisCommonPaymentPsuDataRequest.class)))
             .thenReturn(new Xs2aUpdatePisCommonPaymentPsuDataResponse(errorHolder, PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, PSU_ID_DATA));
-        ArgumentCaptor<ScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(ScaStatus.class);
+        ArgumentCaptor<Xs2aScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aScaStatus.class);
 
         // When
         ResponseObject<Xs2aUpdatePisCommonPaymentPsuDataResponse> response = paymentCancellationAuthorisationService.updatePisCancellationPsuData(request);
@@ -482,7 +482,7 @@ class PaymentCancellationAuthorisationServiceTest {
         // Then
         assertTrue(response.hasError());
         verify(loggingContextService).storeScaStatus(scaStatusArgumentCaptor.capture());
-        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(ScaStatus.FAILED);
+        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(Xs2aScaStatus.FAILED);
     }
 
     @Test
@@ -556,7 +556,7 @@ class PaymentCancellationAuthorisationServiceTest {
     void getPaymentCancellationAuthorisationScaStatus_success() {
         // Given
         PisCommonPaymentResponse pisCommonPaymentResponse = buildPisCommonPaymentResponse();
-        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, pisCommonPaymentResponse, ScaStatus.RECEIVED);
+        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, pisCommonPaymentResponse, Xs2aScaStatus.RECEIVED);
 
         when(pisScaAuthorisationService.getCancellationAuthorisationScaStatus(PAYMENT_ID, CANCELLATION_AUTHORISATION_ID))
             .thenReturn(Optional.of(SCA_STATUS));

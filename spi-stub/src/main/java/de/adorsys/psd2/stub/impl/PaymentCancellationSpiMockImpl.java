@@ -17,8 +17,8 @@
 package de.adorsys.psd2.stub.impl;
 
 import de.adorsys.psd2.stub.impl.service.AuthorisationServiceMock;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.*;
@@ -48,7 +48,7 @@ public class PaymentCancellationSpiMockImpl implements PaymentCancellationSpi {
     public SpiResponse<SpiPaymentCancellationResponse> initiatePaymentCancellation(@NotNull SpiContextData contextData, @NotNull SpiPayment payment, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
         log.info("PaymentCancellationSpi#initiatePaymentCancellation: contextData {}, payment {}, aspspConsentData {}", contextData, payment, aspspConsentDataProvider.loadAspspConsentData());
         SpiPaymentCancellationResponse response = new SpiPaymentCancellationResponse();
-        response.setTransactionStatus(TransactionStatus.ACCP);
+        response.setTransactionStatus(Xs2aTransactionStatus.ACCP);
 
         return SpiResponse.<SpiPaymentCancellationResponse>builder()
                    .payload(response)
@@ -103,7 +103,7 @@ public class PaymentCancellationSpiMockImpl implements PaymentCancellationSpi {
         log.info("PaymentCancellationSpi#startScaDecoupled: contextData {}, authorisationId {}, authenticationMethodId {}, businessObject {}, aspspConsentData {}", contextData, authorisationId, authenticationMethodId, businessObject, aspspConsentDataProvider.loadAspspConsentData());
 
         return SpiResponse.<SpiAuthorisationDecoupledScaResponse>builder()
-                   .payload(new SpiAuthorisationDecoupledScaResponse(ScaStatus.SCAMETHODSELECTED, DECOUPLED_PSU_MESSAGE))
+                   .payload(new SpiAuthorisationDecoupledScaResponse(Xs2aScaStatus.SCAMETHODSELECTED, DECOUPLED_PSU_MESSAGE))
                    .build();
     }
 
@@ -117,7 +117,7 @@ public class PaymentCancellationSpiMockImpl implements PaymentCancellationSpi {
     }
 
     @Override
-    public SpiResponse<SpiScaStatusResponse> getScaStatus(@NotNull ScaStatus scaStatus, @NotNull SpiContextData contextData,
+    public SpiResponse<SpiScaStatusResponse> getScaStatus(@NotNull Xs2aScaStatus scaStatus, @NotNull SpiContextData contextData,
                                                           @NotNull String authorisationId,
                                                           @NotNull SpiPayment businessObject,
                                                           @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {

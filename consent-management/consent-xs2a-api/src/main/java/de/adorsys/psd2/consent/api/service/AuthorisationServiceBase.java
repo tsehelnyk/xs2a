@@ -25,7 +25,7 @@ import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 
 import java.util.List;
 
@@ -71,7 +71,7 @@ public interface AuthorisationServiceBase {
      * @param scaStatus       to be updated status
      * @return boolean
      */
-    CmsResponse<Boolean> updateAuthorisationStatus(String authorisationId, ScaStatus scaStatus);
+    CmsResponse<Boolean> updateAuthorisationStatus(String authorisationId, Xs2aScaStatus scaStatus);
 
     /**
      * Gets list of authorisation IDs by parent ID
@@ -88,7 +88,7 @@ public interface AuthorisationServiceBase {
      * @param authorisationId String representation of the authorisation identifier
      * @return SCA status of the authorisation
      */
-    CmsResponse<ScaStatus> getAuthorisationScaStatus(String authorisationId, AuthorisationParentHolder parentHolder);
+    CmsResponse<Xs2aScaStatus> getAuthorisationScaStatus(String authorisationId, AuthorisationParentHolder parentHolder);
 
     /**
      * Checks if requested authentication method is decoupled.

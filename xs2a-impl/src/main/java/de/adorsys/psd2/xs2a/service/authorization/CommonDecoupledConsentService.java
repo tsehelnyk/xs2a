@@ -20,7 +20,7 @@ import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
 import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
@@ -57,7 +57,7 @@ public abstract class CommonDecoupledConsentService<T extends SpiConsent> {
 
             Optional<MessageErrorCode> first = errorHolder.getFirstErrorCode();
             if (first.isPresent() && first.get() == MessageErrorCode.PSU_CREDENTIALS_INVALID) {
-                authorisationService.updateAuthorisationStatus(authorisationId, ScaStatus.FAILED);
+                authorisationService.updateAuthorisationStatus(authorisationId, Xs2aScaStatus.FAILED);
             }
             return new UpdateConsentPsuDataResponse(errorHolder, consentId, authorisationId, psuData);
         }

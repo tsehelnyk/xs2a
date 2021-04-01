@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.spi.domain.payment;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.spi.domain.psu.SpiPsuData;
 import de.adorsys.psd2.xs2a.spi.service.SpiPayment;
@@ -30,7 +30,7 @@ public class SpiCommonPayment implements SpiPayment {
     private String paymentId;
     private PaymentType paymentType;
     private String paymentProduct;
-    private TransactionStatus paymentStatus;
+    private Xs2aTransactionStatus paymentStatus;
     private OffsetDateTime statusChangeTimestamp;
     private List<SpiPsuData> psuDataList;
     private String contentType;

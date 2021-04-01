@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.api.ais;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,19 +25,19 @@ import java.util.Optional;
 public enum AdditionalAccountInformationType {
     DEDICATED_ACCOUNTS {
         @Override
-        public List<AccountReference> getReferencesByType(List<AccountReference> accountReferences) {
+        public List<Xs2aAccountReference> getReferencesByType(List<Xs2aAccountReference> accountReferences) {
             return accountReferences;
         }
     },
     ALL_AVAILABLE_ACCOUNTS {
         @Override
-        public List<AccountReference> getReferencesByType(List<AccountReference> accountReferences) {
+        public List<Xs2aAccountReference> getReferencesByType(List<Xs2aAccountReference> accountReferences) {
             return Collections.emptyList();
         }
     },
     NONE {
         @Override
-        public List<AccountReference> getReferencesByType(List<AccountReference> accountReferences) {
+        public List<Xs2aAccountReference> getReferencesByType(List<Xs2aAccountReference> accountReferences) {
             return null; //NOSONAR
         }
     };
@@ -50,5 +50,5 @@ public enum AdditionalAccountInformationType {
                    .orElse(AdditionalAccountInformationType.NONE);
     }
 
-    public abstract List<AccountReference> getReferencesByType(List<AccountReference> accountReferences);
+    public abstract List<Xs2aAccountReference> getReferencesByType(List<Xs2aAccountReference> accountReferences);
 }

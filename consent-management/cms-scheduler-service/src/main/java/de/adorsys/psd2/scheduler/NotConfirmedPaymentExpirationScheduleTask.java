@@ -19,7 +19,7 @@ package de.adorsys.psd2.scheduler;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.repository.PisCommonPaymentDataRepository;
 import de.adorsys.psd2.consent.service.PisCommonPaymentConfirmationExpirationService;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -45,7 +45,7 @@ public class NotConfirmedPaymentExpirationScheduleTask extends PageableScheduler
         long start = System.currentTimeMillis();
         log.info("Not confirmed payment expiration schedule task is run!");
 
-        Long totalItems = paymentDataRepository.countByTransactionStatusIn(EnumSet.of(TransactionStatus.RCVD, TransactionStatus.PATC));
+        Long totalItems = paymentDataRepository.countByTransactionStatusIn(EnumSet.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PATC));
         log.debug("Found {} non confirmed payment items for expiration checking", totalItems);
 
         execute(totalItems);
@@ -54,7 +54,7 @@ public class NotConfirmedPaymentExpirationScheduleTask extends PageableScheduler
 
     @Override
     protected void executePageable(Pageable pageable) {
-        List<PisCommonPaymentData> expiredNotConfirmedPayments = paymentDataRepository.findByTransactionStatusIn(EnumSet.of(TransactionStatus.RCVD, TransactionStatus.PATC), pageable)
+        List<PisCommonPaymentData> expiredNotConfirmedPayments = paymentDataRepository.findByTransactionStatusIn(EnumSet.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PATC), pageable)
                                                                          .stream()
                                                                          .filter(pisCommonPaymentConfirmationExpirationService::isConfirmationExpired)
                                                                          .collect(Collectors.toList());

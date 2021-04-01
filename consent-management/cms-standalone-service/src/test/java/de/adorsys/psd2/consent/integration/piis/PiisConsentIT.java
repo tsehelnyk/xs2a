@@ -27,9 +27,9 @@ import de.adorsys.psd2.consent.aspsp.api.piis.CreatePiisConsentRequest;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.integration.config.IntegrationTestConfiguration;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
-import de.adorsys.psd2.core.data.AccountAccess;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceSelector;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -101,7 +101,7 @@ class PiisConsentIT {
         // Second, we update the status and check it and the updated timestamp
         entities = consentJpaRepository.findAll();
         ConsentEntity updatedEntity = entities.iterator().next();
-        assertEquals(ConsentStatus.TERMINATED_BY_ASPSP, updatedEntity.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.TERMINATED_BY_ASPSP, updatedEntity.getConsentStatus());
         assertTrue(updatedEntity.getStatusChangeTimestamp().isAfter(updatedEntity.getCreationTimestamp()));
     }
 
@@ -150,15 +150,15 @@ class PiisConsentIT {
             // Then
             List<CmsConsent> payload = cmsResponse.getPayload();
             assertEquals(1, payload.size());
-            AccountAccess aspspAccountAccesses = payload.get(0).getAspspAccountAccesses();
-            AccountReference account = aspspAccountAccesses.getAccounts().get(0);
+            Xs2aConsentAccountAccess aspspAccountAccesses = payload.get(0).getAspspAccountAccesses();
+            Xs2aAccountReference account = aspspAccountAccesses.getAccounts().get(0);
             assertNotNull(account);
             assertEquals(selector, account.getUsedAccountReferenceSelector());
         });
     }
 
     private AccountReferenceSelector createConsentAndGetSelector(AccountReferenceType accountReferenceType, String accountReferenceValue) {
-        AccountReference accountReference = new AccountReference(accountReferenceType, accountReferenceValue, EUR_CURRENCY);
+        Xs2aAccountReference accountReference = new Xs2aAccountReference(accountReferenceType, accountReferenceValue, EUR_CURRENCY);
         CreatePiisConsentRequest request = buildCreatePiisConsentRequest(accountReference);
         cmsAspspPiisServiceInternal.createConsent(PSU_ID_DATA, request, DEFAULT_SERVICE_INSTANCE_ID);
 
@@ -171,7 +171,7 @@ class PiisConsentIT {
     }
 
     @NotNull
-    private CreatePiisConsentRequest buildCreatePiisConsentRequest(AccountReference accountReference) {
+    private CreatePiisConsentRequest buildCreatePiisConsentRequest(Xs2aAccountReference accountReference) {
         CreatePiisConsentRequest request = new CreatePiisConsentRequest();
         request.setTppAuthorisationNumber(TPP_AUTHORISATION_NUMBER);
         request.setAccount(accountReference);
@@ -187,8 +187,8 @@ class PiisConsentIT {
         return new PsuIdData(psuId, null, psuCorporateId, null, null);
     }
 
-    private AccountReference buildAccountReference() {
-        return new AccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
+    private Xs2aAccountReference buildAccountReference() {
+        return new Xs2aAccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
     }
 
     /**

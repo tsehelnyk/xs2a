@@ -4,6 +4,7 @@
 
 * Replaced all occurrences of CmsPayment with CmsBasePaymentResponse
 * Added business object to AuthorisationSpi#getScaStatus
+* Changed models naming
 
 == Replaced all occurrences of CmsPayment with CmsBasePaymentResponse
 
@@ -12,4 +13,8 @@ From now on, CmsPayment usages are replaced with CmsBasePaymentResponse.
 == Added business object to AuthorisationSpi#getScaStatus
 
 The method AuthorisationSpi#getScaStatus was extended by adding business object.
+
+== Changed models naming
+
+Changed all models names which dublicate xs2a-server-api module models names
 

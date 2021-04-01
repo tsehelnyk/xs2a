@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.domain.pis;
 
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +25,7 @@ import org.springframework.http.MediaType;
 
 @Data
 public class ReadPaymentStatusResponse {
-    private TransactionStatus status;
+    private Xs2aTransactionStatus status;
     @Nullable
     private Boolean fundsAvailable;
     private MediaType responseContentType;
@@ -36,7 +36,7 @@ public class ReadPaymentStatusResponse {
     @Nullable
     private String psuMessage;
 
-    public ReadPaymentStatusResponse(@NotNull TransactionStatus status, @Nullable Boolean fundsAvailable,
+    public ReadPaymentStatusResponse(@NotNull Xs2aTransactionStatus status, @Nullable Boolean fundsAvailable,
                                      @NotNull MediaType responseContentType, @Nullable byte[] paymentStatusRaw,
                                      @Nullable String psuMessage) {
         this.status = status;

@@ -23,11 +23,11 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
-public class BulkPaymentInitiationJson {
+public class Xs2aPisBulkPaymentInitiationJson {
     private Boolean batchBookingPreferred;
-    private AccountReference debtorAccount;
+    private Xs2aPisAccountReference debtorAccount;
     private String debtorName;
     private LocalDate requestedExecutionDate;
     private OffsetDateTime requestedExecutionTime;
-    private List<PaymentInitiationJson> payments;
+    private List<Xs2aPisPaymentInitiationJson> payments;
 }

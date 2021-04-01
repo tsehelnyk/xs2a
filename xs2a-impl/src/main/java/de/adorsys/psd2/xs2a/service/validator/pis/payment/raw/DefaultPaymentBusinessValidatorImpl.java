@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.validator.pis.payment.raw;
 
 import de.adorsys.psd2.validator.payment.PaymentBusinessValidator;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.profile.StandardPaymentProductsResolver;
@@ -42,7 +42,7 @@ public class DefaultPaymentBusinessValidatorImpl implements PaymentBusinessValid
             return ValidationResult.valid();
         }
 
-        Set<AccountReference> accountReferences = paymentAccountReferenceExtractor.extractAccountReferences(body, paymentType);
+        Set<Xs2aAccountReference> accountReferences = paymentAccountReferenceExtractor.extractAccountReferences(body, paymentType);
         return supportedAccountReferenceValidator.validate(accountReferences);
     }
 }

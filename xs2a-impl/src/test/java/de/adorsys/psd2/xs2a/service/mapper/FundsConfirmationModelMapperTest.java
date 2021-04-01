@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.mapper;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.psd2.model.Amount;
 import de.adorsys.psd2.model.ConfirmationOfFunds;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.fund.FundsConfirmationRequest;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
@@ -51,7 +51,7 @@ class FundsConfirmationModelMapperTest {
         //Given
         ConfirmationOfFunds confirmationOfFunds = jsonReader.getObjectFromFile("json/service/mapper/funds-confirmation-model-mapper/confirmation-of-funds.json", ConfirmationOfFunds.class);
         FundsConfirmationRequest expected = jsonReader.getObjectFromFile("json/service/mapper/funds-confirmation-model-mapper/funds-confirmation-request.json", FundsConfirmationRequest.class);
-        when(xs2aObjectMapper.convertValue(any(Object.class), eq(AccountReference.class)))
+        when(xs2aObjectMapper.convertValue(any(Object.class), eq(Xs2aAccountReference.class)))
             .thenReturn(expected.getPsuAccount());
         when(amountModelMapper.mapToXs2aAmount(any(Amount.class)))
             .thenReturn(expected.getInstructedAmount());

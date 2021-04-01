@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.validator.ais.account.dto;
 
 import de.adorsys.psd2.core.data.ais.AisConsent;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.service.validator.TppInfoProvider;
 import lombok.Value;
@@ -40,11 +40,11 @@ public class GetCardAccountDetailsRequestObject implements TppInfoProvider {
         return aisConsent.getTppInfo();
     }
 
-    public List<AccountReference> getAccounts() {
+    public List<Xs2aAccountReference> getAccounts() {
         return aisConsent.getAccess().getAccounts();
     }
 
-    public List<AccountReference> getTransactions() {
+    public List<Xs2aAccountReference> getTransactions() {
         return aisConsent.getAccess().getTransactions();
     }
 

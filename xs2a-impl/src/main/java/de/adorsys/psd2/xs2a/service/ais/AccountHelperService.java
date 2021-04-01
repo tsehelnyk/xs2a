@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.ais;
 import de.adorsys.psd2.consent.api.ActionStatus;
 import de.adorsys.psd2.consent.api.TypeAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.service.RequestProviderService;
@@ -45,7 +45,7 @@ public class AccountHelperService {
     private final SpiContextDataProvider spiContextDataProvider;
     private final RequestProviderService requestProviderService;
 
-    public SpiAccountReference findAccountReference(List<AccountReference> references, String resourceId) {
+    public SpiAccountReference findAccountReference(List<Xs2aAccountReference> references, String resourceId) {
         return references.stream()
                    .filter(accountReference -> StringUtils.equals(accountReference.getResourceId(), resourceId))
                    .findFirst()

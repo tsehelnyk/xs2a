@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service;
 
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.consent.PaymentScaStatus;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
@@ -58,7 +58,7 @@ public class PaymentServiceForAuthorisationImpl extends PaymentServiceForAuthori
     }
 
     @Override
-    SpiResponse<SpiScaStatusResponse> getScaStatus(@NotNull ScaStatus scaStatus, @NotNull SpiContextData contextData,
+    SpiResponse<SpiScaStatusResponse> getScaStatus(@NotNull Xs2aScaStatus scaStatus, @NotNull SpiContextData contextData,
                                                    @NotNull String authorisationId, @NotNull SpiPayment businessObject,
                                                    @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
         return paymentAuthorisationSpi.getScaStatus(scaStatus, contextData, authorisationId, businessObject,

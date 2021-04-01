@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.web.mapper;
 
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,15 +42,15 @@ class HrefLinkMapperTest {
     void mapToLinksMap_withValidMap_shouldReturnLinks() {
         // Given
         Links links = new Links();
-        links.setScaStatus(new HrefType(LINK_PATH));
+        links.setScaStatus(new Xs2aHrefType(LINK_PATH));
 
         //When:
-        Map<String, HrefType> linkMap = hrefMapper.mapToLinksMap(links);
+        Map<String, Xs2aHrefType> linkMap = hrefMapper.mapToLinksMap(links);
 
         //Then:
         assertNotNull(linkMap);
 
-        HrefType wrappedLink = linkMap.get(LINK_NAME);
+        Xs2aHrefType wrappedLink = linkMap.get(LINK_NAME);
 
         assertNotNull(wrappedLink);
         assertEquals(LINK_PATH, wrappedLink.getHref());
@@ -59,7 +59,7 @@ class HrefLinkMapperTest {
     @Test
     void mapToLinksMap_withNullMap_shouldReturnNull() {
         //When:
-        Map<String, HrefType> linkMap = hrefMapper.mapToLinksMap(null);
+        Map<String, Xs2aHrefType> linkMap = hrefMapper.mapToLinksMap(null);
 
         //Then:
         assertNull(linkMap);

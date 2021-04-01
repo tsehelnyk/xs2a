@@ -50,7 +50,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.Currency;
 
-import static de.adorsys.psd2.xs2a.core.sca.ScaStatus.SCAMETHODSELECTED;
+import static de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus.SCAMETHODSELECTED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 

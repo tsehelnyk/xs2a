@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.payment.support.mapper.spi;
 
-import de.adorsys.psd2.core.payment.model.PurposeCode;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
 import de.adorsys.psd2.xs2a.core.pis.*;
 import de.adorsys.psd2.xs2a.domain.pis.BulkPayment;
 import de.adorsys.psd2.xs2a.domain.pis.PeriodicPayment;
@@ -152,7 +152,7 @@ class SpiPaymentMapperTest {
     private SpiPaymentInfo buildSpiPaymentInfo() {
         SpiPaymentInfo spiPayment = new SpiPaymentInfo(PAYMENT_PRODUCT);
         spiPayment.setPaymentId(PAYMENT_ID);
-        spiPayment.setPaymentStatus(TransactionStatus.ACSP);
+        spiPayment.setPaymentStatus(Xs2aTransactionStatus.ACSP);
         spiPayment.setPsuDataList(Collections.singletonList(SPI_PSU_DATA));
         spiPayment.setStatusChangeTimestamp(STATUS_CHANGE_TIMESTAMP);
         spiPayment.setCreationTimestamp(CREATION_TIMESTAMP);
@@ -175,7 +175,7 @@ class SpiPaymentMapperTest {
     private SpiSinglePayment buildEnrichedSpiSinglePayment() {
         SpiSinglePayment singlePayment = buildBaseSpiSinglePayment();
         singlePayment.setPaymentId(PAYMENT_ID);
-        singlePayment.setPaymentStatus(TransactionStatus.ACSP);
+        singlePayment.setPaymentStatus(Xs2aTransactionStatus.ACSP);
         singlePayment.setPaymentProduct(PAYMENT_PRODUCT);
         singlePayment.setPsuDataList(Collections.singletonList(SPI_PSU_DATA));
         singlePayment.setStatusChangeTimestamp(STATUS_CHANGE_TIMESTAMP);
@@ -204,7 +204,7 @@ class SpiPaymentMapperTest {
     private SpiPeriodicPayment buildEnrichedSpiPeriodicPayment() {
         SpiPeriodicPayment spiPeriodicPayment = buildBaseSpiPeriodicPayment();
         spiPeriodicPayment.setPaymentId(PAYMENT_ID);
-        spiPeriodicPayment.setPaymentStatus(TransactionStatus.ACSP);
+        spiPeriodicPayment.setPaymentStatus(Xs2aTransactionStatus.ACSP);
         spiPeriodicPayment.setPaymentProduct(PAYMENT_PRODUCT);
         spiPeriodicPayment.setPsuDataList(Collections.singletonList(SPI_PSU_DATA));
         spiPeriodicPayment.setStatusChangeTimestamp(STATUS_CHANGE_TIMESTAMP);
@@ -227,7 +227,7 @@ class SpiPaymentMapperTest {
         bulkPaymentPart.setRemittanceInformationUnstructured(REMITTANCE_INFORMATION);
         bulkPaymentPart.setUltimateDebtor("ultimateDebtor");
         bulkPaymentPart.setUltimateCreditor("ultimateCreditor");
-        bulkPaymentPart.setPurposeCode(PurposeCode.CDQC);
+        bulkPaymentPart.setPurposeCode(Xs2aPisPurposeCode.CDQC);
         bulkPaymentPart.setRemittanceInformationStructured("reference");
 
         bulkPayment.setPayments(Collections.singletonList(bulkPaymentPart));
@@ -237,7 +237,7 @@ class SpiPaymentMapperTest {
     private SpiBulkPayment buildEnrichedSpiBulkPayment() {
         SpiBulkPayment bulkPayment = buildBaseSpiBulkPayment();
         bulkPayment.setPaymentId(PAYMENT_ID);
-        bulkPayment.setPaymentStatus(TransactionStatus.ACSP);
+        bulkPayment.setPaymentStatus(Xs2aTransactionStatus.ACSP);
         bulkPayment.setPaymentProduct(PAYMENT_PRODUCT);
         bulkPayment.setPsuDataList(Collections.singletonList(SPI_PSU_DATA));
         bulkPayment.setStatusChangeTimestamp(STATUS_CHANGE_TIMESTAMP);

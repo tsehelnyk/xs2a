@@ -17,14 +17,14 @@
 package de.adorsys.psd2.xs2a.service.ais;
 
 import de.adorsys.psd2.consent.api.TypeAccess;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aBalancesReport;
@@ -84,7 +84,7 @@ public class CardAccountBalanceService extends AbstractBalanceService {
 
     @Override
     protected SpiResponse<List<SpiAccountBalance>> getSpiResponse(AisConsent aisConsent, String consentId, String accountId) {
-        AccountAccess access = aisConsent.getAspspAccountAccesses();
+        Xs2aConsentAccountAccess access = aisConsent.getAspspAccountAccesses();
         SpiAccountReference requestedAccountReference = accountServicesHolder.findAccountReference(access.getBalances(), accountId);
 
         return cardAccountSpi.requestCardBalancesForAccount(accountServicesHolder.getSpiContextData(),
@@ -109,15 +109,15 @@ public class CardAccountBalanceService extends AbstractBalanceService {
                                                                                      String consentId,
                                                                                      String requestUri,
                                                                                      List<SpiAccountBalance> payload) {
-        AccountAccess access = aisConsent.getAspspAccountAccesses();
-        List<AccountReference> balances = access.getBalances();
+        Xs2aConsentAccountAccess access = aisConsent.getAspspAccountAccesses();
+        List<Xs2aAccountReference> balances = access.getBalances();
         if (hasNoAccessToCardSource(balances)) {
             return ResponseObject.<Xs2aBalancesReport>builder()
                        .fail(AIS_401, TppMessageInformation.of(CONSENT_INVALID))
                        .build();
         }
 
-        AccountReference maskedAccountReference = getMaskedAccountReference(accountId, access.getBalances());
+        Xs2aAccountReference maskedAccountReference = getMaskedAccountReference(accountId, access.getBalances());
 
         Xs2aBalancesReport balancesReport = accountMappersHolder.mapToXs2aBalancesReport(maskedAccountReference, payload);
 
@@ -132,8 +132,8 @@ public class CardAccountBalanceService extends AbstractBalanceService {
         return response;
     }
 
-    private AccountReference getMaskedAccountReference(String accountId, List<AccountReference> balances) {
-        AccountReference filteredAccountReference = filterAccountReference(balances, accountId);
+    private Xs2aAccountReference getMaskedAccountReference(String accountId, List<Xs2aAccountReference> balances) {
+        Xs2aAccountReference filteredAccountReference = filterAccountReference(balances, accountId);
 
         if (filteredAccountReference != null && StringUtils.isNotBlank(filteredAccountReference.getPan())) {
             String maskedPan = accountServicesHolder.hidePanInAccountReference(filteredAccountReference.getPan());
@@ -145,15 +145,15 @@ public class CardAccountBalanceService extends AbstractBalanceService {
         return filteredAccountReference;
     }
 
-    private AccountReference filterAccountReference(List<AccountReference> references, String resourceId) {
+    private Xs2aAccountReference filterAccountReference(List<Xs2aAccountReference> references, String resourceId) {
         return references.stream()
                    .filter(accountReference -> StringUtils.equals(accountReference.getResourceId(), resourceId))
                    .findFirst()
                    .orElse(null);
     }
 
-    private boolean hasNoAccessToCardSource(List<AccountReference> references) {
+    private boolean hasNoAccessToCardSource(List<Xs2aAccountReference> references) {
         return references.stream()
-                   .allMatch(AccountReference::isNotCardAccount);
+                   .allMatch(Xs2aAccountReference::isNotCardAccount);
     }
 }

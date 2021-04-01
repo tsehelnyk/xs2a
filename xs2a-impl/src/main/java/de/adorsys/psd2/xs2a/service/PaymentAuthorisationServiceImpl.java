@@ -22,7 +22,7 @@ import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -141,7 +141,7 @@ public class PaymentAuthorisationServiceImpl implements PaymentAuthorisationServ
             MessageErrorCode messageErrorCode = validationResult.getMessageError().getTppMessage().getMessageErrorCode();
 
             if (EnumSet.of(PSU_CREDENTIALS_INVALID, FORMAT_ERROR_NO_PSU).contains(messageErrorCode)) {
-                authorisationService.updateAuthorisationStatus(request.getAuthorisationId(), ScaStatus.FAILED);
+                authorisationService.updateAuthorisationStatus(request.getAuthorisationId(), Xs2aScaStatus.FAILED);
             }
 
             log.info("Payment-ID [{}]. Update PIS CommonPayment PSU data - validation failed: {}",
@@ -241,7 +241,7 @@ public class PaymentAuthorisationServiceImpl implements PaymentAuthorisationServ
         }
 
         PisScaAuthorisationService pisScaAuthorisationService = pisScaAuthorisationServiceResolver.getService(authorisationId);
-        Optional<ScaStatus> scaStatusOptional = pisScaAuthorisationService.getAuthorisationScaStatus(paymentId, authorisationId);
+        Optional<Xs2aScaStatus> scaStatusOptional = pisScaAuthorisationService.getAuthorisationScaStatus(paymentId, authorisationId);
 
         if (scaStatusOptional.isEmpty()) {
             return ResponseObject.<PaymentScaStatus>builder()
@@ -249,7 +249,7 @@ public class PaymentAuthorisationServiceImpl implements PaymentAuthorisationServ
                        .build();
         }
 
-        ScaStatus scaStatus = scaStatusOptional.get();
+        Xs2aScaStatus scaStatus = scaStatusOptional.get();
 
         PsuIdData psuIdData = psuIdDataAuthorisationService.getPsuIdData(authorisationId, pisCommonPaymentResponse.getPsuData());
 

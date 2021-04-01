@@ -7,7 +7,7 @@ import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.ConsentServiceEncrypted;
 import de.adorsys.psd2.consent.web.xs2a.config.ObjectMapperTestConfig;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -118,7 +118,7 @@ class CmsConsentControllerTest {
 
     @Test
     void getConsentStatusById_Success() throws Exception {
-        when(consentServiceEncrypted.getConsentStatusById(EXTERNAL_ID)).thenReturn(CmsResponse.<ConsentStatus>builder().payload(ConsentStatus.VALID).build());
+        when(consentServiceEncrypted.getConsentStatusById(EXTERNAL_ID)).thenReturn(CmsResponse.<Xs2aConsentStatus>builder().payload(Xs2aConsentStatus.VALID).build());
 
 
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get(UriComponentsBuilder.fromPath("/api/v1/consent/{encrypted-consent-id}/status")
@@ -134,7 +134,7 @@ class CmsConsentControllerTest {
 
     @Test
     void getConsentStatusById_returnsNotFoundResponse() throws Exception {
-        when(consentServiceEncrypted.getConsentStatusById(EXTERNAL_ID)).thenReturn(CmsResponse.<ConsentStatus>builder().error(CmsError.LOGICAL_ERROR).build());
+        when(consentServiceEncrypted.getConsentStatusById(EXTERNAL_ID)).thenReturn(CmsResponse.<Xs2aConsentStatus>builder().error(CmsError.LOGICAL_ERROR).build());
 
 
         mockMvc.perform(MockMvcRequestBuilders.get(UriComponentsBuilder.fromPath("/api/v1/consent/{encrypted-consent-id}/status")
@@ -146,10 +146,10 @@ class CmsConsentControllerTest {
 
     @Test
     void updateConsentStatus_success() throws Exception {
-        when(consentServiceEncrypted.updateConsentStatusById(EXTERNAL_ID, ConsentStatus.VALID)).thenReturn(CmsResponse.<Boolean>builder().payload(true).build());
+        when(consentServiceEncrypted.updateConsentStatusById(EXTERNAL_ID, Xs2aConsentStatus.VALID)).thenReturn(CmsResponse.<Boolean>builder().payload(true).build());
 
         mockMvc.perform(MockMvcRequestBuilders.put(UriComponentsBuilder.fromPath("/api/v1/consent/{encrypted-consent-id}/status/{status}")
-                                                       .buildAndExpand(EXTERNAL_ID, ConsentStatus.VALID.toString())
+                                                       .buildAndExpand(EXTERNAL_ID, Xs2aConsentStatus.VALID.toString())
                                                        .toUriString())
                             .contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(status().is(HttpStatus.OK.value()));
@@ -157,10 +157,10 @@ class CmsConsentControllerTest {
 
     @Test
     void updateConsentStatus_throwsChecksumError() throws Exception {
-        when(consentServiceEncrypted.updateConsentStatusById(EXTERNAL_ID, ConsentStatus.VALID)).thenThrow(WrongChecksumException.class);
+        when(consentServiceEncrypted.updateConsentStatusById(EXTERNAL_ID, Xs2aConsentStatus.VALID)).thenThrow(WrongChecksumException.class);
 
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.put(UriComponentsBuilder.fromPath("/api/v1/consent/{encrypted-consent-id}/status/{status}")
-                                                                                     .buildAndExpand(EXTERNAL_ID, ConsentStatus.VALID.toString())
+                                                                                     .buildAndExpand(EXTERNAL_ID, Xs2aConsentStatus.VALID.toString())
                                                                                      .toUriString())
                                                           .contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -171,10 +171,10 @@ class CmsConsentControllerTest {
 
     @Test
     void updateConsentStatus_returnsNotFoundResponse_withError() throws Exception {
-        when(consentServiceEncrypted.updateConsentStatusById(EXTERNAL_ID, ConsentStatus.VALID)).thenReturn(CmsResponse.<Boolean>builder().error(CmsError.LOGICAL_ERROR).build());
+        when(consentServiceEncrypted.updateConsentStatusById(EXTERNAL_ID, Xs2aConsentStatus.VALID)).thenReturn(CmsResponse.<Boolean>builder().error(CmsError.LOGICAL_ERROR).build());
 
         mockMvc.perform(MockMvcRequestBuilders.put(UriComponentsBuilder.fromPath("/api/v1/consent/{encrypted-consent-id}/status/{status}")
-                                                       .buildAndExpand(EXTERNAL_ID, ConsentStatus.VALID.toString())
+                                                       .buildAndExpand(EXTERNAL_ID, Xs2aConsentStatus.VALID.toString())
                                                        .toUriString())
                             .contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
@@ -182,10 +182,10 @@ class CmsConsentControllerTest {
 
     @Test
     void updateConsentStatus_returnsNotFoundResponse_withFalseBooleanResponse() throws Exception {
-        when(consentServiceEncrypted.updateConsentStatusById(EXTERNAL_ID, ConsentStatus.VALID)).thenReturn(CmsResponse.<Boolean>builder().payload(false).build());
+        when(consentServiceEncrypted.updateConsentStatusById(EXTERNAL_ID, Xs2aConsentStatus.VALID)).thenReturn(CmsResponse.<Boolean>builder().payload(false).build());
 
         mockMvc.perform(MockMvcRequestBuilders.put(UriComponentsBuilder.fromPath("/api/v1/consent/{encrypted-consent-id}/status/{status}")
-                                                       .buildAndExpand(EXTERNAL_ID, ConsentStatus.VALID.toString())
+                                                       .buildAndExpand(EXTERNAL_ID, Xs2aConsentStatus.VALID.toString())
                                                        .toUriString())
                             .contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(status().is(HttpStatus.NOT_FOUND.value()));

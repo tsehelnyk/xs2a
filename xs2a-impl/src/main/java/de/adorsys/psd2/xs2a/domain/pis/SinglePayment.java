@@ -17,11 +17,11 @@
 package de.adorsys.psd2.xs2a.domain.pis;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.adorsys.psd2.core.payment.model.PurposeCode;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
 import de.adorsys.psd2.model.ChargeBearer;
 import de.adorsys.psd2.xs2a.core.domain.address.Xs2aAddress;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.domain.AccountReferenceCollector;
 import lombok.Data;
@@ -47,7 +47,7 @@ public class SinglePayment extends CommonPayment implements AccountReferenceColl
     private String instructionIdentification;
 
     @NotNull
-    private AccountReference debtorAccount;
+    private Xs2aAccountReference debtorAccount;
 
     private String ultimateDebtor;
 
@@ -56,7 +56,7 @@ public class SinglePayment extends CommonPayment implements AccountReferenceColl
     private Xs2aAmount instructedAmount;
 
     @NotNull
-    private AccountReference creditorAccount;
+    private Xs2aAccountReference creditorAccount;
 
     private String creditorAgent;
 
@@ -68,7 +68,7 @@ public class SinglePayment extends CommonPayment implements AccountReferenceColl
 
     private String ultimateCreditor;
 
-    private PurposeCode purposeCode;
+    private Xs2aPisPurposeCode purposeCode;
 
     @Size(max = 140)
     private String remittanceInformationUnstructured;
@@ -85,10 +85,10 @@ public class SinglePayment extends CommonPayment implements AccountReferenceColl
     private String debtorName;
 
     private ChargeBearer chargeBearer;
-    
+
     @JsonIgnore
     @Override
-    public Set<AccountReference> getAccountReferences() {
+    public Set<Xs2aAccountReference> getAccountReferences() {
         return new HashSet<>(Arrays.asList(this.debtorAccount, this.creditorAccount));
     }
 

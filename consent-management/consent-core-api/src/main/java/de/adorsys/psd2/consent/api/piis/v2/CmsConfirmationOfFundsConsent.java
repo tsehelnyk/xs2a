@@ -17,8 +17,8 @@
 package de.adorsys.psd2.consent.api.piis.v2;
 
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationTemplate;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import lombok.AllArgsConstructor;
@@ -34,11 +34,11 @@ import java.util.List;
 @NoArgsConstructor
 public class CmsConfirmationOfFundsConsent {
     private String id;
-    private AccountReference account;
+    private Xs2aAccountReference account;
     private LocalDate validUntil;
     private LocalDate expireDate;
     private LocalDate lastActionDate;
-    private ConsentStatus consentStatus;
+    private Xs2aConsentStatus consentStatus;
     private boolean tppRedirectPreferred;
     private List<PsuIdData> psuIdDataList;
     private TppInfo tppInfo;

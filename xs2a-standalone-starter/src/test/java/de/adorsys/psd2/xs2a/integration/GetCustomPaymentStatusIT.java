@@ -23,7 +23,7 @@ import de.adorsys.psd2.xs2a.config.CorsConfigurationProperties;
 import de.adorsys.psd2.xs2a.config.WebConfig;
 import de.adorsys.psd2.xs2a.config.Xs2aEndpointPathConstant;
 import de.adorsys.psd2.xs2a.config.Xs2aInterfaceConfig;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.integration.builder.UrlBuilder;
@@ -129,7 +129,7 @@ class GetCustomPaymentStatusIT extends CustomPaymentTestParent {
             .willReturn(CmsResponse.<PisCommonPaymentResponse>builder().payload(response).build());
 
         byte[] paymentStatusRaw = isMediaTypeXml ? data : null;
-        SpiGetPaymentStatusResponse buildGetPaymentStatusResponse = new SpiGetPaymentStatusResponse(TransactionStatus.RCVD, null, mediaType.toString(), paymentStatusRaw, "PSU message");
+        SpiGetPaymentStatusResponse buildGetPaymentStatusResponse = new SpiGetPaymentStatusResponse(Xs2aTransactionStatus.RCVD, null, mediaType.toString(), paymentStatusRaw, "PSU message");
         given(commonPaymentSpi.getPaymentStatusById(any(SpiContextData.class), anyString(), any(SpiPaymentInfo.class), any(SpiAspspConsentDataProvider.class)))
             .willReturn(PisCommonPaymentResponseBuilder.buildGetPaymentStatusResponse(buildGetPaymentStatusResponse));
 

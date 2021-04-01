@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.domain.AuthorisationEntity;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.domain.consent.ConsentTppInformationEntity;
 import de.adorsys.psd2.consent.service.AisConsentUsageService;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
@@ -129,15 +129,15 @@ public class AisConsentMapper {
                    .build();
     }
 
-    public AccountAccess mapToAccountAccess(AisAccountAccess accountAccess) {
-        return new AccountAccess(ListUtils.emptyIfNull(accountAccess.getAccounts()),
+    public Xs2aConsentAccountAccess mapToAccountAccess(AisAccountAccess accountAccess) {
+        return new Xs2aConsentAccountAccess(ListUtils.emptyIfNull(accountAccess.getAccounts()),
                                  ListUtils.emptyIfNull(accountAccess.getBalances()),
                                  ListUtils.emptyIfNull(accountAccess.getTransactions()),
                                  accountAccess.getAccountAdditionalInformationAccess());
     }
 
     private AisAccountAccess mapToAisAccountAccess(AisConsent aisConsent) {
-        AccountAccess tppAccesses = aisConsent.getTppAccountAccesses();
+        Xs2aConsentAccountAccess tppAccesses = aisConsent.getTppAccountAccesses();
         AisConsentData consentData = aisConsent.getConsentData();
         return new AisAccountAccess(tppAccesses.getAccounts(),
                                     tppAccesses.getBalances(),
@@ -149,7 +149,7 @@ public class AisConsentMapper {
     }
 
     private AisAccountAccess mapToAspspAisAccountAccess(AisConsent aisConsent) {
-        AccountAccess aspspAccesses = aisConsent.getAspspAccountAccesses();
+        Xs2aConsentAccountAccess aspspAccesses = aisConsent.getAspspAccountAccesses();
         AisConsentData consentData = aisConsent.getConsentData();
         return new AisAccountAccess(aspspAccesses.getAccounts(),
                                     aspspAccesses.getBalances(),

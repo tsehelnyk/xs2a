@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.link;
 
 import de.adorsys.psd2.aspsp.profile.domain.AspspSettings;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentCancellationRequest;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.profile.ScaRedirectFlow;
@@ -87,7 +87,7 @@ class PaymentCancellationAspectServiceTest {
         response.setPaymentProduct(PAYMENT_PRODUCT);
         response.setPaymentType(PaymentType.SINGLE);
         response.setPsuData(PSU_DATA);
-        response.setTransactionStatus(TransactionStatus.ACCP);
+        response.setTransactionStatus(Xs2aTransactionStatus.ACCP);
 
         paymentCancellationRequest = new PisPaymentCancellationRequest(PaymentType.SINGLE, PAYMENT_PRODUCT, PAYMENT_ID,
                                                                        false, new TppRedirectUri("ok_url", "nok_url"));
@@ -96,7 +96,7 @@ class PaymentCancellationAspectServiceTest {
     @Test
     void cancelPayment_status_RJCT() {
         // Given
-        response.setTransactionStatus(TransactionStatus.RJCT);
+        response.setTransactionStatus(Xs2aTransactionStatus.RJCT);
 
         responseObject = ResponseObject.<CancelPaymentResponse>builder()
                              .body(response)

@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.web.mapper.TppRedirectUriMapper;
 import de.adorsys.xs2a.reader.JsonReader;
@@ -47,7 +47,7 @@ class Xs2AConsentAuthorisationMapperTest {
 
     @Test
     void mapToAuthorisationRequest_CreateAuthorisationRequest() {
-        CreateAuthorisationRequest actual = mapper.mapToAuthorisationRequest(ScaStatus.RECEIVED, PSU_ID_DATA, ScaApproach.EMBEDDED, "ok.uri", "nok.uri");
+        CreateAuthorisationRequest actual = mapper.mapToAuthorisationRequest(Xs2aScaStatus.RECEIVED, PSU_ID_DATA, ScaApproach.EMBEDDED, "ok.uri", "nok.uri");
 
         CreateAuthorisationRequest expected = jsonReader.getObjectFromFile("json/service/mapper/consent/create-authorisation-request.json", CreateAuthorisationRequest.class);
         assertEquals(expected, actual);

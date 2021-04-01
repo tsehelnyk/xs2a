@@ -16,12 +16,12 @@
 
 package de.adorsys.psd2.consent.api.pis;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class PisCommonPaymentDataStatusResponse {
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
 }

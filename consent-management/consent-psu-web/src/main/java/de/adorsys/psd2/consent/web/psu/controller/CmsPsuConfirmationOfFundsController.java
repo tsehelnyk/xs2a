@@ -20,12 +20,12 @@ import de.adorsys.psd2.consent.api.piis.v2.CmsConfirmationOfFundsConsent;
 import de.adorsys.psd2.consent.api.piis.v2.CmsConfirmationOfFundsResponse;
 import de.adorsys.psd2.consent.psu.api.CmsPsuConfirmationOfFundsApi;
 import de.adorsys.psd2.consent.psu.api.CmsPsuConfirmationOfFundsService;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,7 +42,7 @@ public class CmsPsuConfirmationOfFundsController implements CmsPsuConfirmationOf
 
     @Override
     public ResponseEntity<Object> updateAuthorisationStatus(String consentId, String status, String authorisationId, String psuId, String psuIdType, String psuCorporateId, String psuCorporateIdType, String instanceId, AuthenticationDataHolder authenticationDataHolder) {
-        ScaStatus scaStatus = ScaStatus.fromValue(status);
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.fromValue(status);
 
         if (scaStatus == null) {
             log.info("Consent ID [{}], Authorisation ID [{}], Instance ID: [{}]. Bad request: SCA status [{}] incorrect.", consentId, authorisationId, instanceId, status);
@@ -104,9 +104,9 @@ public class CmsPsuConfirmationOfFundsController implements CmsPsuConfirmationOf
 
     @Override
     public ResponseEntity<Void> updateConsentStatus(String consentId, String status, String instanceId) {
-        ConsentStatus consentStatus;
+        Xs2aConsentStatus consentStatus;
         try {
-            consentStatus = ConsentStatus.valueOf(status);
+            consentStatus = Xs2aConsentStatus.valueOf(status);
         } catch (IllegalArgumentException exception) {
             log.info("Consent ID [{}], Instance ID: [{}]. Bad request: SCA status [{}] incorrect.", consentId, instanceId, status);
             return ResponseEntity.badRequest().build();

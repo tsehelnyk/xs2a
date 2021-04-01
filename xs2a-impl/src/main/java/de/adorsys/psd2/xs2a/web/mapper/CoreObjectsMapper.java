@@ -17,8 +17,9 @@
 package de.adorsys.psd2.xs2a.web.mapper;
 
 import de.adorsys.psd2.model.ScaStatus;
-import de.adorsys.psd2.xs2a.core.sca.ChallengeData;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
 import de.adorsys.psd2.xs2a.core.sca.OtpFormat;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
@@ -29,12 +30,12 @@ import java.util.Optional;
 @Service
 public class CoreObjectsMapper {
     @Nullable
-    public ScaStatus mapToModelScaStatus(@NotNull de.adorsys.psd2.xs2a.core.sca.ScaStatus scaStatus) {
+    public ScaStatus mapToModelScaStatus(@NotNull Xs2aScaStatus scaStatus) {
         return ScaStatus.fromValue(scaStatus.getValue());
     }
 
     @Nullable
-    public de.adorsys.psd2.model.ChallengeData mapToChallengeData(ChallengeData challengeData) {
+    public de.adorsys.psd2.model.ChallengeData mapToChallengeData(Xs2aChallengeData challengeData) {
         return Optional.ofNullable(challengeData)
                    .map(cd -> new de.adorsys.psd2.model.ChallengeData()
                                   .image(cd.getImage())

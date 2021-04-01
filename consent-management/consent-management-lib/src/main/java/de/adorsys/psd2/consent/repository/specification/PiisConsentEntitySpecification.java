@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.domain.AccountReferenceEntity;
 import de.adorsys.psd2.consent.domain.account.AspspAccountAccess;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceSelector;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import org.jetbrains.annotations.NotNull;
@@ -75,7 +75,7 @@ public class PiisConsentEntitySpecification extends ConsentFilterableSpecificati
      */
     public Specification<ConsentEntity> byPsuIdDataAndAuthorisationNumberAndAccountReferenceAndInstanceId(@NotNull PsuIdData psuIdData,
                                                                                                           @NotNull String tppAuthorisationNumber,
-                                                                                                          @NotNull AccountReference accountReference,
+                                                                                                          @NotNull Xs2aAccountReference accountReference,
                                                                                                           @NotNull String instanceId) {
         return Optional.of(Specification.where(commonSpecification.byPsuIdDataInList(psuIdData)))
                    .map(s -> s.and(consentSpecification.byTpp(tppAuthorisationNumber)))
@@ -130,7 +130,7 @@ public class PiisConsentEntitySpecification extends ConsentFilterableSpecificati
      * @param accountReference PIIS Account Reference
      * @return resulting specification
      */
-    private Specification<ConsentEntity> byAccountReference(@NotNull AccountReference accountReference) {
+    private Specification<ConsentEntity> byAccountReference(@NotNull Xs2aAccountReference accountReference) {
         return (root, query, cb) -> {
             AccountReferenceSelector selector = accountReference.getUsedAccountReferenceSelector();
 

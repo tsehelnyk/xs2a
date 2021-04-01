@@ -23,10 +23,10 @@ import java.time.LocalDate;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PeriodicPaymentInitiationJson extends PaymentInitiationJson {
+public class Xs2aPisPeriodicPaymentInitiationJson extends Xs2aPisPaymentInitiationJson {
     private LocalDate startDate;
     private LocalDate endDate;
-    private ExecutionRule executionRule;
+    private Xs2aPisExecutionRule executionRule;
     private FrequencyCode frequency;
-    private DayOfExecution dayOfExecution;
+    private Xs2aPisDayOfExecution dayOfExecution;
 }

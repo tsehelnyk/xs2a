@@ -20,7 +20,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AisAuthorisationProcessorRequest;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
 import de.adorsys.psd2.xs2a.service.authorization.processor.service.AisAuthorisationProcessorServiceImpl;
@@ -67,7 +67,7 @@ class AuthorisationProcessorTest {
 
     @Test
     void apply_currentProcessor() {
-        request.setScaStatus(ScaStatus.RECEIVED);
+        request.setScaStatus(Xs2aScaStatus.RECEIVED);
         AuthorisationProcessorResponse processorResponse = new AuthorisationProcessorResponse();
 
         when(provider.getProcessorService(request)).thenReturn(aisAuthorisationProcessorServiceImpl);
@@ -83,7 +83,7 @@ class AuthorisationProcessorTest {
 
     @Test
     void apply_nextProcessor() {
-        request.setScaStatus(ScaStatus.PSUIDENTIFIED);
+        request.setScaStatus(Xs2aScaStatus.PSUIDENTIFIED);
         AuthorisationProcessorResponse processorResponse = new AuthorisationProcessorResponse();
 
         when(nextProcessor.process(request)).thenReturn(processorResponse);
@@ -158,7 +158,7 @@ class AuthorisationProcessorTest {
 
     @Test
     void process_nextProcessorIsNotSet() {
-        request.setScaStatus(ScaStatus.PSUIDENTIFIED);
+        request.setScaStatus(Xs2aScaStatus.PSUIDENTIFIED);
         authorisationProcessor.setNext(null);
 
         assertNull(authorisationProcessor.process(request));

@@ -16,14 +16,14 @@
 
 package de.adorsys.psd2.xs2a.domain.fund;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
 public class CreatePiisConsentRequest {
-    private final AccountReference account;
+    private final Xs2aAccountReference account;
     private final String cardNumber;
     private final LocalDate cardExpiryDate;
     private final String cardInformation;

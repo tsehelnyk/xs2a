@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.payment.support.mapper;
 
 import de.adorsys.psd2.consent.api.pis.CommonPaymentData;
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.domain.pis.BulkPayment;
 import de.adorsys.psd2.xs2a.domain.pis.PeriodicPayment;
 import de.adorsys.psd2.xs2a.domain.pis.SinglePayment;
@@ -42,7 +42,7 @@ class CmsToXs2APaymentSupportMapperTest {
     private static final byte[] PAYMENT_BODY = "some payment body".getBytes();
     private static final String PAYMENT_ID =
         "2Cixxv85Or_qoBBh_d7VTZC0M8PwzR5IGzsJuT-jYHNOMR1D7n69vIF46RgFd7Zn_=_bS6p6XvTWI";
-    private static final TransactionStatus PAYMENT_STATUS = TransactionStatus.ACCP;
+    private static final Xs2aTransactionStatus PAYMENT_STATUS = Xs2aTransactionStatus.ACCP;
     private static final OffsetDateTime STATUS_CHANGE_TIMESTAMP =
         OffsetDateTime.of(2019, 12, 27, 12, 0, 0, 0, ZoneOffset.UTC);
     private static final OffsetDateTime CREATION_TIMESTAMP =

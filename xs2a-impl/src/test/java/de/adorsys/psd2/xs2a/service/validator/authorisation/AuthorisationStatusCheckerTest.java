@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.validator.authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,13 +42,13 @@ class AuthorisationStatusCheckerTest {
 
     @Test
     void isFinalised() {
-        authorisations.add(createAuthorisation(PSU_ID_DATA, AuthorisationType.PIS_CREATION, ScaStatus.RECEIVED));
+        authorisations.add(createAuthorisation(PSU_ID_DATA, AuthorisationType.PIS_CREATION, Xs2aScaStatus.RECEIVED));
         assertFalse(checker.isFinalised(PSU_ID_DATA, authorisations, AuthorisationType.CONSENT));
 
-        authorisations.add(createAuthorisation(PSU_ID_DATA, AuthorisationType.CONSENT, ScaStatus.RECEIVED));
+        authorisations.add(createAuthorisation(PSU_ID_DATA, AuthorisationType.CONSENT, Xs2aScaStatus.RECEIVED));
         assertFalse(checker.isFinalised(PSU_ID_DATA, authorisations, AuthorisationType.CONSENT));
 
-        authorisations.add(createAuthorisation(PSU_ID_DATA, AuthorisationType.CONSENT, ScaStatus.FINALISED));
+        authorisations.add(createAuthorisation(PSU_ID_DATA, AuthorisationType.CONSENT, Xs2aScaStatus.FINALISED));
         assertTrue(checker.isFinalised(PSU_ID_DATA, authorisations, AuthorisationType.CONSENT));
     }
 
@@ -59,7 +59,7 @@ class AuthorisationStatusCheckerTest {
         assertFalse(checker.isFinalised(PSU_ID_DATA, authorisations, AuthorisationType.PIS_CANCELLATION));
     }
 
-    private Authorisation createAuthorisation(PsuIdData psuIdData, AuthorisationType authorisationType, ScaStatus scaStatus) {
+    private Authorisation createAuthorisation(PsuIdData psuIdData, AuthorisationType authorisationType, Xs2aScaStatus scaStatus) {
         Authorisation authorisation = new Authorisation();
         authorisation.setPsuIdData(psuIdData);
         authorisation.setAuthorisationType(authorisationType);

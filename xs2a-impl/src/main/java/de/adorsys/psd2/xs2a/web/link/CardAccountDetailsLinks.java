@@ -16,10 +16,10 @@
 
 package de.adorsys.psd2.xs2a.web.link;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
@@ -29,17 +29,17 @@ public class CardAccountDetailsLinks extends AbstractLinks {
     public CardAccountDetailsLinks(String httpUrl, String accountId, AisConsent aisConsent) {
         super(httpUrl);
 
-        AccountAccess accountAccess = aisConsent.getAccess();
+        Xs2aConsentAccountAccess accountAccess = aisConsent.getAccess();
         AisConsentData consentData = aisConsent.getConsentData();
         boolean isConsentGlobal = consentData.getAllPsd2() != null;
-        List<AccountReference> balances = accountAccess.getBalances();
+        List<Xs2aAccountReference> balances = accountAccess.getBalances();
         if (hasAccessToCardSource(balances) &&
                 isValidAccountByAccess(accountId, balances, isConsentGlobal)) {
 
             setBalances(buildPath(UrlHolder.CARD_BALANCES_URL, accountId));
         }
 
-        List<AccountReference> transactions = accountAccess.getTransactions();
+        List<Xs2aAccountReference> transactions = accountAccess.getTransactions();
 
         if (hasAccessToCardSource(transactions) &&
                 isValidAccountByAccess(accountId, accountAccess.getTransactions(), isConsentGlobal)) {
@@ -47,18 +47,18 @@ public class CardAccountDetailsLinks extends AbstractLinks {
         }
     }
 
-    private boolean isValidAccountByAccess(String accountId, List<AccountReference> allowedAccountData, boolean isConsentGlobal) {
+    private boolean isValidAccountByAccess(String accountId, List<Xs2aAccountReference> allowedAccountData, boolean isConsentGlobal) {
         return isConsentGlobal ||
                    CollectionUtils.isNotEmpty(allowedAccountData)
                        && allowedAccountData.stream()
                               .anyMatch(a -> accountId.equals(a.getResourceId()));
     }
 
-    private boolean hasAccessToCardSource(List<AccountReference> references) {
+    private boolean hasAccessToCardSource(List<Xs2aAccountReference> references) {
         if (CollectionUtils.isEmpty(references)) {
             return true;
         }
         return !references.stream()
-                    .allMatch(AccountReference::isNotCardAccount);
+                    .allMatch(Xs2aAccountReference::isNotCardAccount);
     }
 }

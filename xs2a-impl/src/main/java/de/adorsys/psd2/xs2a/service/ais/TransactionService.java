@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.ais;
 
 import de.adorsys.psd2.consent.api.TypeAccess;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
@@ -27,10 +27,10 @@ import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
-import de.adorsys.psd2.xs2a.domain.Transactions;
+import de.adorsys.psd2.xs2a.domain.Xs2aTransactions;
 import de.adorsys.psd2.xs2a.domain.account.*;
 import de.adorsys.psd2.xs2a.service.TppService;
 import de.adorsys.psd2.xs2a.service.consent.Xs2aAccountService;
@@ -158,7 +158,7 @@ public class TransactionService {
      * @param requestUri    the URI of incoming request
      * @return Transactions based on transaction ID.
      */
-    public ResponseObject<Transactions> getTransactionDetails(String consentId, String accountId, String transactionId, String requestUri) {
+    public ResponseObject<Xs2aTransactions> getTransactionDetails(String consentId, String accountId, String transactionId, String requestUri) {
         xs2aEventService.recordConsentTppRequest(consentId, EventType.READ_TRANSACTION_DETAILS_REQUEST_RECEIVED);
 
         Optional<AisConsent> aisConsentOptional = aisConsentService.getAccountConsentById(consentId);
@@ -166,7 +166,7 @@ public class TransactionService {
         if (aisConsentOptional.isEmpty()) {
             log.info("Account-ID [{}], Consent-ID [{}]. Get transaction details failed. Account consent not found by ID",
                      accountId, consentId);
-            return ResponseObject.<Transactions>builder()
+            return ResponseObject.<Xs2aTransactions>builder()
                        .fail(AIS_400, TppMessageInformation.of(CONSENT_UNKNOWN_400))
                        .build();
         }
@@ -177,7 +177,7 @@ public class TransactionService {
         if (validationResult.isNotValid()) {
             log.info("Account-ID [{}], Consent-ID [{}], RequestUri [{}]. Get transaction details - validation failed: {}",
                      accountId, consentId, requestUri, validationResult.getMessageError());
-            return ResponseObject.<Transactions>builder()
+            return ResponseObject.<Xs2aTransactions>builder()
                        .fail(validationResult.getMessageError())
                        .build();
         }
@@ -283,7 +283,7 @@ public class TransactionService {
     }
 
     private SpiAccountReference getRequestedAccountReference(AisConsent aisConsent, String accountId) {
-        AccountAccess access = aisConsent.getAspspAccountAccesses();
+        Xs2aConsentAccountAccess access = aisConsent.getAspspAccountAccesses();
         return accountHelperService.findAccountReference(access.getTransactions(), accountId);
     }
 
@@ -318,12 +318,12 @@ public class TransactionService {
                                                                       aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(consentId));
     }
 
-    private ResponseObject<Transactions> checkSpiResponseForTransactions(String consentId, String accountId,
-                                                                         SpiResponse<SpiTransaction> spiResponse) {
+    private ResponseObject<Xs2aTransactions> checkSpiResponseForTransactions(String consentId, String accountId,
+                                                                             SpiResponse<SpiTransaction> spiResponse) {
         ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(spiResponse, ServiceType.AIS);
         log.info("Account-ID [{}], Consent-ID: [{}]. Get transaction details failed: Request transactions for account fail at SPI level: {}",
                  accountId, consentId, errorHolder);
-        return ResponseObject.<Transactions>builder()
+        return ResponseObject.<Xs2aTransactions>builder()
                    .fail(new MessageError(errorHolder))
                    .build();
     }
@@ -412,17 +412,17 @@ public class TransactionService {
         return links;
     }
 
-    private HrefType mapToHrefType(String link) {
+    private Xs2aHrefType mapToHrefType(String link) {
         return Optional.ofNullable(link)
-                   .map(HrefType::new)
+                   .map(Xs2aHrefType::new)
                    .orElse(null);
     }
 
     @NotNull
-    private ResponseObject<Transactions> getTransactionsResponseObject(String consentId, String requestUri, AisConsent aisConsent, SpiTransaction spiTransaction, String accountId) {
-        Transactions transactions = spiToXs2aTransactionMapper.mapToXs2aTransaction(spiTransaction);
+    private ResponseObject<Xs2aTransactions> getTransactionsResponseObject(String consentId, String requestUri, AisConsent aisConsent, SpiTransaction spiTransaction, String accountId) {
+        Xs2aTransactions transactions = spiToXs2aTransactionMapper.mapToXs2aTransaction(spiTransaction);
 
-        ResponseObject<Transactions> response = ResponseObject.<Transactions>builder()
+        ResponseObject<Xs2aTransactions> response = ResponseObject.<Xs2aTransactions>builder()
                                                     .body(transactions)
                                                     .build();
 

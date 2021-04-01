@@ -22,8 +22,8 @@ import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.repository.AuthorisationRepository;
 import de.adorsys.psd2.consent.repository.PisCommonPaymentDataRepository;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class PisCommonPaymentConfirmationExpirationServiceImpl implements PisCom
     }
 
     private void failAuthorisation(AuthorisationEntity authorisation) {
-        authorisation.setScaStatus(ScaStatus.FAILED);
+        authorisation.setScaStatus(Xs2aScaStatus.FAILED);
         authorisation.setRedirectUrlExpirationTimestamp(OffsetDateTime.now());
     }
 
@@ -59,11 +59,11 @@ public class PisCommonPaymentConfirmationExpirationServiceImpl implements PisCom
     }
 
     private PisCommonPaymentData obsoletePaymentData(PisCommonPaymentData pisCommonPaymentData) {
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RJCT);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RJCT);
         String paymentId = pisCommonPaymentData.getExternalId();
         List<AuthorisationEntity> authorisations =
             authorisationRepository.findAllByParentExternalIdAndTypeIn(paymentId, EnumSet.of(AuthorisationType.PIS_CREATION, AuthorisationType.PIS_CANCELLATION));
-        authorisations.forEach(auth -> auth.setScaStatus(ScaStatus.FAILED));
+        authorisations.forEach(auth -> auth.setScaStatus(Xs2aScaStatus.FAILED));
         authorisationRepository.saveAll(authorisations);
         return pisCommonPaymentData;
     }
@@ -90,7 +90,7 @@ public class PisCommonPaymentConfirmationExpirationServiceImpl implements PisCom
     @Transactional
     @Override
     public PisCommonPaymentData updateOnConfirmationExpiration(PisCommonPaymentData pisCommonPaymentData) {
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RJCT);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RJCT);
         String paymentId = pisCommonPaymentData.getExternalId();
         List<AuthorisationEntity> authorisations =
             authorisationRepository.findAllByParentExternalIdAndTypeIn(paymentId, EnumSet.of(AuthorisationType.PIS_CREATION, AuthorisationType.PIS_CANCELLATION));

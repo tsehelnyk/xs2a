@@ -22,9 +22,9 @@ import de.adorsys.psd2.consent.api.pis.CmsCommonPaymentMapper;
 import de.adorsys.psd2.consent.api.pis.PisPayment;
 import de.adorsys.psd2.consent.service.mapper.CmsAddressMapperImpl;
 import de.adorsys.psd2.consent.service.mapper.CmsCorePaymentMapper;
-import de.adorsys.psd2.core.payment.model.BulkPaymentInitiationJson;
-import de.adorsys.psd2.core.payment.model.PaymentInitiationJson;
-import de.adorsys.psd2.core.payment.model.PeriodicPaymentInitiationJson;
+import de.adorsys.psd2.core.payment.model.Xs2aPisBulkPaymentInitiationJson;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPaymentInitiationJson;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPeriodicPaymentInitiationJson;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.psd2.mapper.config.ObjectMapperConfig;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
@@ -76,7 +76,7 @@ class CorePaymentsConvertServiceTest {
     void buildPaymentData_singlePayment() throws JsonProcessingException {
         byte[] actual = corePaymentsConvertService.buildPaymentData(Collections.singletonList(pisPayment), PaymentType.SINGLE);
 
-        PaymentInitiationJson expectedPaymentInitiationJson = jsonReader.getObjectFromFile("json/service/mapper/payment-initiation-resp.json", PaymentInitiationJson.class);
+        Xs2aPisPaymentInitiationJson expectedPaymentInitiationJson = jsonReader.getObjectFromFile("json/service/mapper/payment-initiation-resp.json", Xs2aPisPaymentInitiationJson.class);
         byte[] expected = xs2aObjectMapper.writeValueAsBytes(expectedPaymentInitiationJson);
         assertArrayEquals(expected, actual);
     }
@@ -94,7 +94,7 @@ class CorePaymentsConvertServiceTest {
     void buildPaymentData_periodicPayment() throws JsonProcessingException {
         byte[] actual = corePaymentsConvertService.buildPaymentData(Collections.singletonList(pisPayment), PaymentType.PERIODIC);
 
-        PeriodicPaymentInitiationJson expectedPeriodicPaymentInitiationJson = jsonReader.getObjectFromFile("json/service/mapper/periodic-payment-initiation-resp.json", PeriodicPaymentInitiationJson.class);
+        Xs2aPisPeriodicPaymentInitiationJson expectedPeriodicPaymentInitiationJson = jsonReader.getObjectFromFile("json/service/mapper/periodic-payment-initiation-resp.json", Xs2aPisPeriodicPaymentInitiationJson.class);
         byte[] expected = xs2aObjectMapper.writeValueAsBytes(expectedPeriodicPaymentInitiationJson);
         assertArrayEquals(expected, actual);
     }
@@ -112,7 +112,7 @@ class CorePaymentsConvertServiceTest {
     void buildPaymentData_bulkPayment() throws JsonProcessingException {
         byte[] actual = corePaymentsConvertService.buildPaymentData(Collections.singletonList(pisPayment), PaymentType.BULK);
 
-        BulkPaymentInitiationJson expectedBulkPaymentInitiationJson = jsonReader.getObjectFromFile("json/service/mapper/bulk-payment-initiation-resp.json", BulkPaymentInitiationJson.class);
+        Xs2aPisBulkPaymentInitiationJson expectedBulkPaymentInitiationJson = jsonReader.getObjectFromFile("json/service/mapper/bulk-payment-initiation-resp.json", Xs2aPisBulkPaymentInitiationJson.class);
         byte[] expected = xs2aObjectMapper.writeValueAsBytes(expectedBulkPaymentInitiationJson);
         assertArrayEquals(expected, actual);
     }

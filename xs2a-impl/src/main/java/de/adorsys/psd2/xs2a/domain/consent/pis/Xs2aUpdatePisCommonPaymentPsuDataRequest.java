@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.domain.consent.pis;
 
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aCreatePisAuthorisationRequest;
 import lombok.Data;
@@ -31,7 +31,7 @@ public class Xs2aUpdatePisCommonPaymentPsuDataRequest implements UpdateAuthorisa
     private String paymentId;
     private String authorisationId;
 
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     private boolean updatePsuIdentification;
     private String authenticationMethodId;
     private String scaAuthenticationData;

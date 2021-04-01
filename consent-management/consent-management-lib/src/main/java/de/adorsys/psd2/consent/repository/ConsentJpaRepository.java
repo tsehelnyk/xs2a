@@ -17,7 +17,7 @@
 package de.adorsys.psd2.consent.repository;
 
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -33,9 +33,9 @@ import java.util.Set;
 
 public interface ConsentJpaRepository extends CrudRepository<ConsentEntity, Long>, JpaSpecificationExecutor<ConsentEntity> {
 
-    List<ConsentEntity> findByConsentStatusIn(Set<ConsentStatus> statuses, Pageable pageable);
+    List<ConsentEntity> findByConsentStatusIn(Set<Xs2aConsentStatus> statuses, Pageable pageable);
 
-    Long countByConsentStatusIn(Set<ConsentStatus> statuses);
+    Long countByConsentStatusIn(Set<Xs2aConsentStatus> statuses);
 
     Optional<ConsentEntity> findByExternalId(String externalId);
 
@@ -47,7 +47,7 @@ public interface ConsentJpaRepository extends CrudRepository<ConsentEntity, Long
             "WHERE consentStatus IN :consentStatuses AND validUntil < CURRENT_DATE"
     )
     @Modifying
-    void expireByConsentStatusIn(@Param("consentStatuses") Set<ConsentStatus> consentStatuses);
+    void expireByConsentStatusIn(@Param("consentStatuses") Set<Xs2aConsentStatus> consentStatuses);
 
     @Query(
         "select c from consent c " +
@@ -62,7 +62,7 @@ public interface ConsentJpaRepository extends CrudRepository<ConsentEntity, Long
                                                           @Param("authorisationNumber") String tppAuthorisationNumber,
                                                           @Param("instanceId") String instanceId,
                                                           @Param("newConsentId") String newConsentId,
-                                                          @Param("consentStatuses") Set<ConsentStatus> consentStatuses);
+                                                          @Param("consentStatuses") Set<Xs2aConsentStatus> consentStatuses);
 
     @Query(
         "UPDATE consent " +
@@ -72,7 +72,7 @@ public interface ConsentJpaRepository extends CrudRepository<ConsentEntity, Long
             "AND id IN (SELECT cu.consent.id FROM consent_usage cu WHERE cu.usageDate < CURRENT_DATE)"
     )
     @Modifying
-    void expireUsedNonRecurringConsents(@Param("consentStatuses") Set<ConsentStatus> consentStatuses);
+    void expireUsedNonRecurringConsents(@Param("consentStatuses") Set<Xs2aConsentStatus> consentStatuses);
 
     @Query(
         value = "select * from {h-schema}consent c " +

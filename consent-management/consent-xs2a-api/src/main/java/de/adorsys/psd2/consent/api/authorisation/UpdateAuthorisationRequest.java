@@ -19,7 +19,7 @@ package de.adorsys.psd2.consent.api.authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class UpdateAuthorisationRequest {
     private PsuIdData psuData;
 
     @ApiModelProperty(value = "The following code values are permitted 'received', 'psuIdentified', 'psuAuthenticated', 'scaMethodSelected', 'started', 'finalised' 'failed' 'exempted'.", required = true, example = "STARTED")
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
 
     @ApiModelProperty(value = "An identification provided by the ASPSP for the later identification of the authentication method selection.")
     private String authenticationMethodId;

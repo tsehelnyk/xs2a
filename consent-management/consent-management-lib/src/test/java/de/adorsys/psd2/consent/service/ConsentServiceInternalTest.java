@@ -28,7 +28,7 @@ import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
 import de.adorsys.psd2.consent.domain.AuthorisationTemplateEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.TppInfoEntity;
 import de.adorsys.psd2.consent.domain.account.AisConsentUsage;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
@@ -42,9 +42,9 @@ import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
 import de.adorsys.psd2.consent.service.migration.AisConsentLazyMigrationService;
 import de.adorsys.psd2.consent.service.psu.CmsPsuService;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,7 +67,7 @@ class ConsentServiceInternalTest {
     private static final String EXTERNAL_CONSENT_ID_NOT_EXIST = "4b11213-6a96-4941-a220-2da8a4af2c63";
     private static final String PSU_ID = "psu-id-1";
     private static final PsuIdData PSU_ID_DATA = new PsuIdData(PSU_ID, null, null, null, null);
-    private static final PsuData PSU_DATA = new PsuData(PSU_ID, null, null, null, null);
+    private static final CmsPsuData PSU_DATA = new CmsPsuData(PSU_ID, null, null, null, null);
     private static final String FINALISED_CONSENT_ID = "9b112130-6a96-4941-a220-2da8a4af2c65";
     private static final String AUTHORISATION_NUMBER = "Test Authorisation Number";
     private static final String AUTHORISATION_ID = "a01562ea-19ff-4b5a-8188-c45d85bfa20a";
@@ -95,7 +95,7 @@ class ConsentServiceInternalTest {
     @Mock
     private TppInfoEntity tppInfoMocked;
     @Mock
-    private PsuData psuDataMocked;
+    private CmsPsuData psuDataMocked;
     @Mock
     private CmsPsuService cmsPsuService;
     @Mock
@@ -404,7 +404,7 @@ class ConsentServiceInternalTest {
             .thenReturn(Optional.of(finalisedConsent));
 
         // When
-        CmsResponse<Boolean> actual = consentServiceInternal.updateConsentStatusById(FINALISED_CONSENT_ID, ConsentStatus.EXPIRED);
+        CmsResponse<Boolean> actual = consentServiceInternal.updateConsentStatusById(FINALISED_CONSENT_ID, Xs2aConsentStatus.EXPIRED);
 
         // Then
         assertLogicalError(actual);
@@ -414,12 +414,12 @@ class ConsentServiceInternalTest {
     void updateConsentStatusById_noActualConsent_shouldReturnFalse() throws WrongChecksumException {
         // Given
         ConsentEntity nonFinalisedConsent = buildFinalisedConsent();
-        nonFinalisedConsent.setConsentStatus(ConsentStatus.PARTIALLY_AUTHORISED);
+        nonFinalisedConsent.setConsentStatus(Xs2aConsentStatus.PARTIALLY_AUTHORISED);
         when(consentJpaRepository.findByExternalId(FINALISED_CONSENT_ID))
             .thenReturn(Optional.of(nonFinalisedConsent));
 
         // When
-        CmsResponse<Boolean> result = consentServiceInternal.updateConsentStatusById(FINALISED_CONSENT_ID, ConsentStatus.EXPIRED);
+        CmsResponse<Boolean> result = consentServiceInternal.updateConsentStatusById(FINALISED_CONSENT_ID, Xs2aConsentStatus.EXPIRED);
 
         // Then
         assertTrue(result.isSuccessful());
@@ -495,7 +495,7 @@ class ConsentServiceInternalTest {
         ConsentTppInformationEntity tppInformation = new ConsentTppInformationEntity();
         tppInformation.setTppInfo(tppInfoMocked);
 
-        List<PsuData> psuDataList = Collections.singletonList(psuDataMocked);
+        List<CmsPsuData> psuDataList = Collections.singletonList(psuDataMocked);
         when(consentEntityMocked.getPsuDataList())
             .thenReturn(psuDataList);
         when(psuDataMocked.getPsuId())
@@ -513,7 +513,7 @@ class ConsentServiceInternalTest {
 
         ConsentEntity oldConsent = buildConsentEntity(EXTERNAL_CONSENT_ID_NOT_EXIST);
         List<ConsentEntity> oldConsents = Collections.singletonList(oldConsent);
-        when(consentJpaRepository.findOldConsentsByNewConsentParams(Collections.singleton(PSU_ID), AUTHORISATION_NUMBER, INSTANCE_ID, EXTERNAL_CONSENT_ID, EnumSet.of(ConsentStatus.RECEIVED, ConsentStatus.PARTIALLY_AUTHORISED, ConsentStatus.VALID)))
+        when(consentJpaRepository.findOldConsentsByNewConsentParams(Collections.singleton(PSU_ID), AUTHORISATION_NUMBER, INSTANCE_ID, EXTERNAL_CONSENT_ID, EnumSet.of(Xs2aConsentStatus.RECEIVED, Xs2aConsentStatus.PARTIALLY_AUTHORISED, Xs2aConsentStatus.VALID)))
             .thenReturn(oldConsents);
 
         // When
@@ -522,7 +522,7 @@ class ConsentServiceInternalTest {
         // Then
         assertTrue(result.isSuccessful());
         assertTrue(result.getPayload());
-        assertEquals(ConsentStatus.TERMINATED_BY_TPP, oldConsent.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.TERMINATED_BY_TPP, oldConsent.getConsentStatus());
         verify(consentJpaRepository).saveAll(oldConsents);
     }
 
@@ -544,15 +544,15 @@ class ConsentServiceInternalTest {
         when(tppInfoMocked.getAuthorisationNumber())
             .thenReturn(AUTHORISATION_NUMBER);
 
-        List<PsuData> psuDataList = Collections.singletonList(psuDataMocked);
+        List<CmsPsuData> psuDataList = Collections.singletonList(psuDataMocked);
 
         when(cmsPsuService.isPsuDataListEqual(psuDataList, psuDataList))
             .thenReturn(true);
 
         ConsentEntity oldConsent = buildConsentEntity(EXTERNAL_CONSENT_ID_NOT_EXIST);
-        oldConsent.setConsentStatus(ConsentStatus.PARTIALLY_AUTHORISED);
+        oldConsent.setConsentStatus(Xs2aConsentStatus.PARTIALLY_AUTHORISED);
         List<ConsentEntity> oldConsents = Collections.singletonList(oldConsent);
-        when(consentJpaRepository.findOldConsentsByNewConsentParams(Collections.singleton(PSU_ID), AUTHORISATION_NUMBER, INSTANCE_ID, EXTERNAL_CONSENT_ID, EnumSet.of(ConsentStatus.RECEIVED, ConsentStatus.PARTIALLY_AUTHORISED, ConsentStatus.VALID)))
+        when(consentJpaRepository.findOldConsentsByNewConsentParams(Collections.singleton(PSU_ID), AUTHORISATION_NUMBER, INSTANCE_ID, EXTERNAL_CONSENT_ID, EnumSet.of(Xs2aConsentStatus.RECEIVED, Xs2aConsentStatus.PARTIALLY_AUTHORISED, Xs2aConsentStatus.VALID)))
             .thenReturn(oldConsents);
 
         // When
@@ -562,14 +562,14 @@ class ConsentServiceInternalTest {
         assertTrue(result.isSuccessful());
 
         assertTrue(result.getPayload());
-        assertEquals(ConsentStatus.REJECTED, oldConsent.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.REJECTED, oldConsent.getConsentStatus());
         verify(consentJpaRepository).saveAll(oldConsents);
     }
 
     @Test
     void findAndTerminateOldConsentsByNewConsentId_shouldFail_unequalPsuDataLists() {
         // Given
-        List<PsuData> psuDataList = Collections.singletonList(psuDataMocked);
+        List<CmsPsuData> psuDataList = Collections.singletonList(psuDataMocked);
 
         when(consentJpaRepository.findByExternalId(EXTERNAL_CONSENT_ID))
             .thenReturn(Optional.of(consentEntityMocked));
@@ -610,7 +610,7 @@ class ConsentServiceInternalTest {
         when(aisConsentConfirmationExpirationService.expireConsent(consent)).thenReturn(consent);
 
         // When
-        CmsResponse<ConsentStatus> consentStatusById = consentServiceInternal.getConsentStatusById(EXTERNAL_CONSENT_ID);
+        CmsResponse<Xs2aConsentStatus> consentStatusById = consentServiceInternal.getConsentStatusById(EXTERNAL_CONSENT_ID);
 
         // Then
         assertTrue(consentStatusById.isSuccessful());
@@ -624,7 +624,7 @@ class ConsentServiceInternalTest {
             .thenReturn(Optional.empty());
 
         // When
-        CmsResponse<ConsentStatus> actual = consentServiceInternal.getConsentStatusById(EXTERNAL_CONSENT_ID);
+        CmsResponse<Xs2aConsentStatus> actual = consentServiceInternal.getConsentStatusById(EXTERNAL_CONSENT_ID);
 
         // Then
         assertLogicalError(actual);
@@ -642,7 +642,7 @@ class ConsentServiceInternalTest {
         usage.setUsageDate(LocalDate.of(2019, 6, 3));
 
         consent.setUsages(Collections.singletonList(usage));
-        consent.setConsentStatus(ConsentStatus.VALID);
+        consent.setConsentStatus(Xs2aConsentStatus.VALID);
         return consent;
     }
 
@@ -650,7 +650,7 @@ class ConsentServiceInternalTest {
         AuthorisationEntity authorisationEntity = new AuthorisationEntity();
         authorisationEntity.setExternalId(AUTHORISATION_ID);
         authorisationEntity.setPsuData(PSU_DATA);
-        authorisationEntity.setScaStatus(ScaStatus.RECEIVED);
+        authorisationEntity.setScaStatus(Xs2aScaStatus.RECEIVED);
         return authorisationEntity;
     }
 
@@ -666,7 +666,7 @@ class ConsentServiceInternalTest {
         consentEntity.setId(CONSENT_ID);
         consentEntity.setExternalId(externalId);
         consentEntity.setValidUntil(VALID_UNTIL);
-        consentEntity.setConsentStatus(ConsentStatus.VALID);
+        consentEntity.setConsentStatus(Xs2aConsentStatus.VALID);
         consentEntity.setPsuDataList(Collections.singletonList(psuDataMocked));
         AuthorisationTemplateEntity authorisationTemplate = new AuthorisationTemplateEntity();
         authorisationTemplate.setRedirectUri(REDIRECT_URI);
@@ -690,7 +690,7 @@ class ConsentServiceInternalTest {
         consentEntity.setId(CONSENT_ID);
         consentEntity.setExternalId(EXTERNAL_CONSENT_ID);
         consentEntity.setValidUntil(LocalDate.now());
-        consentEntity.setConsentStatus(ConsentStatus.REJECTED);
+        consentEntity.setConsentStatus(Xs2aConsentStatus.REJECTED);
         consentEntity.setInstanceId(INSTANCE_ID);
         return consentEntity;
     }

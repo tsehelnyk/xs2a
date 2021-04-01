@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.authorization.processor.model;
 
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,6 +27,6 @@ class PisCancellationAuthorisationProcessorRequestTest {
 
     @Test
     void checkServiceType() {
-        assertEquals(ServiceType.PIS, new PisCancellationAuthorisationProcessorRequest(ScaApproach.EMBEDDED, ScaStatus.RECEIVED, null, null).getServiceType());
+        assertEquals(ServiceType.PIS, new PisCancellationAuthorisationProcessorRequest(ScaApproach.EMBEDDED, Xs2aScaStatus.RECEIVED, null, null).getServiceType());
     }
 }

@@ -31,7 +31,7 @@ import java.util.Currency;
 @NoArgsConstructor
 @Embeddable
 @ApiModel(description = "Account access", value = "AccountAccess")
-public class TppAccountAccess extends AccountAccess {
+public class TppAccountAccess extends CmsAccountAccess {
 
     public TppAccountAccess(String accountIdentifier, TypeAccess typeAccess, AccountReferenceType accountReferenceType, Currency currency) {
 

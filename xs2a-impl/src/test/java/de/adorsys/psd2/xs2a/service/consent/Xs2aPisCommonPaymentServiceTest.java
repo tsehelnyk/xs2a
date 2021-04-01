@@ -22,7 +22,7 @@ import de.adorsys.psd2.consent.api.pis.CreatePisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
 import de.adorsys.psd2.consent.api.service.PisCommonPaymentServiceEncrypted;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
@@ -136,7 +136,7 @@ class Xs2aPisCommonPaymentServiceTest {
         PisPaymentInfo request = new PisPaymentInfo();
         request.setPaymentProduct(PAYMENT_INITIATION_PARAMETERS.getPaymentProduct());
         request.setPaymentType(PAYMENT_INITIATION_PARAMETERS.getPaymentType());
-        request.setTransactionStatus(TransactionStatus.RCVD);
+        request.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         request.setPaymentData(Xs2aPisCommonPaymentServiceTest.PAYMENT_DATA);
         request.setTppInfo(TPP_INFO);
         request.setPsuDataList(Collections.singletonList(PAYMENT_INITIATION_PARAMETERS.getPsuData()));

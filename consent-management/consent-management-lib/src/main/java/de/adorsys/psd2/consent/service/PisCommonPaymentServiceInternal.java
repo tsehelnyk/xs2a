@@ -31,7 +31,7 @@ import de.adorsys.psd2.consent.repository.TppInfoRepository;
 import de.adorsys.psd2.consent.service.mapper.PisCommonPaymentMapper;
 import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -97,20 +97,20 @@ public class PisCommonPaymentServiceInternal implements PisCommonPaymentService 
      */
     @Override
     @Transactional
-    public CmsResponse<TransactionStatus> getPisCommonPaymentStatusById(String paymentId) {
-        Optional<TransactionStatus> statusOptional = pisCommonPaymentDataRepository.findByPaymentId(paymentId)
+    public CmsResponse<Xs2aTransactionStatus> getPisCommonPaymentStatusById(String paymentId) {
+        Optional<Xs2aTransactionStatus> statusOptional = pisCommonPaymentDataRepository.findByPaymentId(paymentId)
                                                          .map(pisCommonPaymentConfirmationExpirationService::checkAndUpdateOnConfirmationExpiration)
                                                          .map(PisCommonPaymentData::getTransactionStatus);
 
         if (statusOptional.isPresent()) {
-            return CmsResponse.<TransactionStatus>builder()
+            return CmsResponse.<Xs2aTransactionStatus>builder()
                        .payload(statusOptional.get())
                        .build();
         }
 
         log.info("Payment ID: [{}]. Get common payment status by ID failed, because payment was not found by the ID",
                  paymentId);
-        return CmsResponse.<TransactionStatus>builder()
+        return CmsResponse.<Xs2aTransactionStatus>builder()
                    .error(LOGICAL_ERROR)
                    .build();
     }
@@ -173,7 +173,7 @@ public class PisCommonPaymentServiceInternal implements PisCommonPaymentService 
      */
     @Override
     @Transactional
-    public CmsResponse<Boolean> updateCommonPaymentStatusById(String paymentId, TransactionStatus status) {
+    public CmsResponse<Boolean> updateCommonPaymentStatusById(String paymentId, Xs2aTransactionStatus status) {
         Optional<Boolean> isUpdatedOptional = pisCommonPaymentDataRepository.findByPaymentId(paymentId)
                                                   .map(pisCommonPaymentConfirmationExpirationService::checkAndUpdateOnConfirmationExpiration)
                                                   .filter(pm -> !pm.getTransactionStatus().isFinalisedStatus())
@@ -241,7 +241,7 @@ public class PisCommonPaymentServiceInternal implements PisCommonPaymentService 
                    .build();
     }
 
-    private PisCommonPaymentData setStatusAndSaveCommonPaymentData(PisCommonPaymentData commonPaymentData, TransactionStatus status) {
+    private PisCommonPaymentData setStatusAndSaveCommonPaymentData(PisCommonPaymentData commonPaymentData, Xs2aTransactionStatus status) {
         commonPaymentData.setTransactionStatus(status);
         return pisCommonPaymentDataRepository.save(commonPaymentData);
     }

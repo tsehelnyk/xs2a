@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.validator.ais.account;
 
 import de.adorsys.psd2.core.data.ais.AisConsent;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.validator.ais.account.dto.DownloadTransactionListRequestObject;
@@ -44,9 +44,9 @@ public class DownloadTransactionsReportValidator extends AbstractAccountTppValid
             return ValidationResult.invalid(AIS_401, CONSENT_EXPIRED);
         }
 
-        ConsentStatus consentStatus = aisConsent.getConsentStatus();
-        if (consentStatus != ConsentStatus.VALID) {
-            MessageErrorCode messageErrorCode = consentStatus == ConsentStatus.RECEIVED
+        Xs2aConsentStatus consentStatus = aisConsent.getConsentStatus();
+        if (consentStatus != Xs2aConsentStatus.VALID) {
+            MessageErrorCode messageErrorCode = consentStatus == Xs2aConsentStatus.RECEIVED
                                                     ? CONSENT_INVALID
                                                     : CONSENT_EXPIRED;
             return ValidationResult.invalid(AIS_401, messageErrorCode);

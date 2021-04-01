@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.domain.consent;
 
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 @Value
 @AllArgsConstructor
 public class Xs2aScaStatusResponse {
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     private Boolean trustedBeneficiaryFlag;
     @Nullable
     private String psuMessage;

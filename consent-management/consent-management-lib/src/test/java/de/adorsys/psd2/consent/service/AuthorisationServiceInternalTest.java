@@ -37,7 +37,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ class AuthorisationServiceInternalTest {
     private static final PsuIdData PSU_ID_DATA = new PsuIdData(PSU_ID, null, null, null, null);
     private static final String AUTHORISATION_ID = "9304a6a0-8f02-4b79-aeab-00aa7e03a06d";
     private static final String WRONG_AUTHORISATION_ID = "00000000-0000-4b79-aeab-00aa7e03a06d";
-    private static final ScaStatus SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus SCA_STATUS = Xs2aScaStatus.RECEIVED;
     private static final ScaApproach SCA_APPROACH = ScaApproach.EMBEDDED;
     private static final String AUTHENTICATION_METHOD_ID = "SMS";
     private static final String WRONG_AUTHENTICATION_METHOD_ID = "EMAIL";
@@ -94,7 +94,7 @@ class AuthorisationServiceInternalTest {
         AuthorisationType authorisationType = AuthorisationType.CONSENT;
         AuthorisationParentHolder authorisationParentHolder = new AuthorisationParentHolder(authorisationType, parentId);
         CreateAuthorisationRequest createAuthorisationRequest = new CreateAuthorisationRequest(PSU_ID_DATA, ScaApproach.REDIRECT, TPP_REDIRECT_URIs);
-        CreateAuthorisationResponse expectedResponse = new CreateAuthorisationResponse(AUTHORISATION_ID, ScaStatus.RECEIVED, INTERNAL_REQUEST_ID, PSU_ID_DATA);
+        CreateAuthorisationResponse expectedResponse = new CreateAuthorisationResponse(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INTERNAL_REQUEST_ID, PSU_ID_DATA);
 
         ConsentEntity consentEntity = new ConsentEntity();
         consentEntity.setInternalRequestId(INTERNAL_REQUEST_ID);
@@ -104,7 +104,7 @@ class AuthorisationServiceInternalTest {
 
         AuthorisationEntity newAuthorisation = new AuthorisationEntity();
         newAuthorisation.setExternalId(AUTHORISATION_ID);
-        newAuthorisation.setScaStatus(ScaStatus.RECEIVED);
+        newAuthorisation.setScaStatus(Xs2aScaStatus.RECEIVED);
         when(authService.saveAuthorisation(createAuthorisationRequest, consentEntity)).thenReturn(newAuthorisation);
 
         // When
@@ -170,7 +170,7 @@ class AuthorisationServiceInternalTest {
         // Given
         AuthorisationEntity authorisationEntity = new AuthorisationEntity();
         authorisationEntity.setType(AuthorisationType.CONSENT);
-        authorisationEntity.setScaStatus(ScaStatus.RECEIVED);
+        authorisationEntity.setScaStatus(Xs2aScaStatus.RECEIVED);
         when(authorisationRepository.findByExternalId(AUTHORISATION_ID)).thenReturn(Optional.of(authorisationEntity));
 
         UpdateAuthorisationRequest updateAuthorisationRequest = new UpdateAuthorisationRequest();
@@ -219,7 +219,7 @@ class AuthorisationServiceInternalTest {
         // Given
         AuthorisationEntity authorisationEntity = new AuthorisationEntity();
         authorisationEntity.setType(AuthorisationType.CONSENT);
-        authorisationEntity.setScaStatus(ScaStatus.FINALISED);
+        authorisationEntity.setScaStatus(Xs2aScaStatus.FINALISED);
         when(authorisationRepository.findByExternalId(AUTHORISATION_ID)).thenReturn(Optional.of(authorisationEntity));
 
         UpdateAuthorisationRequest updateAuthorisationRequest = new UpdateAuthorisationRequest();
@@ -237,10 +237,10 @@ class AuthorisationServiceInternalTest {
     void updateAuthorisationStatus() {
         // Given
         AuthorisationEntity authorisationEntity = new AuthorisationEntity();
-        authorisationEntity.setScaStatus(ScaStatus.RECEIVED);
+        authorisationEntity.setScaStatus(Xs2aScaStatus.RECEIVED);
         when(authorisationRepository.findByExternalId(AUTHORISATION_ID)).thenReturn(Optional.of(authorisationEntity));
 
-        ScaStatus newScaStatus = ScaStatus.PSUIDENTIFIED;
+        Xs2aScaStatus newScaStatus = Xs2aScaStatus.PSUIDENTIFIED;
 
         // When
         CmsResponse<Boolean> actualResponse = authorisationServiceInternal.updateAuthorisationStatus(AUTHORISATION_ID, newScaStatus);
@@ -256,7 +256,7 @@ class AuthorisationServiceInternalTest {
         when(authorisationRepository.findByExternalId(WRONG_AUTHORISATION_ID)).thenReturn(Optional.empty());
 
         // When
-        CmsResponse<Boolean> actualResponse = authorisationServiceInternal.updateAuthorisationStatus(WRONG_AUTHORISATION_ID, ScaStatus.PSUIDENTIFIED);
+        CmsResponse<Boolean> actualResponse = authorisationServiceInternal.updateAuthorisationStatus(WRONG_AUTHORISATION_ID, Xs2aScaStatus.PSUIDENTIFIED);
 
         // Then
         assertTrue(actualResponse.isSuccessful());
@@ -327,7 +327,7 @@ class AuthorisationServiceInternalTest {
         when(authService.getAuthorisationById(AUTHORISATION_ID)).thenReturn(Optional.of(authorisationEntity));
 
         // When
-        CmsResponse<ScaStatus> actualResult = authorisationServiceInternal.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
+        CmsResponse<Xs2aScaStatus> actualResult = authorisationServiceInternal.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
 
         // Then
         assertTrue(actualResult.isSuccessful());
@@ -345,7 +345,7 @@ class AuthorisationServiceInternalTest {
         when(authService.getAuthorisationParent(parentId)).thenReturn(Optional.empty());
 
         // When
-        CmsResponse<ScaStatus> actualResult = authorisationServiceInternal.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
+        CmsResponse<Xs2aScaStatus> actualResult = authorisationServiceInternal.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
 
         // Then
         assertTrue(actualResult.hasError());
@@ -366,11 +366,11 @@ class AuthorisationServiceInternalTest {
         when(authService.isConfirmationExpired(consentEntity)).thenReturn(true);
 
         // When
-        CmsResponse<ScaStatus> actualResult = authorisationServiceInternal.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
+        CmsResponse<Xs2aScaStatus> actualResult = authorisationServiceInternal.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
 
         // Then
         assertTrue(actualResult.isSuccessful());
-        assertEquals(ScaStatus.FAILED, actualResult.getPayload());
+        assertEquals(Xs2aScaStatus.FAILED, actualResult.getPayload());
         verify(authService).updateOnConfirmationExpiration(consentEntity);
     }
 
@@ -389,7 +389,7 @@ class AuthorisationServiceInternalTest {
         when(authService.getAuthorisationById(WRONG_AUTHORISATION_ID)).thenReturn(Optional.empty());
 
         // When
-        CmsResponse<ScaStatus> actualResult = authorisationServiceInternal.getAuthorisationScaStatus(WRONG_AUTHORISATION_ID, authorisationParentHolder);
+        CmsResponse<Xs2aScaStatus> actualResult = authorisationServiceInternal.getAuthorisationScaStatus(WRONG_AUTHORISATION_ID, authorisationParentHolder);
 
         // Then
         assertTrue(actualResult.hasError());
@@ -414,7 +414,7 @@ class AuthorisationServiceInternalTest {
         when(authService.getAuthorisationById(AUTHORISATION_ID)).thenReturn(Optional.of(authorisationEntity));
 
         // When
-        CmsResponse<ScaStatus> actualResult = authorisationServiceInternal.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
+        CmsResponse<Xs2aScaStatus> actualResult = authorisationServiceInternal.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
 
         // Then
         assertTrue(actualResult.hasError());

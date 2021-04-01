@@ -24,10 +24,10 @@ import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.AisConsentServiceEncrypted;
 import de.adorsys.psd2.consent.api.service.ConsentServiceEncrypted;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.logger.context.LoggingContextService;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aCreatePiisConsentResponse;
@@ -78,7 +78,7 @@ public class Xs2aPiisConsentService {
         return Optional.ofNullable(piisConsent);
     }
 
-    public void updateConsentStatus(String consentId, ConsentStatus consentStatus) {
+    public void updateConsentStatus(String consentId, Xs2aConsentStatus consentStatus) {
         CmsResponse<Boolean> statusUpdated;
         try {
             statusUpdated = consentService.updateConsentStatusById(consentId, consentStatus);
@@ -92,7 +92,7 @@ public class Xs2aPiisConsentService {
         }
     }
 
-    public CmsResponse<PiisConsent> updateAspspAccountAccess(String consentId, AccountAccess accountAccess) {
+    public CmsResponse<PiisConsent> updateAspspAccountAccess(String consentId, Xs2aConsentAccountAccess accountAccess) {
         CmsResponse<CmsConsent> response;
 
         CmsResponse.CmsResponseBuilder<PiisConsent> builder = CmsResponse.builder();

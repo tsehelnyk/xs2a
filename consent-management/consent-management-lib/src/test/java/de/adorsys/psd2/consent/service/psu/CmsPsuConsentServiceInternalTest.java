@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.service.psu;
 
 import de.adorsys.psd2.consent.domain.AdditionalPsuData;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.AuthorisationRepository;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
@@ -28,10 +28,10 @@ import de.adorsys.psd2.consent.service.psu.util.PsuDataUpdater;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,13 +75,13 @@ class CmsPsuConsentServiceInternalTest {
 
     private ConsentEntity consentEntity;
     private PsuIdData psuIdData;
-    private PsuData psuData;
+    private CmsPsuData psuData;
     private JsonReader jsonReader;
 
     @BeforeEach
     void setUp() {
         psuIdData = buildPsuIdData(CORRECT_PSU_ID);
-        psuData = new PsuData(CORRECT_PSU_ID, "", "", "", "");
+        psuData = new CmsPsuData(CORRECT_PSU_ID, "", "", "", "");
         jsonReader = new JsonReader();
         consentEntity = buildConsent();
     }
@@ -128,10 +128,10 @@ class CmsPsuConsentServiceInternalTest {
     @Test
     void updatePsuData_psuDataInAuthorisation_success() {
         //Given
-        PsuData psuDataRequest = new PsuData(CORRECT_PSU_ID, "", "", "", "", buildAdditionalPsuData(null));
+        CmsPsuData psuDataRequest = new CmsPsuData(CORRECT_PSU_ID, "", "", "", "", buildAdditionalPsuData(null));
         when(psuDataMapper.mapToPsuData(psuIdData, INSTANCE_ID))
             .thenReturn(psuDataRequest);
-        PsuData psuData = new PsuData(CORRECT_PSU_ID, "", "", "", "", buildAdditionalPsuData(5L));
+        CmsPsuData psuData = new CmsPsuData(CORRECT_PSU_ID, "", "", "", "", buildAdditionalPsuData(5L));
         psuData.setId(7L);
         AuthorisationEntity authorisation = buildAisConsentAuthorisation(psuData);
         when(psuDataUpdater.updatePsuDataEntity(psuData, psuDataRequest)).thenReturn(psuData);
@@ -170,15 +170,15 @@ class CmsPsuConsentServiceInternalTest {
         return new PsuIdData(psuId, "", "", "", "");
     }
 
-    private PsuData buildPsuData(String psuId) {
-        return new PsuData(psuId, "", "", "", "");
+    private CmsPsuData buildPsuData(String psuId) {
+        return new CmsPsuData(psuId, "", "", "", "");
     }
 
-    private AuthorisationEntity buildAisConsentAuthorisation(PsuData psuData) {
+    private AuthorisationEntity buildAisConsentAuthorisation(CmsPsuData psuData) {
         AuthorisationEntity aisConsentAuthorization = new AuthorisationEntity();
         aisConsentAuthorization.setType(AuthorisationType.CONSENT);
         aisConsentAuthorization.setExternalId(AUTHORISATION_ID);
-        aisConsentAuthorization.setScaStatus(ScaStatus.RECEIVED);
+        aisConsentAuthorization.setScaStatus(Xs2aScaStatus.RECEIVED);
         aisConsentAuthorization.setParentExternalId(EXTERNAL_CONSENT_ID);
         aisConsentAuthorization.setAuthorisationExpirationTimestamp(OffsetDateTime.now().plusDays(1));
         aisConsentAuthorization.setPsuData(psuData);
@@ -190,7 +190,7 @@ class CmsPsuConsentServiceInternalTest {
         aisConsent.setCreationTimestamp(OffsetDateTime.of(2018, 10, 10, 10, 10, 10, 10, ZoneOffset.UTC));
         aisConsent.setLastActionDate(LocalDate.now());
         aisConsent.setPsuDataList(Collections.singletonList(psuData));
-        aisConsent.setConsentStatus(ConsentStatus.RECEIVED);
+        aisConsent.setConsentStatus(Xs2aConsentStatus.RECEIVED);
         aisConsent.setCreationTimestamp(OffsetDateTime.of(2018, 10, 10, 10, 10, 10, 10, ZoneOffset.UTC));
         AisConsentData data = new AisConsentData(null, null, null, false);
         ConsentDataMapper mapper = new ConsentDataMapper();

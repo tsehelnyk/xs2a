@@ -23,7 +23,7 @@ import de.adorsys.psd2.xs2a.config.CorsConfigurationProperties;
 import de.adorsys.psd2.xs2a.config.WebConfig;
 import de.adorsys.psd2.xs2a.config.Xs2aEndpointPathConstant;
 import de.adorsys.psd2.xs2a.config.Xs2aInterfaceConfig;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.integration.builder.UrlBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +58,7 @@ class PaymentUpdateAuthorisationIT extends PaymentUpdateAuthorisationBase {
     @SuppressWarnings("squid:S2699")
     @Test
     void updatePaymentPsuData_failed_psu_authorisation_psu_request_are_different() throws Exception {
-        given(authorisationServiceEncrypted.updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FAILED))
+        given(authorisationServiceEncrypted.updateAuthorisationStatus(AUTHORISATION_ID, Xs2aScaStatus.FAILED))
             .willReturn(CmsResponse.<Boolean>builder()
                             .payload(true)
                             .build());

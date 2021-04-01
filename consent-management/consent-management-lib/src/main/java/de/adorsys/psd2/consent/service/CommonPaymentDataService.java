@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.repository.PisCommonPaymentDataRepository;
 import de.adorsys.psd2.consent.repository.specification.PisCommonPaymentDataSpecification;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -47,9 +47,9 @@ public class CommonPaymentDataService {
     }
 
     @Transactional
-    public boolean updateStatusInPaymentData(PisCommonPaymentData paymentData, TransactionStatus status) {
+    public boolean updateStatusInPaymentData(PisCommonPaymentData paymentData, Xs2aTransactionStatus status) {
         paymentData.setTransactionStatus(status);
-        if (status == TransactionStatus.PATC) {
+        if (status == Xs2aTransactionStatus.PATC) {
             paymentData.setMultilevelScaRequired(true);
         }
         PisCommonPaymentData saved = pisCommonPaymentDataRepository.save(paymentData);

@@ -24,9 +24,9 @@ import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
@@ -62,7 +62,7 @@ import java.util.Collections;
 import java.util.Currency;
 import java.util.Optional;
 
-import static de.adorsys.psd2.xs2a.core.pis.TransactionStatus.RCVD;
+import static de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus.RCVD;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -196,7 +196,7 @@ class CreatePeriodicPaymentTest {
         //Then
         assertThat(actualResponse.hasError()).isFalse();
         assertThat(actualResponse.getBody().getPaymentId()).isEqualTo(PAYMENT_ID);
-        assertThat(actualResponse.getBody().getTransactionStatus()).isEqualTo(TransactionStatus.RCVD);
+        assertThat(actualResponse.getBody().getTransactionStatus()).isEqualTo(Xs2aTransactionStatus.RCVD);
     }
 
     @Test
@@ -232,7 +232,7 @@ class CreatePeriodicPaymentTest {
         payment.setCreditorAccount(buildReference());
         payment.setStartDate(LocalDate.now());
         payment.setEndDate(LocalDate.now().plusMonths(4));
-        payment.setTransactionStatus(TransactionStatus.RCVD);
+        payment.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         return payment;
     }
 
@@ -243,8 +243,8 @@ class CreatePeriodicPaymentTest {
         return amount;
     }
 
-    private static AccountReference buildReference() {
-        AccountReference reference = new AccountReference();
+    private static Xs2aAccountReference buildReference() {
+        Xs2aAccountReference reference = new Xs2aAccountReference();
         reference.setIban(IBAN);
         reference.setCurrency(EUR_CURRENCY);
         return reference;
@@ -265,7 +265,7 @@ class CreatePeriodicPaymentTest {
     private static PeriodicPaymentInitiationResponse buildPeriodicPaymentInitiationResponse(InitialSpiAspspConsentDataProvider initialSpiAspspConsentDataProvider) {
         PeriodicPaymentInitiationResponse response = new PeriodicPaymentInitiationResponse();
         response.setPaymentId(PAYMENT_ID);
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setAspspConsentDataProvider(initialSpiAspspConsentDataProvider);
         return response;
     }

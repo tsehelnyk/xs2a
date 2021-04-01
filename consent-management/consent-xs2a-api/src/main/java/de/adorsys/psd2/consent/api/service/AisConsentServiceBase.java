@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.consent.api.WrongChecksumException;
 import de.adorsys.psd2.consent.api.ais.AisConsentActionRequest;
 import de.adorsys.psd2.consent.api.ais.CmsConsent;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 
 public interface AisConsentServiceBase {
 
@@ -41,5 +41,5 @@ public interface AisConsentServiceBase {
      * @return AisAccountConsent consent
      * @throws WrongChecksumException in case of any attempt to change definite consent fields after its status became valid.
      */
-    CmsResponse<CmsConsent> updateAspspAccountAccess(String consentId, AccountAccess request) throws WrongChecksumException;
+    CmsResponse<CmsConsent> updateAspspAccountAccess(String consentId, Xs2aConsentAccountAccess request) throws WrongChecksumException;
 }

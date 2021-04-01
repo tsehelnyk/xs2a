@@ -29,7 +29,7 @@ import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
@@ -64,7 +64,7 @@ class PisAuthorisationServiceTest {
     private static final String TPP_REDIRECT_URI = "request/redirect_uri";
     private static final String TPP_NOK_REDIRECT_URI = "request/nok_redirect_uri";
 
-    private static final ScaStatus SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus SCA_STATUS = Xs2aScaStatus.RECEIVED;
     private static final ScaApproach SCA_APPROACH = ScaApproach.REDIRECT;
     private static final PsuIdData PSU_ID_DATA = new PsuIdData("psuId", "psuIdType", "psuCorporateId", "psuCorporateIdType", "psuIpAddress");
     private static final CreateAuthorisationResponse CREATE_PIS_AUTHORISATION_RESPONSE = new CreateAuthorisationResponse(AUTHORISATION_ID, SCA_STATUS, null, null);
@@ -268,9 +268,9 @@ class PisAuthorisationServiceTest {
     void getAuthorisationScaStatus() {
         ArgumentCaptor<PisAuthorisationParentHolder> authorisationParentHolderCaptor = ArgumentCaptor.forClass(PisAuthorisationParentHolder.class);
         when(authorisationServiceEncrypted.getAuthorisationScaStatus(eq(AUTHORISATION_ID), any(PisAuthorisationParentHolder.class)))
-            .thenReturn(CmsResponse.<ScaStatus>builder().payload(ScaStatus.PSUIDENTIFIED).build());
+            .thenReturn(CmsResponse.<Xs2aScaStatus>builder().payload(Xs2aScaStatus.PSUIDENTIFIED).build());
 
-        Assertions.assertEquals(Optional.of(ScaStatus.PSUIDENTIFIED), pisAuthorisationService.getAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID));
+        Assertions.assertEquals(Optional.of(Xs2aScaStatus.PSUIDENTIFIED), pisAuthorisationService.getAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID));
 
         verify(authorisationServiceEncrypted, times(1)).getAuthorisationScaStatus(eq(AUTHORISATION_ID), authorisationParentHolderCaptor.capture());
         Assertions.assertEquals(PAYMENT_ID, authorisationParentHolderCaptor.getValue().getParentId());
@@ -280,7 +280,7 @@ class PisAuthorisationServiceTest {
     void getAuthorisationScaStatus_error() {
         ArgumentCaptor<PisAuthorisationParentHolder> authorisationParentHolderCaptor = ArgumentCaptor.forClass(PisAuthorisationParentHolder.class);
         when(authorisationServiceEncrypted.getAuthorisationScaStatus(eq(AUTHORISATION_ID), any(PisAuthorisationParentHolder.class)))
-            .thenReturn(CmsResponse.<ScaStatus>builder().error(CmsError.TECHNICAL_ERROR).build());
+            .thenReturn(CmsResponse.<Xs2aScaStatus>builder().error(CmsError.TECHNICAL_ERROR).build());
 
         Assertions.assertEquals(Optional.empty(), pisAuthorisationService.getAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID));
 
@@ -292,9 +292,9 @@ class PisAuthorisationServiceTest {
     void getCancellationAuthorisationScaStatus() {
         ArgumentCaptor<PisCancellationAuthorisationParentHolder> authorisationParentHolderCaptor = ArgumentCaptor.forClass(PisCancellationAuthorisationParentHolder.class);
         when(authorisationServiceEncrypted.getAuthorisationScaStatus(eq(AUTHORISATION_ID), any(PisCancellationAuthorisationParentHolder.class)))
-            .thenReturn(CmsResponse.<ScaStatus>builder().payload(ScaStatus.PSUIDENTIFIED).build());
+            .thenReturn(CmsResponse.<Xs2aScaStatus>builder().payload(Xs2aScaStatus.PSUIDENTIFIED).build());
 
-        Assertions.assertEquals(Optional.of(ScaStatus.PSUIDENTIFIED), pisAuthorisationService.getCancellationAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID));
+        Assertions.assertEquals(Optional.of(Xs2aScaStatus.PSUIDENTIFIED), pisAuthorisationService.getCancellationAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID));
 
         verify(authorisationServiceEncrypted, times(1)).getAuthorisationScaStatus(eq(AUTHORISATION_ID), authorisationParentHolderCaptor.capture());
         Assertions.assertEquals(PAYMENT_ID, authorisationParentHolderCaptor.getValue().getParentId());
@@ -304,7 +304,7 @@ class PisAuthorisationServiceTest {
     void getCancellationAuthorisationScaStatus_error() {
         ArgumentCaptor<PisCancellationAuthorisationParentHolder> authorisationParentHolderCaptor = ArgumentCaptor.forClass(PisCancellationAuthorisationParentHolder.class);
         when(authorisationServiceEncrypted.getAuthorisationScaStatus(eq(AUTHORISATION_ID), any(PisCancellationAuthorisationParentHolder.class)))
-            .thenReturn(CmsResponse.<ScaStatus>builder().error(CmsError.TECHNICAL_ERROR).build());
+            .thenReturn(CmsResponse.<Xs2aScaStatus>builder().error(CmsError.TECHNICAL_ERROR).build());
 
         Assertions.assertEquals(Optional.empty(), pisAuthorisationService.getCancellationAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID));
 
@@ -397,7 +397,7 @@ class PisAuthorisationServiceTest {
 
     private static Authorisation buildGetPisAuthorisationResponse() {
         Authorisation response = new Authorisation();
-        response.setScaStatus(ScaStatus.RECEIVED);
+        response.setScaStatus(Xs2aScaStatus.RECEIVED);
         return response;
     }
 }

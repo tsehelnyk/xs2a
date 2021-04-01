@@ -24,7 +24,7 @@ import de.adorsys.psd2.consent.api.ais.AisConsentActionRequest;
 import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.ais.UpdateAisConsentResponse;
 import de.adorsys.psd2.consent.api.service.AisConsentServiceEncrypted;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +48,7 @@ public class AisConsentController implements AisConsentApi {
     }
 
     @Override
-    public ResponseEntity<Object> updateAccountAccess(String encryptedConsentId, AccountAccess request) {
+    public ResponseEntity<Object> updateAccountAccess(String encryptedConsentId, Xs2aConsentAccountAccess request) {
         CmsResponse<CmsConsent> response;
 
         try {

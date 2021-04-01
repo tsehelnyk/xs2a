@@ -23,7 +23,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -106,22 +106,22 @@ class CmsConsentAuthorisationServiceInternalTest {
 
     @Test
     void updateScaStatusAndAuthenticationData_success() {
-        authorisationEntity.setScaStatus(ScaStatus.PSUAUTHENTICATED);
+        authorisationEntity.setScaStatus(Xs2aScaStatus.PSUAUTHENTICATED);
         authorisationEntity.setScaAuthenticationData("none");
         authorisationEntity.setAuthenticationMethodId("none");
 
-        boolean actual = cmsConsentAuthorisationServiceInternal.updateScaStatusAndAuthenticationData(ScaStatus.RECEIVED, authorisationEntity, authenticationDataHolder);
+        boolean actual = cmsConsentAuthorisationServiceInternal.updateScaStatusAndAuthenticationData(Xs2aScaStatus.RECEIVED, authorisationEntity, authenticationDataHolder);
 
         assertTrue(actual);
         assertEquals(authenticationDataHolder.getAuthenticationData(), authorisationEntity.getScaAuthenticationData());
         assertEquals(authenticationDataHolder.getAuthenticationMethodId(), authorisationEntity.getAuthenticationMethodId());
-        assertEquals(ScaStatus.RECEIVED, authorisationEntity.getScaStatus());
+        assertEquals(Xs2aScaStatus.RECEIVED, authorisationEntity.getScaStatus());
     }
 
     @Test
     void updateScaStatusAndAuthenticationData_statusFinalised() {
-        authorisationEntity.setScaStatus(ScaStatus.FAILED);
-        boolean actual = cmsConsentAuthorisationServiceInternal.updateScaStatusAndAuthenticationData(ScaStatus.RECEIVED, authorisationEntity, authenticationDataHolder);
+        authorisationEntity.setScaStatus(Xs2aScaStatus.FAILED);
+        boolean actual = cmsConsentAuthorisationServiceInternal.updateScaStatusAndAuthenticationData(Xs2aScaStatus.RECEIVED, authorisationEntity, authenticationDataHolder);
         assertFalse(actual);
     }
 
@@ -158,6 +158,6 @@ class CmsConsentAuthorisationServiceInternalTest {
         assertThrows(RedirectUrlIsExpiredException.class,
                      () -> cmsConsentAuthorisationServiceInternal.getAuthorisationByRedirectId(AUTHORISATION_ID, INSTANCE_ID));
 
-        assertEquals(ScaStatus.FAILED, authorisationEntity.getScaStatus());
+        assertEquals(Xs2aScaStatus.FAILED, authorisationEntity.getScaStatus());
     }
 }

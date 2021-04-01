@@ -16,9 +16,9 @@
 
 package de.adorsys.psd2.xs2a.service.payment.support;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.service.payment.support.mapper.spi.SpiPaymentMapper;
 import de.adorsys.psd2.xs2a.service.profile.StandardPaymentProductsResolver;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
@@ -77,7 +77,7 @@ class PisCheckAuthorisationConfirmationServiceSupportImplTest {
 
         SpiPaymentInfo rawSpiPayment = buildSpiPaymentInfo(RAW_PAYMENT_PRODUCT, PaymentType.SINGLE);
 
-        SpiPaymentConfirmationCodeValidationResponse spiConfirmationCodeCheckingResponse = new SpiPaymentConfirmationCodeValidationResponse(ScaStatus.PSUIDENTIFIED, TransactionStatus.ACSP);
+        SpiPaymentConfirmationCodeValidationResponse spiConfirmationCodeCheckingResponse = new SpiPaymentConfirmationCodeValidationResponse(Xs2aScaStatus.PSUIDENTIFIED, Xs2aTransactionStatus.ACSP);
         SpiResponse<SpiPaymentConfirmationCodeValidationResponse> expectedResponse = SpiResponse.<SpiPaymentConfirmationCodeValidationResponse>builder()
                                                                                          .payload(spiConfirmationCodeCheckingResponse)
                                                                                          .build();
@@ -101,7 +101,7 @@ class PisCheckAuthorisationConfirmationServiceSupportImplTest {
         // Given
         SpiPaymentInfo standardSpiPayment = buildSpiPaymentInfo(STANDARD_PAYMENT_PRODUCT, PaymentType.SINGLE);
 
-        SpiPaymentConfirmationCodeValidationResponse spiConfirmationCodeCheckingResponse = new SpiPaymentConfirmationCodeValidationResponse(ScaStatus.PSUIDENTIFIED, TransactionStatus.ACSP);
+        SpiPaymentConfirmationCodeValidationResponse spiConfirmationCodeCheckingResponse = new SpiPaymentConfirmationCodeValidationResponse(Xs2aScaStatus.PSUIDENTIFIED, Xs2aTransactionStatus.ACSP);
         SpiResponse<SpiPaymentConfirmationCodeValidationResponse> expectedResponse = SpiResponse.<SpiPaymentConfirmationCodeValidationResponse>builder()
                                                                                          .payload(spiConfirmationCodeCheckingResponse)
                                                                                          .build();
@@ -125,7 +125,7 @@ class PisCheckAuthorisationConfirmationServiceSupportImplTest {
         // Given
         SpiPaymentInfo standardSpiPayment = buildSpiPaymentInfo(STANDARD_PAYMENT_PRODUCT, PaymentType.PERIODIC);
 
-        SpiPaymentConfirmationCodeValidationResponse spiConfirmationCodeCheckingResponse = new SpiPaymentConfirmationCodeValidationResponse(ScaStatus.PSUIDENTIFIED, TransactionStatus.ACSP);
+        SpiPaymentConfirmationCodeValidationResponse spiConfirmationCodeCheckingResponse = new SpiPaymentConfirmationCodeValidationResponse(Xs2aScaStatus.PSUIDENTIFIED, Xs2aTransactionStatus.ACSP);
         SpiResponse<SpiPaymentConfirmationCodeValidationResponse> expectedResponse = SpiResponse.<SpiPaymentConfirmationCodeValidationResponse>builder()
                                                                                          .payload(spiConfirmationCodeCheckingResponse)
                                                                                          .build();
@@ -149,7 +149,7 @@ class PisCheckAuthorisationConfirmationServiceSupportImplTest {
         // Given
         SpiPaymentInfo standardSpiPayment = buildSpiPaymentInfo(STANDARD_PAYMENT_PRODUCT, PaymentType.BULK);
 
-        SpiPaymentConfirmationCodeValidationResponse spiConfirmationCodeCheckingResponse = new SpiPaymentConfirmationCodeValidationResponse(ScaStatus.PSUIDENTIFIED, TransactionStatus.ACSP);
+        SpiPaymentConfirmationCodeValidationResponse spiConfirmationCodeCheckingResponse = new SpiPaymentConfirmationCodeValidationResponse(Xs2aScaStatus.PSUIDENTIFIED, Xs2aTransactionStatus.ACSP);
         SpiResponse<SpiPaymentConfirmationCodeValidationResponse> expectedResponse = SpiResponse.<SpiPaymentConfirmationCodeValidationResponse>builder()
                                                                                          .payload(spiConfirmationCodeCheckingResponse)
                                                                                          .build();

@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.authorization;
 
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentAuthorizationResponse;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
@@ -32,5 +32,5 @@ public interface ConsentAuthorizationService extends ScaApproachServiceTypeProvi
 
     Optional<Authorisation> getConsentAuthorizationById(String authorizationId);
 
-    Optional<ScaStatus> getAuthorisationScaStatus(String consentId, String authorisationId);
+    Optional<Xs2aScaStatus> getAuthorisationScaStatus(String consentId, String authorisationId);
 }

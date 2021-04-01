@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.exception.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,5 +42,5 @@ public class AbstractErrorNGAIS<T> {
     private List<T> tppMessages;
 
     @JsonProperty("links")
-    private Map<String, HrefType> links;
+    private Map<String, Xs2aHrefType> links;
 }

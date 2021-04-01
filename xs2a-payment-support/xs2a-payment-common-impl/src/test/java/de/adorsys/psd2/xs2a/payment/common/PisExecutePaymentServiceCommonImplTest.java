@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.payment.common;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiScaConfirmation;
@@ -54,7 +54,7 @@ class PisExecutePaymentServiceCommonImplTest {
         SpiPaymentInfo payment = new SpiPaymentInfo(PAYMENT_PRODUCT);
 
         SpiResponse<SpiPaymentExecutionResponse> commonServiceResponse = SpiResponse.<SpiPaymentExecutionResponse>builder()
-                                                                             .payload(new SpiPaymentExecutionResponse(TransactionStatus.ACSP))
+                                                                             .payload(new SpiPaymentExecutionResponse(Xs2aTransactionStatus.ACSP))
                                                                              .build();
         when(commonPaymentSpi.verifyScaAuthorisationAndExecutePaymentWithPaymentResponse(spiContextData, spiScaConfirmation, payment, spiAspspConsentDataProvider))
             .thenReturn(commonServiceResponse);
@@ -76,7 +76,7 @@ class PisExecutePaymentServiceCommonImplTest {
         SpiPaymentInfo payment = new SpiPaymentInfo(PAYMENT_PRODUCT);
 
         SpiResponse<SpiPaymentExecutionResponse> commonServiceResponse = SpiResponse.<SpiPaymentExecutionResponse>builder()
-                                                                             .payload(new SpiPaymentExecutionResponse(TransactionStatus.ACSP))
+                                                                             .payload(new SpiPaymentExecutionResponse(Xs2aTransactionStatus.ACSP))
                                                                              .build();
         when(commonPaymentSpi.executePaymentWithoutSca(spiContextData, payment, spiAspspConsentDataProvider))
             .thenReturn(commonServiceResponse);

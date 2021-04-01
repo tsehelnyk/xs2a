@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.integration.builder.payment;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.spi.domain.payment.response.SpiBulkPaymentInitiationResponse;
 import de.adorsys.psd2.xs2a.spi.domain.payment.response.SpiPeriodicPaymentInitiationResponse;
 import de.adorsys.psd2.xs2a.spi.domain.payment.response.SpiSinglePaymentInitiationResponse;
@@ -29,7 +29,7 @@ public class SpiPaymentInitiationResponseBuilder {
     public static SpiResponse<SpiSinglePaymentInitiationResponse> buildSinglePaymentResponse(boolean multiLevelSca) {
         SpiSinglePaymentInitiationResponse response = new SpiSinglePaymentInitiationResponse();
         response.setPaymentId(PAYMENT_ID);
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setAspspAccountId(ASPSP_ACCOUNT_ID);
         response.setSpiTransactionFeeIndicator(false);
         response.setMultilevelScaRequired(multiLevelSca);
@@ -45,7 +45,7 @@ public class SpiPaymentInitiationResponseBuilder {
     public static SpiResponse<SpiPeriodicPaymentInitiationResponse> buildPeriodicPaymentResponse() {
         SpiPeriodicPaymentInitiationResponse response = new SpiPeriodicPaymentInitiationResponse();
         response.setPaymentId(PAYMENT_ID);
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setAspspAccountId(ASPSP_ACCOUNT_ID);
         return buildSpiResponse(response);
     }
@@ -53,7 +53,7 @@ public class SpiPaymentInitiationResponseBuilder {
     public static SpiResponse<SpiBulkPaymentInitiationResponse> buildBulkPaymentResponse() {
         SpiBulkPaymentInitiationResponse response = new SpiBulkPaymentInitiationResponse();
         response.setPaymentId(PAYMENT_ID);
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setAspspAccountId(ASPSP_ACCOUNT_ID);
         response.setSpiTransactionFeeIndicator(true);
         return buildSpiResponse(response);

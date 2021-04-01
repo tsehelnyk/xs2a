@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.service.mapper;
 
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
@@ -41,10 +41,10 @@ class PsuDataMapperTest {
     @Test
     void mapToPsuDataList() {
         PsuIdData psuIdData = jsonReader.getObjectFromFile("json/service/mapper/psu-id-data.json", PsuIdData.class);
-        PsuData expected = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", PsuData.class);
-        List<PsuData> expectedList = Collections.singletonList(expected);
+        CmsPsuData expected = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", CmsPsuData.class);
+        List<CmsPsuData> expectedList = Collections.singletonList(expected);
 
-        List<PsuData> psuDataList = psuDataMapper.mapToPsuDataList(Collections.singletonList(psuIdData), DEFAULT_SERVICE_INSTANCE_ID);
+        List<CmsPsuData> psuDataList = psuDataMapper.mapToPsuDataList(Collections.singletonList(psuIdData), DEFAULT_SERVICE_INSTANCE_ID);
 
         verify(psuDataMapper, times(1)).mapToPsuData(psuIdData, DEFAULT_SERVICE_INSTANCE_ID);
         assertEquals(expectedList, psuDataList);
@@ -52,7 +52,7 @@ class PsuDataMapperTest {
 
     @Test
     void mapToPsuIdDataList() {
-        PsuData psuData = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", PsuData.class);
+        CmsPsuData psuData = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", CmsPsuData.class);
         PsuIdData expected = jsonReader.getObjectFromFile("json/service/mapper/psu-id-data.json", PsuIdData.class);
         List<PsuIdData> expectedList = Collections.singletonList(expected);
 
@@ -65,16 +65,16 @@ class PsuDataMapperTest {
     @Test
     void mapToPsuData_WithAdditionalPsuIdData() {
         PsuIdData psuIdData = jsonReader.getObjectFromFile("json/service/mapper/psu-id-data.json", PsuIdData.class);
-        PsuData expected = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", PsuData.class);
+        CmsPsuData expected = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", CmsPsuData.class);
 
-        PsuData psuData = psuDataMapper.mapToPsuData(psuIdData, DEFAULT_SERVICE_INSTANCE_ID);
+        CmsPsuData psuData = psuDataMapper.mapToPsuData(psuIdData, DEFAULT_SERVICE_INSTANCE_ID);
 
         assertEquals(expected, psuData);
     }
 
     @Test
     void mapToPsuIdData_WithAdditionalPsuData() {
-        PsuData psuData = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", PsuData.class);
+        CmsPsuData psuData = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", CmsPsuData.class);
         PsuIdData expected = jsonReader.getObjectFromFile("json/service/mapper/psu-id-data.json", PsuIdData.class);
 
         PsuIdData psuIdData = psuDataMapper.mapToPsuIdData(psuData);
@@ -85,16 +85,16 @@ class PsuDataMapperTest {
     @Test
     void mapToPsuData_WithoutAdditionalPsuIdData() {
         PsuIdData psuIdData = jsonReader.getObjectFromFile("json/service/mapper/psu-id-data-with-additional-psu-id-data.json", PsuIdData.class);
-        PsuData expected = jsonReader.getObjectFromFile("json/service/mapper/psu-data-with-additional-psu-data.json", PsuData.class);
+        CmsPsuData expected = jsonReader.getObjectFromFile("json/service/mapper/psu-data-with-additional-psu-data.json", CmsPsuData.class);
 
-        PsuData psuData = psuDataMapper.mapToPsuData(psuIdData, DEFAULT_SERVICE_INSTANCE_ID);
+        CmsPsuData psuData = psuDataMapper.mapToPsuData(psuIdData, DEFAULT_SERVICE_INSTANCE_ID);
 
         assertEquals(expected, psuData);
     }
 
     @Test
     void mapToPsuIdData_WithoutAdditionalPsuData() {
-        PsuData psuData = jsonReader.getObjectFromFile("json/service/mapper/psu-data-with-additional-psu-data.json", PsuData.class);
+        CmsPsuData psuData = jsonReader.getObjectFromFile("json/service/mapper/psu-data-with-additional-psu-data.json", CmsPsuData.class);
         PsuIdData expected = jsonReader.getObjectFromFile("json/service/mapper/psu-id-data-with-additional-psu-id-data.json", PsuIdData.class);
 
         PsuIdData psuIdData = psuDataMapper.mapToPsuIdData(psuData);

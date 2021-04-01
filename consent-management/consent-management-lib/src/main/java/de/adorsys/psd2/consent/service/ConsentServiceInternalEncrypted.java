@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.ConsentService;
 import de.adorsys.psd2.consent.api.service.ConsentServiceEncrypted;
 import de.adorsys.psd2.consent.service.security.SecurityDataService;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,12 +69,12 @@ public class ConsentServiceInternalEncrypted implements ConsentServiceEncrypted 
 
     @Override
     @Transactional
-    public CmsResponse<ConsentStatus> getConsentStatusById(String encryptedConsentId) {
+    public CmsResponse<Xs2aConsentStatus> getConsentStatusById(String encryptedConsentId) {
         Optional<String> decryptIdOptional = securityDataService.decryptId(encryptedConsentId);
 
         if (decryptIdOptional.isEmpty()) {
             log.info("Encrypted Consent ID: [{}]. Get consent status by id failed, couldn't decrypt consent id", encryptedConsentId);
-            return CmsResponse.<ConsentStatus>builder()
+            return CmsResponse.<Xs2aConsentStatus>builder()
                        .error(TECHNICAL_ERROR)
                        .build();
         }
@@ -84,7 +84,7 @@ public class ConsentServiceInternalEncrypted implements ConsentServiceEncrypted 
 
     @Override
     @Transactional(rollbackFor = WrongChecksumException.class)
-    public CmsResponse<Boolean> updateConsentStatusById(String encryptedConsentId, ConsentStatus status) throws WrongChecksumException {
+    public CmsResponse<Boolean> updateConsentStatusById(String encryptedConsentId, Xs2aConsentStatus status) throws WrongChecksumException {
         Optional<String> decryptIdOptional = securityDataService.decryptId(encryptedConsentId);
 
         if (decryptIdOptional.isEmpty()) {

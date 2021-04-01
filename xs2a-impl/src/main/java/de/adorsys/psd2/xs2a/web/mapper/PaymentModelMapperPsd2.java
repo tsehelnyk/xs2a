@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentCancellationRequest;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.psd2.model.*;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppAttributes;
@@ -141,7 +142,7 @@ public class PaymentModelMapperPsd2 {
         return response;
     }
 
-    private TransactionStatus mapToTransactionStatus(de.adorsys.psd2.xs2a.core.pis.TransactionStatus responseObject) {
+    private TransactionStatus mapToTransactionStatus(Xs2aTransactionStatus responseObject) {
         return Optional.ofNullable(responseObject)
                    .map(r -> TransactionStatus.valueOf(r.name()))
                    .orElse(null);

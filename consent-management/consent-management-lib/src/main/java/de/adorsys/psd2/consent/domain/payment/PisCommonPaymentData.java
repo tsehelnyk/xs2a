@@ -19,7 +19,7 @@ package de.adorsys.psd2.consent.domain.payment;
 import de.adorsys.psd2.consent.domain.*;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.NotificationSupportedMode;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import lombok.Data;
@@ -54,7 +54,7 @@ public class PisCommonPaymentData extends InstanceDependableEntity implements Au
 
     @Column(name = "transaction_status", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
 
     @Column(name = "internal_payment_status", nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -68,7 +68,7 @@ public class PisCommonPaymentData extends InstanceDependableEntity implements Au
     @JoinTable(name = "pis_common_payment_psu_data",
         joinColumns = @JoinColumn(name = "pis_common_payment_id"),
         inverseJoinColumns = @JoinColumn(name = "psu_data_id"))
-    private List<PsuData> psuDataList = new ArrayList<>();
+    private List<CmsPsuData> psuDataList = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tpp_info_id", nullable = false)
@@ -123,7 +123,7 @@ public class PisCommonPaymentData extends InstanceDependableEntity implements Au
     private boolean signingBasketAuthorised;
 
     @Transient
-    private TransactionStatus previousTransactionStatus;
+    private Xs2aTransactionStatus previousTransactionStatus;
 
     @PostLoad
     public void pisCommonPaymentDataPostLoad() {
@@ -154,7 +154,7 @@ public class PisCommonPaymentData extends InstanceDependableEntity implements Au
     }
 
     private boolean isNotConfirmed() {
-        return EnumSet.of(TransactionStatus.RCVD, TransactionStatus.PATC).contains(transactionStatus);
+        return EnumSet.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PATC).contains(transactionStatus);
     }
 
     public boolean isFinalised() {

@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.api.ais.ConsentStatusResponse;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.config.CmsRestException;
 import de.adorsys.psd2.consent.config.ConsentRemoteUrls;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -88,11 +88,11 @@ class ConsentServiceRemoteTest {
     @Test
     void getConsentStatusById() {
         when(consentRemoteUrls.getConsentStatusById()).thenReturn(URL);
-        ConsentStatus consentStatus = ConsentStatus.RECEIVED;
+        Xs2aConsentStatus consentStatus = Xs2aConsentStatus.RECEIVED;
         when(consentRestTemplate.getForEntity(URL, ConsentStatusResponse.class, CONSENT_ID))
             .thenReturn(ResponseEntity.ok(new ConsentStatusResponse(consentStatus)));
 
-        CmsResponse<ConsentStatus> actualResponse = consentServiceRemote.getConsentStatusById(CONSENT_ID);
+        CmsResponse<Xs2aConsentStatus> actualResponse = consentServiceRemote.getConsentStatusById(CONSENT_ID);
 
         assertTrue(actualResponse.isSuccessful());
         assertEquals(consentStatus, actualResponse.getPayload());
@@ -101,11 +101,11 @@ class ConsentServiceRemoteTest {
     @Test
     void getConsentStatusById_nullResponse() {
         when(consentRemoteUrls.getConsentStatusById()).thenReturn(URL);
-        ConsentStatus consentStatus = ConsentStatus.RECEIVED;
+        Xs2aConsentStatus consentStatus = Xs2aConsentStatus.RECEIVED;
         when(consentRestTemplate.getForEntity(URL, ConsentStatusResponse.class, CONSENT_ID))
             .thenReturn(ResponseEntity.ok().build());
 
-        CmsResponse<ConsentStatus> actualResponse = consentServiceRemote.getConsentStatusById(CONSENT_ID);
+        CmsResponse<Xs2aConsentStatus> actualResponse = consentServiceRemote.getConsentStatusById(CONSENT_ID);
 
         assertTrue(actualResponse.hasError());
         assertEquals(CmsError.TECHNICAL_ERROR, actualResponse.getError());
@@ -117,7 +117,7 @@ class ConsentServiceRemoteTest {
         when(consentRestTemplate.getForEntity(URL, ConsentStatusResponse.class, CONSENT_ID))
             .thenThrow(CmsRestException.class);
 
-        CmsResponse<ConsentStatus> actualResponse = consentServiceRemote.getConsentStatusById(CONSENT_ID);
+        CmsResponse<Xs2aConsentStatus> actualResponse = consentServiceRemote.getConsentStatusById(CONSENT_ID);
 
         assertTrue(actualResponse.hasError());
         assertEquals(CmsError.TECHNICAL_ERROR, actualResponse.getError());
@@ -126,7 +126,7 @@ class ConsentServiceRemoteTest {
     @Test
     void updateConsentStatusById() {
         when(consentRemoteUrls.updateConsentStatusById()).thenReturn(URL);
-        ConsentStatus newConsentStatus = ConsentStatus.RECEIVED;
+        Xs2aConsentStatus newConsentStatus = Xs2aConsentStatus.RECEIVED;
 
         CmsResponse<Boolean> actualResponse = consentServiceRemote.updateConsentStatusById(CONSENT_ID, newConsentStatus);
 
@@ -138,7 +138,7 @@ class ConsentServiceRemoteTest {
     @Test
     void updateConsentStatusById_cmsRestException() {
         when(consentRemoteUrls.updateConsentStatusById()).thenReturn(URL);
-        ConsentStatus newConsentStatus = ConsentStatus.RECEIVED;
+        Xs2aConsentStatus newConsentStatus = Xs2aConsentStatus.RECEIVED;
         doThrow(CmsRestException.class).when(consentRestTemplate).put(URL, null, CONSENT_ID, newConsentStatus);
 
         CmsResponse<Boolean> actualResponse = consentServiceRemote.updateConsentStatusById(CONSENT_ID, newConsentStatus);

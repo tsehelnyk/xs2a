@@ -24,7 +24,7 @@ import de.adorsys.psd2.consent.api.pis.PisCommonPaymentDataStatusResponse;
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
 import de.adorsys.psd2.consent.api.service.PisCommonPaymentServiceEncrypted;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -79,9 +79,9 @@ class PisCommonPaymentControllerTest {
     @Test
     void getConsentStatusById_Success() {
         //Given
-        ResponseEntity<PisCommonPaymentDataStatusResponse> expected = new ResponseEntity<>(new PisCommonPaymentDataStatusResponse(TransactionStatus.RCVD), HttpStatus.OK);
+        ResponseEntity<PisCommonPaymentDataStatusResponse> expected = new ResponseEntity<>(new PisCommonPaymentDataStatusResponse(Xs2aTransactionStatus.RCVD), HttpStatus.OK);
         when(pisCommonPaymentService.getPisCommonPaymentStatusById(PAYMENT_ID))
-            .thenReturn(CmsResponse.<TransactionStatus>builder().payload(TransactionStatus.RCVD).build());
+            .thenReturn(CmsResponse.<Xs2aTransactionStatus>builder().payload(Xs2aTransactionStatus.RCVD).build());
 
         //When
         ResponseEntity<PisCommonPaymentDataStatusResponse> actual = pisCommonPaymentController.getPisCommonPaymentStatusById(PAYMENT_ID);
@@ -94,7 +94,7 @@ class PisCommonPaymentControllerTest {
     void getConsentStatusById_Failure() {
         //Given
         when(pisCommonPaymentService.getPisCommonPaymentStatusById(WRONG_PAYMENT_ID))
-            .thenReturn(CmsResponse.<TransactionStatus>builder().error(CmsError.TECHNICAL_ERROR).build());
+            .thenReturn(CmsResponse.<Xs2aTransactionStatus>builder().error(CmsError.TECHNICAL_ERROR).build());
         ResponseEntity<PisCommonPaymentDataStatusResponse> expected = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         //When
@@ -136,7 +136,7 @@ class PisCommonPaymentControllerTest {
     void updateConsentStatus_Success() {
         //Given
         ResponseEntity<Void> expected = new ResponseEntity<>(HttpStatus.OK);
-        when(pisCommonPaymentService.updateCommonPaymentStatusById(PAYMENT_ID, TransactionStatus.RCVD))
+        when(pisCommonPaymentService.updateCommonPaymentStatusById(PAYMENT_ID, Xs2aTransactionStatus.RCVD))
             .thenReturn(CmsResponse.<Boolean>builder().payload(true).build());
 
         //When
@@ -149,7 +149,7 @@ class PisCommonPaymentControllerTest {
     @Test
     void updateConsentStatus_Failure() {
         //Given
-        when(pisCommonPaymentService.updateCommonPaymentStatusById(WRONG_PAYMENT_ID, TransactionStatus.RCVD))
+        when(pisCommonPaymentService.updateCommonPaymentStatusById(WRONG_PAYMENT_ID, Xs2aTransactionStatus.RCVD))
             .thenReturn(CmsResponse.<Boolean>builder().payload(false).build());
         ResponseEntity<Void> expected = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 

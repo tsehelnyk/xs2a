@@ -20,7 +20,7 @@ import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.psd2.model.BulkPaymentInitiationJson;
 import de.adorsys.psd2.model.PaymentInitiationJson;
 import de.adorsys.psd2.model.PeriodicPaymentInitiationJson;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.domain.AccountReferenceCollector;
 import de.adorsys.psd2.xs2a.service.mapper.PaymentModelMapper;
@@ -47,7 +47,7 @@ public class PaymentAccountReferenceExtractor {
      * @param paymentType payment type
      * @return account references
      */
-    public Set<AccountReference> extractAccountReferences(byte[] paymentBody, PaymentType paymentType) {
+    public Set<Xs2aAccountReference> extractAccountReferences(byte[] paymentBody, PaymentType paymentType) {
         Optional<AccountReferenceCollector> accountReferenceCollector = mapToAccountReferenceCollector(paymentBody, paymentType);
         return accountReferenceCollector
                    .map(AccountReferenceCollector::getAccountReferences)

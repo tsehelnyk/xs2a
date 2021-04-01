@@ -26,8 +26,8 @@ import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.integration.config.IntegrationTestConfiguration;
 import de.adorsys.psd2.consent.psu.api.CmsPsuAisService;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
-import de.adorsys.psd2.core.data.AccountAccess;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -93,14 +93,14 @@ class AisConsentIT {
         assertEquals(savedEntity.getStatusChangeTimestamp(), savedEntity.getCreationTimestamp());
 
         // When
-        consentService.updateConsentStatusById(savedEntity.getExternalId(), ConsentStatus.EXPIRED);
+        consentService.updateConsentStatusById(savedEntity.getExternalId(), Xs2aConsentStatus.EXPIRED);
         flushAndClearPersistenceContext();
 
         // Then
         // Second, we update the status and check it and the updated timestamp
         entities = consentJpaRepository.findAll();
         ConsentEntity updatedEntity = entities.iterator().next();
-        assertEquals(ConsentStatus.EXPIRED, updatedEntity.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.EXPIRED, updatedEntity.getConsentStatus());
         assertTrue(updatedEntity.getStatusChangeTimestamp().isAfter(updatedEntity.getCreationTimestamp()));
     }
 
@@ -120,14 +120,14 @@ class AisConsentIT {
         assertEquals(savedEntity.getStatusChangeTimestamp(), savedEntity.getCreationTimestamp());
 
         // When
-        consentService.updateConsentStatusById(savedEntity.getExternalId(), ConsentStatus.RECEIVED);
+        consentService.updateConsentStatusById(savedEntity.getExternalId(), Xs2aConsentStatus.RECEIVED);
         flushAndClearPersistenceContext();
 
         // Then
         // Second, we update the status for the same and check it and the updated timestamp
         entities = consentJpaRepository.findAll();
         ConsentEntity updatedEntity = entities.iterator().next();
-        assertEquals(ConsentStatus.RECEIVED, updatedEntity.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.RECEIVED, updatedEntity.getConsentStatus());
         assertEquals(updatedEntity.getStatusChangeTimestamp(), updatedEntity.getCreationTimestamp());
     }
 
@@ -196,8 +196,8 @@ class AisConsentIT {
 
     private CmsConsent buildCreateAisConsentRequest() {
         CmsConsent cmsConsent = jsonReader.getObjectFromFile("json/consent/integration/ais/cms-consent.json", CmsConsent.class);
-        cmsConsent.setAspspAccountAccesses(AccountAccess.EMPTY_ACCESS);
-        cmsConsent.setTppAccountAccesses(AccountAccess.EMPTY_ACCESS);
+        cmsConsent.setAspspAccountAccesses(Xs2aConsentAccountAccess.EMPTY_ACCESS);
+        cmsConsent.setTppAccountAccesses(Xs2aConsentAccountAccess.EMPTY_ACCESS);
         cmsConsent.setConsentData(jsonReader.getBytesFromFile("json/consent/integration/ais/ais-consent-data.json"));
         cmsConsent.setInstanceId(DEFAULT_SERVICE_INSTANCE_ID);
         return cmsConsent;

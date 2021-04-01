@@ -16,8 +16,8 @@
 
 package de.adorsys.psd2.xs2a.service;
 
-import de.adorsys.psd2.core.data.AccountAccess;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentReq;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
 import lombok.RequiredArgsConstructor;
@@ -40,13 +40,13 @@ public class AdditionalInformationSupportedService {
         }
 
         if (!isOwnerNameSupported || !isTrustedBeneficiariesSupported) {
-            AccountAccess access = request.getAccess();
-            AdditionalInformationAccess additionalInformationAccess = access.getAdditionalInformationAccess();
+            Xs2aConsentAccountAccess access = request.getAccess();
+            Xs2aAdditionalInformationAccess additionalInformationAccess = access.getAdditionalInformationAccess();
             if (additionalInformationAccess != null) {
-                AdditionalInformationAccess additionalInformationCleaned = new AdditionalInformationAccess(
+                Xs2aAdditionalInformationAccess additionalInformationCleaned = new Xs2aAdditionalInformationAccess(
                     isOwnerNameSupported ? additionalInformationAccess.getOwnerName() : null,
                     isTrustedBeneficiariesSupported ? additionalInformationAccess.getTrustedBeneficiaries() : null);
-                request.setAccess(new AccountAccess(access.getAccounts(),
+                request.setAccess(new Xs2aConsentAccountAccess(access.getAccounts(),
                                                     access.getBalances(),
                                                     access.getTransactions(),
                                                     additionalInformationCleaned));

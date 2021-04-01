@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.consent.api.pis.CreatePisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 
 import java.util.List;
@@ -42,7 +42,7 @@ interface PisCommonPaymentServiceBase {
      * @param paymentId String representation of pis payment identifier
      * @return Information about the status of a common payment
      */
-    CmsResponse<TransactionStatus> getPisCommonPaymentStatusById(String paymentId);
+    CmsResponse<Xs2aTransactionStatus> getPisCommonPaymentStatusById(String paymentId);
 
     /**
      * Reads full information of pis payment by payment identifier
@@ -59,7 +59,7 @@ interface PisCommonPaymentServiceBase {
      * @param status    new payment status
      * @return Response containing result of status changing
      */
-    CmsResponse<Boolean> updateCommonPaymentStatusById(String paymentId, TransactionStatus status);
+    CmsResponse<Boolean> updateCommonPaymentStatusById(String paymentId, Xs2aTransactionStatus status);
 
     /**
      * Updates multilevelScaRequired and stores changes into database

@@ -16,10 +16,10 @@
 
 package de.adorsys.psd2.core.data.ais;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
@@ -116,7 +116,7 @@ class AisConsentDataTest {
     @Test
     void getUsedAccess_emptyAccesses() {
         AisConsent bankOfferedConsent = jsonReader.getObjectFromFile("json/data/ais/ais-consent-bank-offered.json", AisConsent.class);
-        AccountAccess emptyAccess = new AccountAccess(null, null, null, null);
+        Xs2aConsentAccountAccess emptyAccess = new Xs2aConsentAccountAccess(null, null, null, null);
 
         assertEquals(emptyAccess, bankOfferedConsent.getAccess());
     }
@@ -124,8 +124,8 @@ class AisConsentDataTest {
     @Test
     void getUsedAccess_tppAccess() {
         AisConsent consentWithTppAccess = jsonReader.getObjectFromFile("json/data/ais/ais-consent-tpp-dedicated.json", AisConsent.class);
-        List<AccountReference> accountReferences = Collections.singletonList(new AccountReference(AccountReferenceType.IBAN, "DE98500105171757213183", null));
-        AccountAccess dedicatedAccess = new AccountAccess(accountReferences, accountReferences, accountReferences, null);
+        List<Xs2aAccountReference> accountReferences = Collections.singletonList(new Xs2aAccountReference(AccountReferenceType.IBAN, "DE98500105171757213183", null));
+        Xs2aConsentAccountAccess dedicatedAccess = new Xs2aConsentAccountAccess(accountReferences, accountReferences, accountReferences, null);
 
         assertEquals(dedicatedAccess, consentWithTppAccess.getAccess());
     }
@@ -133,8 +133,8 @@ class AisConsentDataTest {
     @Test
     void getUsedAccess_aspspAccess() {
         AisConsent consentWithAspspAccess = jsonReader.getObjectFromFile("json/data/ais/ais-consent-aspsp-dedicated.json", AisConsent.class);
-        List<AccountReference> accountReferences = Collections.singletonList(new AccountReference(AccountReferenceType.IBAN, "DE98500105171757213183", null));
-        AccountAccess dedicatedAccess = new AccountAccess(accountReferences, accountReferences, accountReferences, null);
+        List<Xs2aAccountReference> accountReferences = Collections.singletonList(new Xs2aAccountReference(AccountReferenceType.IBAN, "DE98500105171757213183", null));
+        Xs2aConsentAccountAccess dedicatedAccess = new Xs2aConsentAccountAccess(accountReferences, accountReferences, accountReferences, null);
 
         assertEquals(dedicatedAccess, consentWithAspspAccess.getAccess());
     }
@@ -142,7 +142,7 @@ class AisConsentDataTest {
     @Test
     void getUsedAccess_globalConsentWithAspspReferences_shouldReturnTppAccess() {
         AisConsent globalConsentDataWithAccountReferences = jsonReader.getObjectFromFile("json/data/ais/ais-consent-global-aspsp-accounts.json", AisConsent.class);
-        AccountAccess globalAccess = new AccountAccess(null, null, null, null);
+        Xs2aConsentAccountAccess globalAccess = new Xs2aConsentAccountAccess(null, null, null, null);
 
         assertEquals(globalAccess, globalConsentDataWithAccountReferences.getAccess());
     }

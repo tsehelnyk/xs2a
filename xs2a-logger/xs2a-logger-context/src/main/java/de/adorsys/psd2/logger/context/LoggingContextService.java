@@ -16,9 +16,9 @@
 
 package de.adorsys.psd2.logger.context;
 
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,7 +32,7 @@ public interface LoggingContextService {
      *
      * @param consentStatus status to be stored
      */
-    void storeConsentStatus(@NotNull ConsentStatus consentStatus);
+    void storeConsentStatus(@NotNull Xs2aConsentStatus consentStatus);
 
     /**
      * Retrieves consent status from current logging context as string
@@ -46,7 +46,7 @@ public interface LoggingContextService {
      *
      * @param transactionStatus status to be stored
      */
-    void storeTransactionStatus(@NotNull TransactionStatus transactionStatus);
+    void storeTransactionStatus(@NotNull Xs2aTransactionStatus transactionStatus);
 
     /**
      * Retrieves transaction status from current logging context as string
@@ -60,7 +60,7 @@ public interface LoggingContextService {
      *
      * @param scaStatus status to be stored
      */
-    void storeScaStatus(@NotNull ScaStatus scaStatus);
+    void storeScaStatus(@NotNull Xs2aScaStatus scaStatus);
 
     /**
      * Records given transaction status and optional SCA status into current context
@@ -68,7 +68,7 @@ public interface LoggingContextService {
      * @param transactionStatus transaction status to be stored
      * @param scaStatus         optional SCA status to be stored
      */
-    void storeTransactionAndScaStatus(@NotNull TransactionStatus transactionStatus, @Nullable ScaStatus scaStatus);
+    void storeTransactionAndScaStatus(@NotNull Xs2aTransactionStatus transactionStatus, @Nullable Xs2aScaStatus scaStatus);
 
     /**
      * Retrieves SCA status from current logging context as string

@@ -27,7 +27,7 @@ import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationResponse;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.*;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.event.service.Xs2aEventServiceEncrypted;
 import de.adorsys.psd2.event.service.model.EventBO;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
@@ -41,7 +41,7 @@ import de.adorsys.psd2.xs2a.core.consent.AspspConsentData;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.profile.ScaRedirectFlow;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.integration.builder.AspspSettingsBuilder;
 import de.adorsys.psd2.xs2a.integration.builder.TppInfoBuilder;
@@ -307,7 +307,7 @@ class ConsentCreationSuccessfulIT {
             .willReturn(CmsResponse.<CmsCreateConsentResponse>builder()
                             .payload(new CmsCreateConsentResponse(ENCRYPT_CONSENT_ID, cmsConsent))
                             .build());
-        given(aisConsentServiceEncrypted.updateAspspAccountAccess(eq(ENCRYPT_CONSENT_ID), any(AccountAccess.class)))
+        given(aisConsentServiceEncrypted.updateAspspAccountAccess(eq(ENCRYPT_CONSENT_ID), any(Xs2aConsentAccountAccess.class)))
             .willReturn(CmsResponse.<CmsConsent>builder()
                             .payload(cmsConsent)
                             .build());
@@ -340,6 +340,6 @@ class ConsentCreationSuccessfulIT {
     }
 
     private CreateAuthorisationResponse buildCreateAisConsentAuthorizationResponse() {
-        return new CreateAuthorisationResponse(AUTHORISATION_ID, ScaStatus.RECEIVED, INTERNAL_REQUEST_ID, null);
+        return new CreateAuthorisationResponse(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INTERNAL_REQUEST_ID, null);
     }
 }

@@ -19,7 +19,7 @@ package de.adorsys.psd2.consent.api;
 import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.ais.ConsentStatusResponse;
 import de.adorsys.psd2.consent.api.config.InternalCmsXs2aApiTagName;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +51,7 @@ public interface CmsConsentApi {
     @GetMapping(path = "/{encrypted-consent-id}/status")
     @ApiOperation(value = "Get consent status by ID")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "OK", response = ConsentStatus.class),
+        @ApiResponse(code = 200, message = "OK", response = Xs2aConsentStatus.class),
         @ApiResponse(code = 404, message = "Not Found")})
     ResponseEntity<ConsentStatusResponse> getConsentStatusById(
         @ApiParam(name = "encrypted-consent-id",

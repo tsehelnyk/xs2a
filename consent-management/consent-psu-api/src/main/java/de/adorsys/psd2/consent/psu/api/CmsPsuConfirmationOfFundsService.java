@@ -18,12 +18,12 @@ package de.adorsys.psd2.consent.psu.api;
 
 import de.adorsys.psd2.consent.api.piis.v2.CmsConfirmationOfFundsConsent;
 import de.adorsys.psd2.consent.api.piis.v2.CmsConfirmationOfFundsResponse;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -43,7 +43,7 @@ public interface CmsPsuConfirmationOfFundsService {
      * @throws AuthorisationIsExpiredException if authorisation is expired
      */
     boolean updateAuthorisationStatus(@NotNull PsuIdData psuIdData, @NotNull String consentId, @NotNull String authorisationId,
-                                      @NotNull ScaStatus status, @NotNull String instanceId,
+                                      @NotNull Xs2aScaStatus status, @NotNull String instanceId,
                                       AuthenticationDataHolder authenticationDataHolder) throws AuthorisationIsExpiredException;
 
     /**
@@ -86,7 +86,7 @@ public interface CmsPsuConfirmationOfFundsService {
      * @param instanceId optional ID of particular service instance
      * @return <code>true</code> if consent was found and status was updated. <code>false</code> otherwise.
      */
-    boolean updateConsentStatus(@NotNull String consentId, @NotNull ConsentStatus status, @NotNull String instanceId);
+    boolean updateConsentStatus(@NotNull String consentId, @NotNull Xs2aConsentStatus status, @NotNull String instanceId);
 
     /**
      * Returns confirmation of funds Consent object by its ID

@@ -17,12 +17,12 @@
 package de.adorsys.psd2.consent.service.authorisation;
 
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.repository.AuthorisationRepository;
 import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -70,7 +70,7 @@ public class AuthorisationClosingService {
 
     private void closePreviousAuthorisationsByPsu(AuthorisationType authorisationType, List<AuthorisationEntity> authorisations, PsuIdData psuIdData) {
         String instanceId = authorisations.isEmpty() ? null : authorisations.get(0).getInstanceId();
-        PsuData psuData = psuDataMapper.mapToPsuData(psuIdData, instanceId);
+        CmsPsuData psuData = psuDataMapper.mapToPsuData(psuIdData, instanceId);
 
         List<AuthorisationEntity> authorisationsToBeClosed = authorisations
                                                                  .stream()
@@ -82,7 +82,7 @@ public class AuthorisationClosingService {
     }
 
     private void failAndExpireAuthorisation(AuthorisationEntity auth) {
-        auth.setScaStatus(ScaStatus.FAILED);
+        auth.setScaStatus(Xs2aScaStatus.FAILED);
         auth.setRedirectUrlExpirationTimestamp(OffsetDateTime.now());
         authorisationRepository.save(auth);
     }

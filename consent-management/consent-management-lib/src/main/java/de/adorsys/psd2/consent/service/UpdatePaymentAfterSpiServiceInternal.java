@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.consent.api.service.UpdatePaymentAfterSpiService;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ public class UpdatePaymentAfterSpiServiceInternal implements UpdatePaymentAfterS
 
     @Override
     @Transactional
-    public CmsResponse<Boolean> updatePaymentStatus(@NotNull String paymentId, @NotNull TransactionStatus status) {
+    public CmsResponse<Boolean> updatePaymentStatus(@NotNull String paymentId, @NotNull Xs2aTransactionStatus status) {
         Optional<PisCommonPaymentData> paymentDataOptional = commonPaymentDataService.getPisCommonPaymentData(paymentId, null);
         if (paymentDataOptional.isEmpty() || paymentDataOptional.get().isFinalised()) {
             log.info("Payment ID [{}]. Update payment status by id failed, because pis payment data not found or payment is finalized",

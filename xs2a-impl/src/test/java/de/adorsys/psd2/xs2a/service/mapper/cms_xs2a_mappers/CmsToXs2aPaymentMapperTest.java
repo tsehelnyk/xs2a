@@ -22,8 +22,8 @@ import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.PisPayment;
 import de.adorsys.psd2.xs2a.core.pis.PisDayOfExecution;
 import de.adorsys.psd2.xs2a.core.pis.PisExecutionRule;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -53,7 +53,7 @@ class CmsToXs2aPaymentMapperTest {
     private static final Currency CURRENCY = Currency.getInstance("EUR");
 
     private static final String DEBTOR_IBAN = "debtor iban";
-    private static final AccountReference DEBTOR_ACCOUNT_REFERENCE = new AccountReference(AccountReferenceType.IBAN,
+    private static final Xs2aAccountReference DEBTOR_ACCOUNT_REFERENCE = new Xs2aAccountReference(AccountReferenceType.IBAN,
                                                                                           DEBTOR_IBAN,
                                                                                           CURRENCY);
 
@@ -61,7 +61,7 @@ class CmsToXs2aPaymentMapperTest {
     private static final String AMOUNT = "100";
 
     private static final String CREDITOR_IBAN = "creditor iban";
-    private static final AccountReference CREDITOR_ACCOUNT_REFERENCE = new AccountReference(AccountReferenceType.IBAN,
+    private static final Xs2aAccountReference CREDITOR_ACCOUNT_REFERENCE = new Xs2aAccountReference(AccountReferenceType.IBAN,
                                                                                             CREDITOR_IBAN,
                                                                                             CURRENCY);
 
@@ -86,7 +86,7 @@ class CmsToXs2aPaymentMapperTest {
 
     private static final String ULTIMATE_CREDITOR = "ultimate creditor";
     private static final String PURPOSE_CODE = "BKDF";
-    private static final TransactionStatus TRANSACTION_STATUS = TransactionStatus.RCVD;
+    private static final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.RCVD;
     private static final LocalDate START_DATE = LocalDate.of(2019, 2, 25);
     private static final LocalDate END_DATE = LocalDate.of(2019, 2, 28);
     private static final PisExecutionRule EXECUTION_RULE = PisExecutionRule.FOLLOWING;

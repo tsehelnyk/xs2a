@@ -21,7 +21,7 @@ import de.adorsys.psd2.consent.api.TypeAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.service.RequestProviderService;
@@ -60,8 +60,8 @@ class AccountHelperServiceTest {
     private static final boolean WITH_BALANCE = true;
 
     private static final SpiAccountReference SPI_ACCOUNT_REFERENCE = buildSpiAccountReference();
-    private static final AccountReference XS2A_ACCOUNT_REFERENCE = buildXs2aAccountReference();
-    private static final List<AccountReference> REFERENCES = Collections.singletonList(XS2A_ACCOUNT_REFERENCE);
+    private static final Xs2aAccountReference XS2A_ACCOUNT_REFERENCE = buildXs2aAccountReference();
+    private static final List<Xs2aAccountReference> REFERENCES = Collections.singletonList(XS2A_ACCOUNT_REFERENCE);
     private static final SpiContextData SPI_CONTEXT_DATA = TestSpiDataProvider.getSpiContextData();
     private static final PsuIdData PSU_ID_DATA = buildPsuIdData();
 
@@ -164,8 +164,8 @@ class AccountHelperServiceTest {
         return aisConsent;
     }
 
-    private static AccountReference buildXs2aAccountReference() {
-        return new AccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
+    private static Xs2aAccountReference buildXs2aAccountReference() {
+        return new Xs2aAccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
     }
 
     private static SpiAccountReference buildSpiAccountReference() {

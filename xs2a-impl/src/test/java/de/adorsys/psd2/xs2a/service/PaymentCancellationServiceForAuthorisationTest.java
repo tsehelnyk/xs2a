@@ -25,7 +25,7 @@ import de.adorsys.psd2.xs2a.core.error.TppMessage;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.consent.PaymentScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aScaStatusResponse;
@@ -114,9 +114,9 @@ class PaymentCancellationServiceForAuthorisationTest {
     @Test
     void getPaymentAuthorisationScaStatus_successNotFinalised() {
         // Given
-        Xs2aScaStatusResponse expected = new Xs2aScaStatusResponse(ScaStatus.FINALISED, true, "psu message");
+        Xs2aScaStatusResponse expected = new Xs2aScaStatusResponse(Xs2aScaStatus.FINALISED, true, "psu message");
 
-        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, pisCommonPaymentResponse, ScaStatus.RECEIVED);
+        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, pisCommonPaymentResponse, Xs2aScaStatus.RECEIVED);
         ResponseObject<PaymentScaStatus> paymentScaStatusResponse = ResponseObject.<PaymentScaStatus>builder()
                                                                         .body(paymentScaStatus)
                                                                         .build();
@@ -129,9 +129,9 @@ class PaymentCancellationServiceForAuthorisationTest {
             .thenReturn(spiAspspConsentDataProvider);
 
         SpiResponse<SpiScaStatusResponse> spiResponse = SpiResponse.<SpiScaStatusResponse>builder()
-                                                            .payload(new SpiScaStatusResponse(ScaStatus.FINALISED, true, "psu message"))
+                                                            .payload(new SpiScaStatusResponse(Xs2aScaStatus.FINALISED, true, "psu message"))
                                                             .build();
-        when(paymentCancellationSpi.getScaStatus(ScaStatus.RECEIVED, SPI_CONTEXT_DATA, AUTHORISATION_ID,
+        when(paymentCancellationSpi.getScaStatus(Xs2aScaStatus.RECEIVED, SPI_CONTEXT_DATA, AUTHORISATION_ID,
                                                  xs2aToSpiPaymentMapper.mapToSpiPayment(pisCommonPaymentResponse), spiAspspConsentDataProvider)).thenReturn(spiResponse);
 
         // When
@@ -146,7 +146,7 @@ class PaymentCancellationServiceForAuthorisationTest {
     @Test
     void getPaymentAuthorisationScaStatus_spiError() {
         // Given
-        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, pisCommonPaymentResponse, ScaStatus.FINALISED);
+        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, pisCommonPaymentResponse, Xs2aScaStatus.FINALISED);
         ResponseObject<PaymentScaStatus> paymentScaStatusResponse = ResponseObject.<PaymentScaStatus>builder()
                                                                         .body(paymentScaStatus)
                                                                         .build();
@@ -162,7 +162,7 @@ class PaymentCancellationServiceForAuthorisationTest {
                                                .error(new TppMessage(MessageErrorCode.FORMAT_ERROR))
                                                .build();
         SpiPayment businessObject = xs2aToSpiPaymentMapper.mapToSpiPayment(pisCommonPaymentResponse);
-        when(paymentCancellationSpi.getScaStatus(ScaStatus.FINALISED, SPI_CONTEXT_DATA, AUTHORISATION_ID, businessObject, spiAspspConsentDataProvider)).thenReturn(spiResponse);
+        when(paymentCancellationSpi.getScaStatus(Xs2aScaStatus.FINALISED, SPI_CONTEXT_DATA, AUTHORISATION_ID, businessObject, spiAspspConsentDataProvider)).thenReturn(spiResponse);
         when(spiErrorMapper.mapToErrorHolder(spiResponse, ServiceType.PIS)).thenReturn(ErrorHolder.builder(ErrorType.PIS_400).build());
 
         // When
@@ -171,7 +171,7 @@ class PaymentCancellationServiceForAuthorisationTest {
         // Then
         assertThat(actual).isNotNull();
         assertThat(actual.hasError()).isTrue();
-        verify(paymentCancellationSpi, times(1)).getScaStatus(ScaStatus.FINALISED, SPI_CONTEXT_DATA, AUTHORISATION_ID, businessObject, spiAspspConsentDataProvider);
+        verify(paymentCancellationSpi, times(1)).getScaStatus(Xs2aScaStatus.FINALISED, SPI_CONTEXT_DATA, AUTHORISATION_ID, businessObject, spiAspspConsentDataProvider);
         verify(spiErrorMapper, times(1)).mapToErrorHolder(spiResponse, ServiceType.PIS);
         verifyNoInteractions(xs2aAuthorisationService);
     }
@@ -179,9 +179,9 @@ class PaymentCancellationServiceForAuthorisationTest {
     @Test
     void getPaymentAuthorisationScaStatus_success() {
         // Given
-        Xs2aScaStatusResponse expected = new Xs2aScaStatusResponse(ScaStatus.FINALISED, true, "psu message");
+        Xs2aScaStatusResponse expected = new Xs2aScaStatusResponse(Xs2aScaStatus.FINALISED, true, "psu message");
 
-        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, pisCommonPaymentResponse, ScaStatus.RECEIVED);
+        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, pisCommonPaymentResponse, Xs2aScaStatus.RECEIVED);
         ResponseObject<PaymentScaStatus> paymentScaStatusResponse = ResponseObject.<PaymentScaStatus>builder()
                                                                         .body(paymentScaStatus)
                                                                         .build();
@@ -195,9 +195,9 @@ class PaymentCancellationServiceForAuthorisationTest {
             .thenReturn(spiAspspConsentDataProvider);
 
         SpiResponse<SpiScaStatusResponse> spiResponse = SpiResponse.<SpiScaStatusResponse>builder()
-                                               .payload(new SpiScaStatusResponse(ScaStatus.FINALISED, true, "psu message"))
+                                               .payload(new SpiScaStatusResponse(Xs2aScaStatus.FINALISED, true, "psu message"))
                                                .build();
-        when(paymentCancellationSpi.getScaStatus(ScaStatus.RECEIVED, SPI_CONTEXT_DATA, AUTHORISATION_ID, spiPayment, spiAspspConsentDataProvider)).thenReturn(spiResponse);
+        when(paymentCancellationSpi.getScaStatus(Xs2aScaStatus.RECEIVED, SPI_CONTEXT_DATA, AUTHORISATION_ID, spiPayment, spiAspspConsentDataProvider)).thenReturn(spiResponse);
 
         // When
         ResponseObject<Xs2aScaStatusResponse> actual = paymentCancellationServiceForAuthorisation.getAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID, PaymentType.SINGLE, PAYMENT_PRODUCT);
@@ -207,8 +207,8 @@ class PaymentCancellationServiceForAuthorisationTest {
         assertThat(actual.hasError()).isFalse();
         assertThat(actual.getBody()).isEqualTo(expected);
 
-        verify(paymentCancellationSpi, times(1)).getScaStatus(ScaStatus.RECEIVED, SPI_CONTEXT_DATA, AUTHORISATION_ID, spiPayment, spiAspspConsentDataProvider);
+        verify(paymentCancellationSpi, times(1)).getScaStatus(Xs2aScaStatus.RECEIVED, SPI_CONTEXT_DATA, AUTHORISATION_ID, spiPayment, spiAspspConsentDataProvider);
         verify(spiErrorMapper, never()).mapToErrorHolder(any(), any());
-        verify(xs2aAuthorisationService).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
+        verify(xs2aAuthorisationService).updateAuthorisationStatus(AUTHORISATION_ID, Xs2aScaStatus.FINALISED);
     }
 }

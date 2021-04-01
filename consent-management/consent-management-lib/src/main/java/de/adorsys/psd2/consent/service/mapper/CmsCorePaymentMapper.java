@@ -19,6 +19,7 @@ package de.adorsys.psd2.consent.service.mapper;
 import de.adorsys.psd2.consent.api.pis.CmsRemittance;
 import de.adorsys.psd2.consent.api.pis.PisPayment;
 import de.adorsys.psd2.core.payment.model.*;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -33,10 +34,10 @@ import java.util.stream.Collectors;
 public class CmsCorePaymentMapper {
     private final CmsAddressMapper cmsAddressMapper;
 
-    public PaymentInitiationJson mapToPaymentInitiationJson(PisPayment pisPayment) {
+    public Xs2aPisPaymentInitiationJson mapToPaymentInitiationJson(PisPayment pisPayment) {
         return Optional.ofNullable(pisPayment)
                    .map(ref -> {
-                       PaymentInitiationJson payment = new PaymentInitiationJson();
+                       Xs2aPisPaymentInitiationJson payment = new Xs2aPisPaymentInitiationJson();
                        payment.setDebtorAccount(mapToAccountReference(pisPayment.getDebtorAccount()));
                        payment.setRequestedExecutionDate(pisPayment.getRequestedExecutionDate());
                        setCommonFields(payment, pisPayment);
@@ -44,20 +45,20 @@ public class CmsCorePaymentMapper {
                    }).orElse(null);
     }
 
-    public PaymentInitiationJson mapToPaymentInitiationJson(List<PisPayment> payments) {
+    public Xs2aPisPaymentInitiationJson mapToPaymentInitiationJson(List<PisPayment> payments) {
         if (CollectionUtils.isEmpty(payments)) {
             return null;
         }
         return mapToPaymentInitiationJson(payments.get(0));
     }
 
-    public BulkPaymentInitiationJson mapToBulkPaymentInitiationJson(List<PisPayment> payments) {
+    public Xs2aPisBulkPaymentInitiationJson mapToBulkPaymentInitiationJson(List<PisPayment> payments) {
         if (CollectionUtils.isEmpty(payments)) {
             return null;
         }
 
         PisPayment pisPayment = payments.get(0);
-        BulkPaymentInitiationJson payment = new BulkPaymentInitiationJson();
+        Xs2aPisBulkPaymentInitiationJson payment = new Xs2aPisBulkPaymentInitiationJson();
         payment.setPayments(payments.stream().map(this::mapToPaymentInitiationBulkElementJson).collect(Collectors.toList()));
 
         //Bulk
@@ -69,13 +70,13 @@ public class CmsCorePaymentMapper {
         return payment;
     }
 
-    public PeriodicPaymentInitiationJson mapToPeriodicPaymentInitiationJson(List<PisPayment> payments) {
+    public Xs2aPisPeriodicPaymentInitiationJson mapToPeriodicPaymentInitiationJson(List<PisPayment> payments) {
         if (CollectionUtils.isEmpty(payments)) {
             return null;
         }
 
         PisPayment pisPayment = payments.get(0);
-        PeriodicPaymentInitiationJson payment = new PeriodicPaymentInitiationJson();
+        Xs2aPisPeriodicPaymentInitiationJson payment = new Xs2aPisPeriodicPaymentInitiationJson();
 
         payment.setDebtorAccount(mapToAccountReference(pisPayment.getDebtorAccount()));
         setCommonFields(payment, pisPayment);
@@ -83,21 +84,21 @@ public class CmsCorePaymentMapper {
         //Periodic
         payment.setStartDate(pisPayment.getStartDate());
         payment.setEndDate(pisPayment.getEndDate());
-        payment.setExecutionRule(ExecutionRule.fromValue(pisPayment.getExecutionRule().getValue()));
+        payment.setExecutionRule(Xs2aPisExecutionRule.fromValue(pisPayment.getExecutionRule().getValue()));
         payment.setFrequency(FrequencyCode.valueOf(pisPayment.getFrequency()));
-        payment.setDayOfExecution(DayOfExecution.fromValue(pisPayment.getDayOfExecution().getValue()));
+        payment.setDayOfExecution(Xs2aPisDayOfExecution.fromValue(pisPayment.getDayOfExecution().getValue()));
 
         return payment;
     }
 
-    private PaymentInitiationJson mapToPaymentInitiationBulkElementJson(PisPayment pisPayment) {
-        PaymentInitiationJson payment = new PaymentInitiationJson();
+    private Xs2aPisPaymentInitiationJson mapToPaymentInitiationBulkElementJson(PisPayment pisPayment) {
+        Xs2aPisPaymentInitiationJson payment = new Xs2aPisPaymentInitiationJson();
         setCommonFields(payment, pisPayment);
 
         return payment;
     }
 
-    private void setCommonFields(PaymentInitiationJson payment, PisPayment pisPayment) {
+    private void setCommonFields(Xs2aPisPaymentInitiationJson payment, PisPayment pisPayment) {
         payment.setCreditorAddress(cmsAddressMapper.mapToAddress(pisPayment.getCreditorAddress()));
         payment.setRemittanceInformationStructured(mapToRemittanceInformationStructured(pisPayment.getRemittanceInformationStructured()));
         payment.setCreditorAgent(pisPayment.getCreditorAgent());
@@ -109,7 +110,7 @@ public class CmsCorePaymentMapper {
         amount.setAmount(pisPayment.getAmount().toPlainString());
         amount.setCurrency(mapToCurrency(pisPayment.getCurrency()));
         payment.setInstructedAmount(amount);
-        payment.setPurposeCode(PurposeCode.fromValue(pisPayment.getPurposeCode()));
+        payment.setPurposeCode(Xs2aPisPurposeCode.fromValue(pisPayment.getPurposeCode()));
         payment.setRemittanceInformationUnstructured(pisPayment.getRemittanceInformationUnstructured());
         payment.setUltimateCreditor(pisPayment.getUltimateCreditor());
         payment.setUltimateDebtor(pisPayment.getUltimateDebtor());
@@ -127,10 +128,10 @@ public class CmsCorePaymentMapper {
                    }).orElse(null);
     }
 
-    private AccountReference mapToAccountReference(de.adorsys.psd2.xs2a.core.profile.AccountReference reference) {
+    private Xs2aPisAccountReference mapToAccountReference(Xs2aAccountReference reference) {
         return Optional.ofNullable(reference)
                    .map(ref -> {
-                       AccountReference accountReference = new AccountReference();
+                       Xs2aPisAccountReference accountReference = new Xs2aPisAccountReference();
                        accountReference.setIban(ref.getIban());
                        accountReference.setBban(ref.getBban());
                        accountReference.setMaskedPan(ref.getMaskedPan());

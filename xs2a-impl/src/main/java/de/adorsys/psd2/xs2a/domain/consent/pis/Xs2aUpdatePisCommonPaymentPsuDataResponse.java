@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.domain.consent.pis;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aCurrencyConversionInfo;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponseType;
 import de.adorsys.psd2.xs2a.domain.authorisation.CancellationAuthorisationResponse;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
@@ -36,11 +36,11 @@ import org.jetbrains.annotations.NotNull;
 public class Xs2aUpdatePisCommonPaymentPsuDataResponse extends AuthorisationProcessorResponse implements CancellationAuthorisationResponse {
     private Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo;
 
-    public Xs2aUpdatePisCommonPaymentPsuDataResponse(ScaStatus scaStatus, String paymentId, String authorisationId, PsuIdData psuData) {
+    public Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus scaStatus, String paymentId, String authorisationId, PsuIdData psuData) {
         this(scaStatus, paymentId, authorisationId, psuData, null);
     }
 
-    public Xs2aUpdatePisCommonPaymentPsuDataResponse(ScaStatus scaStatus, String paymentId, String authorisationId,
+    public Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus scaStatus, String paymentId, String authorisationId,
                                                      PsuIdData psuData, Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo) {
         this.scaStatus = scaStatus;
         this.paymentId = paymentId;
@@ -49,13 +49,13 @@ public class Xs2aUpdatePisCommonPaymentPsuDataResponse extends AuthorisationProc
         this.xs2aCurrencyConversionInfo = xs2aCurrencyConversionInfo;
     }
 
-    public Xs2aUpdatePisCommonPaymentPsuDataResponse(ScaStatus scaStatus, ErrorHolder errorHolder, String paymentId, String authorisationId, PsuIdData psuData) {
+    public Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus scaStatus, ErrorHolder errorHolder, String paymentId, String authorisationId, PsuIdData psuData) {
         this(scaStatus, paymentId, authorisationId, psuData);
         this.errorHolder = errorHolder;
     }
 
     public Xs2aUpdatePisCommonPaymentPsuDataResponse(ErrorHolder errorHolder, String paymentId, String authorisationId, PsuIdData psuData) {
-        this(ScaStatus.FAILED, paymentId, authorisationId, psuData);
+        this(Xs2aScaStatus.FAILED, paymentId, authorisationId, psuData);
         this.errorHolder = errorHolder;
     }
 

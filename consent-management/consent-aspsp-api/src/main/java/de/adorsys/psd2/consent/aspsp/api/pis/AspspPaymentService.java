@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.aspsp.api.pis;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import org.jetbrains.annotations.NotNull;
 
 public interface AspspPaymentService {
@@ -30,5 +30,5 @@ public interface AspspPaymentService {
      * @return <code>true</code> if payment was found and status was updated. <code>false</code> otherwise.
      *
      */
-    boolean updatePaymentStatus(@NotNull String paymentId, @NotNull TransactionStatus status, @NotNull String instanceId);
+    boolean updatePaymentStatus(@NotNull String paymentId, @NotNull Xs2aTransactionStatus status, @NotNull String instanceId);
 }

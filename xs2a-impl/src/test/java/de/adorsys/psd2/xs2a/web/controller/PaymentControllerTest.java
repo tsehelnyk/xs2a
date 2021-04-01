@@ -24,15 +24,16 @@ import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.NotificationSupportedMode;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.AdditionalPsuIdData;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppAttributes;
 import de.adorsys.psd2.xs2a.core.tpp.TppNotificationData;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -204,7 +205,7 @@ class PaymentControllerTest {
             .when(responseMapper).ok(any(), any());
         when(xs2aPaymentService.getPaymentStatusById(SINGLE, PRODUCT, CORRECT_PAYMENT_ID))
             .thenReturn(ResponseObject.<GetPaymentStatusResponse>builder()
-                            .body(new GetPaymentStatusResponse(TransactionStatus.ACCP, null, MediaType.APPLICATION_JSON, null, PSU_MESSAGE))
+                            .body(new GetPaymentStatusResponse(Xs2aTransactionStatus.ACCP, null, MediaType.APPLICATION_JSON, null, PSU_MESSAGE))
                             .build());
 
         PaymentInitiationStatusResponse200Json expectedBody = getPaymentInitiationStatus();
@@ -233,7 +234,7 @@ class PaymentControllerTest {
             .when(responseMapper).ok(any(), any());
         when(xs2aPaymentService.getPaymentStatusById(SINGLE, PRODUCT, CORRECT_PAYMENT_ID))
             .thenReturn(ResponseObject.<GetPaymentStatusResponse>builder()
-                            .body(new GetPaymentStatusResponse(TransactionStatus.ACCP, null, MediaType.APPLICATION_XML, rawPaymentStatus, PSU_MESSAGE))
+                            .body(new GetPaymentStatusResponse(Xs2aTransactionStatus.ACCP, null, MediaType.APPLICATION_XML, rawPaymentStatus, PSU_MESSAGE))
                             .build());
 
         // When
@@ -371,7 +372,7 @@ class PaymentControllerTest {
     @Test
     void getPaymentInitiationScaStatus_success() {
         // Given
-        Xs2aScaStatusResponse xs2aScaStatusResponse = new Xs2aScaStatusResponse(de.adorsys.psd2.xs2a.core.sca.ScaStatus.RECEIVED, true, "psu message");
+        Xs2aScaStatusResponse xs2aScaStatusResponse = new Xs2aScaStatusResponse(Xs2aScaStatus.RECEIVED, true, "psu message");
         ResponseObject<Xs2aScaStatusResponse> xs2aScaStatusResponseResponseObject = ResponseObject.<Xs2aScaStatusResponse>builder()
                                                                                         .body(xs2aScaStatusResponse)
                                                                                         .build();
@@ -422,7 +423,7 @@ class PaymentControllerTest {
     @Test
     void getPaymentCancellationScaStatus_success() {
         // Given
-        Xs2aScaStatusResponse xs2aScaStatusResponse = new Xs2aScaStatusResponse(de.adorsys.psd2.xs2a.core.sca.ScaStatus.RECEIVED, true, "psu message");
+        Xs2aScaStatusResponse xs2aScaStatusResponse = new Xs2aScaStatusResponse(Xs2aScaStatus.RECEIVED, true, "psu message");
         ResponseObject<Xs2aScaStatusResponse> xs2aScaStatusResponseResponseObject = ResponseObject.<Xs2aScaStatusResponse>builder()
                                                                                         .body(xs2aScaStatusResponse)
                                                                                         .build();
@@ -869,7 +870,7 @@ class PaymentControllerTest {
             .thenReturn(request);
 
         ResponseObject<CancellationAuthorisationResponse> serviceResponse = ResponseObject.<CancellationAuthorisationResponse>builder()
-                                                                                .body(new Xs2aUpdatePisCommonPaymentPsuDataResponse(de.adorsys.psd2.xs2a.core.sca.ScaStatus.PSUIDENTIFIED, CORRECT_PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, psuIdData, null))
+                                                                                .body(new Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus.PSUIDENTIFIED, CORRECT_PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, psuIdData, null))
                                                                                 .build();
         when(paymentCancellationAuthorisationService.createPisCancellationAuthorisation(request))
             .thenReturn(serviceResponse);
@@ -953,7 +954,7 @@ class PaymentControllerTest {
             .thenReturn(request);
 
         ResponseObject<Xs2aUpdatePisCommonPaymentPsuDataResponse> serviceResponse = ResponseObject.<Xs2aUpdatePisCommonPaymentPsuDataResponse>builder()
-                                                                                        .body(new Xs2aUpdatePisCommonPaymentPsuDataResponse(de.adorsys.psd2.xs2a.core.sca.ScaStatus.PSUIDENTIFIED, CORRECT_PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, psuIdData, null))
+                                                                                        .body(new Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus.PSUIDENTIFIED, CORRECT_PAYMENT_ID, CANCELLATION_AUTHORISATION_ID, psuIdData, null))
                                                                                         .build();
 
         when(paymentCancellationAuthorisationService.updatePisCancellationPsuData(request))
@@ -1037,7 +1038,7 @@ class PaymentControllerTest {
             .thenReturn(request);
 
         ResponseObject<Xs2aUpdatePisCommonPaymentPsuDataResponse> serviceResponse = ResponseObject.<Xs2aUpdatePisCommonPaymentPsuDataResponse>builder()
-                                                                                        .body(new Xs2aUpdatePisCommonPaymentPsuDataResponse(de.adorsys.psd2.xs2a.core.sca.ScaStatus.PSUIDENTIFIED, CORRECT_PAYMENT_ID, AUTHORISATION_ID, psuIdData, null))
+                                                                                        .body(new Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus.PSUIDENTIFIED, CORRECT_PAYMENT_ID, AUTHORISATION_ID, psuIdData, null))
                                                                                         .build();
 
         when(paymentAuthorisationService.updatePisCommonPaymentPsuData(request))
@@ -1200,7 +1201,7 @@ class PaymentControllerTest {
     }
 
     private Xs2aCreatePisAuthorisationResponse buildXs2aCreatePisAuthorisationResponse() {
-        return new Xs2aCreatePisAuthorisationResponse(AUTHORISATION_ID, de.adorsys.psd2.xs2a.core.sca.ScaStatus.SCAMETHODSELECTED, SINGLE, REQUEST_ID.toString(), null);
+        return new Xs2aCreatePisAuthorisationResponse(AUTHORISATION_ID, Xs2aScaStatus.SCAMETHODSELECTED, SINGLE, REQUEST_ID.toString(), null);
     }
 
     private List<String> getAuthorisations() {
@@ -1289,7 +1290,7 @@ class PaymentControllerTest {
         PaymentInitiationResponse initiationResponse = new SinglePaymentInitiationResponse();
         initiationResponse.setTppNotificationContentPreferred(Collections.singletonList(NotificationSupportedMode.SCA));
         Links links = new Links();
-        links.setSelf(new HrefType("type"));
+        links.setSelf(new Xs2aHrefType("type"));
         initiationResponse.setLinks(links);
         return ResponseObject.<PaymentInitiationResponse>builder()
                    .body(initiationResponse)

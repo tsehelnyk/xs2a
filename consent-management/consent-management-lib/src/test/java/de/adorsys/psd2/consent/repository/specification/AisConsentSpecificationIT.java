@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.repository.TppInfoRepository;
 import de.adorsys.psd2.integration.test.BaseTest;
 import de.adorsys.psd2.integration.test.TestDBConfiguration;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import org.apache.commons.collections4.CollectionUtils;
@@ -138,7 +138,7 @@ class AisConsentSpecificationIT extends BaseTest {
             aisConsentSpecification.byPsuDataInListAndInstanceIdAndAdditionalTppInfo(
                 PSU_ID_DATA,
                 INSTANCE_ID,
-                null, List.of(ConsentStatus.EXPIRED, ConsentStatus.RECEIVED), null
+                null, List.of(Xs2aConsentStatus.EXPIRED, Xs2aConsentStatus.RECEIVED), null
             )
         );
 
@@ -147,7 +147,7 @@ class AisConsentSpecificationIT extends BaseTest {
         ConsentEntity actualConsent = actual.get(0);
         assertEquals(PSU_ID_DATA.getPsuId(), actualConsent.getPsuDataList().get(0).getPsuId());
         assertEquals(INSTANCE_ID, actual.get(0).getInstanceId());
-        assertEquals(ConsentStatus.RECEIVED, actual.get(0).getConsentStatus());
+        assertEquals(Xs2aConsentStatus.RECEIVED, actual.get(0).getConsentStatus());
     }
 
     @Test

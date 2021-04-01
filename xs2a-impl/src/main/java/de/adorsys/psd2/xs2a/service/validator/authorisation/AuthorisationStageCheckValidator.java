@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.validator.authorisation;
 
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationServiceType;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import static de.adorsys.psd2.xs2a.core.error.MessageErrorCode.SERVICE_INVALID_400;
-import static de.adorsys.psd2.xs2a.core.sca.ScaStatus.*;
+import static de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus.*;
 
 /**
  * Checks whether the incoming request authorisation data matches the current authorisation stage
@@ -33,7 +33,7 @@ import static de.adorsys.psd2.xs2a.core.sca.ScaStatus.*;
 @Component
 public class AuthorisationStageCheckValidator {
 
-    public ValidationResult validate(@NotNull UpdateAuthorisationRequest updateRequest, @NotNull ScaStatus scaStatus, @NotNull AuthorisationServiceType authType) {
+    public ValidationResult validate(@NotNull UpdateAuthorisationRequest updateRequest, @NotNull Xs2aScaStatus scaStatus, @NotNull AuthorisationServiceType authType) {
         if (scaStatus == RECEIVED && updateRequest.getPsuData().isEmpty()) {
             return ValidationResult.invalid(resolveErrorType(authType), SERVICE_INVALID_400);
         }

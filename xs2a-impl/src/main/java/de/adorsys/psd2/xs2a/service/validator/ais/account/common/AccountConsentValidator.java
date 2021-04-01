@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.validator.ais.account.common;
 
 import de.adorsys.psd2.core.data.ais.AisConsent;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.RequestProviderService;
@@ -40,8 +40,8 @@ public class AccountConsentValidator {
             return ValidationResult.invalid(AIS_401, CONSENT_EXPIRED);
         }
 
-        ConsentStatus consentStatus = aisConsent.getConsentStatus();
-        if (consentStatus != ConsentStatus.VALID) {
+        Xs2aConsentStatus consentStatus = aisConsent.getConsentStatus();
+        if (consentStatus != Xs2aConsentStatus.VALID) {
             return processConsentInvalidStatus(consentStatus);
         }
 
@@ -52,11 +52,11 @@ public class AccountConsentValidator {
         return ValidationResult.valid();
     }
 
-    private ValidationResult processConsentInvalidStatus(ConsentStatus consentStatus) {
-        if (consentStatus == ConsentStatus.REVOKED_BY_PSU) {
+    private ValidationResult processConsentInvalidStatus(Xs2aConsentStatus consentStatus) {
+        if (consentStatus == Xs2aConsentStatus.REVOKED_BY_PSU) {
             return ValidationResult.invalid(AIS_401, CONSENT_INVALID_REVOKED);
         }
-        MessageErrorCode messageErrorCode = consentStatus == ConsentStatus.RECEIVED ? CONSENT_INVALID : CONSENT_EXPIRED;
+        MessageErrorCode messageErrorCode = consentStatus == Xs2aConsentStatus.RECEIVED ? CONSENT_INVALID : CONSENT_EXPIRED;
         return ValidationResult.invalid(AIS_401, messageErrorCode);
     }
 

@@ -22,11 +22,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.Consent;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -46,7 +46,7 @@ public abstract class AisAbstractChecksumCalculatingService implements ChecksumC
     private final Sha512HashingService hashingService = new Sha512HashingService();
     private final ObjectMapper objectMapper = buildObjectMapper();
 
-    protected abstract Comparator<AccountReference> getComparator();
+    protected abstract Comparator<Xs2aAccountReference> getComparator();
 
     @Override
     public boolean verifyConsentWithChecksum(Consent<?> consent, byte[] checksum) {
@@ -97,7 +97,7 @@ public abstract class AisAbstractChecksumCalculatingService implements ChecksumC
         return isAspspAccessesChecksumValid(elements, aisConsent.getAspspAccountAccesses());
     }
 
-    private boolean isAspspAccessesChecksumValid(String[] elements, AccountAccess aspspAccess) {
+    private boolean isAspspAccessesChecksumValid(String[] elements, Xs2aConsentAccountAccess aspspAccess) {
 
         if (elements.length > 2) {
             String aspspAccessFromDb = elements[ChecksumConstant.ASPSP_ACCESS_CHECKSUM_START_POSITION];
@@ -117,7 +117,7 @@ public abstract class AisAbstractChecksumCalculatingService implements ChecksumC
         String aisConsentChecksumCommon = calculateChecksumForAisConsentCommon(aisConsent);
         sb.append(aisConsentChecksumCommon);
 
-        AccountAccess aspspAccountAccess = aisConsent.getAspspAccountAccesses();
+        Xs2aConsentAccountAccess aspspAccountAccess = aisConsent.getAspspAccountAccesses();
         if (aspspAccountAccess.isNotEmpty(aisConsent.getConsentData())) {
 
             Map<AccountReferenceType, String> checksumMap = calculateChecksumMapByReferenceType(aspspAccountAccess);
@@ -153,7 +153,7 @@ public abstract class AisAbstractChecksumCalculatingService implements ChecksumC
         return Base64.getEncoder().encodeToString(consentChecksum);
     }
 
-    private Map<AccountReferenceType, String> calculateChecksumMapByReferenceType(AccountAccess aspspAccess) {
+    private Map<AccountReferenceType, String> calculateChecksumMapByReferenceType(Xs2aConsentAccountAccess aspspAccess) {
         Map<AccountReferenceType, String> checkSumMap = new LinkedHashMap<>();
 
         for (AccountReferenceType type : AccountReferenceType.values()) {
@@ -166,13 +166,13 @@ public abstract class AisAbstractChecksumCalculatingService implements ChecksumC
         return checkSumMap;
     }
 
-    private String getChecksumByType(AccountAccess aspspAccess, AccountReferenceType type) {
-        Set<AccountReference> references = Stream.of(aspspAccess.getAccounts(), aspspAccess.getBalances(), aspspAccess.getTransactions())
+    private String getChecksumByType(Xs2aConsentAccountAccess aspspAccess, AccountReferenceType type) {
+        Set<Xs2aAccountReference> references = Stream.of(aspspAccess.getAccounts(), aspspAccess.getBalances(), aspspAccess.getTransactions())
                                                .filter(Objects::nonNull)
                                                .flatMap(Collection::stream)
                                                .collect(Collectors.toSet());
 
-        List<AccountReference> filtered = references.stream()
+        List<Xs2aAccountReference> filtered = references.stream()
                                               .filter(acc -> acc.getUsedAccountReferenceSelector().getAccountReferenceType() == type)
                                               .filter(acc -> StringUtils.isNotBlank(acc.getResourceId()) || StringUtils.isNotBlank(acc.getAspspAccountId()))
                                               .sorted(getComparator())

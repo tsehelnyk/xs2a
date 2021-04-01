@@ -16,14 +16,15 @@
 
 package de.adorsys.psd2.xs2a.web.validator.body.consent;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.psd2.model.AccountReference;
 import de.adorsys.psd2.model.Consents;
 import de.adorsys.psd2.xs2a.core.ais.AccountAccessType;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentReq;
 import de.adorsys.psd2.xs2a.web.validator.ErrorBuildingService;
 import de.adorsys.psd2.xs2a.web.validator.body.AbstractBodyValidatorImpl;
@@ -135,7 +136,7 @@ public class AccountAccessValidatorImpl extends AbstractBodyValidatorImpl implem
     }
 
     private boolean areFlagsAndAccountsInvalid(CreateConsentReq request) {
-        AccountAccess access = request.getAccess();
+        Xs2aConsentAccountAccess access = request.getAccess();
         if (access.isNotEmpty(request.getAisConsentData())) {
             return !(CollectionUtils.isEmpty(request.getAccountReferences()) || areFlagsEmpty(request));
         }
@@ -159,10 +160,10 @@ public class AccountAccessValidatorImpl extends AbstractBodyValidatorImpl implem
                    .orElse(null);
     }
 
-    private AccountAccess mapToAccountAccessInner(de.adorsys.psd2.model.AccountAccess accountAccess, MessageError messageError) {
+    private Xs2aConsentAccountAccess mapToAccountAccessInner(de.adorsys.psd2.model.AccountAccess accountAccess, MessageError messageError) {
         return Optional.ofNullable(accountAccess)
                    .map(acs ->
-                            new AccountAccess(
+                            new Xs2aConsentAccountAccess(
                                 mapToXs2aAccountReferences(acs.getAccounts(), messageError),
                                 mapToXs2aAccountReferences(acs.getBalances(), messageError),
                                 mapToXs2aAccountReferences(acs.getTransactions(), messageError),
@@ -171,16 +172,16 @@ public class AccountAccessValidatorImpl extends AbstractBodyValidatorImpl implem
                    .orElse(null);
     }
 
-    private AdditionalInformationAccess mapToAdditionalInformationAccess(de.adorsys.psd2.model.AdditionalInformationAccess additionalInformationAccess, MessageError messageError) {
+    private Xs2aAdditionalInformationAccess mapToAdditionalInformationAccess(de.adorsys.psd2.model.AdditionalInformationAccess additionalInformationAccess, MessageError messageError) {
         if (additionalInformationAccess == null) {
             return null;
         }
 
-        return new AdditionalInformationAccess(mapToXs2aAccountReferences(additionalInformationAccess.getOwnerName(), messageError),
+        return new Xs2aAdditionalInformationAccess(mapToXs2aAccountReferences(additionalInformationAccess.getOwnerName(), messageError),
                                                mapToXs2aAccountReferences(additionalInformationAccess.getTrustedBeneficiaries(), messageError));
     }
 
-    private List<de.adorsys.psd2.xs2a.core.profile.AccountReference> mapToXs2aAccountReferences(List<de.adorsys.psd2.model.AccountReference> references, MessageError messageError) { // NOPMD
+    private List<Xs2aAccountReference> mapToXs2aAccountReferences(List<de.adorsys.psd2.model.AccountReference> references, MessageError messageError) { // NOPMD
         return Optional.ofNullable(references)
                    .map(ref -> ref.stream()
                                    .map((AccountReference reference) -> mapToAccountReference(reference, messageError))
@@ -206,9 +207,9 @@ public class AccountAccessValidatorImpl extends AbstractBodyValidatorImpl implem
                    .orElse(null);
     }
 
-    private de.adorsys.psd2.xs2a.core.profile.AccountReference mapToAccountReference(Object reference, MessageError messageError) {
+    private Xs2aAccountReference mapToAccountReference(Object reference, MessageError messageError) {
         try {
-            return xs2aObjectMapper.convertValue(reference, de.adorsys.psd2.xs2a.core.profile.AccountReference.class);
+            return xs2aObjectMapper.convertValue(reference, Xs2aAccountReference.class);
         } catch (IllegalArgumentException e) {
             // Happens only during Currency field processing, as other fields are of String type.
             errorBuildingService.enrichMessageError(messageError, TppMessageInformation.of(FORMAT_ERROR_WRONG_FORMAT_VALUE, "currency"));

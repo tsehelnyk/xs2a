@@ -17,8 +17,8 @@
 package de.adorsys.psd2.stub.impl;
 
 import de.adorsys.psd2.stub.impl.service.AuthorisationServiceMock;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.*;
@@ -79,7 +79,7 @@ public class PiisConsentSpiMockImpl implements PiisConsentSpi {
     }
 
     @Override
-    public SpiResponse<SpiScaStatusResponse> getScaStatus(@NotNull ScaStatus scaStatus, @NotNull SpiContextData contextData,
+    public SpiResponse<SpiScaStatusResponse> getScaStatus(@NotNull Xs2aScaStatus scaStatus, @NotNull SpiContextData contextData,
                                                           @NotNull String authorisationId,
                                                           @NotNull SpiPiisConsent businessObject,
                                                           @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
@@ -94,7 +94,7 @@ public class PiisConsentSpiMockImpl implements PiisConsentSpi {
         log.info("PiisConsentSpiImpl#verifyScaAuthorisation: contextData {}, spiScaConfirmation {}, consent-id {}", contextData, spiScaConfirmation, spiPiisConsent.getId());
 
         return SpiResponse.<SpiVerifyScaAuthorisationResponse>builder()
-                   .payload(new SpiVerifyScaAuthorisationResponse(ConsentStatus.VALID))
+                   .payload(new SpiVerifyScaAuthorisationResponse(Xs2aConsentStatus.VALID))
                    .build();
     }
 
@@ -110,7 +110,7 @@ public class PiisConsentSpiMockImpl implements PiisConsentSpi {
         log.info("PiisConsentSpiImpl#checkConfirmationCode: contextData {}, spiCheckConfirmationCodeRequest{}, authorisation-id {}", contextData, spiCheckConfirmationCodeRequest.getConfirmationCode(), spiCheckConfirmationCodeRequest.getAuthorisationId());
 
         return SpiResponse.<SpiConsentConfirmationCodeValidationResponse>builder()
-                   .payload(new SpiConsentConfirmationCodeValidationResponse(ScaStatus.FINALISED, ConsentStatus.VALID))
+                   .payload(new SpiConsentConfirmationCodeValidationResponse(Xs2aScaStatus.FINALISED, Xs2aConsentStatus.VALID))
                    .build();
     }
 
@@ -138,7 +138,7 @@ public class PiisConsentSpiMockImpl implements PiisConsentSpi {
     public SpiResponse<SpiAuthorisationDecoupledScaResponse> startScaDecoupled(@NotNull SpiContextData contextData, @NotNull String authorisationId, @Nullable String authenticationMethodId, @NotNull SpiPiisConsent businessObject, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
         log.info("PiisConsentSpi#startScaDecoupled: contextData {}, authorisationId {}, authenticationMethodId {}, businessObject-id {}", contextData, authorisationId, authenticationMethodId, businessObject.getId());
         return SpiResponse.<SpiAuthorisationDecoupledScaResponse>builder()
-                   .payload(new SpiAuthorisationDecoupledScaResponse(ScaStatus.SCAMETHODSELECTED, DECOUPLED_PSU_MESSAGE))
+                   .payload(new SpiAuthorisationDecoupledScaResponse(Xs2aScaStatus.SCAMETHODSELECTED, DECOUPLED_PSU_MESSAGE))
                    .build();
     }
 }

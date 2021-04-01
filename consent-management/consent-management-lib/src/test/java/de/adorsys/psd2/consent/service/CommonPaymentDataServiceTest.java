@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.domain.AuthorisationTemplateEntity;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.repository.PisCommonPaymentDataRepository;
 import de.adorsys.psd2.consent.repository.specification.PisCommonPaymentDataSpecification;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -81,7 +81,7 @@ class CommonPaymentDataServiceTest {
 
     @Test
     void updateStatusInPaymentData_TransactionStatusACSP() {
-        TransactionStatus transactionStatus = TransactionStatus.ACSP;
+        Xs2aTransactionStatus transactionStatus = Xs2aTransactionStatus.ACSP;
         PisCommonPaymentData paymentData = new PisCommonPaymentData();
         assertNull(paymentData.getTransactionStatus());
 
@@ -93,7 +93,7 @@ class CommonPaymentDataServiceTest {
 
     @Test
     void updateStatusInPaymentData_TransactionStatusPATC() {
-        TransactionStatus transactionStatus = TransactionStatus.PATC;
+        Xs2aTransactionStatus transactionStatus = Xs2aTransactionStatus.PATC;
         PisCommonPaymentData paymentData = new PisCommonPaymentData();
         assertNull(paymentData.getTransactionStatus());
         assertFalse(paymentData.isMultilevelScaRequired());

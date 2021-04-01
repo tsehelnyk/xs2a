@@ -23,7 +23,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -55,13 +55,13 @@ public class CmsConsentAuthorisationServiceInternal {
         if (authorisation.isPresent() && !authorisation.get().isRedirectUrlNotExpired()) {
             log.info("Authorisation ID [{}], Instance ID: [{}]. Check redirect URL and get consent failed, because authorisation is expired",
                      redirectId, instanceId);
-            authorisation.get().setScaStatus(ScaStatus.FAILED);
+            authorisation.get().setScaStatus(Xs2aScaStatus.FAILED);
             throw new RedirectUrlIsExpiredException(authorisation.get().getTppNokRedirectUri());
         }
         return authorisation;
     }
 
-    public boolean updateScaStatusAndAuthenticationData(@NotNull ScaStatus status, AuthorisationEntity authorisation, AuthenticationDataHolder authenticationDataHolder) {
+    public boolean updateScaStatusAndAuthenticationData(@NotNull Xs2aScaStatus status, AuthorisationEntity authorisation, AuthenticationDataHolder authenticationDataHolder) {
         if (authorisation.getScaStatus().isFinalisedStatus()) {
             log.info("Authorisation ID [{}], SCA status [{}]. Update authorisation status failed in updateScaStatusAndAuthenticationData method because authorisation has finalised status.", authorisation.getExternalId(),
                      authorisation.getScaStatus().getValue());

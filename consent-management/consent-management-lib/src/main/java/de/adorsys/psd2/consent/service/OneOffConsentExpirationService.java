@@ -22,11 +22,11 @@ import de.adorsys.psd2.consent.domain.account.AisConsentTransaction;
 import de.adorsys.psd2.consent.repository.AisConsentTransactionRepository;
 import de.adorsys.psd2.consent.repository.AisConsentUsageRepository;
 import de.adorsys.psd2.consent.service.mapper.CmsAisConsentMapper;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.xs2a.core.ais.BookingStatus;
 import de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -70,12 +70,12 @@ public class OneOffConsentExpirationService {
             return true;
         }
 
-        AccountAccess aspspAccountAccesses = cmsConsent.getAspspAccountAccesses();
-        List<AccountReference> references = Stream.of(aspspAccountAccesses.getAccounts(), aspspAccountAccesses.getBalances(), aspspAccountAccesses.getTransactions())
+        Xs2aConsentAccountAccess aspspAccountAccesses = cmsConsent.getAspspAccountAccesses();
+        List<Xs2aAccountReference> references = Stream.of(aspspAccountAccesses.getAccounts(), aspspAccountAccesses.getBalances(), aspspAccountAccesses.getTransactions())
                                                 .flatMap(Collection::stream).collect(Collectors.toList());
 
         List<String> consentResourceIds = references.stream()
-                                              .map(AccountReference::getResourceId)
+                                              .map(Xs2aAccountReference::getResourceId)
                                               .distinct()
                                               .collect(Collectors.toList());
 
@@ -150,7 +150,7 @@ public class OneOffConsentExpirationService {
      * This method returns maximum number of possible get requests for the definite consent for ONE account
      * except the main get call - readAccountList.
      */
-    private int getMaximumNumberOfGetRequestsForConsentsAccount(AccountAccess aspspAccountAccesses,
+    private int getMaximumNumberOfGetRequestsForConsentsAccount(Xs2aConsentAccountAccess aspspAccountAccesses,
                                                                 String resourceId,
                                                                 int numberOfTransactions,
                                                                 boolean isConsentGlobal,
@@ -191,7 +191,7 @@ public class OneOffConsentExpirationService {
         return READ_ACCOUNT_DETAILS_AND_BALANCES_COUNT + totalPages + numberOfTransactions;
     }
 
-    private boolean isBeneficiariesEndpointAllowed(boolean isConsentGlobal, AccountAccess aspspAccountAccesses, String instanceId) {
+    private boolean isBeneficiariesEndpointAllowed(boolean isConsentGlobal, Xs2aConsentAccountAccess aspspAccountAccesses, String instanceId) {
         return isGlobalConsentWithBeneficiaries(isConsentGlobal, instanceId) || !isTrustedBeneficiariesNotAllowed(aspspAccountAccesses);
     }
 
@@ -199,12 +199,12 @@ public class OneOffConsentExpirationService {
         return isConsentGlobal && isTrustedBeneficiariesSupported(instanceId);
     }
 
-    private boolean isTrustedBeneficiariesNotAllowed(AccountAccess aspspAccountAccesses) {
-        AdditionalInformationAccess additionalInformationAccess = aspspAccountAccesses.getAdditionalInformationAccess();
+    private boolean isTrustedBeneficiariesNotAllowed(Xs2aConsentAccountAccess aspspAccountAccesses) {
+        Xs2aAdditionalInformationAccess additionalInformationAccess = aspspAccountAccesses.getAdditionalInformationAccess();
         return additionalInformationAccess == null || additionalInformationAccess.getTrustedBeneficiaries() == null;
     }
 
-    private boolean isAccessForAccountReferencesEmpty(List<AccountReference> accounts, String resourceId) {
+    private boolean isAccessForAccountReferencesEmpty(List<Xs2aAccountReference> accounts, String resourceId) {
         return accounts.stream().noneMatch(access -> access.getResourceId().equals(resourceId));
     }
 

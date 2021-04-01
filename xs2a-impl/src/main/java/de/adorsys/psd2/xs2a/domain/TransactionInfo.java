@@ -16,8 +16,8 @@
 
 package de.adorsys.psd2.xs2a.domain;
 
-import de.adorsys.psd2.core.payment.model.PurposeCode;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
@@ -27,12 +27,12 @@ import java.util.List;
 public class TransactionInfo {
     @Size(max = 70)
     private final String creditorName;
-    private final AccountReference creditorAccount;
+    private final Xs2aAccountReference creditorAccount;
     private final String creditorAgent;
     @Size(max = 70)
     private final String ultimateCreditor;
     private final String debtorName;
-    private final AccountReference debtorAccount;
+    private final Xs2aAccountReference debtorAccount;
     private final String debtorAgent;
     @Size(max = 70)
     private final String ultimateDebtor;
@@ -42,5 +42,5 @@ public class TransactionInfo {
     @Size(max = 140)
     private final String remittanceInformationStructured;
     private final List<String> remittanceInformationStructuredArray;
-    private final PurposeCode purposeCode;
+    private final Xs2aPisPurposeCode purposeCode;
 }

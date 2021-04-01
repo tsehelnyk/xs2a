@@ -17,8 +17,8 @@
 package de.adorsys.psd2.xs2a.web.link;
 
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.ScaApproachResolver;
 
@@ -29,19 +29,19 @@ public abstract class UpdateConsentLinks extends AbstractLinks {
 
         String consentId = response.getConsentId();
         String authorisationId = response.getAuthorisationId();
-        ScaStatus scaStatus = response.getScaStatus();
+        Xs2aScaStatus scaStatus = response.getScaStatus();
 
-        HrefType authorisationLink = buildPath(getPath(), consentId, authorisationId);
+        Xs2aHrefType authorisationLink = buildPath(getPath(), consentId, authorisationId);
         setScaStatus(authorisationLink);
 
-        if (scaStatus == ScaStatus.PSUAUTHENTICATED) {
+        if (scaStatus == Xs2aScaStatus.PSUAUTHENTICATED) {
             setSelectAuthenticationMethod(authorisationLink);
-        } else if (scaStatus == ScaStatus.SCAMETHODSELECTED) {
+        } else if (scaStatus == Xs2aScaStatus.SCAMETHODSELECTED) {
             ScaApproach scaApproach = scaApproachResolver.getScaApproach(authorisationId);
             if (scaApproach != ScaApproach.DECOUPLED) {
                 setAuthoriseTransaction(authorisationLink);
             }
-        } else if (scaStatus == ScaStatus.PSUIDENTIFIED) {
+        } else if (scaStatus == Xs2aScaStatus.PSUIDENTIFIED) {
             setUpdatePsuAuthentication(authorisationLink);
         }
     }

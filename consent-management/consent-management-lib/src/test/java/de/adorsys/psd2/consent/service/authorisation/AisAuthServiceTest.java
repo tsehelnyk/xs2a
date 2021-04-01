@@ -21,7 +21,7 @@ import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.service.AisConsentConfirmationExpirationService;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +57,7 @@ class AisAuthServiceTest {
     @Test
     void getInteractableAuthorisationParent_statusIsNotFinalised() {
         // Given
-        consentEntity.setConsentStatus(ConsentStatus.VALID);
+        consentEntity.setConsentStatus(Xs2aConsentStatus.VALID);
 
         when(consentJpaRepository.findByExternalId(PARENT_ID))
             .thenReturn(Optional.of(consentEntity));
@@ -72,7 +72,7 @@ class AisAuthServiceTest {
     @Test
     void getInteractableAuthorisationParent_statusIsFinalised() {
         // Given
-        consentEntity.setConsentStatus(ConsentStatus.EXPIRED);
+        consentEntity.setConsentStatus(Xs2aConsentStatus.EXPIRED);
 
         when(consentJpaRepository.findByExternalId(PARENT_ID))
             .thenReturn(Optional.of(consentEntity));

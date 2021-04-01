@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum TransactionStatus {
+public enum Xs2aTransactionStatus {
 
     ACCC("AcceptedSettlementCompletedCreditor", true), // Settlement on the creditor's account has been completed.
     ACCP("AcceptedCustomerProfile", false),  //Preceding check of technical validation was successful. Customer profile check was also successful
@@ -37,7 +37,7 @@ public enum TransactionStatus {
     PATC("PartiallyAcceptedTechnicalCorrect", false), // The payment initiation needs multiple authentications, where some but not yet all have been performed. Syntactical and semantical validations are successful.
     PART("PartiallyAccepted", false); // A number of transactions have been accepted, whereas another number of transactions have not yet achieved 'accepted' status.
 
-    private static Map<String, TransactionStatus> container = new HashMap<>();
+    private static Map<String, Xs2aTransactionStatus> container = new HashMap<>();
 
     static {
         Arrays.stream(values())
@@ -55,12 +55,12 @@ public enum TransactionStatus {
         return !isFinalisedStatus();
     }
 
-    TransactionStatus(String transactionStatus, boolean finalisedStatus) {
+    Xs2aTransactionStatus(String transactionStatus, boolean finalisedStatus) {
         this.transactionStatusString = transactionStatus;
         this.finalisedStatus = finalisedStatus;
     }
 
-    public static TransactionStatus getByValue(String transactionStatus) {
+    public static Xs2aTransactionStatus getByValue(String transactionStatus) {
         return container.get(transactionStatus);
     }
 

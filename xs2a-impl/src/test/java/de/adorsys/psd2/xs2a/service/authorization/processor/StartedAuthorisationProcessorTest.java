@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.authorization.processor;
 
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AisAuthorisationProcessorRequest;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
 import de.adorsys.psd2.xs2a.service.authorization.processor.service.AuthorisationProcessorService;
@@ -40,7 +40,7 @@ class StartedAuthorisationProcessorTest {
 
     @Test
     void scaStatus() {
-        assertEquals(ScaStatus.STARTED, processor.getScaStatus());
+        assertEquals(Xs2aScaStatus.STARTED, processor.getScaStatus());
     }
 
     @Test

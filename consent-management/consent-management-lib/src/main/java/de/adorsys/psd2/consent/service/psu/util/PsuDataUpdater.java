@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.service.psu.util;
 
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -25,6 +25,6 @@ import org.mapstruct.MappingTarget;
 public interface PsuDataUpdater {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "additionalPsuData.id", ignore = true)
-    PsuData updatePsuDataEntity(@MappingTarget PsuData psuData, PsuData other);
+    CmsPsuData updatePsuDataEntity(@MappingTarget CmsPsuData psuData, CmsPsuData other);
 }
 

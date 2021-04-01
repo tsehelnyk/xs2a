@@ -18,7 +18,7 @@
 package de.adorsys.psd2.consent.service;
 
 import de.adorsys.psd2.consent.config.PisPaymentRemoteUrls;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,10 +54,10 @@ class UpdatePaymentAfterSpiServiceRemoteTest {
     @Test
     void updatePaymentStatus() {
         when(pisPaymentRemoteUrls.updatePaymentStatus()).thenReturn(URL);
-        when(consentRestTemplate.exchange(eq(URL), eq(HttpMethod.PUT), isNull(), eq(Void.class), eq(ENCRYPTED_PAYMENT_ID), eq(TransactionStatus.ACSP.name())))
+        when(consentRestTemplate.exchange(eq(URL), eq(HttpMethod.PUT), isNull(), eq(Void.class), eq(ENCRYPTED_PAYMENT_ID), eq(Xs2aTransactionStatus.ACSP.name())))
             .thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-        assertTrue(updatePaymentAfterSpiServiceRemote.updatePaymentStatus(ENCRYPTED_PAYMENT_ID, TransactionStatus.ACSP).getPayload());
+        assertTrue(updatePaymentAfterSpiServiceRemote.updatePaymentStatus(ENCRYPTED_PAYMENT_ID, Xs2aTransactionStatus.ACSP).getPayload());
     }
 
     @Test

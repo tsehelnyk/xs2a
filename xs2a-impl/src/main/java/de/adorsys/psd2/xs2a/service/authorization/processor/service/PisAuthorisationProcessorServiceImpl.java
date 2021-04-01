@@ -19,11 +19,11 @@ package de.adorsys.psd2.xs2a.service.authorization.processor.service;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aCurrencyConversionInfo;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
@@ -125,9 +125,9 @@ public class PisAuthorisationProcessorServiceImpl extends PaymentBaseAuthorisati
     @Override
     void updatePaymentDataByPaymentResponse(String paymentId, SpiResponse<SpiPaymentExecutionResponse> spiResponse) {
         SpiPaymentExecutionResponse payload = spiResponse.getPayload();
-        TransactionStatus paymentStatus = payload.getTransactionStatus();
+        Xs2aTransactionStatus paymentStatus = payload.getTransactionStatus();
 
-        if (paymentStatus == TransactionStatus.PATC) {
+        if (paymentStatus == Xs2aTransactionStatus.PATC) {
             xs2aPisCommonPaymentService.updateMultilevelSca(paymentId, true);
         }
 
@@ -148,7 +148,7 @@ public class PisAuthorisationProcessorServiceImpl extends PaymentBaseAuthorisati
                                                                                           request.getAuthorisationId(), aspspConsentDataProvider);
 
 
-        return new Xs2aUpdatePisCommonPaymentPsuDataResponse(ScaStatus.EXEMPTED, request.getBusinessObjectId(),
+        return new Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus.EXEMPTED, request.getBusinessObjectId(),
                                                              request.getAuthorisationId(), request.getPsuData(),
                                                              xs2aCurrencyConversionInfo);
     }
@@ -193,7 +193,7 @@ public class PisAuthorisationProcessorServiceImpl extends PaymentBaseAuthorisati
     }
 
     @Override
-    Xs2aUpdatePisCommonPaymentPsuDataResponse executePaymentWithoutSca(AuthorisationProcessorRequest authorisationProcessorRequest, PsuIdData psuData, PaymentType paymentType, SpiPayment payment, SpiContextData contextData, ScaStatus resultScaStatus,
+    Xs2aUpdatePisCommonPaymentPsuDataResponse executePaymentWithoutSca(AuthorisationProcessorRequest authorisationProcessorRequest, PsuIdData psuData, PaymentType paymentType, SpiPayment payment, SpiContextData contextData, Xs2aScaStatus resultScaStatus,
                                                                        Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo) {
         Xs2aUpdatePisCommonPaymentPsuDataRequest request = (Xs2aUpdatePisCommonPaymentPsuDataRequest) authorisationProcessorRequest.getUpdateAuthorisationRequest();
         String authorisationId = request.getAuthorisationId();
@@ -209,9 +209,9 @@ public class PisAuthorisationProcessorServiceImpl extends PaymentBaseAuthorisati
             return new Xs2aUpdatePisCommonPaymentPsuDataResponse(errorHolder, paymentId, authorisationId, psuData);
         }
 
-        TransactionStatus paymentStatus = spiResponse.getPayload().getTransactionStatus();
+        Xs2aTransactionStatus paymentStatus = spiResponse.getPayload().getTransactionStatus();
 
-        if (paymentStatus == TransactionStatus.PATC) {
+        if (paymentStatus == Xs2aTransactionStatus.PATC) {
             xs2aPisCommonPaymentService.updateMultilevelSca(paymentId, true);
         }
 

@@ -24,7 +24,7 @@ import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.core.data.piis.PiisConsentData;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static de.adorsys.psd2.xs2a.core.consent.ConsentStatus.VALID;
+import static de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus.VALID;
 
 @Component
 @RequiredArgsConstructor
@@ -52,7 +52,7 @@ public class PiisConsentMapper {
 
     public CmsPiisConsent mapToCmsPiisConsent(ConsentEntity consentEntity) {
         PiisConsentData piisConsentData = consentDataMapper.mapToPiisConsentData(consentEntity.getData());
-        AccountReference accountReference = accessMapper.mapToAccountReference(consentEntity.getAspspAccountAccesses().get(0));
+        Xs2aAccountReference accountReference = accessMapper.mapToAccountReference(consentEntity.getAspspAccountAccesses().get(0));
         return new CmsPiisConsent(consentEntity.getExternalId(),
                                   consentEntity.isRecurringIndicator(),
                                   consentEntity.getRequestDateTime(),

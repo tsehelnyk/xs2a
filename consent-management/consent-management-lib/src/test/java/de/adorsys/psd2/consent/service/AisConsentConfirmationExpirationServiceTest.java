@@ -23,7 +23,7 @@ import de.adorsys.psd2.aspsp.profile.service.AspspProfileService;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.AuthorisationRepository;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -65,7 +65,7 @@ class AisConsentConfirmationExpirationServiceTest {
         verify(consentJpaRepository).save(aisConsentCaptor.capture());
 
         ConsentEntity consent = aisConsentCaptor.getValue();
-        assertEquals(ConsentStatus.EXPIRED, consent.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.EXPIRED, consent.getConsentStatus());
         assertEquals(TODAY, consent.getExpireDate());
         assertEquals(TODAY, consent.getLastActionDate());
     }
@@ -80,7 +80,7 @@ class AisConsentConfirmationExpirationServiceTest {
 
         // Then
         verify(consentJpaRepository).save(aisConsentCaptor.capture());
-        assertEquals(ConsentStatus.REJECTED, aisConsentCaptor.getValue().getConsentStatus());
+        assertEquals(Xs2aConsentStatus.REJECTED, aisConsentCaptor.getValue().getConsentStatus());
     }
 
     @Test
@@ -97,7 +97,7 @@ class AisConsentConfirmationExpirationServiceTest {
 
         // Then
         verify(consentJpaRepository).save(aisConsentCaptor.capture());
-        assertEquals(ConsentStatus.REJECTED, aisConsentCaptor.getValue().getConsentStatus());
+        assertEquals(Xs2aConsentStatus.REJECTED, aisConsentCaptor.getValue().getConsentStatus());
     }
 
     @Test
@@ -124,12 +124,12 @@ class AisConsentConfirmationExpirationServiceTest {
 
         // Then
         verify(consentJpaRepository).saveAll(aisConsentListCaptor.capture());
-        assertEquals(ConsentStatus.REJECTED, aisConsentListCaptor.getValue().get(0).getConsentStatus());
+        assertEquals(Xs2aConsentStatus.REJECTED, aisConsentListCaptor.getValue().get(0).getConsentStatus());
     }
 
     private ConsentEntity buildConsent() {
         ConsentEntity consent = new ConsentEntity();
-        consent.setConsentStatus(ConsentStatus.RECEIVED);
+        consent.setConsentStatus(Xs2aConsentStatus.RECEIVED);
         consent.setValidUntil(AisConsentConfirmationExpirationServiceTest.TOMORROW);
         return consent;
     }

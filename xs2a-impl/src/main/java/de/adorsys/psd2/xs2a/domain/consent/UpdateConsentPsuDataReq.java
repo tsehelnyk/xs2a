@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.domain.consent;
 
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import lombok.Data;
 
@@ -29,7 +29,7 @@ public class UpdateConsentPsuDataReq implements UpdateAuthorisationRequest {
     private String consentId;
     private String authorizationId;
 
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     private boolean updatePsuIdentification;
     private String authenticationMethodId;
     private String scaAuthenticationData;

@@ -24,7 +24,7 @@ import de.adorsys.psd2.consent.api.service.AuthorisationServiceEncrypted;
 import de.adorsys.psd2.consent.api.service.ConsentServiceEncrypted;
 import de.adorsys.psd2.consent.api.service.TppService;
 import de.adorsys.psd2.consent.api.service.TppStopListService;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
 import de.adorsys.psd2.event.service.Xs2aEventServiceEncrypted;
@@ -34,16 +34,16 @@ import de.adorsys.psd2.xs2a.config.CorsConfigurationProperties;
 import de.adorsys.psd2.xs2a.config.WebConfig;
 import de.adorsys.psd2.xs2a.config.Xs2aEndpointPathConstant;
 import de.adorsys.psd2.xs2a.config.Xs2aInterfaceConfig;
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationTemplate;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.integration.builder.AspspSettingsBuilder;
 import de.adorsys.psd2.xs2a.integration.builder.TppInfoBuilder;
@@ -155,7 +155,7 @@ class UpdatePsuDataForConsentIT {
             .willReturn(true);
         Authorisation authorizationResponse = new Authorisation();
         authorizationResponse.setAuthorisationId(AUTHORISATION_ID);
-        authorizationResponse.setScaStatus(ScaStatus.PSUIDENTIFIED);
+        authorizationResponse.setScaStatus(Xs2aScaStatus.PSUIDENTIFIED);
         authorizationResponse.setChosenScaApproach(ScaApproach.EMBEDDED);
 
         given(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
@@ -175,7 +175,7 @@ class UpdatePsuDataForConsentIT {
                             .payload(new SpiPsuAuthorisationResponse(false, SpiAuthorisationStatus.SUCCESS))
                             .build());
 
-        AuthenticationObject sms = new AuthenticationObject();
+        Xs2aAuthenticationObject sms = new Xs2aAuthenticationObject();
         sms.setAuthenticationType("SMS_OTP");
         sms.setAuthenticationMethodId("sms");
         sms.setName("some-sms-name");
@@ -186,7 +186,7 @@ class UpdatePsuDataForConsentIT {
                             .build());
         SpiAuthorizationCodeResult spiAuthorizationCodeResult = new SpiAuthorizationCodeResult();
         spiAuthorizationCodeResult.setSelectedScaMethod(sms);
-        spiAuthorizationCodeResult.setScaStatus(ScaStatus.SCAMETHODSELECTED);
+        spiAuthorizationCodeResult.setScaStatus(Xs2aScaStatus.SCAMETHODSELECTED);
         given(aisConsentSpi.requestAuthorisationCode(any(SpiContextData.class), anyString(), any(), any(SpiAspspConsentDataProvider.class)))
             .willReturn(SpiResponse.<SpiAuthorizationCodeResult>builder()
                             .payload(spiAuthorizationCodeResult)
@@ -241,7 +241,7 @@ class UpdatePsuDataForConsentIT {
         AisConsentData aisConsentData = AisConsentData.buildDefaultAisConsentData();
         byte[] bytes = consentDataMapper.getBytesFromConsentData(aisConsentData);
         PsuIdData psuIdData = new PsuIdData(PSU_ID, null, null, null, null);
-        Authorisation authorisation = new Authorisation(AUTHORISATION_ID, psuIdData, ENCRYPTED_CONSENT_ID, AuthorisationType.CONSENT, ScaStatus.PSUIDENTIFIED);
+        Authorisation authorisation = new Authorisation(AUTHORISATION_ID, psuIdData, ENCRYPTED_CONSENT_ID, AuthorisationType.CONSENT, Xs2aScaStatus.PSUIDENTIFIED);
         ConsentTppInformation consentTppInformation = new ConsentTppInformation();
         consentTppInformation.setTppInfo(TPP_INFO);
 
@@ -249,10 +249,10 @@ class UpdatePsuDataForConsentIT {
         cmsConsent.setConsentData(bytes);
         cmsConsent.setAuthorisations(Collections.singletonList(authorisation));
         cmsConsent.setTppInformation(consentTppInformation);
-        cmsConsent.setConsentStatus(ConsentStatus.VALID);
+        cmsConsent.setConsentStatus(Xs2aConsentStatus.VALID);
         cmsConsent.setFrequencyPerDay(0);
-        cmsConsent.setTppAccountAccesses(AccountAccess.EMPTY_ACCESS);
-        cmsConsent.setAspspAccountAccesses(AccountAccess.EMPTY_ACCESS);
+        cmsConsent.setTppAccountAccesses(Xs2aConsentAccountAccess.EMPTY_ACCESS);
+        cmsConsent.setAspspAccountAccesses(Xs2aConsentAccountAccess.EMPTY_ACCESS);
         cmsConsent.setAuthorisationTemplate(new AuthorisationTemplate());
         cmsConsent.setPsuIdDataList(Collections.singletonList(psuIdData));
         cmsConsent.setUsages(Collections.emptyMap());

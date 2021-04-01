@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @ApiModel(description = "CashAccountType", value = "Cash Account Type")
-public enum CashAccountType {
+public enum Xs2aCashAccountType {
     CACC("Current"),  // Account used to post debits and credits when no specific account has been nominated
     CASH("CashPayment"),  // Account used for the payment of cash
     CHAR("Charges"),  // Account used for charges if different from the account for payment
@@ -47,10 +47,10 @@ public enum CashAccountType {
     TRAN("TransactingAccount"),  // A transacting account is the most basic type of bank account that you can get. The main difference between transaction and cheque accounts is that you usually do not get a cheque book with your transacting account and neither are you offered an overdraft facility
     TRAS("Cash Trading");  // Account used for trading if different from the current cash account
 
-    private static final Map<String, CashAccountType> container = new HashMap<>();
+    private static final Map<String, Xs2aCashAccountType> container = new HashMap<>();
 
     static {
-        for (CashAccountType cashAccountType : values()) {
+        for (Xs2aCashAccountType cashAccountType : values()) {
             container.put(cashAccountType.getValue(), cashAccountType);
         }
     }
@@ -58,12 +58,12 @@ public enum CashAccountType {
     private final String value;
 
     @JsonCreator
-    CashAccountType(String value) {
+    Xs2aCashAccountType(String value) {
         this.value = value;
     }
 
     @JsonIgnore
-    public static Optional<CashAccountType> getByValue(String name) {
+    public static Optional<Xs2aCashAccountType> getByValue(String name) {
         return Optional.ofNullable(container.get(name));
     }
 

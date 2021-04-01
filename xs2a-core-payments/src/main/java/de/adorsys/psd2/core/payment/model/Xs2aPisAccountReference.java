@@ -3,7 +3,7 @@ package de.adorsys.psd2.core.payment.model;
 import lombok.Data;
 
 @Data
-public class AccountReference {
+public class Xs2aPisAccountReference {
     private String iban;
     private String bban;
     private String pan;

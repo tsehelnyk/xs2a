@@ -16,12 +16,12 @@
 
 package de.adorsys.psd2.xs2a.service.authorization.processor.service;
 
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ChallengeData;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorRequest;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
@@ -77,15 +77,15 @@ abstract class BaseAuthorisationProcessorService implements AuthorisationProcess
                  request.getScaApproach());
     }
 
-    boolean isSingleScaMethod(List<AuthenticationObject> spiScaMethods) {
+    boolean isSingleScaMethod(List<Xs2aAuthenticationObject> spiScaMethods) {
         return spiScaMethods.size() == 1;
     }
 
-    boolean isMultipleScaMethods(List<AuthenticationObject> spiScaMethods) {
+    boolean isMultipleScaMethods(List<Xs2aAuthenticationObject> spiScaMethods) {
         return spiScaMethods.size() > 1;
     }
 
-    ChallengeData mapToChallengeData(SpiAuthorizationCodeResult authorizationCodeResult) {
+    Xs2aChallengeData mapToChallengeData(SpiAuthorizationCodeResult authorizationCodeResult) {
         if (authorizationCodeResult == null || authorizationCodeResult.isEmpty()) {
             return null;
         }

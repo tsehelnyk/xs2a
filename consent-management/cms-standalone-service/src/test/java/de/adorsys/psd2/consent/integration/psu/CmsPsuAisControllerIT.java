@@ -30,9 +30,9 @@ import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.repository.specification.AisConsentSpecification;
 import de.adorsys.psd2.consent.repository.specification.AuthorisationSpecification;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,7 +79,7 @@ class CmsPsuAisControllerIT {
     private static final String CONSENT_ID = "4b112130-6a96-4941-a220-2da8a4af2c65";
     private static final String AUTHORISATION_ID = "bf489af6-a2cb-4b75-b71d-d66d58b934d7";
     private static final String REDIRECT_ID = "9d7effac-da7f-43c7-9fcc-d66166839c62";
-    private static final ScaStatus STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus STATUS = Xs2aScaStatus.RECEIVED;
     private static final String SMS = "SMS";
     private static final String TAN = "TAN";
 
@@ -205,7 +205,7 @@ class CmsPsuAisControllerIT {
             .andExpect(content().string("true"));
 
         verify(aisConsentSpecification).byConsentIdAndInstanceId(CONSENT_ID, INSTANCE_ID);
-        assertEquals(ConsentStatus.REJECTED, consentEntity.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.REJECTED, consentEntity.getConsentStatus());
     }
 
     @Test
@@ -239,7 +239,7 @@ class CmsPsuAisControllerIT {
             .andExpect(content().string("true"));
 
         verify(aisConsentSpecification).byConsentIdAndInstanceId(CONSENT_ID, INSTANCE_ID);
-        assertEquals(ConsentStatus.REVOKED_BY_PSU, consentEntity.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.REVOKED_BY_PSU, consentEntity.getConsentStatus());
     }
 
     @Test
@@ -256,7 +256,7 @@ class CmsPsuAisControllerIT {
             .andExpect(content().string("true"));
 
         verify(aisConsentSpecification).byConsentIdAndInstanceId(CONSENT_ID, INSTANCE_ID);
-        assertEquals(ConsentStatus.PARTIALLY_AUTHORISED, consentEntity.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.PARTIALLY_AUTHORISED, consentEntity.getConsentStatus());
     }
 
     @Test

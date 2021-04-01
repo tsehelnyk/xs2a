@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.web.aspsp.controller;
 
 import de.adorsys.psd2.consent.aspsp.api.CmsAspspPisTransactionApi;
 import de.adorsys.psd2.consent.aspsp.api.pis.AspspPaymentService;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,9 +30,9 @@ public class CmsAspspPisTransactionController implements CmsAspspPisTransactionA
 
     @Override
     public ResponseEntity<Void> updatePaymentStatus(String paymentId, String status, String instanceId) {
-        TransactionStatus transactionStatus;
+        Xs2aTransactionStatus transactionStatus;
         try {
-            transactionStatus = TransactionStatus.valueOf(status);
+            transactionStatus = Xs2aTransactionStatus.valueOf(status);
         } catch (IllegalArgumentException illegalArgumentException) {
             return ResponseEntity.badRequest().build();
         }

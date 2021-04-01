@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.aspsp.api.psu.CmsAspspPsuAccountService;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.repository.specification.ConsentSpecification;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
@@ -58,7 +58,7 @@ public class CmsAspspPsuAccountServiceInternal implements CmsAspspPsuAccountServ
 
         filteredConsents.forEach(cst -> {
             cst.setLastActionDate(LocalDate.now());
-            cst.setConsentStatus(ConsentStatus.REVOKED_BY_PSU);
+            cst.setConsentStatus(Xs2aConsentStatus.REVOKED_BY_PSU);
         });
 
         return true;

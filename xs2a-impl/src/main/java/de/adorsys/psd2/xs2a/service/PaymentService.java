@@ -22,7 +22,7 @@ import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -201,8 +201,8 @@ public class PaymentService {
                        .build();
         }
 
-        if (pisCommonPaymentResponse.getTransactionStatus() == TransactionStatus.RJCT) {
-            return ResponseObject.<GetPaymentStatusResponse>builder().body(new GetPaymentStatusResponse(TransactionStatus.RJCT, null, MediaType.APPLICATION_JSON, null, null)).build();
+        if (pisCommonPaymentResponse.getTransactionStatus() == Xs2aTransactionStatus.RJCT) {
+            return ResponseObject.<GetPaymentStatusResponse>builder().body(new GetPaymentStatusResponse(Xs2aTransactionStatus.RJCT, null, MediaType.APPLICATION_JSON, null, null)).build();
         }
 
         SpiContextData spiContextData = spiContextDataProvider.provideWithPsuIdData(getPsuIdDataFromRequest());
@@ -218,7 +218,7 @@ public class PaymentService {
                        .build();
         }
 
-        TransactionStatus transactionStatus = readPaymentStatusResponse.getStatus();
+        Xs2aTransactionStatus transactionStatus = readPaymentStatusResponse.getStatus();
 
         if (transactionStatus == null) {
             log.info("Payment-ID [{}].  Get Payment Status by ID failed. Transaction status is null.", encryptedPaymentId);

@@ -16,12 +16,12 @@
 
 package de.adorsys.psd2.xs2a.domain;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.Value;
 
 @Value
 @ApiModel(description = "Transactions Status response", value = "transactionStatus")
 public class TransactionStatusResponse {
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
 }

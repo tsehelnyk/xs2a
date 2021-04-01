@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.psu.api.ais;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.Value;
 
 @Value
@@ -26,5 +26,5 @@ public class CmsAisPsuDataAuthorisation {
     @JsonUnwrapped
     private PsuIdData psu;
     private String authorisationId;
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
 }

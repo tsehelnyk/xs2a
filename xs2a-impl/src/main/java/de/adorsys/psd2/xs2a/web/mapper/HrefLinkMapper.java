@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.web.mapper;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -36,12 +36,12 @@ public class HrefLinkMapper {
      * @param links Links model Object, where URI links stored as a HrefType
      * @return Map with link name and HrefType value.
      */
-    public Map<String, HrefType> mapToLinksMap(Links links) {
+    public Map<String, Xs2aHrefType> mapToLinksMap(Links links) {
         if (links == null) {
             return null;
         }
 
-        return xs2aObjectMapper.convertValue(links, new TypeReference<Map<String, HrefType>>() {
+        return xs2aObjectMapper.convertValue(links, new TypeReference<Map<String, Xs2aHrefType>>() {
         });
     }
 }

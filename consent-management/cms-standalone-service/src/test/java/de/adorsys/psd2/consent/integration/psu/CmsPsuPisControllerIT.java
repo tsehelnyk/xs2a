@@ -29,8 +29,8 @@ import de.adorsys.psd2.consent.repository.specification.AuthorisationSpecificati
 import de.adorsys.psd2.consent.repository.specification.PisCommonPaymentDataSpecification;
 import de.adorsys.psd2.consent.repository.specification.PisPaymentDataSpecification;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -74,8 +73,8 @@ class CmsPsuPisControllerIT {
     private static final String AUTHORISATION_ID = "9d7effac-da7f-43c7-9fcc-d66166839c62";
     private static final String REDIRECT_ID = "9d7effac-da7f-43c7-9fcc-d66166839c62";
     private static final String PAYMENT_ID = "cea9dda3-5154-420d-b1a7-6b4798fccb4b";
-    private static final ScaStatus STATUS = ScaStatus.RECEIVED;
-    private static final TransactionStatus PAYMENT_STATUS = TransactionStatus.RCVD;
+    private static final Xs2aScaStatus STATUS = Xs2aScaStatus.RECEIVED;
+    private static final Xs2aTransactionStatus PAYMENT_STATUS = Xs2aTransactionStatus.RCVD;
     private static final String INSTANCE_ID = "bank-instance-id";
     private static final String SMS = "SMS";
     private static final String TAN = "TAN";

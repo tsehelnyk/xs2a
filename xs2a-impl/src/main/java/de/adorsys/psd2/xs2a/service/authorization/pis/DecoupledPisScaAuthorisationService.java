@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.authorization.pis;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aAuthorisationSubResources;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aCreatePisAuthorisationResponse;
@@ -83,12 +83,12 @@ public class DecoupledPisScaAuthorisationService implements PisScaAuthorisationS
     }
 
     @Override
-    public Optional<ScaStatus> getAuthorisationScaStatus(String paymentId, String authorisationId) {
+    public Optional<Xs2aScaStatus> getAuthorisationScaStatus(String paymentId, String authorisationId) {
         return authorisationService.getAuthorisationScaStatus(paymentId, authorisationId);
     }
 
     @Override
-    public Optional<ScaStatus> getCancellationAuthorisationScaStatus(String paymentId, String authorisationId) {
+    public Optional<Xs2aScaStatus> getCancellationAuthorisationScaStatus(String paymentId, String authorisationId) {
         return authorisationService.getCancellationAuthorisationScaStatus(paymentId, authorisationId);
     }
 

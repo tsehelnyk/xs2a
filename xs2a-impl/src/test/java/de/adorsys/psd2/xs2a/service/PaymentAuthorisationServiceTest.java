@@ -23,9 +23,9 @@ import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
@@ -76,8 +76,8 @@ class PaymentAuthorisationServiceTest {
     private static final PsuIdData PSU_ID_DATA_EMPTY = new PsuIdData(null, null, null, null, null);
     private static final String WRONG_AUTHORISATION_ID = "wrong authorisation id";
     private static final String WRONG_PAYMENT_ID = "wrong payment id";
-    private static final TransactionStatus TRANSACTION_STATUS = TransactionStatus.ACCP;
-    private static final ScaStatus SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.ACCP;
+    private static final Xs2aScaStatus SCA_STATUS = Xs2aScaStatus.RECEIVED;
     private final Xs2aCreatePisAuthorisationRequest CREATE_AUTHORISATION_REQUEST = new Xs2aCreatePisAuthorisationRequest(PAYMENT_ID, PSU_ID_DATA, PAYMENT_PRODUCT, SINGLE, "");
     private final Xs2aCreatePisAuthorisationRequest CREATE_AUTHORISATION_REQUEST_WITH_PASSWORD = new Xs2aCreatePisAuthorisationRequest(PAYMENT_ID, PSU_ID_DATA, PAYMENT_PRODUCT, SINGLE, "123");
     private final Xs2aCreatePisAuthorisationRequest CREATE_AUTHORISATION_REQUEST_NO_PSU_ID = new Xs2aCreatePisAuthorisationRequest(PAYMENT_ID, PSU_ID_DATA_EMPTY, PAYMENT_PRODUCT, SINGLE, "");
@@ -282,7 +282,7 @@ class PaymentAuthorisationServiceTest {
     @Test
     void createPisAuthorisation_shouldStoreStatusesInLoggingContext() {
         // Given
-        ScaStatus authorisationStatus = ScaStatus.PSUIDENTIFIED;
+        Xs2aScaStatus authorisationStatus = Xs2aScaStatus.PSUIDENTIFIED;
 
         when(pisScaAuthorisationServiceResolver.getService())
             .thenReturn(pisScaAuthorisationService);
@@ -335,7 +335,7 @@ class PaymentAuthorisationServiceTest {
             .thenReturn(ValidationResult.valid());
 
         when(pisScaAuthorisationService.updateCommonPaymentPsuData(any()))
-            .thenReturn(new Xs2aUpdatePisCommonPaymentPsuDataResponse(ScaStatus.RECEIVED, PAYMENT_ID, AUTHORISATION_ID, PSU_ID_DATA, null));
+            .thenReturn(new Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus.RECEIVED, PAYMENT_ID, AUTHORISATION_ID, PSU_ID_DATA, null));
 
         PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse();
 
@@ -398,14 +398,14 @@ class PaymentAuthorisationServiceTest {
 
         Xs2aUpdatePisCommonPaymentPsuDataRequest request = buildXs2aUpdatePisPsuDataRequest();
 
-        ArgumentCaptor<TransactionStatus> transactionStatusArgumentCaptor = ArgumentCaptor.forClass(TransactionStatus.class);
+        ArgumentCaptor<Xs2aTransactionStatus> transactionStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aTransactionStatus.class);
         // When
         ResponseObject<Xs2aUpdatePisCommonPaymentPsuDataResponse> response = paymentAuthorisationService.updatePisCommonPaymentPsuData(request);
 
         // Then
         assertTrue(response.hasError());
         verify(loggingContextService).storeTransactionStatus(transactionStatusArgumentCaptor.capture());
-        assertThat(transactionStatusArgumentCaptor.getValue()).isEqualTo(TransactionStatus.ACCP);
+        assertThat(transactionStatusArgumentCaptor.getValue()).isEqualTo(Xs2aTransactionStatus.ACCP);
     }
 
     @Test
@@ -427,14 +427,14 @@ class PaymentAuthorisationServiceTest {
 
         Xs2aUpdatePisCommonPaymentPsuDataRequest request = buildXs2aUpdatePisPsuDataRequest();
 
-        ArgumentCaptor<ScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(ScaStatus.class);
+        ArgumentCaptor<Xs2aScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aScaStatus.class);
         // When
         ResponseObject<Xs2aUpdatePisCommonPaymentPsuDataResponse> response = paymentAuthorisationService.updatePisCommonPaymentPsuData(request);
 
         // Then
         assertTrue(response.hasError());
         verify(loggingContextService).storeScaStatus(scaStatusArgumentCaptor.capture());
-        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(ScaStatus.FAILED);
+        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(Xs2aScaStatus.FAILED);
     }
 
     @Test
@@ -540,7 +540,7 @@ class PaymentAuthorisationServiceTest {
     void getPaymentInitiationAuthorisationScaStatus_success() {
         // Given
         PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse();
-        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, commonPaymentResponse, ScaStatus.RECEIVED);
+        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, commonPaymentResponse, Xs2aScaStatus.RECEIVED);
 
         when(pisScaAuthorisationService.getAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID))
             .thenReturn(Optional.of(SCA_STATUS));
@@ -590,7 +590,7 @@ class PaymentAuthorisationServiceTest {
     void getPaymentInitiationAuthorisationScaStatus_shouldStoreStatusesInLoggingContext() {
         // Given:
         PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse();
-        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, commonPaymentResponse, ScaStatus.RECEIVED);
+        PaymentScaStatus paymentScaStatus = new PaymentScaStatus(PSU_ID_DATA, commonPaymentResponse, Xs2aScaStatus.RECEIVED);
 
         when(pisScaAuthorisationService.getAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID))
             .thenReturn(Optional.of(SCA_STATUS));

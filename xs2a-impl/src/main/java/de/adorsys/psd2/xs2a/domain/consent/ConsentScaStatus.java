@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.domain.consent;
 
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -27,5 +27,5 @@ import lombok.Data;
 public class ConsentScaStatus {
     private PsuIdData psuIdData;
     private AisConsent accountConsent;
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
 }

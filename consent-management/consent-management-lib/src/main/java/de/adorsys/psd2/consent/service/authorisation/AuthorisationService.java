@@ -19,7 +19,7 @@ package de.adorsys.psd2.consent.service.authorisation;
 import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
 import de.adorsys.psd2.consent.domain.Authorisable;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.repository.AuthorisationRepository;
 import de.adorsys.psd2.consent.service.mapper.AuthorisationMapper;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
@@ -44,7 +44,7 @@ public class AuthorisationService {
     }
 
     public AuthorisationEntity prepareAuthorisationEntity(Authorisable authorisationParent, CreateAuthorisationRequest request,
-                                                          Optional<PsuData> psuDataOptional, AuthorisationType authorisationType,
+                                                          Optional<CmsPsuData> psuDataOptional, AuthorisationType authorisationType,
                                                           long redirectUrlExpirationTimeMs, long authorisationExpirationTimeMs) {
         return authorisationMapper.prepareAuthorisationEntity(authorisationParent, request, psuDataOptional, authorisationType,
                                                               redirectUrlExpirationTimeMs, authorisationExpirationTimeMs);

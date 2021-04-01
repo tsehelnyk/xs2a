@@ -24,7 +24,7 @@ import de.adorsys.psd2.consent.api.ais.AisConsentActionRequest;
 import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.ais.UpdateAisConsentResponse;
 import de.adorsys.psd2.consent.api.service.AisConsentServiceEncrypted;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +53,7 @@ class AisConsentControllerTest {
                                                                      .toUriString();
     private static final JsonReader JSON_READER = new JsonReader();
     private static final AisConsentActionRequest AIS_CONSENT_ACTION_REQUEST = JSON_READER.getObjectFromFile("json/controller/ais-consent-action-request.json", AisConsentActionRequest.class);
-    private static final AccountAccess ACCOUNT_ACCESS = JSON_READER.getObjectFromFile("json/controller/account-access.json", AccountAccess.class);
+    private static final Xs2aConsentAccountAccess ACCOUNT_ACCESS = JSON_READER.getObjectFromFile("json/controller/account-access.json", Xs2aConsentAccountAccess.class);
 
     @InjectMocks
     private AisConsentController aisConsentController;

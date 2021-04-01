@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.core.authorisation;
 import lombok.Data;
 
 @Data
-public class AuthenticationObject {
+public class Xs2aAuthenticationObject {
     private String authenticationType;
     private String authenticationMethodId;
     private String authenticationVersion;

@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.domain;
 
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAdditionalInformationStructured;
-import de.adorsys.psd2.xs2a.domain.code.BankTransactionCode;
+import de.adorsys.psd2.xs2a.domain.code.Xs2aBankTransactionCode;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
@@ -26,7 +26,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class Transactions {
+public class Xs2aTransactions {
     @Size(max = 35)
     private String transactionId;
     @Size(max = 35)
@@ -44,7 +44,7 @@ public class Transactions {
     private Xs2aAmount amount;
     private List<Xs2aExchangeRate> exchangeRate;
     private TransactionInfo transactionInfo;
-    private BankTransactionCode bankTransactionCodeCode;
+    private Xs2aBankTransactionCode bankTransactionCodeCode;
     @Size(max = 35)
     private String proprietaryBankTransactionCode;
     private String additionalInformation;
@@ -52,6 +52,6 @@ public class Transactions {
     private Xs2aBalance balanceAfterTransaction;
     private Boolean batchIndicator;
     private Integer batchNumberOfTransactions;
-    private List<EntryDetails> entryDetails;
+    private List<Xs2aEntryDetails> entryDetails;
     private Links links = new Links();
 }

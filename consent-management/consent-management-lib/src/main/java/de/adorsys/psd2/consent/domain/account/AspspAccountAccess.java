@@ -35,7 +35,7 @@ import java.util.Currency;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(description = "Aspsp Account access", value = "AspspAccountAccess")
-public class AspspAccountAccess extends AccountAccess {
+public class AspspAccountAccess extends CmsAccountAccess {
 
     @Column(name = "resource_id", length = 100)
     @ApiModelProperty(value = "RESOURCE-ID: This identification is denoting the addressed account.")

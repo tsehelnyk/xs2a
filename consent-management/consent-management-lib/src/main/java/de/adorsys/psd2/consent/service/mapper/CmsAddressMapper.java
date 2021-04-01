@@ -18,14 +18,14 @@ package de.adorsys.psd2.consent.service.mapper;
 
 import de.adorsys.psd2.consent.api.CmsAddress;
 import de.adorsys.psd2.consent.domain.payment.PisAddress;
-import de.adorsys.psd2.core.payment.model.Address;
+import de.adorsys.psd2.core.payment.model.Xs2aPisAddress;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CmsAddressMapper {
 
-    Address mapToAddress(CmsAddress cmsAddress);
+    Xs2aPisAddress mapToAddress(CmsAddress cmsAddress);
 
     @Mapping(target = "postCode", source = "postalCode")
     @Mapping(target = "streetName", source = "street")

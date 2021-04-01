@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.service.mapper;
 
 import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
@@ -46,7 +46,7 @@ class AuthorisationMapperTest {
     void prepareAuthorisationEntity() {
         PisCommonPaymentData authorisationParent = jsonReader.getObjectFromFile("json/service/mapper/pis-common-payment-data.json", PisCommonPaymentData.class);
         CreateAuthorisationRequest request = jsonReader.getObjectFromFile("json/service/mapper/create-authorisation-request.json", CreateAuthorisationRequest.class);
-        PsuData psuData = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", PsuData.class);
+        CmsPsuData psuData = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", CmsPsuData.class);
 
         AuthorisationEntity actual = mapper.prepareAuthorisationEntity(authorisationParent, request, Optional.of(psuData), AuthorisationType.PIS_CREATION, 100L, 200L);
 

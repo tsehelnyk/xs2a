@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import de.adorsys.psd2.xs2a.domain.Links;
-import de.adorsys.psd2.xs2a.domain.Transactions;
+import de.adorsys.psd2.xs2a.domain.Xs2aTransactions;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -31,11 +31,11 @@ import java.util.List;
 @JsonRootName(value = "transactions")
 public class Xs2aAccountReport {
 
-    private final List<Transactions> booked;
+    private final List<Xs2aTransactions> booked;
 
-    private final List<Transactions> pending;
+    private final List<Xs2aTransactions> pending;
 
-    private final List<Transactions> information;
+    private final List<Xs2aTransactions> information;
 
     private final byte[] transactionsRaw;
 

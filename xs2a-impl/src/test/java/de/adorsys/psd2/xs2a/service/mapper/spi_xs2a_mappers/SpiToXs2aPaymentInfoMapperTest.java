@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.domain.pis.CommonPayment;
 import de.adorsys.psd2.xs2a.spi.domain.payment.SpiPaymentInfo;
@@ -53,7 +53,7 @@ class SpiToXs2aPaymentInfoMapperTest {
         SpiPaymentInfo spiPaymentInfo = new SpiPaymentInfo(PAYMENT_PRODUCT);
         spiPaymentInfo.setPaymentId(PAYMENT_ID);
         spiPaymentInfo.setPaymentType(PaymentType.SINGLE);
-        spiPaymentInfo.setStatus(TransactionStatus.ACSP);
+        spiPaymentInfo.setStatus(Xs2aTransactionStatus.ACSP);
         spiPaymentInfo.setStatusChangeTimestamp(OFFSET_DATE_TIME);
         spiPaymentInfo.setPsuDataList(Collections.singletonList(SpiPsuData.builder()
                                                                     .psuId("psuId")

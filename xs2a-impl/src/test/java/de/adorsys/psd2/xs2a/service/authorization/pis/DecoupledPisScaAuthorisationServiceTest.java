@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationResponse;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aAuthorisationSubResources;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aPaymentCancellationAuthorisationSubResource;
@@ -46,7 +46,7 @@ class DecoupledPisScaAuthorisationServiceTest {
     private static final String PAYMENT_ID = "c713a32c-15ff-4f90-afa0-34a500359844";
     private static final String AUTHORISATION_ID = "ad746cb3-a01b-4196-a6b9-40b0e4cd2350";
     private static final String CANCELLATION_AUTHORISATION_ID = "dd5d766f-eeb7-4efe-b730-24d5ed53f537";
-    private static final ScaStatus SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus SCA_STATUS = Xs2aScaStatus.RECEIVED;
     private static final PsuIdData PSU_ID_DATA = new PsuIdData("psu Id", "psuId Type", "psu Corporate Id", "psuCorporate Id Type", "psuIp Address");
 
     @InjectMocks
@@ -145,14 +145,14 @@ class DecoupledPisScaAuthorisationServiceTest {
     void getAuthorisationScaStatus_success() {
         // Given
         when(authorisationService.getAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID))
-            .thenReturn(Optional.of(ScaStatus.RECEIVED));
+            .thenReturn(Optional.of(Xs2aScaStatus.RECEIVED));
 
         // When
-        Optional<ScaStatus> actual = decoupledPisScaAuthorisationService.getAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID);
+        Optional<Xs2aScaStatus> actual = decoupledPisScaAuthorisationService.getAuthorisationScaStatus(PAYMENT_ID, AUTHORISATION_ID);
 
         // Then
         assertTrue(actual.isPresent());
-        assertEquals(ScaStatus.RECEIVED, actual.get());
+        assertEquals(Xs2aScaStatus.RECEIVED, actual.get());
     }
 
     @Test
@@ -162,7 +162,7 @@ class DecoupledPisScaAuthorisationServiceTest {
             .thenReturn(Optional.of(SCA_STATUS));
 
         // When
-        Optional<ScaStatus> actual = decoupledPisScaAuthorisationService.getCancellationAuthorisationScaStatus(PAYMENT_ID, CANCELLATION_AUTHORISATION_ID);
+        Optional<Xs2aScaStatus> actual = decoupledPisScaAuthorisationService.getCancellationAuthorisationScaStatus(PAYMENT_ID, CANCELLATION_AUTHORISATION_ID);
 
         // Then
         assertTrue(actual.isPresent());

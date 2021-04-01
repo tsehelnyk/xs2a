@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.web.validator.body.payment;
 
-import de.adorsys.psd2.core.payment.model.PurposeCode;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.psd2.model.ChargeBearer;
 import de.adorsys.psd2.model.FrequencyCode;
@@ -182,7 +182,7 @@ public class PaymentBodyValidatorImpl extends AbstractBodyValidatorImpl implemen
     private void validatePurposeCodes(HttpServletRequest request, MessageError messageError) {
         List<String> purposeCodes = fieldExtractor.extractList(request, PURPOSE_CODE_FIELD_NAME, messageError);
         boolean isPurposeCodeInvalid = purposeCodes.stream()
-                                           .map(PurposeCode::fromValue)
+                                           .map(Xs2aPisPurposeCode::fromValue)
                                            .anyMatch(Objects::isNull);
 
         if (isPurposeCodeInvalid) {

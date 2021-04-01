@@ -17,8 +17,8 @@
 package de.adorsys.psd2.stub.impl;
 
 import de.adorsys.psd2.stub.impl.service.PaymentServiceMock;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountReference;
@@ -64,7 +64,7 @@ public class BulkPaymentSpiMockImpl implements BulkPaymentSpi {
     public SpiResponse<SpiBulkPaymentInitiationResponse> initiatePayment(@NotNull SpiContextData contextData, @NotNull SpiBulkPayment payment, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
         log.info("BulkPaymentSpi#initiatePayment: contextData {}, spiBulkPayment {}, aspspConsentData {}", contextData, payment, aspspConsentDataProvider.loadAspspConsentData());
         SpiBulkPaymentInitiationResponse response = new SpiBulkPaymentInitiationResponse();
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setPaymentId(UUID.randomUUID().toString());
         response.setAspspAccountId("11111-11119");
         List<SpiSinglePayment> payments = new ArrayList<>();
@@ -114,7 +114,7 @@ public class BulkPaymentSpiMockImpl implements BulkPaymentSpi {
         log.info("BulkPaymentSpi#executePaymentWithoutSca: contextData {}, spiBulkPayment {}, aspspConsentData {}", contextData, payment, aspspConsentDataProvider.loadAspspConsentData());
 
         return SpiResponse.<SpiPaymentExecutionResponse>builder()
-                   .payload(new SpiPaymentExecutionResponse(TransactionStatus.ACCP))
+                   .payload(new SpiPaymentExecutionResponse(Xs2aTransactionStatus.ACCP))
                    .build();
     }
 
@@ -124,7 +124,7 @@ public class BulkPaymentSpiMockImpl implements BulkPaymentSpi {
         log.info("BulkPaymentSpi#verifyScaAuthorisationAndExecutePayment: contextData {}, spiScaConfirmation{}, spiBulkPayment {}, aspspConsentData {}", contextData, spiScaConfirmation, payment, aspspConsentDataProvider.loadAspspConsentData());
 
         return SpiResponse.<SpiPaymentExecutionResponse>builder()
-                   .payload(new SpiPaymentExecutionResponse(TransactionStatus.ACCP))
+                   .payload(new SpiPaymentExecutionResponse(Xs2aTransactionStatus.ACCP))
                    .build();
     }
 
@@ -133,7 +133,7 @@ public class BulkPaymentSpiMockImpl implements BulkPaymentSpi {
         log.info("BulkPaymentSpi#checkConfirmationCode: contextData {}, spiCheckConfirmationCodeRequest{}, authorisationId {}, aspspConsentData {}", contextData, spiCheckConfirmationCodeRequest.getConfirmationCode(), spiCheckConfirmationCodeRequest.getAuthorisationId(), aspspConsentDataProvider.loadAspspConsentData());
 
         return SpiResponse.<SpiPaymentConfirmationCodeValidationResponse>builder()
-                   .payload(new SpiPaymentConfirmationCodeValidationResponse(ScaStatus.FINALISED, TransactionStatus.ACSP))
+                   .payload(new SpiPaymentConfirmationCodeValidationResponse(Xs2aScaStatus.FINALISED, Xs2aTransactionStatus.ACSP))
                    .build();
     }
 
@@ -162,7 +162,7 @@ public class BulkPaymentSpiMockImpl implements BulkPaymentSpi {
         payment.setRemittanceInformationUnstructured("Ref. Number WBG-1234");
         payment.setRequestedExecutionDate(LocalDate.of(2020, Month.JANUARY, 1));
         payment.setRequestedExecutionTime(OffsetDateTime.of(2020, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC));
-        payment.setPaymentStatus(TransactionStatus.RCVD);
+        payment.setPaymentStatus(Xs2aTransactionStatus.RCVD);
         return payment;
     }
 }

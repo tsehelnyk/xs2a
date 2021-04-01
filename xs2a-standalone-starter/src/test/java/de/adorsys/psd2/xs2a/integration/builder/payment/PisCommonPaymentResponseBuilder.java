@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.integration.builder.payment;
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.integration.builder.PsuIdDataBuilder;
 import de.adorsys.psd2.xs2a.integration.builder.TppInfoBuilder;
@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class PisCommonPaymentResponseBuilder {
-    private static final TransactionStatus TRANSACTION_STATUS = TransactionStatus.RCVD;
+    private static final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.RCVD;
     private static final PaymentType PAYMENT_TYPE = PaymentType.SINGLE;
     private static final String PAYMENT_PRODUCT = "sepa-credit-transfers";
     private static final String PAYMENT_ID = "d6cb50e5-bb88-4bbf-a5c1-42ee1ed1df2c";
@@ -81,7 +81,7 @@ public class PisCommonPaymentResponseBuilder {
     public static SpiResponse<SpiPaymentInitiationResponse> buildSpiPaymentInitiationResponse() {
         SpiPaymentInitiationResponse response = new SpiCommonPaymentInitiationResponse();
         response.setPaymentId(PAYMENT_ID);
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setAspspAccountId(ASPSP_ACCOUNT_ID);
         response.setSpiTransactionFeeIndicator(false);
         response.setMultilevelScaRequired(false);

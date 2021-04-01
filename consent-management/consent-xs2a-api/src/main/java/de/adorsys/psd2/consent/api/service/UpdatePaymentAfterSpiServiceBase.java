@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.api.service;
 
 import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +41,7 @@ interface UpdatePaymentAfterSpiServiceBase {
      * @param status    Status of Payment to be set
      * @return true if the status was updated, false otherwise
      */
-    CmsResponse<Boolean> updatePaymentStatus(@NotNull String paymentId, @NotNull TransactionStatus status);
+    CmsResponse<Boolean> updatePaymentStatus(@NotNull String paymentId, @NotNull Xs2aTransactionStatus status);
 
     /**
      * Updates a Status of Payment object by its ID and PSU ID

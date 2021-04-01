@@ -16,10 +16,10 @@
 
 package de.adorsys.psd2.xs2a.service.validator.ais.account.common;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
@@ -174,11 +174,11 @@ class AccountConsentValidatorTest {
     private AisConsent buildAccountConsentInvalid() {
         AisConsent aisConsent = new AisConsent();
         aisConsent.setId("id");
-        aisConsent.setTppAccountAccesses(AccountAccess.EMPTY_ACCESS);
-        aisConsent.setAspspAccountAccesses(AccountAccess.EMPTY_ACCESS);
+        aisConsent.setTppAccountAccesses(Xs2aConsentAccountAccess.EMPTY_ACCESS);
+        aisConsent.setAspspAccountAccesses(Xs2aConsentAccountAccess.EMPTY_ACCESS);
         aisConsent.setConsentData(new AisConsentData(null, null, null, false));
         aisConsent.setValidUntil(LocalDate.now().plusYears(1));
-        aisConsent.setConsentStatus(ConsentStatus.RECEIVED);
+        aisConsent.setConsentStatus(Xs2aConsentStatus.RECEIVED);
         return aisConsent;
     }
 
@@ -186,7 +186,7 @@ class AccountConsentValidatorTest {
         AisConsent aisConsent = new AisConsent();
         aisConsent.setValidUntil(LocalDate.now().plusYears(1));
         aisConsent.setUsages(Collections.singletonMap(REQUEST_URI, 0));
-        aisConsent.setConsentStatus(ConsentStatus.VALID);
+        aisConsent.setConsentStatus(Xs2aConsentStatus.VALID);
         aisConsent.setRecurringIndicator(true);
         return aisConsent;
     }

@@ -20,7 +20,7 @@ package de.adorsys.psd2.consent.web.xs2a.controller;
 import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.service.PiisConsentService;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceSelector;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
 import de.adorsys.xs2a.reader.JsonReader;
@@ -106,7 +106,7 @@ class PiisConsentControllerTest {
 
     private CmsConsent buildPiisConsent() {
         CmsConsent piisConsent = new CmsConsent();
-        piisConsent.setConsentStatus(ConsentStatus.VALID);
+        piisConsent.setConsentStatus(Xs2aConsentStatus.VALID);
         return piisConsent;
     }
 }

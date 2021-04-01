@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.service.psu;
 
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +36,7 @@ public class CmsPsuService {
      * @param psuDataList     list where will search psuData
      * @return if the psuData is not in the psuDataList then will return this psuData otherwise return element form list
      */
-    public Optional<PsuData> definePsuDataForAuthorisation(PsuData psuDataForCheck, List<PsuData> psuDataList) {
+    public Optional<CmsPsuData> definePsuDataForAuthorisation(CmsPsuData psuDataForCheck, List<CmsPsuData> psuDataList) {
         return Optional.ofNullable(psuDataForCheck)
                    .map(psuData -> psuDataList.stream()
                                        .filter(psu -> StringUtils.equals(psu.getPsuId(), psuData.getPsuId()))
@@ -51,7 +51,7 @@ public class CmsPsuService {
      * @param psuDataList list where will search psuData
      * @return List with psuData
      */
-    public List<PsuData> enrichPsuData(PsuData psuData, List<PsuData> psuDataList) {
+    public List<CmsPsuData> enrichPsuData(CmsPsuData psuData, List<CmsPsuData> psuDataList) {
         if (isPsuDataNew(psuData, psuDataList)) {
             psuDataList.add(psuData);
         }
@@ -65,7 +65,7 @@ public class CmsPsuService {
      * @param psuDataList list where will search psuData
      * @return if the psuData is not in the psuDataList then will return true otherwise return false
      */
-    public boolean isPsuDataNew(PsuData psuData, List<PsuData> psuDataList) {
+    public boolean isPsuDataNew(CmsPsuData psuData, List<CmsPsuData> psuDataList) {
         return Optional.ofNullable(psuData)
                    .map(psu -> !isPsuDataInList(psu, psuDataList))
                    .orElseGet(() -> {
@@ -83,7 +83,7 @@ public class CmsPsuService {
      * @param anotherPsuDataList the second list to be compared, must not be null
      * @return <code>true</code> if two lists are equal, <code>false</code> otherwise
      */
-    public boolean isPsuDataListEqual(@NotNull List<PsuData> psuDataList, @NotNull List<PsuData> anotherPsuDataList) {
+    public boolean isPsuDataListEqual(@NotNull List<CmsPsuData> psuDataList, @NotNull List<CmsPsuData> anotherPsuDataList) {
         if (psuDataList.size() != anotherPsuDataList.size()) {
             return false;
         }
@@ -98,7 +98,7 @@ public class CmsPsuService {
      * @param psuAuth    psu in authorisation
      * @return true if psu in authorisation is null or equals psu in request
      */
-    public boolean isPsuDataRequestCorrect(PsuData psuRequest, PsuData psuAuth) {
+    public boolean isPsuDataRequestCorrect(CmsPsuData psuRequest, CmsPsuData psuAuth) {
         return Optional.ofNullable(psuRequest)
                    .map(psu -> psuAuth == null || psu.contentEquals(psuAuth))
                    .orElse(false);
@@ -111,7 +111,7 @@ public class CmsPsuService {
      * @param psuDataList list where will search psuData
      * @return if the psuData is not in the psuDataList then will return false otherwise will return true
      */
-    private boolean isPsuDataInList(PsuData psuData, List<PsuData> psuDataList) {
+    private boolean isPsuDataInList(CmsPsuData psuData, List<CmsPsuData> psuDataList) {
         return psuData.isNotEmpty()
                    && psuDataList.stream()
                           .anyMatch(psuData::contentEquals);

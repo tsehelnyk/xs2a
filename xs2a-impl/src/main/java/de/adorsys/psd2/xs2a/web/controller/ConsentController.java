@@ -23,7 +23,7 @@ import de.adorsys.psd2.xs2a.core.psu.AdditionalPsuIdData;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppNotificationData;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.NotificationModeResponseHeaders;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -94,7 +94,7 @@ public class ConsentController implements ConsentApi {
 
         ResponseHeaders headers = consentHeadersBuilder.buildCreateConsentHeaders(createConsentResponse.getAuthorizationId(),
                                                                                   Optional.ofNullable(createConsentResponse.getLinks().getSelf())
-                                                                                      .map(HrefType::getHref)
+                                                                                      .map(Xs2aHrefType::getHref)
                                                                                       .orElseThrow(() -> new IllegalArgumentException("Wrong href type in self link")),
                                                                                   notificationHeaders);
 

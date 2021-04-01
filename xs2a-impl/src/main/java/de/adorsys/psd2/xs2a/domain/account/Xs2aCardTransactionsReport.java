@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.domain.account;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.CustomContentTypeProvider;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.Xs2aBalance;
@@ -30,7 +30,7 @@ import java.util.List;
 @Data
 public class Xs2aCardTransactionsReport implements CustomContentTypeProvider {
 
-    private AccountReference accountReference;
+    private Xs2aAccountReference accountReference;
 
     private Xs2aCardAccountReport cardAccountReport;
 

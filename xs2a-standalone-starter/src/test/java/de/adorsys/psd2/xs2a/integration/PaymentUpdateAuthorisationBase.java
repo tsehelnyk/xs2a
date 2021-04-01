@@ -30,7 +30,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.integration.builder.AspspSettingsBuilder;
 import de.adorsys.psd2.xs2a.integration.builder.HttpHeadersBuilder;
@@ -131,7 +131,7 @@ public abstract class PaymentUpdateAuthorisationBase {
             .willReturn(CmsResponse.<PisCommonPaymentResponse>builder()
                             .payload(pisCommonPaymentResponse)
                             .build());
-        given(authorisationServiceEncrypted.updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FAILED))
+        given(authorisationServiceEncrypted.updateAuthorisationStatus(AUTHORISATION_ID, Xs2aScaStatus.FAILED))
             .willReturn(CmsResponse.<Boolean>builder()
                             .payload(Boolean.TRUE)
                             .build());
@@ -158,6 +158,6 @@ public abstract class PaymentUpdateAuthorisationBase {
     }
 
     private Authorisation buildAuthorisation(PsuIdData psuIdData) {
-         return new Authorisation(AUTHORISATION_ID, psuIdData, PAYMENT_ID, AuthorisationType.PIS_CREATION, ScaStatus.RECEIVED);
+         return new Authorisation(AUTHORISATION_ID, psuIdData, PAYMENT_ID, AuthorisationType.PIS_CREATION, Xs2aScaStatus.RECEIVED);
     }
 }

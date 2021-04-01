@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.validator.ais.consent;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
@@ -123,7 +123,7 @@ public class CreateConsentRequestValidator implements BusinessValidator<CreateCo
                    && EnumSet.of(ALL_ACCOUNTS, ALL_ACCOUNTS_WITH_OWNER_NAME).contains(request.getAllPsd2());
     }
 
-    private boolean isNotEmptyAccess(AccountAccess access, AisConsentData aisConsentData) {
+    private boolean isNotEmptyAccess(Xs2aConsentAccountAccess access, AisConsentData aisConsentData) {
         return Optional.ofNullable(access)
                    .map(ac -> ac.isNotEmpty(aisConsentData))
                    .orElse(false);

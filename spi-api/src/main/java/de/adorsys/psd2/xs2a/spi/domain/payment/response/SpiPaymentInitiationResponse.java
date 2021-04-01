@@ -16,8 +16,8 @@
 
 package de.adorsys.psd2.xs2a.spi.domain.payment.response;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ChallengeData;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiAmount;
 import lombok.Data;
 
@@ -25,14 +25,14 @@ import java.util.List;
 
 @Data
 public abstract class SpiPaymentInitiationResponse {
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
     private String paymentId;
     private SpiAmount spiTransactionFees;
     private Boolean spiTransactionFeeIndicator;
     private boolean multilevelScaRequired;
     private List<String> scaMethods;
     private String chosenScaMethod;
-    private ChallengeData challengeData;
+    private Xs2aChallengeData challengeData;
     private String psuMessage;
     private List<String> tppMessages;
     private String aspspAccountId;

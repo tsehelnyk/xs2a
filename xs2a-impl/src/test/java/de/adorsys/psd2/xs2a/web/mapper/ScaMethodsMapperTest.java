@@ -18,6 +18,7 @@ package de.adorsys.psd2.xs2a.web.mapper;
 
 import de.adorsys.psd2.model.AuthenticationObject;
 import de.adorsys.psd2.model.ScaMethods;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,8 +51,8 @@ class ScaMethodsMapperTest {
     @Test
     void mapToScaMethods_withRealData_success() {
         // Given
-        de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject authenticationObject =
-            jsonReader.getObjectFromFile("json/service/mapper/xs2a-authentication-objects-list.json", de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject.class);
+        Xs2aAuthenticationObject authenticationObject =
+            jsonReader.getObjectFromFile("json/service/mapper/xs2a-authentication-objects-list.json", Xs2aAuthenticationObject.class);
 
         AuthenticationObject expected =
             jsonReader.getObjectFromFile("json/service/mapper/authentication-objects-list.json", AuthenticationObject.class);

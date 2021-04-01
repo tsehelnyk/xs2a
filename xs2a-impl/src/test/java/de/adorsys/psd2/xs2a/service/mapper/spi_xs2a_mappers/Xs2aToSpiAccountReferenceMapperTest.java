@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountReference;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +40,7 @@ class Xs2aToSpiAccountReferenceMapperTest {
 
     @Test
     void mapToSpiAccountReference() {
-        AccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/account-reference.json", AccountReference.class);
+        Xs2aAccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/account-reference.json", Xs2aAccountReference.class);
         SpiAccountReference actual = mapper.mapToSpiAccountReference(accountReference);
 
         SpiAccountReference expected = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/spi-account-reference.json", SpiAccountReference.class);
@@ -49,7 +49,7 @@ class Xs2aToSpiAccountReferenceMapperTest {
 
     @Test
     void mapToSpiAccountReferences() {
-        AccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/account-reference.json", AccountReference.class);
+        Xs2aAccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/account-reference.json", Xs2aAccountReference.class);
         List<SpiAccountReference> actual = mapper.mapToSpiAccountReferences(Collections.singletonList(accountReference));
 
         SpiAccountReference expected = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/spi-account-reference.json", SpiAccountReference.class);
@@ -65,7 +65,7 @@ class Xs2aToSpiAccountReferenceMapperTest {
 
     @Test
     void mapToSpiAccountReferencesOrDefault_notNull() {
-        AccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/account-reference.json", AccountReference.class);
+        Xs2aAccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/account-reference.json", Xs2aAccountReference.class);
 
         SpiAccountReference spiAccountReference = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/spi-account-reference.json", SpiAccountReference.class);
         List<SpiAccountReference> defaultList = Collections.singletonList(spiAccountReference);

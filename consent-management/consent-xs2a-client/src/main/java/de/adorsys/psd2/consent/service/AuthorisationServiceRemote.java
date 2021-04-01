@@ -28,7 +28,7 @@ import de.adorsys.psd2.consent.config.CmsRestException;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -105,7 +105,7 @@ public class AuthorisationServiceRemote implements AuthorisationServiceEncrypted
     }
 
     @Override
-    public CmsResponse<Boolean> updateAuthorisationStatus(String authorisationId, ScaStatus scaStatus) {
+    public CmsResponse<Boolean> updateAuthorisationStatus(String authorisationId, Xs2aScaStatus scaStatus) {
         try {
             consentRestTemplate.put(authorisationRemoteUrls.updateAuthorisationStatus(), null, authorisationId, scaStatus);
             return CmsResponse.<Boolean>builder()
@@ -142,12 +142,12 @@ public class AuthorisationServiceRemote implements AuthorisationServiceEncrypted
     }
 
     @Override
-    public CmsResponse<ScaStatus> getAuthorisationScaStatus(String authorisationId, AuthorisationParentHolder parentHolder) {
+    public CmsResponse<Xs2aScaStatus> getAuthorisationScaStatus(String authorisationId, AuthorisationParentHolder parentHolder) {
         String parentId = parentHolder.getParentId();
         try {
-            ResponseEntity<ScaStatus> request = consentRestTemplate.getForEntity(
-                authorisationRemoteUrls.getAuthorisationScaStatus(), ScaStatus.class, parentHolder.getAuthorisationType(), parentId, authorisationId);
-            return CmsResponse.<ScaStatus>builder()
+            ResponseEntity<Xs2aScaStatus> request = consentRestTemplate.getForEntity(
+                authorisationRemoteUrls.getAuthorisationScaStatus(), Xs2aScaStatus.class, parentHolder.getAuthorisationType(), parentId, authorisationId);
+            return CmsResponse.<Xs2aScaStatus>builder()
                        .payload(request.getBody())
                        .build();
         } catch (CmsRestException cmsRestException) {
@@ -155,7 +155,7 @@ public class AuthorisationServiceRemote implements AuthorisationServiceEncrypted
                      parentId, authorisationId, cmsRestException.getHttpStatus());
         }
 
-        return CmsResponse.<ScaStatus>builder()
+        return CmsResponse.<Xs2aScaStatus>builder()
                    .error(TECHNICAL_ERROR)
                    .build();
     }

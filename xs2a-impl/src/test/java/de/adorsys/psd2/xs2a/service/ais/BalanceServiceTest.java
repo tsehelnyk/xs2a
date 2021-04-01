@@ -17,12 +17,12 @@
 package de.adorsys.psd2.xs2a.service.ais;
 
 import de.adorsys.psd2.consent.api.ActionStatus;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
@@ -30,7 +30,7 @@ import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.error.TppMessage;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aBalancesReport;
@@ -78,7 +78,7 @@ class BalanceServiceTest {
     private static final String REQUEST_URI = "request/uri";
     private static final Currency EUR_CURRENCY = Currency.getInstance("EUR");
     private static final SpiAccountConsent SPI_ACCOUNT_CONSENT = new SpiAccountConsent();
-    private static final AccountReference XS2A_ACCOUNT_REFERENCE = buildXs2aAccountReference();
+    private static final Xs2aAccountReference XS2A_ACCOUNT_REFERENCE = buildXs2aAccountReference();
     private static final SpiContextData SPI_CONTEXT_DATA = TestSpiDataProvider.getSpiContextData();
     private static final MessageError CONSENT_INVALID_ERROR = new MessageError(ErrorType.AIS_401, of(CONSENT_INVALID));
 
@@ -286,14 +286,14 @@ class BalanceServiceTest {
         when(accountMappersHolder.mapToSpiAccountConsent(any()))
             .thenReturn(SPI_ACCOUNT_CONSENT);
 
-        ArgumentCaptor<ConsentStatus> argumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> argumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
 
         // When
         balanceService.getBalancesReport(CONSENT_ID, ACCOUNT_ID, REQUEST_URI);
 
         // Then
         verify(loggingContextService).storeConsentStatus(argumentCaptor.capture());
-        assertThat(argumentCaptor.getValue()).isEqualTo(ConsentStatus.VALID);
+        assertThat(argumentCaptor.getValue()).isEqualTo(Xs2aConsentStatus.VALID);
     }
 
     private void assertResponseHasNoErrors(ResponseObject<Xs2aBalancesReport> actualResponse) {
@@ -326,21 +326,21 @@ class BalanceServiceTest {
                    .build();
     }
 
-    private static AccountReference buildXs2aAccountReference() {
-        return new AccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
+    private static Xs2aAccountReference buildXs2aAccountReference() {
+        return new Xs2aAccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
     }
 
     private AisConsent createConsent() {
         AisConsent aisConsent = jsonReader.getObjectFromFile("json/service/ais-consent.json", AisConsent.class);
-        AccountAccess accountAccess = createAccountAccess();
+        Xs2aConsentAccountAccess accountAccess = createAccountAccess();
         aisConsent.setTppAccountAccesses(accountAccess);
         aisConsent.setAspspAccountAccesses(accountAccess);
         aisConsent.setConsentData(AisConsentData.buildDefaultAisConsentData());
         return aisConsent;
     }
 
-    private static AccountAccess createAccountAccess() {
-        return new AccountAccess(Collections.singletonList(XS2A_ACCOUNT_REFERENCE), Collections.singletonList(XS2A_ACCOUNT_REFERENCE), Collections.singletonList(XS2A_ACCOUNT_REFERENCE), null);
+    private static Xs2aConsentAccountAccess createAccountAccess() {
+        return new Xs2aConsentAccountAccess(Collections.singletonList(XS2A_ACCOUNT_REFERENCE), Collections.singletonList(XS2A_ACCOUNT_REFERENCE), Collections.singletonList(XS2A_ACCOUNT_REFERENCE), null);
     }
 
     private GetAccountBalanceRequestObject buildCommonAccountBalanceRequestObject() {

@@ -16,11 +16,11 @@
 
 package de.adorsys.psd2.xs2a.service;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
@@ -28,7 +28,7 @@ import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
@@ -139,7 +139,7 @@ public class ConsentService {
         aspspConsentDataProvider.saveWith(encryptedConsentId);
 
         if (initiateAisConsentSpiResponse.hasError()) {
-            aisConsentService.updateConsentStatus(encryptedConsentId, ConsentStatus.REJECTED);
+            aisConsentService.updateConsentStatus(encryptedConsentId, Xs2aConsentStatus.REJECTED);
             ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(initiateAisConsentSpiResponse, ServiceType.AIS);
             log.info("Consent-ID: [{}]. Create account consent  with response failed. Consent rejected. Couldn't initiate AIS consent at SPI level: {}",
                      encryptedConsentId, errorHolder);
@@ -154,11 +154,11 @@ public class ConsentService {
 
         updateMultilevelSca(encryptedConsentId, multilevelScaRequired);
 
-        Optional<AccountAccess> xs2aAccountAccess = spiToXs2aAccountAccessMapper.mapToAccountAccess(spiResponsePayload.getAccountAccess());
+        Optional<Xs2aConsentAccountAccess> xs2aAccountAccess = spiToXs2aAccountAccessMapper.mapToAccountAccess(spiResponsePayload.getAccountAccess());
         xs2aAccountAccess.ifPresent(accountAccess ->
                                         accountReferenceUpdater.rewriteAccountAccess(encryptedConsentId, accountAccess, ConsentType.AIS));
 
-        ConsentStatus consentStatus = aisConsent.getConsentStatus();
+        Xs2aConsentStatus consentStatus = aisConsent.getConsentStatus();
         CreateConsentResponse createConsentResponse = new CreateConsentResponse(consentStatus.getValue(), encryptedConsentId,
                                                                                 null, null, null,
                                                                                 spiResponsePayload.getPsuMessage(), multilevelScaRequired,
@@ -214,7 +214,7 @@ public class ConsentService {
                        .build();
         }
 
-        ConsentStatus consentStatus = validatedAccountConsent.getConsentStatus();
+        Xs2aConsentStatus consentStatus = validatedAccountConsent.getConsentStatus();
         if (consentStatus.isFinalisedStatus()) {
             loggingContextService.storeConsentStatus(consentStatus);
             return responseBuilder
@@ -233,7 +233,7 @@ public class ConsentService {
         }
 
         SpiConsentStatusResponse spiPayload = spiResponse.getPayload();
-        ConsentStatus spiConsentStatus = spiPayload.getConsentStatus();
+        Xs2aConsentStatus spiConsentStatus = spiPayload.getConsentStatus();
         aisConsentService.updateConsentStatus(consentId, spiConsentStatus);
         loggingContextService.storeConsentStatus(spiConsentStatus);
 
@@ -277,9 +277,9 @@ public class ConsentService {
                            .build();
             }
 
-            ConsentStatus newConsentStatus = accountConsent.getConsentStatus() == ConsentStatus.RECEIVED
-                                                 ? ConsentStatus.REJECTED
-                                                 : ConsentStatus.TERMINATED_BY_TPP;
+            Xs2aConsentStatus newConsentStatus = accountConsent.getConsentStatus() == Xs2aConsentStatus.RECEIVED
+                                                 ? Xs2aConsentStatus.REJECTED
+                                                 : Xs2aConsentStatus.TERMINATED_BY_TPP;
 
             loggingContextService.storeConsentStatus(newConsentStatus);
 
@@ -338,7 +338,7 @@ public class ConsentService {
                        .build();
         }
 
-        ConsentStatus consentStatus = spiConsentStatus.getPayload().getConsentStatus();
+        Xs2aConsentStatus consentStatus = spiConsentStatus.getPayload().getConsentStatus();
         aisConsentService.updateConsentStatus(consentId, consentStatus);
         loggingContextService.storeConsentStatus(consent.getConsentStatus());
 
@@ -385,7 +385,7 @@ public class ConsentService {
 
         SpiContextData contextData = getSpiContextData();
         SpiAspspConsentDataProvider spiAspspConsentDataProvider = aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(consentId);
-        ScaStatus scaStatus = cmsScaStatusResponse.getBody().getScaStatus();
+        Xs2aScaStatus scaStatus = cmsScaStatusResponse.getBody().getScaStatus();
         SpiAccountConsent spiAccountConsent = aisConsentMapper.mapToSpiAccountConsent(cmsScaStatusResponse.getBody().getAccountConsent());
 
         SpiResponse<SpiScaStatusResponse> spiScaInformation = aisConsentSpi.getScaStatus(scaStatus, contextData, authorisationId, spiAccountConsent, spiAspspConsentDataProvider);

@@ -17,14 +17,14 @@
 package de.adorsys.psd2.xs2a.service.mapper;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import de.adorsys.psd2.core.payment.model.PurposeCode;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
 import de.adorsys.psd2.model.Amount;
 import de.adorsys.psd2.model.InlineResponse2001;
 import de.adorsys.psd2.model.TransactionsResponse200Json;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
-import de.adorsys.psd2.xs2a.domain.Transactions;
+import de.adorsys.psd2.xs2a.domain.Xs2aTransactions;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aTransactionsReport;
 import de.adorsys.psd2.xs2a.web.mapper.*;
 import de.adorsys.xs2a.reader.JsonReader;
@@ -91,10 +91,10 @@ class TransactionModelMapperTest {
         Amount amountEntry = jsonReader.getObjectFromFile(AMOUNT_ENTRY_JSON_PATH, Amount.class);
         when(mockedAmountModelMapper.mapToAmount(xs2aEntryAmount)).thenReturn(amountEntry);
 
-        when(mockedPurposeCodeMapper.mapToPurposeCode(PurposeCode.BKDF)).thenReturn(de.adorsys.psd2.model.PurposeCode.BKDF);
-        when(mockedPurposeCodeMapper.mapToPurposeCode(PurposeCode.CDCB)).thenReturn(de.adorsys.psd2.model.PurposeCode.CDCB);
+        when(mockedPurposeCodeMapper.mapToPurposeCode(Xs2aPisPurposeCode.BKDF)).thenReturn(de.adorsys.psd2.model.PurposeCode.BKDF);
+        when(mockedPurposeCodeMapper.mapToPurposeCode(Xs2aPisPurposeCode.CDCB)).thenReturn(de.adorsys.psd2.model.PurposeCode.CDCB);
 
-        Transactions transactions = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-transactions.json", Transactions.class);
+        Xs2aTransactions transactions = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-transactions.json", Xs2aTransactions.class);
         de.adorsys.psd2.model.Transactions actualTransactionDetails = mapper.mapToTransactions(transactions);
 
         de.adorsys.psd2.model.Transactions expectedReportTransactionDetails = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-transaction-details-expected.json",
@@ -107,15 +107,15 @@ class TransactionModelMapperTest {
         Xs2aAmount xs2aAmount = jsonReader.getObjectFromFile(XS2A_AMOUNT_JSON_PATH, Xs2aAmount.class);
         Amount amount = jsonReader.getObjectFromFile(AMOUNT_JSON_PATH, Amount.class);
         when(mockedAmountModelMapper.mapToAmount(xs2aAmount)).thenReturn(amount);
-        when(mockedPurposeCodeMapper.mapToPurposeCode(PurposeCode.BKDF)).thenReturn(de.adorsys.psd2.model.PurposeCode.BKDF);
+        when(mockedPurposeCodeMapper.mapToPurposeCode(Xs2aPisPurposeCode.BKDF)).thenReturn(de.adorsys.psd2.model.PurposeCode.BKDF);
 
         Xs2aAmount xs2aEntryAmount = jsonReader.getObjectFromFile(XS2A_AMOUNT_ENTRY_JSON_PATH, Xs2aAmount.class);
         Amount amountEntry = jsonReader.getObjectFromFile(AMOUNT_ENTRY_JSON_PATH, Amount.class);
         when(mockedAmountModelMapper.mapToAmount(xs2aEntryAmount)).thenReturn(amountEntry);
 
-        when(mockedPurposeCodeMapper.mapToPurposeCode(PurposeCode.BKDF)).thenReturn(de.adorsys.psd2.model.PurposeCode.BKDF);
-        when(mockedPurposeCodeMapper.mapToPurposeCode(PurposeCode.CDCB)).thenReturn(de.adorsys.psd2.model.PurposeCode.CDCB);
-        Transactions transactions = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-transactions.json", Transactions.class);
+        when(mockedPurposeCodeMapper.mapToPurposeCode(Xs2aPisPurposeCode.BKDF)).thenReturn(de.adorsys.psd2.model.PurposeCode.BKDF);
+        when(mockedPurposeCodeMapper.mapToPurposeCode(Xs2aPisPurposeCode.CDCB)).thenReturn(de.adorsys.psd2.model.PurposeCode.CDCB);
+        Xs2aTransactions transactions = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-transactions.json", Xs2aTransactions.class);
 
         InlineResponse2001 actualInlineResponse2001 = mapper.mapToTransactionDetails(transactions);
 
@@ -138,7 +138,7 @@ class TransactionModelMapperTest {
     @Test
     void mapToTransactionsResponse200Json_success() {
         // Given
-        Map<String, HrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, HrefType>>() {
+        Map<String, Xs2aHrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, Xs2aHrefType>>() {
         });
         Links xs2aLinks = jsonReader.getObjectFromFile(XS2A_LINKS_JSON_PATH, Links.class);
         when(mockedHrefLinkMapper.mapToLinksMap(xs2aLinks)).thenReturn(links);
@@ -172,7 +172,7 @@ class TransactionModelMapperTest {
         assertFalse(actualLinks.isEmpty());
         assertEquals(expectedLinks.size(), actualLinks.size());
         for (Object linkKey : actualLinks.keySet()) {
-            HrefType actualHrefType = (HrefType) actualLinks.get(linkKey);
+            Xs2aHrefType actualHrefType = (Xs2aHrefType) actualLinks.get(linkKey);
             assertEquals(String.valueOf(((Map) expectedLinks.get(linkKey)).get("href")), actualHrefType.getHref());
         }
     }

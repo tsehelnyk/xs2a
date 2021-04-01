@@ -32,16 +32,16 @@ import de.adorsys.psd2.xs2a.config.CorsConfigurationProperties;
 import de.adorsys.psd2.xs2a.config.WebConfig;
 import de.adorsys.psd2.xs2a.config.Xs2aEndpointPathConstant;
 import de.adorsys.psd2.xs2a.config.Xs2aInterfaceConfig;
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.consent.AspspConsentData;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.integration.builder.AspspSettingsBuilder;
 import de.adorsys.psd2.xs2a.integration.builder.TppInfoBuilder;
@@ -184,12 +184,12 @@ class PaymentStartAuthorisationIT {
         given(aspspProfileService.getScaApproaches(null)).willReturn(Collections.singletonList(ScaApproach.EMBEDDED));
         given(authorisationServiceEncrypted.createAuthorisation(parentHolderCaptor.capture(), createAuthorisationRequest.capture()))
             .willReturn(CmsResponse.<CreateAuthorisationResponse>builder()
-                            .payload(new CreateAuthorisationResponse(AUTHORISATION_ID, ScaStatus.PSUIDENTIFIED, null, buildPsuIdData()))
+                            .payload(new CreateAuthorisationResponse(AUTHORISATION_ID, Xs2aScaStatus.PSUIDENTIFIED, null, buildPsuIdData()))
                             .build());
 
         given(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
             .willReturn(CmsResponse.<Authorisation>builder()
-                            .payload(buildGetPisAuthorisationResponse(ScaStatus.PSUIDENTIFIED))
+                            .payload(buildGetPisAuthorisationResponse(Xs2aScaStatus.PSUIDENTIFIED))
                             .build());
         given(authorisationServiceEncrypted.getAuthorisationScaApproach(AUTHORISATION_ID))
             .willReturn(CmsResponse.<AuthorisationScaApproachResponse>builder()
@@ -199,7 +199,7 @@ class PaymentStartAuthorisationIT {
             .willReturn(SpiResponse.<SpiPsuAuthorisationResponse>builder()
                             .payload(new SpiPsuAuthorisationResponse(false, SpiAuthorisationStatus.SUCCESS))
                             .build());
-        AuthenticationObject authenticationObject = new AuthenticationObject();
+        Xs2aAuthenticationObject authenticationObject = new Xs2aAuthenticationObject();
         authenticationObject.setAuthenticationMethodId(AUTHORISATION_METHOD_ID);
         given(paymentAuthorisationSpi.requestAvailableScaMethods(any(SpiContextData.class), any(SpiPayment.class), any(SpiAspspConsentDataProvider.class)))
             .willReturn(SpiResponse.<SpiAvailableScaMethodsResponse>builder()
@@ -210,7 +210,7 @@ class PaymentStartAuthorisationIT {
                             .payload(true)
                             .build());
         SpiAuthorizationCodeResult spiAuthorizationCodeResult = new SpiAuthorizationCodeResult();
-        spiAuthorizationCodeResult.setScaStatus(ScaStatus.SCAMETHODSELECTED);
+        spiAuthorizationCodeResult.setScaStatus(Xs2aScaStatus.SCAMETHODSELECTED);
         given(paymentAuthorisationSpi.requestAuthorisationCode(any(SpiContextData.class), eq(AUTHORISATION_METHOD_ID), any(SpiPayment.class), any(SpiAspspConsentDataProvider.class)))
             .willReturn(SpiResponse.<SpiAuthorizationCodeResult>builder()
                             .payload(spiAuthorizationCodeResult)
@@ -219,9 +219,9 @@ class PaymentStartAuthorisationIT {
 
         given(commonPaymentSpi.executePaymentWithoutSca(any(SpiContextData.class), any(SpiPaymentInfo.class), any(SpiAspspConsentDataProvider.class)))
             .willReturn(SpiResponse.<SpiPaymentExecutionResponse>builder()
-                            .payload(new SpiPaymentExecutionResponse(TransactionStatus.ACCP))
+                            .payload(new SpiPaymentExecutionResponse(Xs2aTransactionStatus.ACCP))
                             .build());
-        given(updatePaymentAfterSpiService.updatePaymentStatus(PAYMENT_ID, TransactionStatus.ACCP))
+        given(updatePaymentAfterSpiService.updatePaymentStatus(PAYMENT_ID, Xs2aTransactionStatus.ACCP))
             .willReturn(CmsResponse.<Boolean>builder()
                             .payload(true)
                             .build());
@@ -247,7 +247,7 @@ class PaymentStartAuthorisationIT {
     }
 
     @NotNull
-    private Authorisation buildGetPisAuthorisationResponse(ScaStatus scaStatus) {
+    private Authorisation buildGetPisAuthorisationResponse(Xs2aScaStatus scaStatus) {
         Authorisation getPisAuthorisationResponse = new Authorisation();
         getPisAuthorisationResponse.setScaStatus(scaStatus);
         getPisAuthorisationResponse.setAuthorisationType(AuthorisationType.PIS_CREATION);
@@ -262,13 +262,13 @@ class PaymentStartAuthorisationIT {
         pisCommonPaymentResponse.setPaymentType(SINGLE_PAYMENT_TYPE);
         pisCommonPaymentResponse.setPaymentProduct(SEPA_PAYMENT_PRODUCT);
         pisCommonPaymentResponse.setAuthorisations(Collections.singletonList(buildAuthorisation()));
-        pisCommonPaymentResponse.setTransactionStatus(TransactionStatus.ACSP);
+        pisCommonPaymentResponse.setTransactionStatus(Xs2aTransactionStatus.ACSP);
         return pisCommonPaymentResponse;
     }
 
     private Authorisation buildAuthorisation() {
         return new Authorisation(AUTHORISATION_ID, new PsuIdData(PSU_ID, null, null, null, null),
-                                 PAYMENT_ID, AuthorisationType.PIS_CREATION, ScaStatus.RECEIVED);
+                                 PAYMENT_ID, AuthorisationType.PIS_CREATION, Xs2aScaStatus.RECEIVED);
     }
 
     private PsuIdData buildPsuIdData() {

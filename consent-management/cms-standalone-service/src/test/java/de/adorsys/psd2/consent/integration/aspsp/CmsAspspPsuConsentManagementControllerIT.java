@@ -22,7 +22,7 @@ import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.integration.UrlBuilder;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.repository.specification.ConsentSpecification;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,7 +100,7 @@ class CmsAspspPsuConsentManagementControllerIT {
     @Test
     void closeAllConsents() throws Exception {
         given(consentJpaRepository.findAll(any(Specification.class))).willReturn(Collections.singletonList(consentEntity));
-        assertNotEquals(ConsentStatus.REVOKED_BY_PSU, consentEntity.getConsentStatus());
+        assertNotEquals(Xs2aConsentStatus.REVOKED_BY_PSU, consentEntity.getConsentStatus());
 
         MockHttpServletRequestBuilder requestBuilder = delete(UrlBuilder.closeAllConsentsUrl());
         requestBuilder.headers(httpHeaders);
@@ -112,7 +112,7 @@ class CmsAspspPsuConsentManagementControllerIT {
 
         verify(consentSpecification).byPsuIdDataAndAspspAccountIdAndInstanceId(psuIdData, ACCOUNT_ID, INSTANCE_ID);
 
-        assertEquals(ConsentStatus.REVOKED_BY_PSU, consentEntity.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.REVOKED_BY_PSU, consentEntity.getConsentStatus());
     }
 
     @Test

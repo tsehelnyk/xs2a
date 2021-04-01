@@ -26,7 +26,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity(name = "psu_data")
-public class PsuData extends InstanceDependableEntity {
+public class CmsPsuData extends InstanceDependableEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "psu_data_generator")
@@ -52,7 +52,7 @@ public class PsuData extends InstanceDependableEntity {
     @JoinColumn(name = "additional_psu_data_id")
     private AdditionalPsuData additionalPsuData;
 
-    public PsuData(String psuId, String psuIdType, String psuCorporateId, String psuCorporateIdType, String psuIpAddress) {
+    public CmsPsuData(String psuId, String psuIdType, String psuCorporateId, String psuCorporateIdType, String psuIpAddress) {
         this.psuId = psuId;
         this.psuIdType = psuIdType;
         this.psuCorporateId = psuCorporateId;
@@ -60,12 +60,12 @@ public class PsuData extends InstanceDependableEntity {
         this.psuIpAddress = psuIpAddress;
     }
 
-    public PsuData(String psuId, String psuIdType, String psuCorporateId, String psuCorporateIdType, String psuIpAddress, AdditionalPsuData additionalPsuData) {
+    public CmsPsuData(String psuId, String psuIdType, String psuCorporateId, String psuCorporateIdType, String psuIpAddress, AdditionalPsuData additionalPsuData) {
         this(psuId, psuIdType, psuCorporateId, psuCorporateIdType, psuIpAddress);
         this.additionalPsuData = additionalPsuData;
     }
 
-    public boolean contentEquals(@NotNull PsuData otherPsuData) {
+    public boolean contentEquals(@NotNull CmsPsuData otherPsuData) {
         return StringUtils.equals(this.getPsuId(), otherPsuData.getPsuId())
                    && StringUtils.equals(this.getPsuCorporateId(), otherPsuData.getPsuCorporateId())
                    && StringUtils.equals(this.getPsuCorporateIdType(), otherPsuData.getPsuCorporateIdType())

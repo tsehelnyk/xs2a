@@ -16,9 +16,9 @@
 
 package de.adorsys.psd2.logger.context;
 
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.MDC;
@@ -47,7 +47,7 @@ class MdcLoggingContextServiceTest {
     @Test
     void storeConsentStatus_shouldPutStatusIntoMdc() {
         // Given
-        ConsentStatus status = ConsentStatus.RECEIVED;
+        Xs2aConsentStatus status = Xs2aConsentStatus.RECEIVED;
 
         // When
         mdcLoggingContextService.storeConsentStatus(status);
@@ -58,7 +58,7 @@ class MdcLoggingContextServiceTest {
     @Test
     void getConsentStatus_shouldTakeStatusFromMdc() {
         // Given
-        String expectedStatus = ConsentStatus.REJECTED.getValue();
+        String expectedStatus = Xs2aConsentStatus.REJECTED.getValue();
         MDC.put(CONSENT_STATUS_KEY, expectedStatus);
 
         // When
@@ -71,7 +71,7 @@ class MdcLoggingContextServiceTest {
     @Test
     void storeTransactionStatus_shouldPutStatusIntoMdc() {
         // Given
-        TransactionStatus status = TransactionStatus.ACSP;
+        Xs2aTransactionStatus status = Xs2aTransactionStatus.ACSP;
 
         // When
         mdcLoggingContextService.storeTransactionStatus(status);
@@ -83,7 +83,7 @@ class MdcLoggingContextServiceTest {
     @Test
     void getTransactionStatus_shouldTakeStatusFromMdc() {
         // Given
-        String expectedStatus = TransactionStatus.ACCC.getTransactionStatus();
+        String expectedStatus = Xs2aTransactionStatus.ACCC.getTransactionStatus();
         MDC.put(TRANSACTION_STATUS_KEY, expectedStatus);
 
         // When
@@ -96,8 +96,8 @@ class MdcLoggingContextServiceTest {
     @Test
     void storeTransactionAndScaStatus() {
         // Given
-        TransactionStatus transactionStatus = TransactionStatus.ACSP;
-        ScaStatus scaStatus = ScaStatus.PSUAUTHENTICATED;
+        Xs2aTransactionStatus transactionStatus = Xs2aTransactionStatus.ACSP;
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.PSUAUTHENTICATED;
 
         // When
         mdcLoggingContextService.storeTransactionAndScaStatus(transactionStatus, scaStatus);
@@ -110,7 +110,7 @@ class MdcLoggingContextServiceTest {
     @Test
     void storeScaStatus_shouldPutStatusIntoMdc() {
         // Given
-        ScaStatus status = ScaStatus.PSUAUTHENTICATED;
+        Xs2aScaStatus status = Xs2aScaStatus.PSUAUTHENTICATED;
 
         // When
         mdcLoggingContextService.storeScaStatus(status);
@@ -122,7 +122,7 @@ class MdcLoggingContextServiceTest {
     @Test
     void getScaStatus_shouldTakeStatusFromMdc() {
         // Given
-        String expectedStatus = ScaStatus.PSUAUTHENTICATED.getValue();
+        String expectedStatus = Xs2aScaStatus.PSUAUTHENTICATED.getValue();
         MDC.put(SCA_STATUS_KEY, expectedStatus);
 
         // When

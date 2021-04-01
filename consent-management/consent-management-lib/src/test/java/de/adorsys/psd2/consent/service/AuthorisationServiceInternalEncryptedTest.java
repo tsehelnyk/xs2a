@@ -30,7 +30,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -71,7 +71,7 @@ class AuthorisationServiceInternalEncryptedTest {
         when(securityDataService.decryptId(ENCRYPTED_PARENT_ID)).thenReturn(Optional.of(DECRYPTED_PARENT_ID));
 
         AuthorisationParentHolder decryptedParentHolder = new AuthorisationParentHolder(AUTHORISATION_TYPE, DECRYPTED_PARENT_ID);
-        CreateAuthorisationResponse createAuthorisationResponse = new CreateAuthorisationResponse(AUTHORISATION_ID, ScaStatus.RECEIVED, "internal request id", new PsuIdData());
+        CreateAuthorisationResponse createAuthorisationResponse = new CreateAuthorisationResponse(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, "internal request id", new PsuIdData());
         CmsResponse<CreateAuthorisationResponse> innerServiceResponse = CmsResponse.<CreateAuthorisationResponse>builder().payload(createAuthorisationResponse).build();
         when(authorisationService.createAuthorisation(decryptedParentHolder, createAuthorisationRequest)).thenReturn(innerServiceResponse);
 
@@ -138,7 +138,7 @@ class AuthorisationServiceInternalEncryptedTest {
     @Test
     void updateAuthorisationStatus() {
         // Given
-        ScaStatus scaStatus = ScaStatus.RECEIVED;
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.RECEIVED;
         CmsResponse<Boolean> innerServiceResponse = CmsResponse.<Boolean>builder().payload(true).build();
         when(authorisationService.updateAuthorisationStatus(AUTHORISATION_ID, scaStatus))
             .thenReturn(innerServiceResponse);
@@ -197,12 +197,12 @@ class AuthorisationServiceInternalEncryptedTest {
         when(securityDataService.decryptId(ENCRYPTED_PARENT_ID)).thenReturn(Optional.of(DECRYPTED_PARENT_ID));
 
         AuthorisationParentHolder decryptedParentHolder = new AuthorisationParentHolder(AUTHORISATION_TYPE, DECRYPTED_PARENT_ID);
-        ScaStatus scaStatus = ScaStatus.RECEIVED;
-        CmsResponse<ScaStatus> innerServiceResponse = CmsResponse.<ScaStatus>builder().payload(scaStatus).build();
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.RECEIVED;
+        CmsResponse<Xs2aScaStatus> innerServiceResponse = CmsResponse.<Xs2aScaStatus>builder().payload(scaStatus).build();
         when(authorisationService.getAuthorisationScaStatus(AUTHORISATION_ID, decryptedParentHolder)).thenReturn(innerServiceResponse);
 
         // When
-        CmsResponse<ScaStatus> actualResponse =
+        CmsResponse<Xs2aScaStatus> actualResponse =
             authorisationServiceInternalEncrypted.getAuthorisationScaStatus(AUTHORISATION_ID, encryptedParentHolder);
 
         // Then
@@ -218,7 +218,7 @@ class AuthorisationServiceInternalEncryptedTest {
         when(securityDataService.decryptId(MALFORMED_ENCRYPTED_PARENT_ID)).thenReturn(Optional.empty());
 
         // When
-        CmsResponse<ScaStatus> actualResponse =
+        CmsResponse<Xs2aScaStatus> actualResponse =
             authorisationServiceInternalEncrypted.getAuthorisationScaStatus(AUTHORISATION_ID, encryptedParentHolder);
 
         // Then

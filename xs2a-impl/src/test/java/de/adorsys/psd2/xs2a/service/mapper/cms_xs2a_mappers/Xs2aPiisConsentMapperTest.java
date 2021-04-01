@@ -20,6 +20,7 @@ import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
 import de.adorsys.psd2.model.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.fund.CreatePiisConsentRequest;
@@ -76,7 +77,7 @@ class Xs2aPiisConsentMapperTest {
         AccountReference accountReference = new AccountReference();
         accountReference.setIban("DE15500105172295759744");
         accountReference.setCurrency("EUR");
-        de.adorsys.psd2.xs2a.core.profile.AccountReference reference = new de.adorsys.psd2.xs2a.core.profile.AccountReference(null, null, accountReference.getIban(), null, null, null, null, Currency.getInstance(accountReference.getCurrency()), null);
+        Xs2aAccountReference reference = new Xs2aAccountReference(null, null, accountReference.getIban(), null, null, null, null, Currency.getInstance(accountReference.getCurrency()), null);
         when(consentModelMapper.mapToXs2aAccountReferences(Collections.singletonList(accountReference)))
             .thenReturn(Collections.singletonList(reference));
         PsuIdData psuIdData = jsonReader.getObjectFromFile("json/service/mapper/psu-id-data.json", PsuIdData.class);

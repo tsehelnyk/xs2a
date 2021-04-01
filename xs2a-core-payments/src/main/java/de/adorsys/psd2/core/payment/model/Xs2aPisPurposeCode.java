@@ -19,7 +19,7 @@ package de.adorsys.psd2.core.payment.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum PurposeCode {
+public enum Xs2aPisPurposeCode {
     BKDF("BKDF"),
     BKFE("BKFE"),
     BKFM("BKFM"),
@@ -309,7 +309,7 @@ public enum PurposeCode {
 
     private final String value;
 
-    PurposeCode(String value) {
+    Xs2aPisPurposeCode(String value) {
         this.value = value;
     }
 
@@ -320,8 +320,8 @@ public enum PurposeCode {
     }
 
     @JsonCreator
-    public static PurposeCode fromValue(String text) {
-        for (PurposeCode b : PurposeCode.values()) {
+    public static Xs2aPisPurposeCode fromValue(String text) {
+        for (Xs2aPisPurposeCode b : Xs2aPisPurposeCode.values()) {
             if (String.valueOf(b.value).equals(text)) {
                 return b;
             }

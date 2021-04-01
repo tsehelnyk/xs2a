@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.domain.consent;
 
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
 import lombok.AllArgsConstructor;
@@ -28,13 +28,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class Xs2aCreatePisAuthorisationResponse implements AuthorisationResponse {
     private String authorisationId;
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     private PaymentType paymentType;
     private Links links = new Links();
     private String internalRequestId;
     private PsuIdData psuIdData;
 
-    public Xs2aCreatePisAuthorisationResponse(String authorisationId, ScaStatus scaStatus, PaymentType paymentType,
+    public Xs2aCreatePisAuthorisationResponse(String authorisationId, Xs2aScaStatus scaStatus, PaymentType paymentType,
                                               String internalRequestId, PsuIdData psuIdData) {
         this.authorisationId = authorisationId;
         this.scaStatus = scaStatus;

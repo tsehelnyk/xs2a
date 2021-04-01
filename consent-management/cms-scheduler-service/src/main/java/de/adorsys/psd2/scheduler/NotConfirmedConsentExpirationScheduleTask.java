@@ -19,7 +19,7 @@ package de.adorsys.psd2.scheduler;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.service.AisConsentConfirmationExpirationService;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -45,7 +45,7 @@ public class NotConfirmedConsentExpirationScheduleTask extends PageableScheduler
         long start = System.currentTimeMillis();
         log.info("Not confirmed consent expiration schedule task is run!");
 
-        Long totalItems = consentJpaRepository.countByConsentStatusIn(EnumSet.of(ConsentStatus.RECEIVED, ConsentStatus.PARTIALLY_AUTHORISED));
+        Long totalItems = consentJpaRepository.countByConsentStatusIn(EnumSet.of(Xs2aConsentStatus.RECEIVED, Xs2aConsentStatus.PARTIALLY_AUTHORISED));
         log.debug("Found {} non confirmed consent items for expiration checking", totalItems);
 
         execute(totalItems);
@@ -54,7 +54,7 @@ public class NotConfirmedConsentExpirationScheduleTask extends PageableScheduler
 
     @Override
     protected void executePageable(Pageable pageable) {
-        List<ConsentEntity> expiredNotConfirmedConsents = consentJpaRepository.findByConsentStatusIn(EnumSet.of(ConsentStatus.RECEIVED, ConsentStatus.PARTIALLY_AUTHORISED), pageable)
+        List<ConsentEntity> expiredNotConfirmedConsents = consentJpaRepository.findByConsentStatusIn(EnumSet.of(Xs2aConsentStatus.RECEIVED, Xs2aConsentStatus.PARTIALLY_AUTHORISED), pageable)
                                                               .stream()
                                                               .filter(aisConsentConfirmationExpirationService::isConfirmationExpired)
                                                               .collect(Collectors.toList());

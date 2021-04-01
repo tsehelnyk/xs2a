@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.service.psu;
 
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,17 +36,17 @@ class CmsPsuServiceTest {
     private static final String PSU_CORPORATE_ID_TYPE = "corp type";
     private static final String PSU_IP_ADDRESS = "ip address";
 
-    private final PsuData PSU_DATA_1 = new PsuData(PSU_ID_1, PSU_ID_TYPE, PSU_CORPORATE_ID, PSU_CORPORATE_ID_TYPE, PSU_IP_ADDRESS);
-    private final PsuData PSU_DATA_2 = new PsuData(PSU_ID_2, PSU_ID_TYPE, PSU_CORPORATE_ID, PSU_CORPORATE_ID_TYPE, PSU_IP_ADDRESS);
-    private final PsuData PSU_DATA_3 = new PsuData(PSU_ID_3, PSU_ID_TYPE, PSU_CORPORATE_ID, PSU_CORPORATE_ID_TYPE, PSU_IP_ADDRESS);
-    private final List<PsuData> PSU_DATA_LIST = new ArrayList<>(Arrays.asList(PSU_DATA_1, PSU_DATA_2));
+    private final CmsPsuData PSU_DATA_1 = new CmsPsuData(PSU_ID_1, PSU_ID_TYPE, PSU_CORPORATE_ID, PSU_CORPORATE_ID_TYPE, PSU_IP_ADDRESS);
+    private final CmsPsuData PSU_DATA_2 = new CmsPsuData(PSU_ID_2, PSU_ID_TYPE, PSU_CORPORATE_ID, PSU_CORPORATE_ID_TYPE, PSU_IP_ADDRESS);
+    private final CmsPsuData PSU_DATA_3 = new CmsPsuData(PSU_ID_3, PSU_ID_TYPE, PSU_CORPORATE_ID, PSU_CORPORATE_ID_TYPE, PSU_IP_ADDRESS);
+    private final List<CmsPsuData> PSU_DATA_LIST = new ArrayList<>(Arrays.asList(PSU_DATA_1, PSU_DATA_2));
 
     @InjectMocks
     CmsPsuService cmsPsuService;
 
     @Test
     void definePsuDataForAuthorisation_PsuIsExistInList() {
-        Optional<PsuData> actualResult = cmsPsuService.definePsuDataForAuthorisation(PSU_DATA_1, PSU_DATA_LIST);
+        Optional<CmsPsuData> actualResult = cmsPsuService.definePsuDataForAuthorisation(PSU_DATA_1, PSU_DATA_LIST);
 
         assertTrue(actualResult.isPresent());
         assertEquals(PSU_DATA_LIST.get(0), actualResult.get());
@@ -54,7 +54,7 @@ class CmsPsuServiceTest {
 
     @Test
     void definePsuDataForAuthorisation_PsuIsNotExistInList() {
-        Optional<PsuData> actualResult = cmsPsuService.definePsuDataForAuthorisation(PSU_DATA_3, PSU_DATA_LIST);
+        Optional<CmsPsuData> actualResult = cmsPsuService.definePsuDataForAuthorisation(PSU_DATA_3, PSU_DATA_LIST);
 
         assertTrue(actualResult.isPresent());
         assertEquals(PSU_DATA_3, actualResult.get());
@@ -62,7 +62,7 @@ class CmsPsuServiceTest {
 
     @Test
     void enrichPsuData_PsuIsExistInList() {
-        List<PsuData> actualResult = cmsPsuService.enrichPsuData(PSU_DATA_1, PSU_DATA_LIST);
+        List<CmsPsuData> actualResult = cmsPsuService.enrichPsuData(PSU_DATA_1, PSU_DATA_LIST);
 
         assertEquals(2, actualResult.size());
         assertTrue(actualResult.containsAll(Arrays.asList(PSU_DATA_1, PSU_DATA_2)));
@@ -70,7 +70,7 @@ class CmsPsuServiceTest {
 
     @Test
     void enrichPsuData_PsuIsNotExistInList() {
-        List<PsuData> actualResult = cmsPsuService.enrichPsuData(PSU_DATA_3, PSU_DATA_LIST);
+        List<CmsPsuData> actualResult = cmsPsuService.enrichPsuData(PSU_DATA_3, PSU_DATA_LIST);
 
         assertEquals(3, actualResult.size());
         assertTrue(actualResult.containsAll(Arrays.asList(PSU_DATA_1, PSU_DATA_2, PSU_DATA_3)));
@@ -106,8 +106,8 @@ class CmsPsuServiceTest {
 
     @Test
     void isPsuDataListEqual_shouldReturnTrue_sameContentExceptId() {
-        List<PsuData> psuDataList = Arrays.asList(buildPsuDataWithId(PSU_ID_1, 1L), buildPsuDataWithId(PSU_ID_2, 2L));
-        List<PsuData> anotherPsuDataList = Arrays.asList(buildPsuDataWithId(PSU_ID_1, 3L), buildPsuDataWithId(PSU_ID_2, 4L));
+        List<CmsPsuData> psuDataList = Arrays.asList(buildPsuDataWithId(PSU_ID_1, 1L), buildPsuDataWithId(PSU_ID_2, 2L));
+        List<CmsPsuData> anotherPsuDataList = Arrays.asList(buildPsuDataWithId(PSU_ID_1, 3L), buildPsuDataWithId(PSU_ID_2, 4L));
 
         boolean actualResult = cmsPsuService.isPsuDataListEqual(psuDataList, anotherPsuDataList);
 
@@ -123,8 +123,8 @@ class CmsPsuServiceTest {
 
     @Test
     void isPsuDataListEqual_shouldReturnFalse_differentPsuIds() {
-        List<PsuData> psuDataList = Arrays.asList(PSU_DATA_1, PSU_DATA_2);
-        List<PsuData> anotherPsuDataList = Arrays.asList(PSU_DATA_2, PSU_DATA_3);
+        List<CmsPsuData> psuDataList = Arrays.asList(PSU_DATA_1, PSU_DATA_2);
+        List<CmsPsuData> anotherPsuDataList = Arrays.asList(PSU_DATA_2, PSU_DATA_3);
 
         boolean actualResult = cmsPsuService.isPsuDataListEqual(psuDataList, anotherPsuDataList);
 
@@ -138,8 +138,8 @@ class CmsPsuServiceTest {
         assertFalse(actualResult);
     }
 
-    private PsuData buildPsuDataWithId(String psuId, Long databaseId) {
-        PsuData newPsuData = new PsuData(psuId, PSU_ID_TYPE, PSU_CORPORATE_ID, PSU_CORPORATE_ID_TYPE, PSU_IP_ADDRESS);
+    private CmsPsuData buildPsuDataWithId(String psuId, Long databaseId) {
+        CmsPsuData newPsuData = new CmsPsuData(psuId, PSU_ID_TYPE, PSU_CORPORATE_ID, PSU_CORPORATE_ID_TYPE, PSU_IP_ADDRESS);
         newPsuData.setId(databaseId);
         return newPsuData;
     }

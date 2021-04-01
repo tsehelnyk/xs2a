@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.TypeAccess;
 import de.adorsys.psd2.consent.api.piis.v1.CmsPiisConsent;
 import de.adorsys.psd2.consent.aspsp.api.PageData;
 import de.adorsys.psd2.consent.aspsp.api.piis.CreatePiisConsentRequest;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.TppInfoEntity;
 import de.adorsys.psd2.consent.domain.account.AspspAccountAccess;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
@@ -31,8 +31,8 @@ import de.adorsys.psd2.consent.service.mapper.PiisConsentMapper;
 import de.adorsys.psd2.consent.service.migration.PiisConsentLazyMigrationService;
 import de.adorsys.psd2.consent.service.psu.util.PageRequestBuilder;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -133,7 +133,7 @@ class CmsAspspPiisServiceInternalTest {
         when(tppInfoRepository.findByAuthorisationNumber(TPP_AUTHORISATION_NUMBER)).thenReturn(Optional.of(buildTppInfoEntity()));
 
         // Given
-        AccountReference accountReference = buildAccountReference();
+        Xs2aAccountReference accountReference = buildAccountReference();
 
         when(piisConsentEntitySpecification.byPsuIdDataAndAuthorisationNumberAndAccountReferenceAndInstanceId(psuIdData, TPP_AUTHORISATION_NUMBER, accountReference, DEFAULT_SERVICE_INSTANCE_ID))
             .thenReturn((root, criteriaQuery, criteriaBuilder) -> null);
@@ -157,12 +157,12 @@ class CmsAspspPiisServiceInternalTest {
         verify(piisConsentEntitySpecification, times(1))
             .byPsuIdDataAndAuthorisationNumberAndAccountReferenceAndInstanceId(psuIdData, TPP_AUTHORISATION_NUMBER, accountReference, DEFAULT_SERVICE_INSTANCE_ID);
 
-        Set<ConsentStatus> consentStatuses = previousPiisConsent.stream()
+        Set<Xs2aConsentStatus> consentStatuses = previousPiisConsent.stream()
                                                  .map(ConsentEntity::getConsentStatus)
                                                  .collect(Collectors.toSet());
 
         assertEquals(1, consentStatuses.size());
-        assertTrue(consentStatuses.contains(ConsentStatus.REVOKED_BY_PSU));
+        assertTrue(consentStatuses.contains(Xs2aConsentStatus.REVOKED_BY_PSU));
     }
 
     @Test
@@ -175,13 +175,13 @@ class CmsAspspPiisServiceInternalTest {
         when(tppInfoRepository.findByAuthorisationNumber(TPP_AUTHORISATION_NUMBER)).thenReturn(Optional.of(buildTppInfoEntity()));
 
         // Given
-        AccountReference accountReference = buildAccountReference();
+        Xs2aAccountReference accountReference = buildAccountReference();
 
         @SuppressWarnings("unchecked")
         Specification<ConsentEntity> mockSpecification = Mockito.mock(Specification.class);
         when(piisConsentEntitySpecification.byPsuIdDataAndAuthorisationNumberAndAccountReferenceAndInstanceId(psuIdData, TPP_AUTHORISATION_NUMBER, accountReference, DEFAULT_SERVICE_INSTANCE_ID))
             .thenReturn(mockSpecification);
-        List<ConsentEntity> piisConsentEntities = Arrays.asList(buildPiisConsentEntity(ConsentStatus.TERMINATED_BY_ASPSP), buildPiisConsentEntity());
+        List<ConsentEntity> piisConsentEntities = Arrays.asList(buildPiisConsentEntity(Xs2aConsentStatus.TERMINATED_BY_ASPSP), buildPiisConsentEntity());
         when(consentJpaRepository.findAll(mockSpecification)).thenReturn(piisConsentEntities);
         when(piisConsentLazyMigrationService.migrateIfNeeded(piisConsentEntities)).thenReturn(piisConsentEntities);
 
@@ -196,7 +196,7 @@ class CmsAspspPiisServiceInternalTest {
 
         List<ConsentEntity> closedPiisConsents = argumentCaptor.getValue();
         assertEquals(1, closedPiisConsents.size());
-        assertEquals(ConsentStatus.REVOKED_BY_PSU, closedPiisConsents.get(0).getConsentStatus());
+        assertEquals(Xs2aConsentStatus.REVOKED_BY_PSU, closedPiisConsents.get(0).getConsentStatus());
     }
 
     @Test
@@ -395,7 +395,7 @@ class CmsAspspPiisServiceInternalTest {
         ArgumentCaptor<ConsentEntity> argumentCaptor = ArgumentCaptor.forClass(ConsentEntity.class);
         ConsentEntity modified = buildPiisConsentEntity();
         modified.setLastActionDate(LocalDate.now());
-        modified.setConsentStatus(ConsentStatus.TERMINATED_BY_ASPSP);
+        modified.setConsentStatus(Xs2aConsentStatus.TERMINATED_BY_ASPSP);
         when(piisConsentLazyMigrationService.migrateIfNeeded(any(ConsentEntity.class))).thenReturn(modified);
 
         // When
@@ -404,7 +404,7 @@ class CmsAspspPiisServiceInternalTest {
         // Then
         assertTrue(actual);
         verify(piisConsentLazyMigrationService).migrateIfNeeded(argumentCaptor.capture());
-        assertEquals(ConsentStatus.TERMINATED_BY_ASPSP, argumentCaptor.getValue().getConsentStatus());
+        assertEquals(Xs2aConsentStatus.TERMINATED_BY_ASPSP, argumentCaptor.getValue().getConsentStatus());
         verify(piisConsentEntitySpecification, times(1))
             .byConsentIdAndInstanceId(CONSENT_EXTERNAL_ID, DEFAULT_SERVICE_INSTANCE_ID);
     }
@@ -440,14 +440,14 @@ class CmsAspspPiisServiceInternalTest {
         piisConsent.setExternalId(CONSENT_EXTERNAL_ID);
         piisConsent.setRequestDateTime(OffsetDateTime.now());
         piisConsent.setPsuDataList(Collections.singletonList(buildPsuData()));
-        piisConsent.setConsentStatus(ConsentStatus.RECEIVED);
+        piisConsent.setConsentStatus(Xs2aConsentStatus.RECEIVED);
         piisConsent.setValidUntil(VALID_UNTIL_DATE);
         piisConsent.setData(DATA);
         return piisConsent;
     }
 
-    private PsuData buildPsuData() {
-        return new PsuData(PSU_ID, null, null, null, null);
+    private CmsPsuData buildPsuData() {
+        return new CmsPsuData(PSU_ID, null, null, null, null);
     }
 
     private PsuIdData buildPsuIdData() {
@@ -458,8 +458,8 @@ class CmsAspspPiisServiceInternalTest {
         return new PsuIdData(psuId, null, null, null, null);
     }
 
-    private AccountReference buildAccountReference() {
-        return new AccountReference("aspspAccountId", "resourceId",
+    private Xs2aAccountReference buildAccountReference() {
+        return new Xs2aAccountReference("aspspAccountId", "resourceId",
                                     "DE89370400440532013000",
                                     null,
                                     null,
@@ -470,10 +470,10 @@ class CmsAspspPiisServiceInternalTest {
     }
 
     private ConsentEntity buildPiisConsentEntity() {
-        return buildPiisConsentEntity(ConsentStatus.RECEIVED);
+        return buildPiisConsentEntity(Xs2aConsentStatus.RECEIVED);
     }
 
-    private ConsentEntity buildPiisConsentEntity(ConsentStatus consentStatus) {
+    private ConsentEntity buildPiisConsentEntity(Xs2aConsentStatus consentStatus) {
         ConsentEntity consentEntity = new ConsentEntity();
         consentEntity.setExternalId(CONSENT_EXTERNAL_ID);
         consentEntity.setCreationTimestamp(CREATION_TIMESTAMP);
@@ -485,11 +485,11 @@ class CmsAspspPiisServiceInternalTest {
         CmsPiisConsent consent = new CmsPiisConsent();
         consent.setId(CONSENT_EXTERNAL_ID);
         consent.setCreationTimestamp(CREATION_TIMESTAMP);
-        consent.setConsentStatus(ConsentStatus.RECEIVED);
+        consent.setConsentStatus(Xs2aConsentStatus.RECEIVED);
         return consent;
     }
 
-    private CreatePiisConsentRequest buildCreatePiisConsentRequest(AccountReference account, LocalDate validUntil) {
+    private CreatePiisConsentRequest buildCreatePiisConsentRequest(Xs2aAccountReference account, LocalDate validUntil) {
         CreatePiisConsentRequest request = new CreatePiisConsentRequest();
         request.setAccount(account);
         request.setValidUntil(validUntil);
@@ -501,7 +501,7 @@ class CmsAspspPiisServiceInternalTest {
         return request;
     }
 
-    public AspspAccountAccess buildAspspAccountAccess(AccountReference accountReference) {
+    public AspspAccountAccess buildAspspAccountAccess(Xs2aAccountReference accountReference) {
         return new AspspAccountAccess(accountReference.getUsedAccountReferenceSelector().getAccountValue(),
                                       TypeAccess.ACCOUNT,
                                       accountReference.getUsedAccountReferenceSelector().getAccountReferenceType(),

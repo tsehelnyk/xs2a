@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.authorization.processor;
 
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorRequest;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
 import de.adorsys.psd2.xs2a.service.authorization.processor.service.AuthorisationProcessorService;
@@ -28,8 +28,8 @@ public class StartedAuthorisationProcessor extends AuthorisationProcessor {
     }
 
     @Override
-    public ScaStatus getScaStatus() {
-        return ScaStatus.STARTED;
+    public Xs2aScaStatus getScaStatus() {
+        return Xs2aScaStatus.STARTED;
     }
 
     @Override

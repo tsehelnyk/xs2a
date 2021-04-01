@@ -16,11 +16,11 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.xs2a.core.sca.ChallengeData;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiChallengeData;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface SpiToXs2aChallengeDataMapper {
-    ChallengeData toChallengeData(SpiChallengeData spiChallengeData);
+    Xs2aChallengeData toChallengeData(SpiChallengeData spiChallengeData);
 }

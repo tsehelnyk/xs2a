@@ -17,8 +17,8 @@
 package de.adorsys.psd2.consent.api.pis;
 
 import de.adorsys.psd2.consent.api.CmsAddress;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,14 +34,14 @@ import java.util.List;
 public class CmsSinglePayment extends BaseCmsPayment {
     private String endToEndIdentification;
     private String instructionIdentification;
-    private AccountReference debtorAccount;
+    private Xs2aAccountReference debtorAccount;
     private CmsAmount instructedAmount;
-    private AccountReference creditorAccount;
+    private Xs2aAccountReference creditorAccount;
     private String creditorAgent;
     private String creditorName;
     private CmsAddress creditorAddress;
     private String remittanceInformationUnstructured;
-    private TransactionStatus paymentStatus;
+    private Xs2aTransactionStatus paymentStatus;
     private LocalDate requestedExecutionDate;
     private OffsetDateTime requestedExecutionTime;
     private String ultimateDebtor;

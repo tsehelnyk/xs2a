@@ -19,7 +19,7 @@ package de.adorsys.psd2.core.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationTemplate;
 import de.adorsys.psd2.xs2a.core.authorisation.ConsentAuthorization;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -48,7 +48,7 @@ public abstract class Consent<T> {
     private String id;
     @Nullable
     private String internalRequestId;
-    private ConsentStatus consentStatus;
+    private Xs2aConsentStatus consentStatus;
     @NotNull
     private Integer frequencyPerDay;
     private boolean recurringIndicator;
@@ -74,9 +74,9 @@ public abstract class Consent<T> {
     @NotNull
     private Map<String, Integer> usages;
     @NotNull
-    private AccountAccess tppAccountAccesses = AccountAccess.EMPTY_ACCESS;
+    private Xs2aConsentAccountAccess tppAccountAccesses = Xs2aConsentAccountAccess.EMPTY_ACCESS;
     @NotNull
-    private AccountAccess aspspAccountAccesses = AccountAccess.EMPTY_ACCESS;
+    private Xs2aConsentAccountAccess aspspAccountAccesses = Xs2aConsentAccountAccess.EMPTY_ACCESS;
     @Nullable
     private String instanceId;
     @NotNull
@@ -98,6 +98,6 @@ public abstract class Consent<T> {
 
     @JsonIgnore
     public boolean isExpired() {
-        return getConsentStatus() == ConsentStatus.EXPIRED;
+        return getConsentStatus() == Xs2aConsentStatus.EXPIRED;
     }
 }

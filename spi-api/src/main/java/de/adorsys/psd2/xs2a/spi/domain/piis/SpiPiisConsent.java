@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.spi.domain.piis;
 
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.spi.domain.SpiConsent;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountReference;
@@ -39,7 +39,7 @@ public class SpiPiisConsent implements SpiConsent {
     private LocalDate lastActionDate;
     private LocalDate expireDate;
     private List<SpiPsuData> psuData;
-    private ConsentStatus consentStatus;
+    private Xs2aConsentStatus consentStatus;
     private SpiAccountReference account;
     private OffsetDateTime creationTimestamp;
     private String instanceId;

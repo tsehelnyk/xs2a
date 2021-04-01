@@ -16,8 +16,8 @@
 
 package de.adorsys.psd2.consent.api.pis;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,10 +29,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class CmsBulkPayment extends BaseCmsPayment {
     private boolean batchBookingPreferred;
-    private AccountReference debtorAccount;
+    private Xs2aAccountReference debtorAccount;
     private String debtorName;
     private LocalDate requestedExecutionDate;
-    private TransactionStatus paymentStatus;
+    private Xs2aTransactionStatus paymentStatus;
     private List<CmsSinglePayment> payments;
 
     @Override
@@ -40,7 +40,7 @@ public class CmsBulkPayment extends BaseCmsPayment {
         return PaymentType.BULK;
     }
 
-    public TransactionStatus getTransactionStatus() {
+    public Xs2aTransactionStatus getTransactionStatus() {
         return paymentStatus;
     }
 }

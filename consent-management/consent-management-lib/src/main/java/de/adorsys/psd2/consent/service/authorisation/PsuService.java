@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.service.authorisation;
 
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
 import de.adorsys.psd2.consent.service.psu.CmsPsuService;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -32,19 +32,19 @@ public class PsuService {
     protected final CmsPsuService cmsPsuService;
     protected final PsuDataMapper psuDataMapper;
 
-    public PsuData mapToPsuData(PsuIdData psuData, String instanceId) {
+    public CmsPsuData mapToPsuData(PsuIdData psuData, String instanceId) {
         return psuDataMapper.mapToPsuData(psuData, instanceId);
     }
 
-    public Optional<PsuData> definePsuDataForAuthorisation(PsuData psuData, List<PsuData> psuDataList) {
+    public Optional<CmsPsuData> definePsuDataForAuthorisation(CmsPsuData psuData, List<CmsPsuData> psuDataList) {
         return cmsPsuService.definePsuDataForAuthorisation(psuData, psuDataList);
     }
 
-    public List<PsuData> enrichPsuData(PsuData psuData, List<PsuData> psuDataList) {
+    public List<CmsPsuData> enrichPsuData(CmsPsuData psuData, List<CmsPsuData> psuDataList) {
         return cmsPsuService.enrichPsuData(psuData, psuDataList);
     }
 
-    public boolean isPsuDataRequestCorrect(PsuData psuRequest, PsuData psuData) {
+    public boolean isPsuDataRequestCorrect(CmsPsuData psuRequest, CmsPsuData psuData) {
         return cmsPsuService.isPsuDataRequestCorrect(psuRequest, psuData);
     }
 }

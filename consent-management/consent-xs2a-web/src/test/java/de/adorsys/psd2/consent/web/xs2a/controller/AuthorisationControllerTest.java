@@ -28,7 +28,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -165,12 +165,12 @@ class AuthorisationControllerTest {
 
     @Test
     void updateAuthorisationStatus() throws Exception {
-        when(authorisationServiceEncrypted.updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.RECEIVED))
+        when(authorisationServiceEncrypted.updateAuthorisationStatus(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED))
             .thenReturn(CmsResponse.<Boolean>builder()
                             .payload(true).build());
 
         mockMvc.perform(MockMvcRequestBuilders.put(UriComponentsBuilder.fromPath("/api/v1/authorisations/{authorisation-id}/status/{status}")
-                                                       .buildAndExpand(AUTHORISATION_ID, ScaStatus.RECEIVED)
+                                                       .buildAndExpand(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED)
                                                        .toUriString())
                             .contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(status().is(HttpStatus.OK.value()));
@@ -178,12 +178,12 @@ class AuthorisationControllerTest {
 
     @Test
     void updateAuthorisationStatus_notUpdate_notFoundHttpStatus() throws Exception {
-        when(authorisationServiceEncrypted.updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.RECEIVED))
+        when(authorisationServiceEncrypted.updateAuthorisationStatus(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED))
             .thenReturn(CmsResponse.<Boolean>builder()
                             .payload(false).build());
 
         mockMvc.perform(MockMvcRequestBuilders.put(UriComponentsBuilder.fromPath("/api/v1/authorisations/{authorisation-id}/status/{status}")
-                                                       .buildAndExpand(AUTHORISATION_ID, ScaStatus.RECEIVED)
+                                                       .buildAndExpand(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED)
                                                        .toUriString())
                             .contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
@@ -192,8 +192,8 @@ class AuthorisationControllerTest {
     @Test
     void getAuthorisationScaStatus() throws Exception {
         when(authorisationServiceEncrypted.getAuthorisationScaStatus(AUTHORISATION_ID, new AuthorisationParentHolder(AuthorisationType.PIS_CREATION, PARENT_ID)))
-            .thenReturn(CmsResponse.<ScaStatus>builder()
-                            .payload(ScaStatus.FAILED).build());
+            .thenReturn(CmsResponse.<Xs2aScaStatus>builder()
+                            .payload(Xs2aScaStatus.FAILED).build());
 
         mockMvc.perform(MockMvcRequestBuilders.get(UriComponentsBuilder.fromPath("/api/v1/{authorisation-type}/{parent-id}/authorisations/{authorisation-id}/status")
                                                        .buildAndExpand(AuthorisationType.PIS_CREATION, PARENT_ID, AUTHORISATION_ID)
@@ -205,7 +205,7 @@ class AuthorisationControllerTest {
     @Test
     void getAuthorisationScaStatus_hasError_notFoundHttpStatus() throws Exception {
         when(authorisationServiceEncrypted.getAuthorisationScaStatus(AUTHORISATION_ID, new AuthorisationParentHolder(AuthorisationType.PIS_CREATION, PARENT_ID)))
-            .thenReturn(CmsResponse.<ScaStatus>builder()
+            .thenReturn(CmsResponse.<Xs2aScaStatus>builder()
                             .error(CmsError.TECHNICAL_ERROR).build());
 
         mockMvc.perform(MockMvcRequestBuilders.get(UriComponentsBuilder.fromPath("/api/v1/{authorisation-type}/{parent-id}/authorisations/{authorisation-id}/status")

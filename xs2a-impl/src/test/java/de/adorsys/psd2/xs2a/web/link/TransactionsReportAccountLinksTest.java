@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.web.link;
 
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ class TransactionsReportAccountLinksTest {
 
         TransactionsReportAccountLinks links = new TransactionsReportAccountLinks(HTTP_URL, ACCOUNT_ID, withOutBalance);
 
-        expectedLinks.setAccount(new HrefType("http://url/v1/accounts/33333-999999999"));
+        expectedLinks.setAccount(new Xs2aHrefType("http://url/v1/accounts/33333-999999999"));
         assertEquals(expectedLinks, links);
     }
 
@@ -50,8 +50,8 @@ class TransactionsReportAccountLinksTest {
 
         TransactionsReportAccountLinks links = new TransactionsReportAccountLinks(HTTP_URL, ACCOUNT_ID, withBalance);
 
-        expectedLinks.setAccount(new HrefType("http://url/v1/accounts/33333-999999999"));
-        expectedLinks.setBalances(new HrefType("http://url/v1/accounts/33333-999999999/balances"));
+        expectedLinks.setAccount(new Xs2aHrefType("http://url/v1/accounts/33333-999999999"));
+        expectedLinks.setBalances(new Xs2aHrefType("http://url/v1/accounts/33333-999999999/balances"));
         assertEquals(expectedLinks, links);
     }
 }

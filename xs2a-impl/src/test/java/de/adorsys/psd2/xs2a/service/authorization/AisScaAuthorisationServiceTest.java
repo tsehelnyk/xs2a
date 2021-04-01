@@ -20,7 +20,7 @@ import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.xs2a.core.ais.AccountAccessType;
 import de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.service.authorization.ais.AisScaAuthorisationService;
@@ -196,7 +196,7 @@ class AisScaAuthorisationServiceTest {
         aisConsent.setId(CONSENT_ID);
         aisConsent.setValidUntil(validUntil);
         aisConsent.setFrequencyPerDay(oneAccessType ? 1 : 2);
-        aisConsent.setConsentStatus(ConsentStatus.VALID);
+        aisConsent.setConsentStatus(Xs2aConsentStatus.VALID);
         aisConsent.setAuthorisations(Collections.emptyList());
         aisConsent.setConsentTppInformation(buildConsentTppInformation());
         aisConsent.setStatusChangeTimestamp(statusChangeTimeStamp);

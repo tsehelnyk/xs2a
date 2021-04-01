@@ -45,19 +45,19 @@ import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
 import de.adorsys.psd2.consent.service.migration.AisConsentLazyMigrationService;
 import de.adorsys.psd2.consent.service.psu.util.PageRequestBuilder;
 import de.adorsys.psd2.consent.service.psu.util.PsuDataUpdater;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
 import de.adorsys.psd2.xs2a.core.ais.AccountAccessType;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -75,7 +75,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static de.adorsys.psd2.xs2a.core.consent.ConsentStatus.*;
+import static de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus.*;
 
 @Slf4j
 @Service
@@ -128,7 +128,7 @@ public class CmsPsuAisServiceInternal implements CmsPsuAisService {
             if (!authorisation.isRedirectUrlNotExpired()) {
                 log.info("Authorisation ID [{}], Instance ID: [{}]. Check redirect URL and get consent failed, because authorisation is expired",
                          redirectId, instanceId);
-                authorisation.setScaStatus(ScaStatus.FAILED);
+                authorisation.setScaStatus(Xs2aScaStatus.FAILED);
 
                 throw new RedirectUrlIsExpiredException(authorisation.getTppNokRedirectUri());
             }
@@ -169,7 +169,7 @@ public class CmsPsuAisServiceInternal implements CmsPsuAisService {
     @Override
     @Transactional
     public boolean updateAuthorisationStatus(@NotNull PsuIdData psuIdData, @NotNull String consentId,
-                                             @NotNull String authorisationId, @NotNull ScaStatus status,
+                                             @NotNull String authorisationId, @NotNull Xs2aScaStatus status,
                                              @NotNull String instanceId, AuthenticationDataHolder authenticationDataHolder) throws AuthorisationIsExpiredException {
         Optional<ConsentEntity> actualAisConsent = getActualAisConsent(consentId, instanceId);
 
@@ -215,8 +215,8 @@ public class CmsPsuAisServiceInternal implements CmsPsuAisService {
             return Collections.emptyList();
         }
 
-        List<ConsentStatus> consentStatuses = CollectionUtils.emptyIfNull(statuses).stream()
-                                                  .map(ConsentStatus::valueOf).collect(Collectors.toList());
+        List<Xs2aConsentStatus> consentStatuses = CollectionUtils.emptyIfNull(statuses).stream()
+                                                  .map(Xs2aConsentStatus::valueOf).collect(Collectors.toList());
         Pageable pageRequest = pageRequestBuilder.getPageable(pageIndex, itemsPerPage);
         return consentJpaRepository.findAll(aisConsentSpecification.byPsuDataInListAndInstanceIdAndAdditionalTppInfo(psuIdData, instanceId, additionalTppInfo, consentStatuses, accountNumbers), pageRequest)
                    .stream()
@@ -313,7 +313,7 @@ public class CmsPsuAisServiceInternal implements CmsPsuAisService {
 
         byte[] data = consentDataMapper.getBytesFromConsentData(aisConsentDataNew);
 
-        AccountAccess requestedAccountAccess = consentMapper.mapToAccountAccess(requestedAisAccountAccess);
+        Xs2aConsentAccountAccess requestedAccountAccess = consentMapper.mapToAccountAccess(requestedAisAccountAccess);
         List<AspspAccountAccess> aspspAccountAccesses = accessMapper.mapToAspspAccountAccess(requestedAccountAccess);
 
         consent.setData(data);
@@ -321,7 +321,7 @@ public class CmsPsuAisServiceInternal implements CmsPsuAisService {
         consent.setValidUntil(request.getValidUntil());
         consent.setFrequencyPerDay(request.getFrequencyPerDay());
 
-        AdditionalInformationAccess requestedAdditionalInformationAccess = requestedAisAccountAccess.getAccountAdditionalInformationAccess();
+        Xs2aAdditionalInformationAccess requestedAdditionalInformationAccess = requestedAisAccountAccess.getAccountAdditionalInformationAccess();
         if (requestedAdditionalInformationAccess != null) {
             consent.setOwnerNameType(AdditionalAccountInformationType.findTypeByList(requestedAdditionalInformationAccess.getOwnerName()));
             consent.setTrustedBeneficiariesType(AdditionalAccountInformationType.findTypeByList(requestedAdditionalInformationAccess.getTrustedBeneficiaries()));
@@ -340,7 +340,7 @@ public class CmsPsuAisServiceInternal implements CmsPsuAisService {
         return true;
     }
 
-    private boolean changeConsentStatus(String consentId, ConsentStatus status, String instanceId) throws WrongChecksumException {
+    private boolean changeConsentStatus(String consentId, Xs2aConsentStatus status, String instanceId) throws WrongChecksumException {
 
         Optional<ConsentEntity> aisConsentOptional = consentJpaRepository.findOne(aisConsentSpecification.byConsentIdAndInstanceId(consentId, instanceId));
 
@@ -368,7 +368,7 @@ public class CmsPsuAisServiceInternal implements CmsPsuAisService {
                    .filter(c -> !c.getConsentStatus().isFinalisedStatus());
     }
 
-    private boolean updateConsentStatus(ConsentEntity consent, ConsentStatus status) throws WrongChecksumException {
+    private boolean updateConsentStatus(ConsentEntity consent, Xs2aConsentStatus status) throws WrongChecksumException {
         if (consent.getConsentStatus().isFinalisedStatus()) {
             log.info("Consent ID: [{}], Consent status: [{}]. Confirmation of consent failed in updateConsentStatus method, because consent has finalised status",
                      consent.getExternalId(), consent.getConsentStatus().getValue());

@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.repository.specification;
 
 import de.adorsys.psd2.consent.domain.account.AspspAccountAccess;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -81,7 +81,7 @@ public abstract class ConsentFilterableSpecification {
     }
 
     public Specification<ConsentEntity> byPsuDataInListAndInstanceIdAndAdditionalTppInfo(PsuIdData psuIdData, String instanceId,
-                                                                                         String additionalTppInfo, List<ConsentStatus> statuses,
+                                                                                         String additionalTppInfo, List<Xs2aConsentStatus> statuses,
                                                                                          List<String> accountNumbers) {
         return Optional.ofNullable(consentSpecification.byPsuDataInListAndInstanceId(psuIdData, instanceId))
                    .map(s -> s.and(byAdditionalTppInfo(additionalTppInfo)))
@@ -91,7 +91,7 @@ public abstract class ConsentFilterableSpecification {
                    .orElse(null);
     }
 
-    private Specification<ConsentEntity> byInConsentStatuses(List<ConsentStatus> statuses) {
+    private Specification<ConsentEntity> byInConsentStatuses(List<Xs2aConsentStatus> statuses) {
         return (root, criteriaQuery, criteriaBuilder) -> {
             if (CollectionUtils.isEmpty(statuses)) {
                 return null;

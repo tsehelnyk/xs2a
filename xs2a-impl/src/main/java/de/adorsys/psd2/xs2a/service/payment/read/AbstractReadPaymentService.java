@@ -22,7 +22,7 @@ import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.domain.pis.CommonPayment;
 import de.adorsys.psd2.xs2a.domain.pis.PaymentInformationResponse;
@@ -90,7 +90,7 @@ public abstract class AbstractReadPaymentService implements ReadPaymentService {
 
         CommonPayment xs2aPayment = getXs2aPayment(spiResponse);
 
-        TransactionStatus paymentStatus = xs2aPayment.getTransactionStatus();
+        Xs2aTransactionStatus paymentStatus = xs2aPayment.getTransactionStatus();
 
         if (!updatePaymentStatusAfterSpiService.updatePaymentStatus(encryptedPaymentId, paymentStatus)) {
             log.info("Internal payment ID: [{}], Transaction status: [{}]. Update of a payment status in the CMS has failed.",

@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.domain.account;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.CustomContentTypeProvider;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.Xs2aBalance;
@@ -33,7 +33,7 @@ public class Xs2aTransactionsReport implements CustomContentTypeProvider {
     private static final String RESPONSE_TYPE_XML = "application/xml";
     private static final String RESPONSE_TYPE_TEXT = "text/plain";
 
-    private AccountReference accountReference;
+    private Xs2aAccountReference accountReference;
 
     private Xs2aAccountReport accountReport;
 

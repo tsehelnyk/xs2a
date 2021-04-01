@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.web.controller;
 import de.adorsys.psd2.core.data.piis.PiisConsentData;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.model.*;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
@@ -28,8 +28,8 @@ import de.adorsys.psd2.xs2a.core.profile.PiisConsentSupported;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.AdditionalPsuIdData;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -172,7 +172,7 @@ class ConfirmationOfFundsControllerTest {
         //Then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(resp).isNotNull();
-        assertThat(resp.getConsentStatus()).hasToString(ConsentStatus.RECEIVED.getValue());
+        assertThat(resp.getConsentStatus()).hasToString(Xs2aConsentStatus.RECEIVED.getValue());
         assertThat(resp.getConsentId()).isEqualTo(CONSENT_ID);
         assertThat(resp.getPsuMessage()).isEqualTo(PSU_MESSAGE_RESPONSE);
     }
@@ -236,9 +236,9 @@ class ConfirmationOfFundsControllerTest {
         //Given
         when(piisConsentService.getPiisConsentStatusById(CONSENT_ID))
             .thenReturn(ResponseObject.<ConsentStatusResponse>builder()
-                            .body(new ConsentStatusResponse(ConsentStatus.RECEIVED, PSU_MESSAGE_RESPONSE))
+                            .body(new ConsentStatusResponse(Xs2aConsentStatus.RECEIVED, PSU_MESSAGE_RESPONSE))
                             .build());
-        doReturn(new ResponseEntity<>(ConsentStatus.RECEIVED, HttpStatus.OK)).when(responseMapper).ok(any(), any());
+        doReturn(new ResponseEntity<>(Xs2aConsentStatus.RECEIVED, HttpStatus.OK)).when(responseMapper).ok(any(), any());
 
         //When
         ResponseEntity responseEntity = confirmationOfFundsController.getConsentConfirmationOfFundsStatus(CONSENT_ID, null,
@@ -247,7 +247,7 @@ class ConfirmationOfFundsControllerTest {
                                                                                                           null, null);
         //Then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isEqualTo(ConsentStatus.RECEIVED);
+        assertThat(responseEntity.getBody()).isEqualTo(Xs2aConsentStatus.RECEIVED);
     }
 
     @Test
@@ -386,7 +386,7 @@ class ConfirmationOfFundsControllerTest {
 
         when(consentModelMapper.mapToUpdatePsuData(psuIdData, CONSENT_ID, AUTHORISATION_ID, body)).thenReturn(updateConsentPsuDataReq);
 
-        UpdateConsentPsuDataResponse updateConsentPsuDataResponse = new UpdateConsentPsuDataResponse(ScaStatus.FINALISED, CONSENT_ID, AUTHORISATION_ID, psuIdData);
+        UpdateConsentPsuDataResponse updateConsentPsuDataResponse = new UpdateConsentPsuDataResponse(Xs2aScaStatus.FINALISED, CONSENT_ID, AUTHORISATION_ID, psuIdData);
 
         ResponseObject<UpdateConsentPsuDataResponse> updateConsentPsuDataServiceResponse = ResponseObject.<UpdateConsentPsuDataResponse>builder()
                                                                                                .body(updateConsentPsuDataResponse)
@@ -442,7 +442,7 @@ class ConfirmationOfFundsControllerTest {
         CreateConsentAuthorizationResponse response = new CreateConsentAuthorizationResponse();
         response.setConsentId(CONSENT_ID);
         response.setAuthorisationId(AUTHORISATION_ID);
-        response.setScaStatus(ScaStatus.RECEIVED);
+        response.setScaStatus(Xs2aScaStatus.RECEIVED);
         return response;
     }
 
@@ -490,9 +490,9 @@ class ConfirmationOfFundsControllerTest {
     }
 
     private ResponseObject<Xs2aConfirmationOfFundsResponse> createConsentsConfirmationOfFunds() {
-        Xs2aConfirmationOfFundsResponse consentResponse = new Xs2aConfirmationOfFundsResponse(ConsentStatus.RECEIVED.getValue(), ConfirmationOfFundsControllerTest.CONSENT_ID, false, null, PSU_MESSAGE_RESPONSE);
+        Xs2aConfirmationOfFundsResponse consentResponse = new Xs2aConfirmationOfFundsResponse(Xs2aConsentStatus.RECEIVED.getValue(), ConfirmationOfFundsControllerTest.CONSENT_ID, false, null, PSU_MESSAGE_RESPONSE);
         Links links = new Links();
-        links.setSelf(new HrefType("type"));
+        links.setSelf(new Xs2aHrefType("type"));
         consentResponse.setLinks(links);
         return ResponseObject.<Xs2aConfirmationOfFundsResponse>builder().body(consentResponse).build();
     }

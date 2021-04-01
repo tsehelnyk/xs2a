@@ -20,7 +20,7 @@ import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.domain.MessageCategory;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
@@ -28,7 +28,7 @@ import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -162,11 +162,11 @@ class ConsentAuthorisationServiceTest {
         when(consentValidationService.validateConsentAuthorisationScaStatus(aisConsent, AUTHORISATION_ID)).thenReturn(ValidationResult.valid());
         when(aisScaAuthorisationServiceResolver.getService(AUTHORISATION_ID)).thenReturn(redirectAisAuthorizationService);
         when(redirectAisAuthorizationService.getAuthorisationScaStatus(any(), any()))
-            .thenReturn(Optional.of(ScaStatus.RECEIVED));
+            .thenReturn(Optional.of(Xs2aScaStatus.RECEIVED));
 
         when(psuIdDataAuthorisationService.getPsuIdData(AUTHORISATION_ID, Collections.singletonList(PSU_ID_DATA))).thenReturn(PSU_ID_DATA);
-        ArgumentCaptor<ConsentStatus> consentStatusArgumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
-        ArgumentCaptor<ScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(ScaStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> consentStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
+        ArgumentCaptor<Xs2aScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aScaStatus.class);
 
         // When
         service.getConsentAuthorisationScaStatus(CONSENT_ID, AUTHORISATION_ID);
@@ -177,8 +177,8 @@ class ConsentAuthorisationServiceTest {
         verify(aisScaAuthorisationServiceResolver, times(1)).getService(AUTHORISATION_ID);
         verify(loggingContextService, times(1)).storeConsentStatus(consentStatusArgumentCaptor.capture());
         verify(loggingContextService, times(1)).storeScaStatus(scaStatusArgumentCaptor.capture());
-        assertThat(consentStatusArgumentCaptor.getValue()).isEqualTo(ConsentStatus.VALID);
-        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(ScaStatus.RECEIVED);
+        assertThat(consentStatusArgumentCaptor.getValue()).isEqualTo(Xs2aConsentStatus.VALID);
+        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(Xs2aScaStatus.RECEIVED);
     }
 
     @Test
@@ -197,13 +197,13 @@ class ConsentAuthorisationServiceTest {
     @Test
     void getConsentAuthorisationScaStatus_success() {
         // Given
-        ConsentScaStatus consentScaStatus = new ConsentScaStatus(PSU_ID_DATA, aisConsent, ScaStatus.RECEIVED);
+        ConsentScaStatus consentScaStatus = new ConsentScaStatus(PSU_ID_DATA, aisConsent, Xs2aScaStatus.RECEIVED);
 
         when(aisConsentService.getAccountConsentById(CONSENT_ID)).thenReturn(Optional.of(aisConsent));
         when(consentValidationService.validateConsentAuthorisationScaStatus(aisConsent, AUTHORISATION_ID)).thenReturn(ValidationResult.valid());
         when(aisScaAuthorisationServiceResolver.getService(AUTHORISATION_ID)).thenReturn(redirectAisAuthorizationService);
         when(redirectAisAuthorizationService.getAuthorisationScaStatus(CONSENT_ID, AUTHORISATION_ID))
-            .thenReturn(Optional.of(ScaStatus.RECEIVED));
+            .thenReturn(Optional.of(Xs2aScaStatus.RECEIVED));
         when(psuIdDataAuthorisationService.getPsuIdData(AUTHORISATION_ID, Collections.singletonList(PSU_ID_DATA))).thenReturn(PSU_ID_DATA);
 
         // When
@@ -269,7 +269,7 @@ class ConsentAuthorisationServiceTest {
         // When
         service.getConsentInitiationAuthorisations(CONSENT_ID);
 
-        ArgumentCaptor<ConsentStatus> consentStatusArgumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> consentStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
 
         // Then
         verify(loggingContextService).storeConsentStatus(consentStatusArgumentCaptor.capture());
@@ -385,10 +385,10 @@ class ConsentAuthorisationServiceTest {
         when(redirectAisAuthorizationService.getConsentAuthorizationById(AUTHORISATION_ID))
             .thenReturn(Optional.of(authorisation));
 
-        when(authorisationChainResponsibilityService.apply(any())).thenReturn(new UpdateConsentPsuDataResponse(ScaStatus.RECEIVED, CONSENT_ID, AUTHORISATION_ID, PSU_ID_DATA));
+        when(authorisationChainResponsibilityService.apply(any())).thenReturn(new UpdateConsentPsuDataResponse(Xs2aScaStatus.RECEIVED, CONSENT_ID, AUTHORISATION_ID, PSU_ID_DATA));
 
-        ArgumentCaptor<ConsentStatus> consentStatusArgumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
-        ArgumentCaptor<ScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(ScaStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> consentStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
+        ArgumentCaptor<Xs2aScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aScaStatus.class);
 
         // When
         service.updateConsentPsuData(updateConsentPsuDataReq);
@@ -396,8 +396,8 @@ class ConsentAuthorisationServiceTest {
         // Then
         verify(loggingContextService).storeConsentStatus(consentStatusArgumentCaptor.capture());
         verify(loggingContextService).storeScaStatus(scaStatusArgumentCaptor.capture());
-        assertThat(consentStatusArgumentCaptor.getValue()).isEqualTo(ConsentStatus.VALID);
-        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(ScaStatus.RECEIVED);
+        assertThat(consentStatusArgumentCaptor.getValue()).isEqualTo(Xs2aConsentStatus.VALID);
+        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(Xs2aScaStatus.RECEIVED);
     }
 
     @Test
@@ -437,7 +437,7 @@ class ConsentAuthorisationServiceTest {
         ResponseObject<UpdateConsentPsuDataResponse> actualResponseObject = service.updateConsentPsuData(updateConsentPsuDataReq);
 
         // Then
-        verify(authorisationService, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FAILED);
+        verify(authorisationService, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, Xs2aScaStatus.FAILED);
         assertTrue(actualResponseObject.hasError());
         assertEquals(MessageErrorCode.PSU_CREDENTIALS_INVALID, actualResponseObject.getError().getTppMessage().getMessageErrorCode());
     }
@@ -493,20 +493,20 @@ class ConsentAuthorisationServiceTest {
 
         when(aisScaAuthorisationServiceResolver.getService()).thenReturn(redirectAisAuthorizationService);
         CreateConsentAuthorizationResponse createConsentAuthorizationResponse = new CreateConsentAuthorizationResponse();
-        createConsentAuthorizationResponse.setScaStatus(ScaStatus.RECEIVED);
+        createConsentAuthorizationResponse.setScaStatus(Xs2aScaStatus.RECEIVED);
         when(redirectAisAuthorizationService.createConsentAuthorization(any(), anyString()))
             .thenReturn(Optional.of(createConsentAuthorizationResponse));
-        ArgumentCaptor<ConsentStatus> consentStatusArgumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
-        ArgumentCaptor<ScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(ScaStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> consentStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
+        ArgumentCaptor<Xs2aScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aScaStatus.class);
 
         // When
         service.createAisAuthorisation(PSU_ID_DATA_EMPTY, CONSENT_ID, PASSWORD);
 
         // Then
         verify(loggingContextService).storeScaStatus(scaStatusArgumentCaptor.capture());
-        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(ScaStatus.RECEIVED);
+        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(Xs2aScaStatus.RECEIVED);
         verify(loggingContextService).storeConsentStatus(consentStatusArgumentCaptor.capture());
-        assertThat(consentStatusArgumentCaptor.getValue()).isEqualTo(ConsentStatus.VALID);
+        assertThat(consentStatusArgumentCaptor.getValue()).isEqualTo(Xs2aConsentStatus.VALID);
     }
 
     @Test
@@ -515,7 +515,7 @@ class ConsentAuthorisationServiceTest {
         when(aisScaAuthorisationServiceResolver.getService()).thenReturn(redirectAisAuthorizationService);
         CreateConsentAuthorizationResponse createConsentAuthorizationResponse = new CreateConsentAuthorizationResponse();
         createConsentAuthorizationResponse.setAuthorisationId(AUTHORISATION_ID);
-        createConsentAuthorizationResponse.setScaStatus(ScaStatus.RECEIVED);
+        createConsentAuthorizationResponse.setScaStatus(Xs2aScaStatus.RECEIVED);
         createConsentAuthorizationResponse.setPsuIdData(PSU_ID_DATA);
         when(redirectAisAuthorizationService.createConsentAuthorization(any(), anyString()))
             .thenReturn(Optional.of(createConsentAuthorizationResponse));
@@ -527,18 +527,18 @@ class ConsentAuthorisationServiceTest {
 
         UpdateConsentPsuDataReq updatePsuData = buildUpdateConsentPsuDataReq(CONSENT_ID);
         updatePsuData.setPassword(PASSWORD);
-        UpdateConsentPsuDataResponse updateConsentPsuDataResponse = new UpdateConsentPsuDataResponse(ScaStatus.RECEIVED, CONSENT_ID, AUTHORISATION_ID, PSU_ID_DATA);
-        updateConsentPsuDataResponse.setScaStatus(ScaStatus.RECEIVED);
+        UpdateConsentPsuDataResponse updateConsentPsuDataResponse = new UpdateConsentPsuDataResponse(Xs2aScaStatus.RECEIVED, CONSENT_ID, AUTHORISATION_ID, PSU_ID_DATA);
+        updateConsentPsuDataResponse.setScaStatus(Xs2aScaStatus.RECEIVED);
 
         when(aisConsentService.getAccountConsentById(CONSENT_ID)).thenReturn(Optional.of(aisConsent));
         when(consentValidationService.validateConsentAuthorisationOnCreate(any(CreateConsentAuthorisationObject.class)))
             .thenReturn(ValidationResult.valid());
         when(consentValidationService.validateConsentPsuDataOnUpdate(aisConsent, updatePsuData))
             .thenReturn(ValidationResult.valid());
-        when(authorisationChainResponsibilityService.apply(any())).thenReturn(new UpdateConsentPsuDataResponse(ScaStatus.RECEIVED, CONSENT_ID, AUTHORISATION_ID, PSU_ID_DATA));
+        when(authorisationChainResponsibilityService.apply(any())).thenReturn(new UpdateConsentPsuDataResponse(Xs2aScaStatus.RECEIVED, CONSENT_ID, AUTHORISATION_ID, PSU_ID_DATA));
 
-        ArgumentCaptor<ConsentStatus> consentStatusArgumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
-        ArgumentCaptor<ScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(ScaStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> consentStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
+        ArgumentCaptor<Xs2aScaStatus> scaStatusArgumentCaptor = ArgumentCaptor.forClass(Xs2aScaStatus.class);
 
         // When
         service.createAisAuthorisation(PSU_ID_DATA, CONSENT_ID, PASSWORD);
@@ -548,9 +548,9 @@ class ConsentAuthorisationServiceTest {
         verify(consentValidationService, times(1)).validateConsentAuthorisationOnCreate(createConsentAuthorisationObject);
         verify(consentValidationService, times(1)).validateConsentPsuDataOnUpdate(aisConsent, updatePsuData);
         verify(loggingContextService).storeScaStatus(scaStatusArgumentCaptor.capture());
-        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(ScaStatus.RECEIVED);
+        assertThat(scaStatusArgumentCaptor.getValue()).isEqualTo(Xs2aScaStatus.RECEIVED);
         verify(loggingContextService, times(2)).storeConsentStatus(consentStatusArgumentCaptor.capture());
-        assertThat(consentStatusArgumentCaptor.getValue()).isEqualTo(ConsentStatus.VALID);
+        assertThat(consentStatusArgumentCaptor.getValue()).isEqualTo(Xs2aConsentStatus.VALID);
     }
 
     @Test
@@ -563,7 +563,7 @@ class ConsentAuthorisationServiceTest {
         when(aisScaAuthorisationServiceResolver.getService()).thenReturn(redirectAisAuthorizationService);
         CreateConsentAuthorizationResponse createConsentAuthorizationResponse = new CreateConsentAuthorizationResponse();
         createConsentAuthorizationResponse.setAuthorisationId(AUTHORISATION_ID);
-        createConsentAuthorizationResponse.setScaStatus(ScaStatus.RECEIVED);
+        createConsentAuthorizationResponse.setScaStatus(Xs2aScaStatus.RECEIVED);
         createConsentAuthorizationResponse.setPsuIdData(PSU_ID_DATA);
         when(redirectAisAuthorizationService.createConsentAuthorization(any(), anyString()))
             .thenReturn(Optional.of(createConsentAuthorizationResponse));
@@ -615,7 +615,7 @@ class ConsentAuthorisationServiceTest {
         Authorisation authorisation = new Authorisation();
         authorisation.setChosenScaApproach(ScaApproach.REDIRECT);
         authorisation.setScaAuthenticationData(SCA_AUTHENTICATION_DATA);
-        UpdateConsentPsuDataResponse response = new UpdateConsentPsuDataResponse(ScaStatus.FINALISED, CONSENT_ID, AUTHORISATION_ID, PSU_ID_DATA);
+        UpdateConsentPsuDataResponse response = new UpdateConsentPsuDataResponse(Xs2aScaStatus.FINALISED, CONSENT_ID, AUTHORISATION_ID, PSU_ID_DATA);
         ResponseObject<UpdateConsentPsuDataResponse> expectedResult = ResponseObject.<UpdateConsentPsuDataResponse>builder().body(response).build();
         when(aisScaAuthorisationServiceResolver.getService(AUTHORISATION_ID)).thenReturn(redirectAisAuthorizationService);
         when(redirectAisAuthorizationService.getConsentAuthorizationById(AUTHORISATION_ID))

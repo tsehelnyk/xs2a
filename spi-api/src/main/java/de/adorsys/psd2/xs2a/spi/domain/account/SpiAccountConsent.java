@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.spi.domain.account;
 
 import de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.spi.domain.SpiConsent;
@@ -42,7 +42,7 @@ public class SpiAccountConsent implements SpiConsent {
     private LocalDate expireDate;
     private int frequencyPerDay;
     private LocalDate lastActionDate;
-    private ConsentStatus consentStatus;
+    private Xs2aConsentStatus consentStatus;
     private boolean withBalance;
     private boolean tppRedirectPreferred;
     private List<SpiPsuData> psuData;

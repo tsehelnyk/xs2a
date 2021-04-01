@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.spi.service;
 
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.error.TppMessage;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.*;
@@ -110,7 +110,7 @@ interface AuthorisationSpi<T> {
      * @return Returns response object, containing a SCA information from ASPSP
      */
     //TODO: remove default implementation with getScaInformation https://git.adorsys.de/adorsys/xs2a/aspsp-xs2a/-/issues/1507
-    default SpiResponse<SpiScaStatusResponse> getScaStatus(@NotNull ScaStatus scaStatus,
+    default SpiResponse<SpiScaStatusResponse> getScaStatus(@NotNull Xs2aScaStatus scaStatus,
                                                            @NotNull SpiContextData contextData,
                                                            @NotNull String authorisationId,
                                                            @NotNull T businessObject,

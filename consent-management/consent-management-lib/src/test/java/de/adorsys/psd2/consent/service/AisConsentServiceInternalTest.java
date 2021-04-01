@@ -33,8 +33,8 @@ import de.adorsys.psd2.consent.repository.AuthorisationRepository;
 import de.adorsys.psd2.consent.service.account.AccountAccessUpdater;
 import de.adorsys.psd2.consent.service.mapper.AccessMapper;
 import de.adorsys.psd2.consent.service.mapper.CmsConsentMapper;
-import de.adorsys.psd2.core.data.AccountAccess;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -162,7 +162,7 @@ class AisConsentServiceInternalTest {
         assertTrue(response.isSuccessful());
         verify(aisConsentRepository).verifyAndSave(consentEntityCaptor.capture());
         ConsentEntity capturedConsentEntity = consentEntityCaptor.getValue();
-        assertEquals(ConsentStatus.EXPIRED, capturedConsentEntity.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.EXPIRED, capturedConsentEntity.getConsentStatus());
     }
 
     @Test
@@ -171,10 +171,10 @@ class AisConsentServiceInternalTest {
         when(aisConsentRepository.getActualAisConsent(CONSENT_ID)).thenReturn(Optional.of(consentEntity));
         List<AspspAccountAccess> aspspAccountAccesses = jsonReader.getObjectFromFile("json/service/ais-consent-service/aspsp-account-accesses.json", new TypeReference<>() {
         });
-        AccountAccess existingAccountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-existing.json", AccountAccess.class);
+        Xs2aConsentAccountAccess existingAccountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-existing.json", Xs2aConsentAccountAccess.class);
         when(accessMapper.mapAspspAccessesToAccountAccess(aspspAccountAccesses, AdditionalAccountInformationType.DEDICATED_ACCOUNTS, AdditionalAccountInformationType.NONE)).thenReturn(existingAccountAccess);
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access.json", AccountAccess.class);
-        AccountAccess updatedAccountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-updated.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access.json", Xs2aConsentAccountAccess.class);
+        Xs2aConsentAccountAccess updatedAccountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-updated.json", Xs2aConsentAccountAccess.class);
         when(accountAccessUpdater.updateAccountReferencesInAccess(existingAccountAccess, accountAccess)).thenReturn(updatedAccountAccess);
         CmsConsent cmsConsent = jsonReader.getObjectFromFile("json/service/ais-consent-service/cms-consent.json", CmsConsent.class);
         when(cmsConsentMapper.mapToCmsConsent(eq(consentEntity), anyList(), anyMap())).thenReturn(cmsConsent);
@@ -192,29 +192,29 @@ class AisConsentServiceInternalTest {
         when(aisConsentRepository.getActualAisConsent(CONSENT_ID)).thenReturn(Optional.of(consentEntity));
         List<AspspAccountAccess> aspspAccountAccesses = jsonReader.getObjectFromFile("json/service/ais-consent-service/aspsp-account-accesses.json", new TypeReference<>() {
         });
-        AccountAccess existingAccountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-existing.json", AccountAccess.class);
+        Xs2aConsentAccountAccess existingAccountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-existing.json", Xs2aConsentAccountAccess.class);
         when(accessMapper.mapAspspAccessesToAccountAccess(aspspAccountAccesses, AdditionalAccountInformationType.DEDICATED_ACCOUNTS, AdditionalAccountInformationType.NONE)).thenReturn(existingAccountAccess);
-        AccountAccess requestedAccountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-requested.json", AccountAccess.class);
-        AccountAccess updatedAccountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-updated.json", AccountAccess.class);
+        Xs2aConsentAccountAccess requestedAccountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-requested.json", Xs2aConsentAccountAccess.class);
+        Xs2aConsentAccountAccess updatedAccountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-updated.json", Xs2aConsentAccountAccess.class);
         when(accountAccessUpdater.updateAccountReferencesInAccess(eq(existingAccountAccess), any())).thenReturn(updatedAccountAccess);
         CmsConsent cmsConsent = jsonReader.getObjectFromFile("json/service/ais-consent-service/cms-consent.json", CmsConsent.class);
         when(cmsConsentMapper.mapToCmsConsent(eq(consentEntity), anyList(), anyMap())).thenReturn(cmsConsent);
         when(aisConsentRepository.verifyAndUpdate(consentEntity)).thenReturn(consentEntity);
-        ArgumentCaptor<AccountAccess> requestedAccountAccessCaptor = ArgumentCaptor.forClass(AccountAccess.class);
-        AccountAccess accountAccessWithFilledAccounts = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-requested-filled-accounts.json", AccountAccess.class);
+        ArgumentCaptor<Xs2aConsentAccountAccess> requestedAccountAccessCaptor = ArgumentCaptor.forClass(Xs2aConsentAccountAccess.class);
+        Xs2aConsentAccountAccess accountAccessWithFilledAccounts = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access-requested-filled-accounts.json", Xs2aConsentAccountAccess.class);
 
         CmsResponse<CmsConsent> response = aisConsentServiceInternal.updateAspspAccountAccess(CONSENT_ID, requestedAccountAccess);
 
         assertTrue(response.isSuccessful());
         verify(accountAccessUpdater).updateAccountReferencesInAccess(eq(existingAccountAccess), requestedAccountAccessCaptor.capture());
-        AccountAccess capturedAccountAccess = requestedAccountAccessCaptor.getValue();
+        Xs2aConsentAccountAccess capturedAccountAccess = requestedAccountAccessCaptor.getValue();
         assertEquals(accountAccessWithFilledAccounts, capturedAccountAccess);
     }
 
     @Test
     void updateAspspAccountAccess_noConsent() throws WrongChecksumException {
         when(aisConsentRepository.getActualAisConsent(CONSENT_ID)).thenReturn(Optional.empty());
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/service/ais-consent-service/account-access.json", Xs2aConsentAccountAccess.class);
 
         CmsResponse<CmsConsent> response = aisConsentServiceInternal.updateAspspAccountAccess(CONSENT_ID, accountAccess);
 

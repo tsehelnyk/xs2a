@@ -21,7 +21,7 @@ import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
@@ -94,7 +94,7 @@ public class CancelPaymentService {
         }
 
         CancelPaymentResponse cancelPaymentResponse = spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(spiResponse.getPayload(), payment, encryptedPaymentId);
-        TransactionStatus resultStatus = cancelPaymentResponse.getTransactionStatus();
+        Xs2aTransactionStatus resultStatus = cancelPaymentResponse.getTransactionStatus();
 
         if (resultStatus != null) {
             updatePaymentStatusAfterSpiService.updatePaymentStatus(encryptedPaymentId, resultStatus);
@@ -109,7 +109,7 @@ public class CancelPaymentService {
         updatePaymentStatusAfterSpiService.updatePaymentCancellationInternalRequestId(encryptedPaymentId, internalRequestId.toString());
         cancelPaymentResponse.setInternalRequestId(internalRequestId.toString());
 
-        if (resultStatus == TransactionStatus.CANC) {
+        if (resultStatus == Xs2aTransactionStatus.CANC) {
             log.info("Payment-ID [{}]. Initiate Payment Cancellation has failed. Payment status - CANCELED", encryptedPaymentId);
             updatePaymentStatusAfterSpiService.updateInternalPaymentStatus(encryptedPaymentId, InternalPaymentStatus.CANCELLED_FINALISED);
             return ResponseObject.<CancelPaymentResponse>builder()
@@ -125,7 +125,7 @@ public class CancelPaymentService {
                        .build();
         }
 
-        if (resultStatus == TransactionStatus.RCVD
+        if (resultStatus == Xs2aTransactionStatus.RCVD
                 || cancellationScaNeededDecider.isNoScaRequired(cancelPaymentResponse.isStartAuthorisationRequired())) {
             payment.setPaymentStatus(resultStatus);
             return proceedNoScaCancellation(payment, spiContextData, aspspConsentDataProvider, encryptedPaymentId);
@@ -169,10 +169,10 @@ public class CancelPaymentService {
                        .build();
         }
 
-        updatePaymentStatusAfterSpiService.updatePaymentStatus(encryptedPaymentId, TransactionStatus.CANC);
+        updatePaymentStatusAfterSpiService.updatePaymentStatus(encryptedPaymentId, Xs2aTransactionStatus.CANC);
         updatePaymentStatusAfterSpiService.updateInternalPaymentStatus(encryptedPaymentId, InternalPaymentStatus.CANCELLED_FINALISED);
         CancelPaymentResponse cancelPaymentResponse = new CancelPaymentResponse();
-        cancelPaymentResponse.setTransactionStatus(TransactionStatus.CANC);
+        cancelPaymentResponse.setTransactionStatus(Xs2aTransactionStatus.CANC);
         cancelPaymentResponse.setInternalRequestId(requestProviderService.getInternalRequestIdString());
 
         return ResponseObject.<CancelPaymentResponse>builder()

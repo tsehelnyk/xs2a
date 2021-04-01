@@ -28,8 +28,8 @@ import de.adorsys.psd2.consent.repository.specification.PiisConsentEntitySpecifi
 import de.adorsys.psd2.consent.service.mapper.PiisConsentMapper;
 import de.adorsys.psd2.consent.service.migration.PiisConsentLazyMigrationService;
 import de.adorsys.psd2.consent.service.psu.util.PageRequestBuilder;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +46,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static de.adorsys.psd2.xs2a.core.consent.ConsentStatus.REVOKED_BY_PSU;
-import static de.adorsys.psd2.xs2a.core.consent.ConsentStatus.TERMINATED_BY_ASPSP;
+import static de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus.REVOKED_BY_PSU;
+import static de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus.TERMINATED_BY_ASPSP;
 
 @Slf4j
 @Service
@@ -119,7 +119,7 @@ public class CmsAspspPiisServiceInternal implements CmsAspspPiisService {
     }
 
     private void closePreviousPiisConsents(PsuIdData psuIdData, CreatePiisConsentRequest request, String instanceId) {
-        AccountReference accountReference = request.getAccount();
+        Xs2aAccountReference accountReference = request.getAccount();
         Specification<ConsentEntity> specification = piisConsentEntitySpecification
                                                          .byPsuIdDataAndAuthorisationNumberAndAccountReferenceAndInstanceId(psuIdData, request.getTppAuthorisationNumber(), accountReference, instanceId);
 
@@ -133,7 +133,7 @@ public class CmsAspspPiisServiceInternal implements CmsAspspPiisService {
         consentJpaRepository.saveAll(consentsToRevoke);
     }
 
-    private void changeStatusAndLastActionDate(ConsentEntity consentEntity, ConsentStatus consentStatus) {
+    private void changeStatusAndLastActionDate(ConsentEntity consentEntity, Xs2aConsentStatus consentStatus) {
         consentEntity.setLastActionDate(LocalDate.now());
         consentEntity.setConsentStatus(consentStatus);
     }

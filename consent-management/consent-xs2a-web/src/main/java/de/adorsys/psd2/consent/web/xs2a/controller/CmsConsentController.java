@@ -24,7 +24,7 @@ import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.ais.ConsentStatusResponse;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.ConsentServiceEncrypted;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
@@ -69,7 +69,7 @@ public class CmsConsentController implements CmsConsentApi {
 
     @Override
     public ResponseEntity<ConsentStatusResponse> getConsentStatusById(String encryptedConsentId) {
-        CmsResponse<ConsentStatus> consentStatusById = consentServiceEncrypted.getConsentStatusById(encryptedConsentId);
+        CmsResponse<Xs2aConsentStatus> consentStatusById = consentServiceEncrypted.getConsentStatusById(encryptedConsentId);
 
         if (consentStatusById.hasError()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -81,7 +81,7 @@ public class CmsConsentController implements CmsConsentApi {
     @Override
     public ResponseEntity<Object> updateConsentStatus(String encryptedConsentId, String status) {
         try {
-            CmsResponse<Boolean> response = consentServiceEncrypted.updateConsentStatusById(encryptedConsentId, ConsentStatus.valueOf(status));
+            CmsResponse<Boolean> response = consentServiceEncrypted.updateConsentStatusById(encryptedConsentId, Xs2aConsentStatus.valueOf(status));
             if (response.isSuccessful() && BooleanUtils.isTrue(response.getPayload())) {
                 return new ResponseEntity<>(HttpStatus.OK);
             }

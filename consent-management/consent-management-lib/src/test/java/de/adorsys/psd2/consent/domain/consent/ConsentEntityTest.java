@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.domain.consent;
 
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.TppInfoEntity;
 import de.adorsys.psd2.consent.domain.account.AisConsentUsage;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
@@ -31,7 +31,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConsentEntityTest {
-    private static final PsuData PSU_DATA = new PsuData("psu", null, null, null, null);
+    private static final CmsPsuData PSU_DATA = new CmsPsuData("psu", null, null, null, null);
     private static final TppInfoEntity TPP_INFO = new TppInfoEntity();
 
     @Test
@@ -144,7 +144,7 @@ class ConsentEntityTest {
         assertFalse(shouldConsentBeExpired);
     }
 
-    private ConsentEntity buildConsent(List<PsuData> psuDataList, TppInfoEntity tppInfoEntity, boolean recurringIndicator) {
+    private ConsentEntity buildConsent(List<CmsPsuData> psuDataList, TppInfoEntity tppInfoEntity, boolean recurringIndicator) {
         ConsentEntity consent = new ConsentEntity();
         consent.setPsuDataList(psuDataList);
         ConsentTppInformationEntity consentTppInformation = new ConsentTppInformationEntity();

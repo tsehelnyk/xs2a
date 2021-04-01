@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.api.pis;
 
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
@@ -56,7 +56,7 @@ public class PisCommonPaymentResponse implements CommonPaymentData {
     private byte[] paymentData;
 
     @ApiModelProperty(value = "Transaction status", required = true)
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
 
     @ApiModelProperty(value = "Internal payment status", required = true)
     private InternalPaymentStatus internalPaymentStatus;

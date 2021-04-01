@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.domain;
 
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -44,14 +44,14 @@ public class AuthorisationEntity extends InstanceDependableEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "psu_id")
-    private PsuData psuData;
+    private CmsPsuData psuData;
 
     @Column(name = "parent_id", nullable = false)
     private String parentExternalId;
 
     @Column(name = "sca_status", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
 
     @Column(name = "authentication_method_id")
     private String authenticationMethodId;

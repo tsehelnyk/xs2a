@@ -14,35 +14,31 @@
  * limitations under the License.
  */
 
-package de.adorsys.psd2.xs2a.domain;
+package de.adorsys.psd2.xs2a.domain.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public enum BalanceType {
-    CLOSING_BOOKED("closingBooked"),
-    EXPECTED("expected"),
-    OPENING_BOOKED("openingBooked"),
-    INTERIM_AVAILABLE("interimAvailable"),
-    INTERIM_BOOKED("interimBooked"),
-    FORWARD_AVAILABLE("forwardAvailable"),
-    NONINVOICED("nonInvoiced");
+public enum Xs2aAccountStatus {
+    ENABLED("enabled"),
+    DELETED("deleted"),
+    BLOCKED("blocked");
 
-
-    private static final Map<String, BalanceType> container = new HashMap<>();
+    private static final Map<String, Xs2aAccountStatus> container = new HashMap<>();
 
     static {
-        for (BalanceType type : values()) {
-            container.put(type.getValue(), type);
+        for (Xs2aAccountStatus accountStatus : values()) {
+            container.put(accountStatus.getValue(), accountStatus);
         }
     }
 
     private final String value;
 
-    BalanceType(String value) {
+    Xs2aAccountStatus(String value) {
         this.value = value;
     }
 
@@ -51,7 +47,13 @@ public enum BalanceType {
     }
 
     @JsonIgnore
-    public static Optional<BalanceType> getByValue(String name) {
+    public static Optional<Xs2aAccountStatus> getByValue(String name) {
         return Optional.ofNullable(container.get(name));
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+        return String.valueOf(value);
     }
 }

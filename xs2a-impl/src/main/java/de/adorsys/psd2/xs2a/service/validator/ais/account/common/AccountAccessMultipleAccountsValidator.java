@@ -16,10 +16,10 @@
 
 package de.adorsys.psd2.xs2a.service.validator.ais.account.common;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ public class AccountAccessMultipleAccountsValidator {
 
     public ValidationResult validate(AisConsent aisConsent, boolean withBalance) {
         if (withBalance && aisConsent.isConsentForDedicatedAccounts()) {
-            AccountAccess access = aisConsent.getAccess();
+            Xs2aConsentAccountAccess access = aisConsent.getAccess();
             return validateAccountReferenceSize(access.getAccounts(), access.getBalances())
                        ? ValidationResult.invalid(ErrorType.AIS_401, CONSENT_INVALID)
                        : ValidationResult.valid();
@@ -43,11 +43,11 @@ public class AccountAccessMultipleAccountsValidator {
         return ValidationResult.valid();
     }
 
-    private boolean validateAccountReferenceSize(List<AccountReference> accounts, List<AccountReference> balances) {
+    private boolean validateAccountReferenceSize(List<Xs2aAccountReference> accounts, List<Xs2aAccountReference> balances) {
         // This filtering allows to skip all card accounts (with masked PAN or PAN inside in case of ) and allows the further flow
         // to be finished.
-        List<AccountReference> filteredAccountReferences = accounts.stream()
-                                                               .filter(AccountReference::isNotCardAccount)
+        List<Xs2aAccountReference> filteredAccountReferences = accounts.stream()
+                                                               .filter(Xs2aAccountReference::isNotCardAccount)
                                                                .collect(Collectors.toList());
 
         return CollectionUtils.isNotEmpty(filteredAccountReferences)

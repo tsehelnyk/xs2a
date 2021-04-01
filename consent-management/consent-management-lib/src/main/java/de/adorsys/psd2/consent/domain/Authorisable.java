@@ -23,9 +23,9 @@ import java.util.List;
 public interface Authorisable {
     String getExternalId();
 
-    List<PsuData> getPsuDataList();
+    List<CmsPsuData> getPsuDataList();
 
-    void setPsuDataList(List<PsuData> psuData);
+    void setPsuDataList(List<CmsPsuData> psuData);
 
     String getInternalRequestId(AuthorisationType authorisationType);
 

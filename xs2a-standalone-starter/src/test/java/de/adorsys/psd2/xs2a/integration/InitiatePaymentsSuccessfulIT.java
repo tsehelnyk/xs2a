@@ -41,7 +41,7 @@ import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.profile.ScaRedirectFlow;
 import de.adorsys.psd2.xs2a.core.profile.StartAuthorisationMode;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import de.adorsys.psd2.xs2a.integration.builder.AspspSettingsBuilder;
@@ -122,7 +122,7 @@ class InitiatePaymentsSuccessfulIT {
     private static final String TPP_NOK_REDIRECT_URI = "request/nok_redirect_uri";
     private static final TppRedirectUri TPP_REDIRECT_URIs = new TppRedirectUri(TPP_REDIRECT_URI, TPP_NOK_REDIRECT_URI);
 
-    private static final ScaStatus SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus SCA_STATUS = Xs2aScaStatus.RECEIVED;
 
     private final HttpHeaders httpHeadersImplicit = new HttpHeaders();
     private final HttpHeaders httpHeadersImplicitNoPsuData = new HttpHeaders();
@@ -332,7 +332,7 @@ class InitiatePaymentsSuccessfulIT {
         given(aspspProfileService.getAspspSettings(null))
             .willReturn(AspspSettingsBuilder.buildAspspSettingsWithScaRedirectFlow(ScaRedirectFlow.OAUTH));
         given(authorisationServiceEncrypted.createAuthorisation(new PisAuthorisationParentHolder(ENCRYPT_PAYMENT_ID), getAuthorisationRequest(ScaApproach.REDIRECT)))
-            .willReturn(getCmsReponse(ScaStatus.RECEIVED));
+            .willReturn(getCmsReponse(Xs2aScaStatus.RECEIVED));
         initiateSinglePaymentOauth_successful(httpHeadersImplicit, ScaApproach.REDIRECT);
     }
 
@@ -617,13 +617,13 @@ class InitiatePaymentsSuccessfulIT {
         return tppExplicitAuthorisationPreferred && aspspProfileService.getAspspSettings(null).getSb().isSigningBasketSupported();
     }
 
-    private CmsResponse<CreateAuthorisationResponse> getCmsReponse(ScaStatus scaStatus) {
+    private CmsResponse<CreateAuthorisationResponse> getCmsReponse(Xs2aScaStatus scaStatus) {
         return CmsResponse.<CreateAuthorisationResponse>builder()
                    .payload(buildCreateAuthorisationResponse(scaStatus))
                    .build();
     }
 
-    private CreateAuthorisationResponse buildCreateAuthorisationResponse(ScaStatus scaStatus) {
+    private CreateAuthorisationResponse buildCreateAuthorisationResponse(Xs2aScaStatus scaStatus) {
         return new CreateAuthorisationResponse(AUTHORISATION_ID, scaStatus, null, null);
     }
 }

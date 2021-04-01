@@ -19,6 +19,7 @@ package de.adorsys.psd2.xs2a.service.mapper;
 import de.adorsys.psd2.model.*;
 import de.adorsys.psd2.xs2a.core.pis.PisDayOfExecution;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.pis.BulkPayment;
 import de.adorsys.psd2.xs2a.domain.pis.PeriodicPayment;
 import de.adorsys.psd2.xs2a.domain.pis.SinglePayment;
@@ -48,14 +49,14 @@ public interface PaymentModelMapper {
 
     Xs2aAmount mapToXs2aAmount(Amount amount);
 
-    de.adorsys.psd2.xs2a.core.profile.AccountReference mapToAccountReference(AccountReference accountReference);
+    Xs2aAccountReference mapToAccountReference(AccountReference accountReference);
 
     @AfterMapping
     default void mapToXs2aPaymentAfterMapping(BulkPaymentInitiationJson paymentRequest,
                                               @MappingTarget BulkPayment bulkPayment) {
         LocalDate requestedExecutionDate = paymentRequest.getRequestedExecutionDate();
         OffsetDateTime requestedExecutionTime = paymentRequest.getRequestedExecutionTime();
-        de.adorsys.psd2.xs2a.core.profile.AccountReference debtorAccount = mapToAccountReference(paymentRequest.getDebtorAccount());
+        Xs2aAccountReference debtorAccount = mapToAccountReference(paymentRequest.getDebtorAccount());
 
         bulkPayment.getPayments().forEach(bp -> {
             bp.setRequestedExecutionDate(requestedExecutionDate);

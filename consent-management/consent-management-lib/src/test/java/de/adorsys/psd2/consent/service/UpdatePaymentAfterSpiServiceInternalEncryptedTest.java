@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.CmsError;
 import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.consent.api.service.UpdatePaymentAfterSpiService;
 import de.adorsys.psd2.consent.service.security.SecurityDataService;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,7 +65,7 @@ class UpdatePaymentAfterSpiServiceInternalEncryptedTest {
                             .build());
 
         // When
-        CmsResponse<Boolean> actual = updatePaymentStatusAfterSpiServiceInternalEncrypted.updatePaymentStatus(ENCRYPTED_PAYMENT_ID, TransactionStatus.ACCP);
+        CmsResponse<Boolean> actual = updatePaymentStatusAfterSpiServiceInternalEncrypted.updatePaymentStatus(ENCRYPTED_PAYMENT_ID, Xs2aTransactionStatus.ACCP);
 
         // Then
         assertTrue(actual.isSuccessful());
@@ -83,7 +83,7 @@ class UpdatePaymentAfterSpiServiceInternalEncryptedTest {
                             .build());
 
         // When
-        CmsResponse<Boolean> actual = updatePaymentStatusAfterSpiServiceInternalEncrypted.updatePaymentStatus(WRONG_ENCRYPTED_PAYMENT_ID, TransactionStatus.ACCP);
+        CmsResponse<Boolean> actual = updatePaymentStatusAfterSpiServiceInternalEncrypted.updatePaymentStatus(WRONG_ENCRYPTED_PAYMENT_ID, Xs2aTransactionStatus.ACCP);
 
         // Then
         assertTrue(actual.isSuccessful());
@@ -97,7 +97,7 @@ class UpdatePaymentAfterSpiServiceInternalEncryptedTest {
         when(securityDataService.decryptId(UNDECRYPTABLE_PAYMENT_ID)).thenReturn(Optional.empty());
 
         // When
-        CmsResponse<Boolean> actual = updatePaymentStatusAfterSpiServiceInternalEncrypted.updatePaymentStatus(UNDECRYPTABLE_PAYMENT_ID, TransactionStatus.ACCP);
+        CmsResponse<Boolean> actual = updatePaymentStatusAfterSpiServiceInternalEncrypted.updatePaymentStatus(UNDECRYPTABLE_PAYMENT_ID, Xs2aTransactionStatus.ACCP);
 
         // Then
         assertTrue(actual.hasError());

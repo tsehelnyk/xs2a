@@ -18,8 +18,8 @@ package de.adorsys.psd2.consent.domain.piis;
 
 import de.adorsys.psd2.consent.domain.AccountReferenceEntity;
 import de.adorsys.psd2.consent.domain.InstanceDependableEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -59,11 +59,11 @@ public class PiisConsentEntity extends InstanceDependableEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "psu_id")
-    private PsuData psuData;
+    private CmsPsuData psuData;
 
     @Column(name = "consent_status", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private ConsentStatus consentStatus;
+    private Xs2aConsentStatus consentStatus;
 
     @JoinColumn(name = "acc_reference_id")
     @ManyToOne(cascade = CascadeType.ALL)
@@ -91,7 +91,7 @@ public class PiisConsentEntity extends InstanceDependableEntity {
     private String tppAuthorisationNumber;
 
     @Transient
-    private ConsentStatus previousConsentStatus;
+    private Xs2aConsentStatus previousConsentStatus;
 
     @PostLoad
     public void piisConsentPostLoad() {

@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.consent;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aCardAccountDetails;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +33,7 @@ public class CardAccountHandler {
     @Value("${xs2a.masked-pan-end-chars:4}")
     private int maskedPanEndChars;
 
-    public boolean areAccountsEqual(Xs2aCardAccountDetails aspspAccount, AccountReference tppAccount) {
+    public boolean areAccountsEqual(Xs2aCardAccountDetails aspspAccount, Xs2aAccountReference tppAccount) {
 
         String aspspMaskedPan = aspspAccount.getMaskedPan();
 

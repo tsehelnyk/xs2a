@@ -19,7 +19,7 @@ package de.adorsys.psd2.consent.service.aspsp;
 import de.adorsys.psd2.consent.aspsp.api.pis.AspspPaymentService;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.service.CommonPaymentDataService;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public class AspspPaymentServiceInternal implements AspspPaymentService {
 
     @Override
     @Transactional
-    public boolean updatePaymentStatus(@NotNull String paymentId, @NotNull TransactionStatus status, @NotNull String instanceId) {
+    public boolean updatePaymentStatus(@NotNull String paymentId, @NotNull Xs2aTransactionStatus status, @NotNull String instanceId) {
         Optional<PisCommonPaymentData> paymentDataOptional = commonPaymentDataService.getPisCommonPaymentData(paymentId, instanceId);
 
         return paymentDataOptional

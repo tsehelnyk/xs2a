@@ -21,7 +21,7 @@ import de.adorsys.psd2.xs2a.core.ais.BookingStatus;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
-import de.adorsys.psd2.xs2a.domain.Transactions;
+import de.adorsys.psd2.xs2a.domain.Xs2aTransactions;
 import de.adorsys.psd2.xs2a.domain.account.*;
 import de.adorsys.psd2.xs2a.service.ais.*;
 import de.adorsys.psd2.xs2a.service.mapper.AccountModelMapper;
@@ -155,7 +155,7 @@ public class AccountController implements AccountApi {
 
     @Override
     public ResponseEntity getTransactionDetails(String accountId, String resourceId, UUID xRequestID, String consentID, String digest, String signature, byte[] tpPSignatureCertificate, String psUIPAddress, String psUIPPort, String psUAccept, String psUAcceptCharset, String psUAcceptEncoding, String psUAcceptLanguage, String psUUserAgent, String psUHttpMethod, UUID psUDeviceID, String psUGeoLocation) {
-        ResponseObject<Transactions> transactionDetails = transactionService.getTransactionDetails(consentID, accountId, resourceId, requestUriHandler.trimEndingSlash(request.getRequestURI()));
+        ResponseObject<Xs2aTransactions> transactionDetails = transactionService.getTransactionDetails(consentID, accountId, resourceId, requestUriHandler.trimEndingSlash(request.getRequestURI()));
         return transactionDetails.hasError()
                    ? responseErrorMapper.generateErrorResponse(transactionDetails.getError())
                    : responseMapper.ok(transactionDetails, transactionModelMapper::mapToTransactionDetails);

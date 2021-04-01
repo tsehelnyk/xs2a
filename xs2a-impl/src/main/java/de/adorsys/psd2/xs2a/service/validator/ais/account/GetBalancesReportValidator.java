@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.validator.ais.account;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.validator.OauthConsentValidator;
@@ -56,7 +56,7 @@ public class GetBalancesReportValidator extends AbstractAccountTppValidator<GetA
             return ValidationResult.invalid(AIS_401, CONSENT_INVALID);
         }
 
-        AccountAccess accountAccess = aisConsent.getAspspAccountAccesses();
+        Xs2aConsentAccountAccess accountAccess = aisConsent.getAspspAccountAccesses();
         ValidationResult accountReferenceValidationResult = accountReferenceAccessValidator.validate(aisConsent,
                                                                                                      accountAccess.getBalances(), consentObject.getAccountId(), aisConsent.getAisConsentRequestType());
 

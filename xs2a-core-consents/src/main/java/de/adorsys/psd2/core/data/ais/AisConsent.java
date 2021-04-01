@@ -17,7 +17,7 @@
 package de.adorsys.psd2.core.data.ais;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.Consent;
 import de.adorsys.psd2.xs2a.core.ais.AccountAccessType;
 import de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType;
@@ -37,7 +37,7 @@ public class AisConsent extends Consent<AisConsentData> {
     }
 
     @JsonIgnore
-    public AccountAccess getAccess() {
+    public Xs2aConsentAccountAccess getAccess() {
         Optional<AccountAccessType> allPsd2Optional = Optional.ofNullable(getConsentData())
                                                           .map(AisConsentData::getAllPsd2);
 
@@ -45,7 +45,7 @@ public class AisConsent extends Consent<AisConsentData> {
             return getTppAccountAccesses();
         }
 
-        AccountAccess aspspAccountAccesses = getAspspAccountAccesses();
+        Xs2aConsentAccountAccess aspspAccountAccesses = getAspspAccountAccesses();
         if (aspspAccountAccesses.isNotEmpty(getConsentData())) {
             return aspspAccountAccesses;
         }
@@ -85,7 +85,7 @@ public class AisConsent extends Consent<AisConsentData> {
     }
 
     public boolean isConsentWithNotIbanAccount() {
-        AccountAccess access = getAccess();
+        Xs2aConsentAccountAccess access = getAccess();
         if (access == null) {
             return false;
         }
@@ -97,7 +97,7 @@ public class AisConsent extends Consent<AisConsentData> {
     }
 
     public boolean isConsentWithNotCardAccount() {
-        AccountAccess access = getAccess();
+        Xs2aConsentAccountAccess access = getAccess();
         if (access == null) {
             return false;
 
@@ -119,7 +119,7 @@ public class AisConsent extends Consent<AisConsentData> {
 
     @JsonIgnore
     public AisConsentRequestType getConsentRequestType() {
-        AccountAccess usedAccess = getAccess();
+        Xs2aConsentAccountAccess usedAccess = getAccess();
         return getRequestType(getConsentData().getAllPsd2(),
                               getConsentData().getAvailableAccounts(),
                               getConsentData().getAvailableAccountsWithBalance(),

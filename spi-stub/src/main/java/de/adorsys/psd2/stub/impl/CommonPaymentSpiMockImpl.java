@@ -17,8 +17,8 @@
 package de.adorsys.psd2.stub.impl;
 
 import de.adorsys.psd2.stub.impl.service.PaymentServiceMock;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiCheckConfirmationCodeRequest;
@@ -50,7 +50,7 @@ public class CommonPaymentSpiMockImpl implements CommonPaymentSpi {
     public SpiResponse<SpiPaymentInitiationResponse> initiatePayment(@NotNull SpiContextData contextData, @NotNull SpiPaymentInfo payment, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
         log.info("CommonPaymentSpi#initiatePayment: contextData {}, spiPaymentInfo {}, aspspConsentData {}", contextData, payment, aspspConsentDataProvider.loadAspspConsentData());
         SpiCommonPaymentInitiationResponse response = new SpiCommonPaymentInitiationResponse();
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setPaymentId(UUID.randomUUID().toString());
         response.setAspspAccountId("d0419f4f-54a5-47fd-ae59-af308601bb16");
 
@@ -91,7 +91,7 @@ public class CommonPaymentSpiMockImpl implements CommonPaymentSpi {
         log.info("CommonPaymentSpi#executePaymentWithoutSca: contextData {}, spiPaymentInfo {}, aspspConsentData {}", contextData, payment, aspspConsentDataProvider.loadAspspConsentData());
 
         return SpiResponse.<SpiPaymentExecutionResponse>builder()
-                   .payload(new SpiPaymentExecutionResponse(TransactionStatus.ACCP))
+                   .payload(new SpiPaymentExecutionResponse(Xs2aTransactionStatus.ACCP))
                    .build();
     }
 
@@ -101,7 +101,7 @@ public class CommonPaymentSpiMockImpl implements CommonPaymentSpi {
         log.info("CommonPaymentSpi#verifyScaAuthorisationAndExecutePayment: contextData {}, spiScaConfirmation{}, spiPaymentInfo {}, aspspConsentData {}", contextData, spiScaConfirmation, payment, aspspConsentDataProvider.loadAspspConsentData());
 
         return SpiResponse.<SpiPaymentExecutionResponse>builder()
-                   .payload(new SpiPaymentExecutionResponse(TransactionStatus.ACCP))
+                   .payload(new SpiPaymentExecutionResponse(Xs2aTransactionStatus.ACCP))
                    .build();
     }
 
@@ -111,7 +111,7 @@ public class CommonPaymentSpiMockImpl implements CommonPaymentSpi {
         log.info("CommonPaymentSpi#checkConfirmationCode: contextData {}, spiCheckConfirmationCodeRequest{}, authorisationId {}, aspspConsentData {}", contextData, spiCheckConfirmationCodeRequest.getConfirmationCode(), spiCheckConfirmationCodeRequest.getAuthorisationId(), aspspConsentDataProvider.loadAspspConsentData());
 
         return SpiResponse.<SpiPaymentConfirmationCodeValidationResponse>builder()
-                   .payload(new SpiPaymentConfirmationCodeValidationResponse(ScaStatus.FINALISED, TransactionStatus.ACSP))
+                   .payload(new SpiPaymentConfirmationCodeValidationResponse(Xs2aScaStatus.FINALISED, Xs2aTransactionStatus.ACSP))
                    .build();
     }
 

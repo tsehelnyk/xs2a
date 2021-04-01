@@ -17,12 +17,12 @@
 package de.adorsys.psd2.consent.api.ais;
 
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.Value;
 
 @Value
 public class AisAccountConsentAuthorisation {
     private String id;
     private PsuIdData psuIdData;
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
 }

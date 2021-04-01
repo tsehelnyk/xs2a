@@ -23,12 +23,12 @@ import de.adorsys.psd2.consent.domain.account.AisConsentTransaction;
 import de.adorsys.psd2.consent.repository.AisConsentTransactionRepository;
 import de.adorsys.psd2.consent.repository.AisConsentUsageRepository;
 import de.adorsys.psd2.consent.service.mapper.CmsAisConsentMapper;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
 import de.adorsys.psd2.xs2a.core.ais.AccountAccessType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,15 +72,15 @@ class OneOffConsentExpirationServiceTest {
     private final JsonReader jsonReader = new JsonReader();
     private AisConsentTransaction aisConsentTransaction;
     private CmsConsent cmsConsent;
-    private AccountReference accountReference;
+    private Xs2aAccountReference accountReference;
     private AspspSettings aspspSettings;
 
     @BeforeEach
     void setUp() {
-        accountReference = jsonReader.getObjectFromFile("json/service/account-reference.json", AccountReference.class);
+        accountReference = jsonReader.getObjectFromFile("json/service/account-reference.json", Xs2aAccountReference.class);
         aisConsentTransaction = new AisConsentTransaction();
         cmsConsent = new CmsConsent();
-        cmsConsent.setTppAccountAccesses(AccountAccess.EMPTY_ACCESS);
+        cmsConsent.setTppAccountAccesses(Xs2aConsentAccountAccess.EMPTY_ACCESS);
         cmsConsent.setInstanceId(INSTANCE_ID);
         aspspSettings = jsonReader.getObjectFromFile("json/AspspSetting.json", AspspSettings.class);
     }
@@ -358,21 +358,21 @@ class OneOffConsentExpirationServiceTest {
         assertTrue(isExpired);
     }
 
-    private AisConsent buildAisConsent(AccountReference account,
-                                       AccountReference balance,
-                                       AccountReference transaction,
+    private AisConsent buildAisConsent(Xs2aAccountReference account,
+                                       Xs2aAccountReference balance,
+                                       Xs2aAccountReference transaction,
                                        AccountAccessType availableAccounts,
                                        AccountAccessType allPsd2) {
         AisConsent aisConsent = new AisConsent();
 
-        AccountAccess accountAccess = new AccountAccess(
+        Xs2aConsentAccountAccess accountAccess = new Xs2aConsentAccountAccess(
             Optional.ofNullable(account).map(Collections::singletonList).orElseGet(Collections::emptyList),
             Optional.ofNullable(balance).map(Collections::singletonList).orElseGet(Collections::emptyList),
             Optional.ofNullable(transaction).map(Collections::singletonList).orElseGet(Collections::emptyList),
             null);
 
         aisConsent.setAspspAccountAccesses(accountAccess);
-        aisConsent.setTppAccountAccesses(AccountAccess.EMPTY_ACCESS);
+        aisConsent.setTppAccountAccesses(Xs2aConsentAccountAccess.EMPTY_ACCESS);
 
         AisConsentData consentData = new AisConsentData(
             Optional.ofNullable(availableAccounts).orElse(null),

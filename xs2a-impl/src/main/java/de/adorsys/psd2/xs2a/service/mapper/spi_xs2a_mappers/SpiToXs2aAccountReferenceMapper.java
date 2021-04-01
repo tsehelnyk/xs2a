@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountReference;
 import org.mapstruct.Mapper;
 
@@ -25,7 +25,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface SpiToXs2aAccountReferenceMapper {
 
-    AccountReference mapToXs2aAccountReference(SpiAccountReference spiAccountRef);
+    Xs2aAccountReference mapToXs2aAccountReference(SpiAccountReference spiAccountRef);
 
-    List<AccountReference> mapToXs2aAccountReferences(List<SpiAccountReference> references);
+    List<Xs2aAccountReference> mapToXs2aAccountReferences(List<SpiAccountReference> references);
 }

@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.web.link;
 
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.profile.ScaRedirectFlow;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.pis.PaymentInitiationParameters;
 import de.adorsys.psd2.xs2a.domain.pis.PaymentInitiationResponse;
 import de.adorsys.psd2.xs2a.service.RedirectIdService;
@@ -27,7 +27,7 @@ import de.adorsys.psd2.xs2a.web.RedirectLinkBuilder;
 
 import java.util.EnumSet;
 
-import static de.adorsys.psd2.xs2a.core.pis.TransactionStatus.RJCT;
+import static de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus.RJCT;
 import static de.adorsys.psd2.xs2a.core.profile.ScaApproach.*;
 
 public class PaymentInitiationLinks extends AbstractLinks {
@@ -107,7 +107,7 @@ public class PaymentInitiationLinks extends AbstractLinks {
                                           ? redirectLinkBuilder.buildPaymentScaOauthRedirectLink(paymentId, redirectId, internalRequestId)
                                           : redirectLinkBuilder.buildPaymentScaRedirectLink(paymentId, redirectId, internalRequestId, instanceId);
 
-            setScaRedirect(new HrefType(paymentOauthLink));
+            setScaRedirect(new Xs2aHrefType(paymentOauthLink));
             setScaStatus(
                 buildPath(UrlHolder.PIS_AUTHORISATION_LINK_URL, paymentService, paymentProduct, paymentId, authorisationId));
 

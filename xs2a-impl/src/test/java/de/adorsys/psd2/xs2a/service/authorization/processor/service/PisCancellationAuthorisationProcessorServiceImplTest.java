@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorRequest;
@@ -52,7 +52,7 @@ class PisCancellationAuthorisationProcessorServiceImplTest {
     private static final String TEST_AUTHORISATION_ID = "assddsff";
     private static final PsuIdData TEST_PSU_DATA = new PsuIdData("test-user", null, null, null, null);
     private static final ScaApproach TEST_SCA_APPROACH = ScaApproach.EMBEDDED;
-    private static final ScaStatus TEST_SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus TEST_SCA_STATUS = Xs2aScaStatus.RECEIVED;
 
     @InjectMocks
     private PisCancellationAuthorisationProcessorServiceImpl pisCancellationAuthorisationProcessorService;
@@ -94,7 +94,7 @@ class PisCancellationAuthorisationProcessorServiceImplTest {
         assertNotNull(actual);
         assertNull(actual.getErrorHolder());
         assertTrue(actual instanceof Xs2aUpdatePisCommonPaymentPsuDataResponse);
-        assertThat(actual.getScaStatus()).isEqualTo(ScaStatus.FINALISED);
+        assertThat(actual.getScaStatus()).isEqualTo(Xs2aScaStatus.FINALISED);
         assertThat(actual.getAuthorisationId()).isEqualTo(TEST_AUTHORISATION_ID);
         assertThat(actual.getPaymentId()).isEqualTo(TEST_PAYMENT_ID);
         assertThat((actual).getPsuData()).isEqualTo(TEST_PSU_DATA);

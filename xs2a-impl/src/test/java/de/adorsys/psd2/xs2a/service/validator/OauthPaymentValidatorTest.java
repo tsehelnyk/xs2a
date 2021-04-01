@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.validator;
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.profile.ScaRedirectFlow;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
@@ -45,9 +45,9 @@ import static org.mockito.Mockito.when;
 class OauthPaymentValidatorTest {
     private static final String TOKEN = "token";
     private static final MessageError MESSAGE_ERROR = new MessageError(ErrorType.PIS_403, of(FORBIDDEN));
-    private static final List<TransactionStatus> ALLOWED_WITHOUT_TOKEN = Stream.of(TransactionStatus.RCVD, TransactionStatus.PDNG, TransactionStatus.PATC).collect(Collectors.toList());
-    private static final List<TransactionStatus> NOT_ALLOWED_WITHOUT_TOKEN = Stream.of(TransactionStatus.values()).filter(status -> !ALLOWED_WITHOUT_TOKEN.contains(status)).collect(Collectors.toList());
-    private static final List<TransactionStatus> ALL_TRANSACTION_STATUSES = Stream.of(TransactionStatus.values()).collect(Collectors.toList());
+    private static final List<Xs2aTransactionStatus> ALLOWED_WITHOUT_TOKEN = Stream.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PDNG, Xs2aTransactionStatus.PATC).collect(Collectors.toList());
+    private static final List<Xs2aTransactionStatus> NOT_ALLOWED_WITHOUT_TOKEN = Stream.of(Xs2aTransactionStatus.values()).filter(status -> !ALLOWED_WITHOUT_TOKEN.contains(status)).collect(Collectors.toList());
+    private static final List<Xs2aTransactionStatus> ALL_TRANSACTION_STATUSES = Stream.of(Xs2aTransactionStatus.values()).collect(Collectors.toList());
 
     @InjectMocks
     private OauthPaymentValidator oauthPaymentValidator;
@@ -102,7 +102,7 @@ class OauthPaymentValidatorTest {
         ALL_TRANSACTION_STATUSES.forEach(this::testForValid);
     }
 
-    private void testForInvalid(TransactionStatus status) {
+    private void testForInvalid(Xs2aTransactionStatus status) {
         //When
         PisCommonPaymentResponse pisCommonPaymentResponse = buildPisCommonPaymentResponse(status);
         ValidationResult validationResult = oauthPaymentValidator.validate(pisCommonPaymentResponse);
@@ -112,7 +112,7 @@ class OauthPaymentValidatorTest {
         assertEquals(MESSAGE_ERROR, validationResult.getMessageError());
     }
 
-    private void testForValid(TransactionStatus status) {
+    private void testForValid(Xs2aTransactionStatus status) {
         //When
         PisCommonPaymentResponse pisCommonPaymentResponse = buildPisCommonPaymentResponse(status);
         ValidationResult validationResult = oauthPaymentValidator.validate(pisCommonPaymentResponse);
@@ -121,7 +121,7 @@ class OauthPaymentValidatorTest {
         assertTrue(validationResult.isValid());
     }
 
-    private PisCommonPaymentResponse buildPisCommonPaymentResponse(TransactionStatus transactionStatus) {
+    private PisCommonPaymentResponse buildPisCommonPaymentResponse(Xs2aTransactionStatus transactionStatus) {
         PisCommonPaymentResponse pisCommonPaymentResponse = new PisCommonPaymentResponse();
         pisCommonPaymentResponse.setTransactionStatus(transactionStatus);
         return pisCommonPaymentResponse;

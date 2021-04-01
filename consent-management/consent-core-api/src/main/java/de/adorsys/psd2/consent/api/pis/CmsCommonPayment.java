@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.api.pis;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +25,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class CmsCommonPayment extends BaseCmsPayment {
     private PaymentType paymentType;
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
     private byte[] paymentData;
 
     public CmsCommonPayment(String paymentProduct) {

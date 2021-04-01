@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.event;
 
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import org.junit.jupiter.api.Test;
 
@@ -132,7 +132,7 @@ class EventTypeServiceTest {
             }
 
             @Override
-            public ScaStatus getScaStatus() {
+            public Xs2aScaStatus getScaStatus() {
                 return null;
             }
 
@@ -181,7 +181,7 @@ class EventTypeServiceTest {
             }
 
             @Override
-            public ScaStatus getScaStatus() {
+            public Xs2aScaStatus getScaStatus() {
                 return null;
             }
 
@@ -230,7 +230,7 @@ class EventTypeServiceTest {
             }
 
             @Override
-            public ScaStatus getScaStatus() {
+            public Xs2aScaStatus getScaStatus() {
                 return null;
             }
 
@@ -279,7 +279,7 @@ class EventTypeServiceTest {
             }
 
             @Override
-            public ScaStatus getScaStatus() {
+            public Xs2aScaStatus getScaStatus() {
                 return null;
             }
 
@@ -328,7 +328,7 @@ class EventTypeServiceTest {
             }
 
             @Override
-            public ScaStatus getScaStatus() {
+            public Xs2aScaStatus getScaStatus() {
                 return null;
             }
 

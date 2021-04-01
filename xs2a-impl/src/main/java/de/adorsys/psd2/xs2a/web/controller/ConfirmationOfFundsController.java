@@ -26,7 +26,7 @@ import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.profile.PiisConsentSupported;
 import de.adorsys.psd2.xs2a.core.psu.AdditionalPsuIdData;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
 import de.adorsys.psd2.xs2a.domain.consent.ConsentStatusResponse;
@@ -95,7 +95,7 @@ public class ConfirmationOfFundsController implements ConfirmationOfFundsApi {
 
         ResponseHeaders headers = consentHeadersBuilder.buildCreateConsentHeaders(xs2aConfirmationOfFundsResponse.getAuthorizationId(),
                                                                                   Optional.ofNullable(xs2aConfirmationOfFundsResponse.getLinks().getSelf())
-                                                                                      .map(HrefType::getHref)
+                                                                                      .map(Xs2aHrefType::getHref)
                                                                                       .orElseThrow(() -> new IllegalArgumentException("Wrong href type in self link")));
 
         return responseMapper.created(xs2aConfirmationOfFundsResponseResponseObject, piisConsentModelMapper::mapToConsentsConfirmationOfFundsResponse, headers);

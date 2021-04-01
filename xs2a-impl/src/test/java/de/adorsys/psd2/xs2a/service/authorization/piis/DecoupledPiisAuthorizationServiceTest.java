@@ -23,7 +23,7 @@ import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentAuthorizationResponse;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
@@ -51,7 +51,7 @@ class DecoupledPiisAuthorizationServiceTest {
     private static final String WRONG_AUTHORISATION_ID = "Wrong authorisation id";
     private static final PsuIdData PSU_DATA = new PsuIdData("psuId", "psuIdType", "psuCorporateId", "psuCorporateIdType", "psuIpAddress");
     private static final Authorisation ACCOUNT_CONSENT_AUTHORIZATION = buildAccountConsentAuthorization();
-    private static final ScaStatus SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus SCA_STATUS = Xs2aScaStatus.RECEIVED;
     private static final ScaApproach SCA_APPROACH = ScaApproach.DECOUPLED;
     private static final CreateConsentAuthorizationResponse CREATE_CONSENT_AUTHORIZATION_RESPONSE = buildCreateConsentAuthorizationResponse();
 
@@ -154,7 +154,7 @@ class DecoupledPiisAuthorizationServiceTest {
             .thenReturn(Optional.of(SCA_STATUS));
 
         // When
-        Optional<ScaStatus> actualResponse = decoupledPiisAuthorizationService.getAuthorisationScaStatus(CONSENT_ID, AUTHORISATION_ID);
+        Optional<Xs2aScaStatus> actualResponse = decoupledPiisAuthorizationService.getAuthorisationScaStatus(CONSENT_ID, AUTHORISATION_ID);
 
         // Then
         assertThat(actualResponse).isPresent().contains(SCA_STATUS);
@@ -167,7 +167,7 @@ class DecoupledPiisAuthorizationServiceTest {
             .thenReturn(Optional.empty());
 
         // When
-        Optional<ScaStatus> actualResponse = decoupledPiisAuthorizationService.getAuthorisationScaStatus(WRONG_CONSENT_ID, WRONG_AUTHORISATION_ID);
+        Optional<Xs2aScaStatus> actualResponse = decoupledPiisAuthorizationService.getAuthorisationScaStatus(WRONG_CONSENT_ID, WRONG_AUTHORISATION_ID);
 
         // Then
         assertThat(actualResponse).isNotPresent();
@@ -186,14 +186,14 @@ class DecoupledPiisAuthorizationServiceTest {
         CreateConsentAuthorizationResponse resp = new CreateConsentAuthorizationResponse();
         resp.setConsentId(CONSENT_ID);
         resp.setAuthorisationId(AUTHORISATION_ID);
-        resp.setScaStatus(ScaStatus.RECEIVED);
+        resp.setScaStatus(Xs2aScaStatus.RECEIVED);
         resp.setPsuIdData(PSU_DATA);
         return resp;
     }
 
     private static Authorisation buildAccountConsentAuthorization() {
         Authorisation authorisation = new Authorisation();
-        authorisation.setScaStatus(ScaStatus.RECEIVED);
+        authorisation.setScaStatus(Xs2aScaStatus.RECEIVED);
         return authorisation;
     }
 
@@ -210,7 +210,7 @@ class DecoupledPiisAuthorizationServiceTest {
     }
 
     private CreateAuthorisationResponse buildCreateAuthorisationResponse() {
-        return new CreateAuthorisationResponse(AUTHORISATION_ID, ScaStatus.RECEIVED, "", PSU_DATA);
+        return new CreateAuthorisationResponse(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, "", PSU_DATA);
     }
 
     private AuthorisationProcessorResponse buildAuthorisationProcessorResponseWithError() {

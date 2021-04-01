@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.validator.piis;
 
 import de.adorsys.psd2.core.data.Consent;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.domain.fund.PiisConsentValidationResult;
@@ -52,7 +52,7 @@ public class PiisConsentValidation {
         }
 
         Optional<PiisConsent> filteredPiisConsent = piisConsents.stream()
-                                                        .filter(e -> EnumSet.of(ConsentStatus.VALID, ConsentStatus.RECEIVED).contains(e.getConsentStatus()))
+                                                        .filter(e -> EnumSet.of(Xs2aConsentStatus.VALID, Xs2aConsentStatus.RECEIVED).contains(e.getConsentStatus()))
                                                         .filter(this::isNotExpired)
                                                         .filter(this::filterByTpp)
                                                         .sorted(Comparator.comparing(PiisConsent::getCreationTimestamp, Comparator.nullsLast(Comparator.reverseOrder())))

@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.api.pis.PisCommonPaymentDataStatusResponse;
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
 import de.adorsys.psd2.consent.api.service.PisCommonPaymentServiceEncrypted;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
@@ -50,7 +50,7 @@ public class PisCommonPaymentController implements PisCommonPaymentApi {
 
     @Override
     public ResponseEntity<PisCommonPaymentDataStatusResponse> getPisCommonPaymentStatusById(String paymentId) {
-        CmsResponse<TransactionStatus> response = pisCommonPaymentServiceEncrypted.getPisCommonPaymentStatusById(paymentId);
+        CmsResponse<Xs2aTransactionStatus> response = pisCommonPaymentServiceEncrypted.getPisCommonPaymentStatusById(paymentId);
 
         if (response.hasError()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -72,7 +72,7 @@ public class PisCommonPaymentController implements PisCommonPaymentApi {
 
     @Override
     public ResponseEntity<Void> updateCommonPaymentStatus(String paymentId, String status) {
-        TransactionStatus transactionStatus = TransactionStatus.getByValue(status);
+        Xs2aTransactionStatus transactionStatus = Xs2aTransactionStatus.getByValue(status);
         if (transactionStatus == null) {
             log.error("Invalid transaction status: [{}] for payment-ID [{}]", status, paymentId);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

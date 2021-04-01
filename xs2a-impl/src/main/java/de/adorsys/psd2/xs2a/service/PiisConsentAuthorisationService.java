@@ -25,7 +25,7 @@ import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -106,7 +106,7 @@ public class PiisConsentAuthorisationService {
             MessageErrorCode messageErrorCode = validationResult.getMessageError().getTppMessage().getMessageErrorCode();
 
             if (EnumSet.of(PSU_CREDENTIALS_INVALID, FORMAT_ERROR_NO_PSU).contains(messageErrorCode)) {
-                xs2aAuthorisationService.updateAuthorisationStatus(authorisationId, ScaStatus.FAILED);
+                xs2aAuthorisationService.updateAuthorisationStatus(authorisationId, Xs2aScaStatus.FAILED);
             }
 
             log.info("Consent-ID: [{}], Authorisation-ID [{}]. Update consent PSU data - validation failed: {}",
@@ -287,7 +287,7 @@ public class PiisConsentAuthorisationService {
         }
 
         PiisAuthorizationService authorizationService = piisScaAuthorisationServiceResolver.getService(authorisationId);
-        Optional<ScaStatus> scaStatusOptional = authorizationService
+        Optional<Xs2aScaStatus> scaStatusOptional = authorizationService
                                                     .getAuthorisationScaStatus(consentId, authorisationId);
 
         if (scaStatusOptional.isEmpty()) {
@@ -298,7 +298,7 @@ public class PiisConsentAuthorisationService {
                        .build();
         }
 
-        ScaStatus scaStatus = scaStatusOptional.get();
+        Xs2aScaStatus scaStatus = scaStatusOptional.get();
 
         PsuIdData psuIdData = psuIdDataAuthorisationService.getPsuIdData(authorisationId, piisConsent.getPsuIdDataList());
 

@@ -22,7 +22,7 @@ import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.domain.pis.SinglePayment;
 import de.adorsys.psd2.xs2a.web.mapper.PurposeCodeMapper;
@@ -56,7 +56,7 @@ class SinglePaymentTypeValidatorImplTest {
     private MessageError messageError;
 
     private SinglePayment singlePayment;
-    private AccountReference accountReference;
+    private Xs2aAccountReference accountReference;
     private Xs2aAddress address;
     private PaymentValidationConfig validationConfig;
     private JsonReader jsonReader = new JsonReader();
@@ -65,7 +65,7 @@ class SinglePaymentTypeValidatorImplTest {
     void setUp() {
         messageError = new MessageError();
         singlePayment = jsonReader.getObjectFromFile("json/validation/single-payment.json", SinglePayment.class);
-        accountReference = jsonReader.getObjectFromFile("json/validation/account_reference.json", AccountReference.class);
+        accountReference = jsonReader.getObjectFromFile("json/validation/account_reference.json", Xs2aAccountReference.class);
         address = jsonReader.getObjectFromFile("json/validation/address.json", Xs2aAddress.class);
 
         Xs2aObjectMapper xs2aObjectMapper = new Xs2aObjectMapper();

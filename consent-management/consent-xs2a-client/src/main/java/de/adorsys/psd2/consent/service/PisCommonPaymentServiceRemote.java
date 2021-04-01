@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
 import de.adorsys.psd2.consent.api.service.PisCommonPaymentServiceEncrypted;
 import de.adorsys.psd2.consent.config.CmsRestException;
 import de.adorsys.psd2.consent.config.PisCommonPaymentRemoteUrls;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,8 +63,8 @@ public class PisCommonPaymentServiceRemote implements PisCommonPaymentServiceEnc
     }
 
     @Override
-    public CmsResponse<TransactionStatus> getPisCommonPaymentStatusById(String paymentId) {
-        return CmsResponse.<TransactionStatus>builder()
+    public CmsResponse<Xs2aTransactionStatus> getPisCommonPaymentStatusById(String paymentId) {
+        return CmsResponse.<Xs2aTransactionStatus>builder()
                    .error(TECHNICAL_ERROR)
                    .build();
     }
@@ -86,7 +86,7 @@ public class PisCommonPaymentServiceRemote implements PisCommonPaymentServiceEnc
     }
 
     @Override
-    public CmsResponse<Boolean> updateCommonPaymentStatusById(String paymentId, TransactionStatus status) {
+    public CmsResponse<Boolean> updateCommonPaymentStatusById(String paymentId, Xs2aTransactionStatus status) {
         try {
             HttpStatus statusCode = consentRestTemplate.exchange(remotePisCommonPaymentUrls.updatePisCommonPaymentStatus(), HttpMethod.PUT,
                                                                  null, Void.class, paymentId, status.getTransactionStatus()).getStatusCode();

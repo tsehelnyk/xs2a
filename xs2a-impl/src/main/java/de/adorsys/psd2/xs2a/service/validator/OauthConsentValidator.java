@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.validator;
 
 import de.adorsys.psd2.core.data.ais.AisConsent;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
@@ -39,7 +39,7 @@ public class OauthConsentValidator extends OauthValidator<AisConsent> {
 
     @Override
     protected boolean checkObjectForTokenAbsence(AisConsent aisConsent) {
-        return aisConsent.getConsentStatus() == ConsentStatus.VALID;
+        return aisConsent.getConsentStatus() == Xs2aConsentStatus.VALID;
     }
 
     @Override

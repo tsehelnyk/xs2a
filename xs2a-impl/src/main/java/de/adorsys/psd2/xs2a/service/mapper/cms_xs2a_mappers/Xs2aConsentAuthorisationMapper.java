@@ -21,7 +21,7 @@ import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.web.mapper.TppRedirectUriMapper;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ import java.util.Optional;
 public class Xs2aConsentAuthorisationMapper {
     private final TppRedirectUriMapper tppRedirectUriMapper;
 
-    public CreateAuthorisationRequest mapToAuthorisationRequest(ScaStatus scaStatus, PsuIdData psuData, ScaApproach scaApproach, String tppRedirectURI, String tppNOKRedirectURI) {
+    public CreateAuthorisationRequest mapToAuthorisationRequest(Xs2aScaStatus scaStatus, PsuIdData psuData, ScaApproach scaApproach, String tppRedirectURI, String tppNOKRedirectURI) {
         return Optional.ofNullable(scaStatus)
                    .map(st -> {
                        CreateAuthorisationRequest consentAuthorization = new CreateAuthorisationRequest();

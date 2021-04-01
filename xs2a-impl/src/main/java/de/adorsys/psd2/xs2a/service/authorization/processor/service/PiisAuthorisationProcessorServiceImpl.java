@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.authorization.processor.service;
 
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
@@ -106,7 +106,7 @@ public class PiisAuthorisationProcessorServiceImpl extends ConsentAuthorisationP
     }
 
     @Override
-    void updateConsentStatus(String consentId, ConsentStatus responseConsentStatus) {
+    void updateConsentStatus(String consentId, Xs2aConsentStatus responseConsentStatus) {
         piisConsentService.updateConsentStatus(consentId, responseConsentStatus);
     }
 

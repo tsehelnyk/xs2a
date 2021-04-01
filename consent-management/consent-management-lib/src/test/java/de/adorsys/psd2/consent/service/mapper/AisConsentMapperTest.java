@@ -21,7 +21,7 @@ import de.adorsys.psd2.consent.api.ais.CmsAisAccountConsent;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.service.AisConsentUsageService;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
 import de.adorsys.xs2a.reader.JsonReader;
@@ -152,11 +152,11 @@ class AisConsentMapperTest {
                                                 .getObjectFromFile("json/service/mapper/ais-consent-mapper/ais-account-access.json",
                                                                    AisAccountAccess.class);
 
-        AccountAccess result = aisConsentMapper.mapToAccountAccess(aisAccountAccess);
+        Xs2aConsentAccountAccess result = aisConsentMapper.mapToAccountAccess(aisAccountAccess);
 
-        AccountAccess expected = jsonReader.
+        Xs2aConsentAccountAccess expected = jsonReader.
                                                getObjectFromFile("json/service/mapper/ais-consent-mapper/aspsp-account-access.json",
-                                                                 AccountAccess.class);
+                                                                 Xs2aConsentAccountAccess.class);
 
         assertEquals(expected, result);
     }

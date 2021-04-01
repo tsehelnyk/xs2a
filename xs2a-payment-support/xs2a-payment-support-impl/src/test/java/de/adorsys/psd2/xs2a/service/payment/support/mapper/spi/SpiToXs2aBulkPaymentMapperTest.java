@@ -16,8 +16,8 @@
 
 package de.adorsys.psd2.xs2a.service.payment.support.mapper.spi;
 
-import de.adorsys.psd2.core.payment.model.PurposeCode;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.domain.pis.BulkPayment;
 import de.adorsys.psd2.xs2a.domain.pis.SinglePayment;
 import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiToXs2aAccountReferenceMapperImpl;
@@ -91,7 +91,7 @@ class SpiToXs2aBulkPaymentMapperTest {
         payment.setDebtorAccount(accountReference);
         payment.setRequestedExecutionDate(OFFSET_DATE_TIME.toLocalDate());
         payment.setRequestedExecutionTime(OFFSET_DATE_TIME);
-        payment.setPaymentStatus(TransactionStatus.ACCP);
+        payment.setPaymentStatus(Xs2aTransactionStatus.ACCP);
         payment.setPaymentProduct(PAYMENT_PRODUCT);
         payment.setPsuDataList(Collections.singletonList(SpiPsuData.builder()
                                                              .psuId("psuId")
@@ -116,7 +116,7 @@ class SpiToXs2aBulkPaymentMapperTest {
     private List<SpiSinglePayment> buildSpiSinglePaymentList() {
         SpiSinglePayment payment = new SpiSinglePayment(PAYMENT_PRODUCT);
         payment.setPaymentId(PAYMENT_ID);
-        payment.setPaymentStatus(TransactionStatus.ACCP);
+        payment.setPaymentStatus(Xs2aTransactionStatus.ACCP);
         SpiAccountReference accountReferenceCreditor = jsonReader.getObjectFromFile("json/support/mapper/spi/spi-account-reference-creditor.json", SpiAccountReference.class);
         payment.setCreditorAccount(accountReferenceCreditor);
         payment.setCreditorAgent("BCENECEQ");
@@ -147,7 +147,7 @@ class SpiToXs2aBulkPaymentMapperTest {
                                                              .psuHttpMethod("")
                                                              .psuDeviceId(UUID.randomUUID())
                                                              .build()));
-        payment.setPurposeCode(PurposeCode.CDQC);
+        payment.setPurposeCode(Xs2aPisPurposeCode.CDQC);
         payment.setStatusChangeTimestamp(OFFSET_DATE_TIME);
         payment.setUltimateCreditor("ultimateCreditor");
         payment.setUltimateDebtor("ultimateDebtor");

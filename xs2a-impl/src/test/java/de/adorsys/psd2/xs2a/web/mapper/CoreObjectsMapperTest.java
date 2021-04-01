@@ -17,6 +17,7 @@
 package de.adorsys.psd2.xs2a.web.mapper;
 
 import de.adorsys.psd2.model.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ class CoreObjectsMapperTest {
 
     @Test
     void mapToModelScaStatus() {
-        Stream.of(de.adorsys.psd2.xs2a.core.sca.ScaStatus.values())
+        Stream.of(Xs2aScaStatus.values())
             .forEach(scaStatus -> assertEquals(ScaStatus.valueOf(scaStatus.name()), mapper.mapToModelScaStatus(scaStatus)));
     }
 }

@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.spi.domain.payment.response;
 
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,5 +34,5 @@ public class SpiPaymentCancellationResponse extends SpiPaymentResponse {
      * Provides a possibility to update status to an actual one. If not provided status will not be updated.
      * If TransactionStatus.CANC is returned, payment will be cancelled immediately without further processing.
      */
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
 }

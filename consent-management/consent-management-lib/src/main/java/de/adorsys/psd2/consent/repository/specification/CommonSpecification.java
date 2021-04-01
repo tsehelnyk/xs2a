@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.repository.specification;
 
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,7 +76,7 @@ public class CommonSpecification<T> {
         }
 
         return (root, query, cb) -> {
-            Join<T, PsuData> psuDataJoin = root.join(PSU_DATA_LIST_ATTRIBUTE);
+            Join<T, CmsPsuData> psuDataJoin = root.join(PSU_DATA_LIST_ATTRIBUTE);
             return Optional.of(Specification.where(provideSpecificationForJoinedEntityAttribute(psuDataJoin, PSU_ID_ATTRIBUTE, psuIdData.getPsuId())))
                        .map(s -> s.and(provideSpecificationForJoinedEntityAttribute(psuDataJoin, PSU_ID_TYPE_ATTRIBUTE, psuIdData.getPsuIdType())))
                        .map(s -> s.and(provideSpecificationForJoinedEntityAttribute(psuDataJoin, PSU_CORPORATE_ID_ATTRIBUTE, psuIdData.getPsuCorporateId())))

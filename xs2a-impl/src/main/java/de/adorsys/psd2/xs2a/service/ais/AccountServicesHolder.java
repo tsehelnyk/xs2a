@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.ais;
 import de.adorsys.psd2.consent.api.ActionStatus;
 import de.adorsys.psd2.consent.api.TypeAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.service.TppService;
 import de.adorsys.psd2.xs2a.service.consent.CardAccountHandler;
@@ -44,7 +44,7 @@ public class AccountServicesHolder {
         return aisConsentService.getAccountConsentById(consentId);
     }
 
-    public SpiAccountReference findAccountReference(List<AccountReference> accountReferences, String accountId) {
+    public SpiAccountReference findAccountReference(List<Xs2aAccountReference> accountReferences, String accountId) {
         return accountHelperService.findAccountReference(accountReferences, accountId);
     }
 

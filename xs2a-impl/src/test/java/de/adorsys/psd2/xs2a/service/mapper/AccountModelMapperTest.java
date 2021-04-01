@@ -20,8 +20,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import de.adorsys.psd2.aspsp.profile.domain.MulticurrencyAccountLevel;
 import de.adorsys.psd2.model.*;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountDetails;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountDetailsHolder;
@@ -89,7 +89,7 @@ class AccountModelMapperTest {
     @Test
     void mapToAccountList() {
         // Given
-        Map<String, HrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, HrefType>>() {
+        Map<String, Xs2aHrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, Xs2aHrefType>>() {
         });
         Links xs2aLinks = jsonReader.getObjectFromFile(XS2A_LINKS_JSON_PATH, Links.class);
         when(mockedHrefLinkMapper.mapToLinksMap(xs2aLinks)).thenReturn(links);
@@ -118,7 +118,7 @@ class AccountModelMapperTest {
 
     @Test
     void mapToAccountDetails() {
-        Map<String, HrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, HrefType>>() {
+        Map<String, Xs2aHrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, Xs2aHrefType>>() {
         });
         Links xs2aLinks = jsonReader.getObjectFromFile(XS2A_LINKS_JSON_PATH, Links.class);
         when(mockedHrefLinkMapper.mapToLinksMap(xs2aLinks)).thenReturn(links);
@@ -136,7 +136,7 @@ class AccountModelMapperTest {
 
     @Test
     void mapToAccountReference_success() {
-        AccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-account-reference.json", AccountReference.class);
+        Xs2aAccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-account-reference.json", Xs2aAccountReference.class);
         de.adorsys.psd2.model.AccountReference actualAccountReference = mapper.mapToAccountReference(accountReference);
 
         de.adorsys.psd2.model.AccountReference expectedAccountReference = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-account-reference-expected.json",
@@ -152,7 +152,7 @@ class AccountModelMapperTest {
 
     @Test
     void mapToAccountReferences() {
-        AccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-account-reference.json", AccountReference.class);
+        Xs2aAccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-account-reference.json", Xs2aAccountReference.class);
         List<de.adorsys.psd2.model.AccountReference> actualAccountReferences = mapper.mapToAccountReferences(Collections.singletonList(accountReference));
 
         de.adorsys.psd2.model.AccountReference expectedAccountReference = jsonReader.getObjectFromFile("json/service/mapper/account-model-mapper/AccountModelMapper-account-reference-expected.json",
@@ -305,7 +305,7 @@ class AccountModelMapperTest {
         assertFalse(actualLinks.isEmpty());
         assertEquals(expectedLinks.size(), actualLinks.size());
         for (Object linkKey : actualLinks.keySet()) {
-            HrefType actualHrefType = (HrefType) actualLinks.get(linkKey);
+            Xs2aHrefType actualHrefType = (Xs2aHrefType) actualLinks.get(linkKey);
             assertEquals(String.valueOf(((Map) expectedLinks.get(linkKey)).get("href")), actualHrefType.getHref());
         }
     }

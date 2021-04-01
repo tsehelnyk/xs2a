@@ -19,14 +19,14 @@ package de.adorsys.psd2.xs2a.service.authorization.processor.model;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import lombok.Value;
 
 @Value
 public class AisAuthorisationProcessorRequest extends AuthorisationProcessorRequest {
 
-    public AisAuthorisationProcessorRequest(ScaApproach scaApproach, ScaStatus scaStatus,
+    public AisAuthorisationProcessorRequest(ScaApproach scaApproach, Xs2aScaStatus scaStatus,
                                             UpdateAuthorisationRequest updateAuthorisationRequest,
                                             Authorisation authorisation) {
         super(ServiceType.AIS, scaApproach, scaStatus, updateAuthorisationRequest, authorisation);

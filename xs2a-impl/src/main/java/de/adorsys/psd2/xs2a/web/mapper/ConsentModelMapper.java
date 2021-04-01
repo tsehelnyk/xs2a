@@ -17,15 +17,16 @@
 package de.adorsys.psd2.xs2a.web.mapper;
 
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.psd2.model.*;
 import de.adorsys.psd2.xs2a.core.ais.AccountAccessType;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppNotificationData;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
@@ -111,10 +112,10 @@ public class ConsentModelMapper {
                    .orElse(null);
     }
 
-    private AccountAccess mapToAccountAccessInner(de.adorsys.psd2.model.AccountAccess accountAccess) {
+    private Xs2aConsentAccountAccess mapToAccountAccessInner(de.adorsys.psd2.model.AccountAccess accountAccess) {
         return Optional.ofNullable(accountAccess)
                    .map(acs ->
-                            new AccountAccess(
+                            new Xs2aConsentAccountAccess(
                                 mapToXs2aAccountReferences(acs.getAccounts()),
                                 mapToXs2aAccountReferences(acs.getBalances()),
                                 mapToXs2aAccountReferences(acs.getTransactions()),
@@ -123,16 +124,16 @@ public class ConsentModelMapper {
                    .orElse(null);
     }
 
-    private de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess mapToAdditionalInformationAccess(AdditionalInformationAccess additionalInformationAccess) {
+    private Xs2aAdditionalInformationAccess mapToAdditionalInformationAccess(AdditionalInformationAccess additionalInformationAccess) {
         return Optional.ofNullable(additionalInformationAccess)
-                   .map(info -> new de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess(mapToXs2aAccountReferencesOrDefault(info.getOwnerName(), null),
+                   .map(info -> new Xs2aAdditionalInformationAccess(mapToXs2aAccountReferencesOrDefault(info.getOwnerName(), null),
                                                                                                   mapToXs2aAccountReferencesOrDefault(info.getTrustedBeneficiaries(), null)
                    ))
                    .orElse(null);
     }
 
     private de.adorsys.psd2.model.AccountAccess mapToAccountAccessDomain(AisConsent aisConsent) {
-        AccountAccess accountAccess = aisConsent.getAccess();
+        Xs2aConsentAccountAccess accountAccess = aisConsent.getAccess();
         AisConsentData consentData = aisConsent.getConsentData();
         return Optional.ofNullable(accountAccess)
                    .map(access -> {
@@ -170,7 +171,7 @@ public class ConsentModelMapper {
                    .orElse(null);
     }
 
-    private AdditionalInformationAccess mapToAdditionalInformationAccess(de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess additionalInformationAccess) {
+    private AdditionalInformationAccess mapToAdditionalInformationAccess(Xs2aAdditionalInformationAccess additionalInformationAccess) {
         return Optional.ofNullable(additionalInformationAccess)
                    .map(info -> {
                        if (info.noAdditionalInformationAccess()) {
@@ -202,11 +203,11 @@ public class ConsentModelMapper {
                    .orElse(null);
     }
 
-    public List<AccountReference> mapToXs2aAccountReferences(List<de.adorsys.psd2.model.AccountReference> references) {
+    public List<Xs2aAccountReference> mapToXs2aAccountReferences(List<de.adorsys.psd2.model.AccountReference> references) {
         return mapToXs2aAccountReferencesOrDefault(references, Collections.emptyList());
     }
 
-    private List<AccountReference> mapToXs2aAccountReferencesOrDefault(List<de.adorsys.psd2.model.AccountReference> references, List<AccountReference> defaultValue) {
+    private List<Xs2aAccountReference> mapToXs2aAccountReferencesOrDefault(List<de.adorsys.psd2.model.AccountReference> references, List<Xs2aAccountReference> defaultValue) {
         return Optional.ofNullable(references)
                    .map(ref -> ref.stream()
                                    .map(this::mapToAccountReference)
@@ -214,8 +215,8 @@ public class ConsentModelMapper {
                    .orElse(defaultValue);
     }
 
-    public AccountReference mapToAccountReference(Object reference) {
-        return xs2aObjectMapper.convertValue(reference, AccountReference.class);
+    public Xs2aAccountReference mapToAccountReference(Object reference) {
+        return xs2aObjectMapper.convertValue(reference, Xs2aAccountReference.class);
     }
 
     public UpdateConsentPsuDataReq mapToUpdatePsuData(PsuIdData psuData, String consentId, String authorizationId, Map body) {

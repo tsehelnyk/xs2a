@@ -17,9 +17,9 @@
 package de.adorsys.psd2.consent.service.mapper;
 
 import de.adorsys.psd2.consent.api.pis.PisPayment;
-import de.adorsys.psd2.core.payment.model.BulkPaymentInitiationJson;
-import de.adorsys.psd2.core.payment.model.PaymentInitiationJson;
-import de.adorsys.psd2.core.payment.model.PeriodicPaymentInitiationJson;
+import de.adorsys.psd2.core.payment.model.Xs2aPisBulkPaymentInitiationJson;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPaymentInitiationJson;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPeriodicPaymentInitiationJson;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,9 +44,9 @@ class CmsCorePaymentMapperTest {
     @Test
     void mapToPaymentInitiationJson() {
         PisPayment pisPayment = jsonReader.getObjectFromFile("json/service/mapper/pis-payment.json", PisPayment.class);
-        PaymentInitiationJson actual = mapper.mapToPaymentInitiationJson(pisPayment);
+        Xs2aPisPaymentInitiationJson actual = mapper.mapToPaymentInitiationJson(pisPayment);
 
-        PaymentInitiationJson expected = jsonReader.getObjectFromFile("json/service/mapper/payment-initiation-resp.json", PaymentInitiationJson.class);
+        Xs2aPisPaymentInitiationJson expected = jsonReader.getObjectFromFile("json/service/mapper/payment-initiation-resp.json", Xs2aPisPaymentInitiationJson.class);
         assertEquals(expected, actual);
     }
 
@@ -58,18 +58,18 @@ class CmsCorePaymentMapperTest {
     @Test
     void mapToPaymentInitiationJsonList() {
         PisPayment pisPayment = jsonReader.getObjectFromFile("json/service/mapper/pis-payment.json", PisPayment.class);
-        PaymentInitiationJson actual = mapper.mapToPaymentInitiationJson(Arrays.asList(pisPayment, new PisPayment()));
+        Xs2aPisPaymentInitiationJson actual = mapper.mapToPaymentInitiationJson(Arrays.asList(pisPayment, new PisPayment()));
 
-        PaymentInitiationJson expected = jsonReader.getObjectFromFile("json/service/mapper/payment-initiation-resp.json", PaymentInitiationJson.class);
+        Xs2aPisPaymentInitiationJson expected = jsonReader.getObjectFromFile("json/service/mapper/payment-initiation-resp.json", Xs2aPisPaymentInitiationJson.class);
         assertEquals(expected, actual);
     }
 
     @Test
     void mapToBulkPaymentInitiationJson() {
         PisPayment pisPayment = jsonReader.getObjectFromFile("json/service/mapper/pis-payment.json", PisPayment.class);
-        BulkPaymentInitiationJson actual = mapper.mapToBulkPaymentInitiationJson(Collections.singletonList(pisPayment));
+        Xs2aPisBulkPaymentInitiationJson actual = mapper.mapToBulkPaymentInitiationJson(Collections.singletonList(pisPayment));
 
-        BulkPaymentInitiationJson expected = jsonReader.getObjectFromFile("json/service/mapper/bulk-payment-initiation-resp.json", BulkPaymentInitiationJson.class);
+        Xs2aPisBulkPaymentInitiationJson expected = jsonReader.getObjectFromFile("json/service/mapper/bulk-payment-initiation-resp.json", Xs2aPisBulkPaymentInitiationJson.class);
         assertEquals(expected, actual);
     }
 
@@ -81,9 +81,9 @@ class CmsCorePaymentMapperTest {
     @Test
     void mapToPeriodicPaymentInitiationJson() {
         PisPayment pisPayment = jsonReader.getObjectFromFile("json/service/mapper/pis-payment.json", PisPayment.class);
-        PeriodicPaymentInitiationJson actual = mapper.mapToPeriodicPaymentInitiationJson(Collections.singletonList(pisPayment));
+        Xs2aPisPeriodicPaymentInitiationJson actual = mapper.mapToPeriodicPaymentInitiationJson(Collections.singletonList(pisPayment));
 
-        PeriodicPaymentInitiationJson expected = jsonReader.getObjectFromFile("json/service/mapper/periodic-payment-initiation-resp.json", PeriodicPaymentInitiationJson.class);
+        Xs2aPisPeriodicPaymentInitiationJson expected = jsonReader.getObjectFromFile("json/service/mapper/periodic-payment-initiation-resp.json", Xs2aPisPeriodicPaymentInitiationJson.class);
         assertEquals(expected, actual);
     }
 

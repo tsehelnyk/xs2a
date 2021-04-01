@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.web.util;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.adorsys.psd2.xs2a.core.domain.address.Xs2aAddress;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -75,9 +75,9 @@ class LogbackPatternLayoutTest {
     void testFieldsAndObjectsNoMask() throws IOException {
         //Given
         Map<String, Object> testMap = new HashMap<>();
-        AccountReference accountReference = new AccountReference();
+        Xs2aAccountReference accountReference = new Xs2aAccountReference();
         accountReference.setIban("IBAN");
-        List<AccountReference> accountReferenceList = Collections.singletonList(accountReference);
+        List<Xs2aAccountReference> accountReferenceList = Collections.singletonList(accountReference);
         testMap.put("ownerName", accountReferenceList);
         testMap.put("ownerAddress", accountReferenceList);
 

@@ -21,7 +21,7 @@ import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.domain.address.Xs2aAddress;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.domain.pis.SinglePayment;
 import de.adorsys.psd2.xs2a.web.validator.ErrorBuildingService;
@@ -150,7 +150,7 @@ public class SinglePaymentTypeValidatorImpl extends AbstractBodyValidatorImpl im
         }
     }
 
-    void validateAccount(AccountReference accountReference, MessageError messageError, PaymentValidationConfig validationConfig) {
+    void validateAccount(Xs2aAccountReference accountReference, MessageError messageError, PaymentValidationConfig validationConfig) {
         ibanValidator.validate(accountReference.getIban(), messageError);
 
         if (StringUtils.isNotBlank(accountReference.getBban()) && !isValidBban(accountReference.getBban())) {

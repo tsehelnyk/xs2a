@@ -22,12 +22,12 @@ import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationResponse;
 import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.service.AuthorisationServiceEncrypted;
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers.Xs2aAuthenticationObjectToCmsScaMethodMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,7 +94,7 @@ public class Xs2aAuthorisationService {
      * @param methods         List of authentication methods to be saved
      * @return <code>true</code> if authorisation was found and updated, <code>false</code> otherwise
      */
-    public boolean saveAuthenticationMethods(String authorisationId, List<AuthenticationObject> methods) {
+    public boolean saveAuthenticationMethods(String authorisationId, List<Xs2aAuthenticationObject> methods) {
         CmsResponse<Boolean> response = authorisationServiceEncrypted.saveAuthenticationMethods(authorisationId,
                                                                                                 xs2aAuthenticationObjectToCmsScaMethodMapper.mapToCmsScaMethods(methods));
         return response.isSuccessful() && response.getPayload();
@@ -118,7 +118,7 @@ public class Xs2aAuthorisationService {
      * @param authorisationId String representation of authorisation identifier
      * @param scaStatus       Enum for status of the SCA method applied
      */
-    public void updateAuthorisationStatus(String authorisationId, ScaStatus scaStatus) {
+    public void updateAuthorisationStatus(String authorisationId, Xs2aScaStatus scaStatus) {
         authorisationServiceEncrypted.updateAuthorisationStatus(authorisationId, scaStatus);
     }
 
@@ -165,8 +165,8 @@ public class Xs2aAuthorisationService {
      * @param authorisationId String representation of authorisation identifier
      * @return SCA status of the authorisation
      */
-    public Optional<ScaStatus> getAuthorisationScaStatus(String authorisationId, String parentId, AuthorisationType authorisationType) {
-        CmsResponse<ScaStatus> response = authorisationServiceEncrypted.getAuthorisationScaStatus(authorisationId,
+    public Optional<Xs2aScaStatus> getAuthorisationScaStatus(String authorisationId, String parentId, AuthorisationType authorisationType) {
+        CmsResponse<Xs2aScaStatus> response = authorisationServiceEncrypted.getAuthorisationScaStatus(authorisationId,
                                                                                                   new AuthorisationParentHolder(authorisationType, parentId));
 
         if (response.hasError()) {

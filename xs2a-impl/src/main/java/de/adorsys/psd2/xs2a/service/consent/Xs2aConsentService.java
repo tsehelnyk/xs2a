@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationResponse;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.service.RequestProviderService;
 import de.adorsys.psd2.xs2a.service.ScaApproachResolver;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
@@ -48,7 +48,7 @@ public class Xs2aConsentService {
      * @param psuData   authorisation data about PSU
      * @return CreateAuthorisationResponse object with authorisation ID and scaStatus
      */
-    public Optional<CreateAuthorisationResponse> createConsentAuthorisation(String consentId, ScaStatus scaStatus, PsuIdData psuData) {
+    public Optional<CreateAuthorisationResponse> createConsentAuthorisation(String consentId, Xs2aScaStatus scaStatus, PsuIdData psuData) {
         String tppRedirectURI = requestProviderService.getTppRedirectURI();
         String tppNOKRedirectURI = requestProviderService.getTppNokRedirectURI();
         CreateAuthorisationRequest request = xs2aConsentAuthorisationMapper.mapToAuthorisationRequest(scaStatus, psuData, scaApproachResolver.resolveScaApproach(), tppRedirectURI, tppNOKRedirectURI);
@@ -62,7 +62,7 @@ public class Xs2aConsentService {
      * @param authorisationId String representation of authorisation identifier
      * @return SCA status of the authorisation
      */
-    public Optional<ScaStatus> getAuthorisationScaStatus(String consentId, String authorisationId) {
+    public Optional<Xs2aScaStatus> getAuthorisationScaStatus(String consentId, String authorisationId) {
         return authorisationService.getAuthorisationScaStatus(authorisationId, consentId, AuthorisationType.CONSENT);
     }
 }

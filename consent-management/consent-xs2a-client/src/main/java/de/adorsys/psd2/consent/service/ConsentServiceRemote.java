@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.ConsentServiceEncrypted;
 import de.adorsys.psd2.consent.config.CmsRestException;
 import de.adorsys.psd2.consent.config.ConsentRemoteUrls;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,11 +62,11 @@ public class ConsentServiceRemote implements ConsentServiceEncrypted {
     }
 
     @Override
-    public CmsResponse<ConsentStatus> getConsentStatusById(String consentId) {
+    public CmsResponse<Xs2aConsentStatus> getConsentStatusById(String consentId) {
         try {
             ConsentStatusResponse response = consentRestTemplate.getForEntity(consentRemoteUrls.getConsentStatusById(), ConsentStatusResponse.class, consentId).getBody();
             if (response != null) {
-                return CmsResponse.<ConsentStatus>builder()
+                return CmsResponse.<Xs2aConsentStatus>builder()
                            .payload(response.getConsentStatus())
                            .build();
             }
@@ -77,13 +77,13 @@ public class ConsentServiceRemote implements ConsentServiceEncrypted {
                      consentId, cmsRestException.getHttpStatus());
         }
 
-        return CmsResponse.<ConsentStatus>builder()
+        return CmsResponse.<Xs2aConsentStatus>builder()
                    .error(TECHNICAL_ERROR)
                    .build();
     }
 
     @Override
-    public CmsResponse<Boolean> updateConsentStatusById(String consentId, ConsentStatus status) {
+    public CmsResponse<Boolean> updateConsentStatusById(String consentId, Xs2aConsentStatus status) {
         try {
             consentRestTemplate.put(consentRemoteUrls.updateConsentStatusById(), null, consentId, status);
             return CmsResponse.<Boolean>builder()

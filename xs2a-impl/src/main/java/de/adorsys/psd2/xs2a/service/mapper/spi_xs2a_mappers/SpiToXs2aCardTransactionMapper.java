@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.xs2a.domain.CardTransaction;
+import de.adorsys.psd2.xs2a.domain.Xs2aCardTransaction;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiCardTransaction;
 import org.mapstruct.Mapper;
 
@@ -26,7 +26,7 @@ import java.util.List;
     uses = {SpiToXs2aAmountMapper.class, Xs2aToSpiAddressMapper.class, SpiToXs2aExchangeRateMapper.class})
 public interface SpiToXs2aCardTransactionMapper {
 
-    CardTransaction mapToXs2aCardTransaction(SpiCardTransaction spiCardTransaction);
+    Xs2aCardTransaction mapToXs2aCardTransaction(SpiCardTransaction spiCardTransaction);
 
-    List<CardTransaction> mapToXs2aCardTransactionList(List<SpiCardTransaction> spiCardTransaction);
+    List<Xs2aCardTransaction> mapToXs2aCardTransactionList(List<SpiCardTransaction> spiCardTransaction);
 }

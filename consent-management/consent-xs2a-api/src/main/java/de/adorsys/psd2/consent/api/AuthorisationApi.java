@@ -24,7 +24,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -91,7 +91,7 @@ public interface AuthorisationApi {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 404, message = "Not Found")})
-    ResponseEntity<ScaStatus> getAuthorisationScaStatus(
+    ResponseEntity<Xs2aScaStatus> getAuthorisationScaStatus(
         @PathVariable("authorisation-type") AuthorisationType authorisationType,
         @PathVariable("parent-id") String parentId,
         @PathVariable("authorisation-id") String authorisationId);

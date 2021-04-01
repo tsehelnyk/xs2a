@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentReq;
 import de.adorsys.psd2.xs2a.spi.domain.consent.SpiAccountAccess;
 import de.adorsys.xs2a.reader.JsonReader;
@@ -42,18 +42,18 @@ class SpiToAccountAccessMapperTest {
     @Test
     void getAccessForGlobalOrAllAvailableAccountsConsent() {
         CreateConsentReq createConsentReq = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/create-consent-request.json", CreateConsentReq.class);
-        AccountAccess actualAccountAccess = mapper.getAccessForGlobalOrAllAvailableAccountsConsent(createConsentReq);
+        Xs2aConsentAccountAccess actualAccountAccess = mapper.getAccessForGlobalOrAllAvailableAccountsConsent(createConsentReq);
 
-        AccountAccess expectedAccountAccess = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/expected-xs2a-account-access.json", AccountAccess.class);
+        Xs2aConsentAccountAccess expectedAccountAccess = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/expected-xs2a-account-access.json", Xs2aConsentAccountAccess.class);
         assertEquals(expectedAccountAccess, actualAccountAccess);
     }
 
     @Test
     void mapToAccountAccess() {
         SpiAccountAccess spiAccountAccess = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/spi-account-access.json", SpiAccountAccess.class);
-        Optional<AccountAccess> actualXs2aAccountAccess = mapper.mapToAccountAccess(spiAccountAccess);
+        Optional<Xs2aConsentAccountAccess> actualXs2aAccountAccess = mapper.mapToAccountAccess(spiAccountAccess);
 
-        AccountAccess expectedAccountAccess = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/expected-xs2a-account-access2.json", AccountAccess.class);
+        Xs2aConsentAccountAccess expectedAccountAccess = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/expected-xs2a-account-access2.json", Xs2aConsentAccountAccess.class);
         assertTrue(actualXs2aAccountAccess.isPresent());
         assertEquals(expectedAccountAccess, actualXs2aAccountAccess.get());
     }

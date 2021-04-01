@@ -16,8 +16,8 @@
 
 package de.adorsys.psd2.xs2a.service.payment.support.mapper.spi;
 
-import de.adorsys.psd2.core.payment.model.PurposeCode;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.domain.pis.SinglePayment;
 import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiToXs2aAccountReferenceMapperImpl;
 import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiToXs2aAddressMapperImpl;
@@ -100,7 +100,7 @@ class SpiToXs2aSinglePaymentMapperTest {
     private SpiSinglePayment buildSpiSinglePayment() {
         SpiSinglePayment payment = new SpiSinglePayment(PAYMENT_PRODUCT);
         payment.setPaymentId(PAYMENT_ID);
-        payment.setPaymentStatus(TransactionStatus.ACCP);
+        payment.setPaymentStatus(Xs2aTransactionStatus.ACCP);
         SpiAccountReference creditorAccountReference = jsonReader.getObjectFromFile("json/support/mapper/spi/spi-account-reference-creditor.json", SpiAccountReference.class);
         payment.setCreditorAccount(creditorAccountReference);
         payment.setCreditorAgent("BCENECEQ");
@@ -131,7 +131,7 @@ class SpiToXs2aSinglePaymentMapperTest {
                                                              .psuHttpMethod("")
                                                              .psuDeviceId(UUID.randomUUID())
                                                              .build()));
-        payment.setPurposeCode(PurposeCode.CDQC);
+        payment.setPurposeCode(Xs2aPisPurposeCode.CDQC);
         payment.setStatusChangeTimestamp(OFFSET_DATE_TIME);
         payment.setUltimateCreditor("ultimateCreditor");
         payment.setUltimateDebtor("ultimateDebtor");

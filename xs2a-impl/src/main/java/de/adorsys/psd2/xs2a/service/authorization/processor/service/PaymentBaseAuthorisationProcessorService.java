@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.authorization.processor.service;
 
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
@@ -28,8 +28,8 @@ import de.adorsys.psd2.xs2a.core.pis.Xs2aCurrencyConversionInfo;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ChallengeData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
@@ -58,7 +58,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-import static de.adorsys.psd2.xs2a.core.sca.ScaStatus.*;
+import static de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus.*;
 
 abstract class PaymentBaseAuthorisationProcessorService extends BaseAuthorisationProcessorService {
 
@@ -205,7 +205,7 @@ abstract class PaymentBaseAuthorisationProcessorService extends BaseAuthorisatio
 
     abstract Xs2aUpdatePisCommonPaymentPsuDataResponse executePaymentWithoutSca(AuthorisationProcessorRequest authorisationProcessorRequest,
                                                                                 PsuIdData psuData, PaymentType paymentType, SpiPayment payment,
-                                                                                SpiContextData contextData, ScaStatus resultScaStatus,
+                                                                                SpiContextData contextData, Xs2aScaStatus resultScaStatus,
                                                                                 Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo);
 
     abstract Xs2aUpdatePisCommonPaymentPsuDataResponse proceedDecoupledApproach(Xs2aUpdatePisCommonPaymentPsuDataRequest request,
@@ -277,7 +277,7 @@ abstract class PaymentBaseAuthorisationProcessorService extends BaseAuthorisatio
             return executePaymentWithoutSca(authorisationProcessorRequest, psuData, paymentType, payment, contextData, EXEMPTED, xs2aCurrencyConversionInfo);
         }
 
-        List<AuthenticationObject> spiScaMethods = availableScaMethods.getAvailableScaMethods();
+        List<Xs2aAuthenticationObject> spiScaMethods = availableScaMethods.getAvailableScaMethods();
 
         return processScaMethods(authorisationProcessorRequest, psuData, paymentType, payment, aspspConsentDataProvider,
                                  contextData, spiScaMethods, xs2aCurrencyConversionInfo);
@@ -286,7 +286,7 @@ abstract class PaymentBaseAuthorisationProcessorService extends BaseAuthorisatio
     private Xs2aUpdatePisCommonPaymentPsuDataResponse processScaMethods(@NotNull AuthorisationProcessorRequest authorisationProcessorRequest,
                                                                         PsuIdData psuData, PaymentType paymentType, SpiPayment payment,
                                                                         SpiAspspConsentDataProvider aspspConsentDataProvider, SpiContextData contextData,
-                                                                        List<AuthenticationObject> spiScaMethods, Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo) {
+                                                                        List<Xs2aAuthenticationObject> spiScaMethods, Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo) {
         Xs2aUpdatePisCommonPaymentPsuDataRequest request = (Xs2aUpdatePisCommonPaymentPsuDataRequest) authorisationProcessorRequest.getUpdateAuthorisationRequest();
 
         if (CollectionUtils.isEmpty(spiScaMethods)) {
@@ -326,7 +326,7 @@ abstract class PaymentBaseAuthorisationProcessorService extends BaseAuthorisatio
 
     Xs2aUpdatePisCommonPaymentPsuDataResponse buildUpdateResponseWhenScaMethodsAreMultiple(Xs2aUpdatePisCommonPaymentPsuDataRequest request,
                                                                                            PsuIdData psuData,
-                                                                                           List<AuthenticationObject> spiScaMethods) {
+                                                                                           List<Xs2aAuthenticationObject> spiScaMethods) {
         xs2aAuthorisationService.saveAuthenticationMethods(request.getAuthorisationId(), spiScaMethods);
 
         Xs2aUpdatePisCommonPaymentPsuDataResponse response = new Xs2aUpdatePisCommonPaymentPsuDataResponse
@@ -340,10 +340,10 @@ abstract class PaymentBaseAuthorisationProcessorService extends BaseAuthorisatio
 
     Xs2aUpdatePisCommonPaymentPsuDataResponse buildUpdateResponseWhenScaMethodIsSingle(AuthorisationProcessorRequest authorisationProcessorRequest,
                                                                                        PsuIdData psuData, SpiPayment payment, SpiAspspConsentDataProvider aspspConsentDataProvider,
-                                                                                       SpiContextData contextData, List<AuthenticationObject> scaMethods, Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo) {
+                                                                                       SpiContextData contextData, List<Xs2aAuthenticationObject> scaMethods, Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo) {
         Xs2aUpdatePisCommonPaymentPsuDataRequest request = (Xs2aUpdatePisCommonPaymentPsuDataRequest) authorisationProcessorRequest.getUpdateAuthorisationRequest();
         xs2aAuthorisationService.saveAuthenticationMethods(request.getAuthorisationId(), scaMethods);
-        AuthenticationObject chosenMethod = scaMethods.get(0);
+        Xs2aAuthenticationObject chosenMethod = scaMethods.get(0);
 
         if (chosenMethod.isDecoupled()) {
             xs2aAuthorisationService.updateScaApproach(request.getAuthorisationId(), ScaApproach.DECOUPLED);
@@ -356,7 +356,7 @@ abstract class PaymentBaseAuthorisationProcessorService extends BaseAuthorisatio
 
     private Xs2aUpdatePisCommonPaymentPsuDataResponse proceedSingleScaEmbeddedApproach(AuthorisationProcessorRequest authorisationProcessorRequest,
                                                                                        SpiPayment payment,
-                                                                                       AuthenticationObject chosenMethod,
+                                                                                       Xs2aAuthenticationObject chosenMethod,
                                                                                        SpiContextData contextData,
                                                                                        SpiAspspConsentDataProvider spiAspspConsentDataProvider,
                                                                                        PsuIdData psuData, Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo) {
@@ -377,7 +377,7 @@ abstract class PaymentBaseAuthorisationProcessorService extends BaseAuthorisatio
             return executePaymentWithoutSca(authorisationProcessorRequest, psuData, payment.getPaymentType(), payment, contextData, EXEMPTED, xs2aCurrencyConversionInfo);
         }
 
-        ScaStatus scaStatus = ObjectUtils.defaultIfNull(authorizationCodeResult.getScaStatus(), ScaStatus.SCAMETHODSELECTED);
+        Xs2aScaStatus scaStatus = ObjectUtils.defaultIfNull(authorizationCodeResult.getScaStatus(), Xs2aScaStatus.SCAMETHODSELECTED);
 
         Xs2aUpdatePisCommonPaymentPsuDataResponse response = new Xs2aUpdatePisCommonPaymentPsuDataResponse(
             scaStatus, payment.getPaymentId(), authorisationId, psuData, xs2aCurrencyConversionInfo);
@@ -430,8 +430,8 @@ abstract class PaymentBaseAuthorisationProcessorService extends BaseAuthorisatio
             return new Xs2aUpdatePisCommonPaymentPsuDataResponse(errorHolder, paymentId, authorisationId, psuData);
         }
 
-        AuthenticationObject authenticationObject = authorizationCodeResult.getSelectedScaMethod();
-        ChallengeData challengeData = authorizationCodeResult.getChallengeData();
+        Xs2aAuthenticationObject authenticationObject = authorizationCodeResult.getSelectedScaMethod();
+        Xs2aChallengeData challengeData = authorizationCodeResult.getChallengeData();
 
         Xs2aUpdatePisCommonPaymentPsuDataResponse response = new Xs2aUpdatePisCommonPaymentPsuDataResponse(
             SCAMETHODSELECTED, paymentId, authorisationId, psuData, xs2aCurrencyConversionInfo);

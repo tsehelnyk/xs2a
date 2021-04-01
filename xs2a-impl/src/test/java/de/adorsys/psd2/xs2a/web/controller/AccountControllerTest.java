@@ -17,17 +17,16 @@
 package de.adorsys.psd2.xs2a.web.controller;
 
 import de.adorsys.psd2.model.*;
-import de.adorsys.psd2.xs2a.core.ais.BookingStatus;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.domain.BalanceType;
-import de.adorsys.psd2.xs2a.domain.CashAccountType;
+import de.adorsys.psd2.xs2a.domain.Xs2aBalanceType;
+import de.adorsys.psd2.xs2a.domain.Xs2aCashAccountType;
 import de.adorsys.psd2.xs2a.domain.*;
-import de.adorsys.psd2.xs2a.domain.Transactions;
-import de.adorsys.psd2.xs2a.domain.account.AccountStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aTransactions;
+import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountStatus;
 import de.adorsys.psd2.xs2a.domain.account.*;
 import de.adorsys.psd2.xs2a.service.ais.*;
 import de.adorsys.psd2.xs2a.service.mapper.AccountModelMapper;
@@ -38,7 +37,6 @@ import de.adorsys.psd2.xs2a.service.mapper.psd2.ResponseErrorMapper;
 import de.adorsys.psd2.xs2a.web.controller.util.RequestUriHandler;
 import de.adorsys.psd2.xs2a.web.error.TppErrorMessageWriter;
 import de.adorsys.xs2a.reader.JsonReader;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -472,7 +470,7 @@ class AccountControllerTest {
         List<Xs2aAccountDetails> accountDetails = Collections.singletonList(
             new Xs2aAccountDetails(ASPSP_ACCOUNT_ID, "33333-999999999", "DE371234599997", null, null, null,
                                    null, CURRENCY, "Schmidt", "Display name", null,
-                                   CashAccountType.CACC, AccountStatus.ENABLED, "GENODEF1N02", "", Xs2aUsageType.PRIV, "", null, null, null));
+                                   Xs2aCashAccountType.CACC, Xs2aAccountStatus.ENABLED, "GENODEF1N02", "", Xs2aUsageType.PRIV, "", null, null, null));
         Xs2aAccountListHolder xs2aAccountListHolder = new Xs2aAccountListHolder(accountDetails, null);
         return ResponseObject.<Xs2aAccountListHolder>builder()
                    .body(xs2aAccountListHolder).build();
@@ -535,7 +533,7 @@ class AccountControllerTest {
         amount.setAmount("300.45");
         amount.setCurrency(CURRENCY);
         balance.setBalanceAmount(amount);
-        balance.setBalanceType(BalanceType.INTERIM_AVAILABLE);
+        balance.setBalanceType(Xs2aBalanceType.INTERIM_AVAILABLE);
         balance.setLastChangeDateTime(LocalDateTime.of(2018, 3, 31, 15, 16,
                                                        16, 374));
         balance.setReferenceDate(LocalDate.of(2018, 3, 29));
@@ -558,14 +556,14 @@ class AccountControllerTest {
                    .body(balancesReport).build();
     }
 
-    private ResponseObject<Transactions> buildTransaction() {
-        Transactions transactions = jsonReader.getObjectFromFile(TRANSACTIONS_JSON, Transactions.class);
-        return ResponseObject.<Transactions>builder()
+    private ResponseObject<Xs2aTransactions> buildTransaction() {
+        Xs2aTransactions transactions = jsonReader.getObjectFromFile(TRANSACTIONS_JSON, Xs2aTransactions.class);
+        return ResponseObject.<Xs2aTransactions>builder()
                    .body(transactions).build();
     }
 
-    private ResponseObject<Transactions> buildTransactionWithError() {
-        return ResponseObject.<Transactions>builder()
+    private ResponseObject<Xs2aTransactions> buildTransactionWithError() {
+        return ResponseObject.<Xs2aTransactions>builder()
                    .fail(AccountControllerTest.MESSAGE_ERROR_AIS_404)
                    .build();
     }

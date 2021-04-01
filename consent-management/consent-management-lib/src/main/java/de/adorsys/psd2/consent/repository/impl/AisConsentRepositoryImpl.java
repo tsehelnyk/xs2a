@@ -27,7 +27,7 @@ import de.adorsys.psd2.consent.service.sha.ChecksumCalculatingFactory;
 import de.adorsys.psd2.consent.service.sha.ChecksumCalculatingService;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
-import static de.adorsys.psd2.xs2a.core.consent.ConsentStatus.*;
+import static de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus.*;
 
 @Slf4j
 @Component
@@ -148,7 +148,7 @@ public class AisConsentRepositoryImpl implements AisConsentVerifyingRepository {
         return aisConsentMapper.mapToAisConsent(entity, authorisationEntityList);
     }
 
-    private ConsentStatus getPreviousConsentStatus(ConsentEntity entity) {
+    private Xs2aConsentStatus getPreviousConsentStatus(ConsentEntity entity) {
         Optional<ConsentEntity> optionalConsentStatus = aisConsentRepository.findByExternalId(entity.getExternalId());
 
         return optionalConsentStatus
@@ -158,7 +158,7 @@ public class AisConsentRepositoryImpl implements AisConsentVerifyingRepository {
     }
 
     private boolean isFinalisedStatus(ConsentEntity entity) {
-        ConsentStatus previousConsentStatus = getPreviousConsentStatus(entity);
+        Xs2aConsentStatus previousConsentStatus = getPreviousConsentStatus(entity);
         return previousConsentStatus != null && previousConsentStatus.isFinalisedStatus();
     }
 }

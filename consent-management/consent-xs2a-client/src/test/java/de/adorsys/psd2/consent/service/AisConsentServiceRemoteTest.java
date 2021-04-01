@@ -24,8 +24,8 @@ import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.ais.UpdateAisConsentResponse;
 import de.adorsys.psd2.consent.config.AisConsentRemoteUrls;
 import de.adorsys.psd2.consent.config.CmsRestException;
-import de.adorsys.psd2.core.data.AccountAccess;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -84,7 +84,7 @@ class AisConsentServiceRemoteTest {
     @Test
     void updateAspspAccountAccess() {
         when(aisConsentRemoteUrls.updateAisAccountAccess()).thenReturn(URL);
-        AccountAccess accountAccess = buildEmptyAccountAccess();
+        Xs2aConsentAccountAccess accountAccess = buildEmptyAccountAccess();
         CmsConsent updatedConsent = new CmsConsent();
         when(consentRestTemplate.exchange(URL, HttpMethod.PUT, new HttpEntity<>(accountAccess), UpdateAisConsentResponse.class, CONSENT_ID))
             .thenReturn(ResponseEntity.ok(new UpdateAisConsentResponse(updatedConsent)));
@@ -98,7 +98,7 @@ class AisConsentServiceRemoteTest {
     @Test
     void updateAspspAccountAccess_nullBody() {
         when(aisConsentRemoteUrls.updateAisAccountAccess()).thenReturn(URL);
-        AccountAccess accountAccess = buildEmptyAccountAccess();
+        Xs2aConsentAccountAccess accountAccess = buildEmptyAccountAccess();
         when(consentRestTemplate.exchange(URL, HttpMethod.PUT, new HttpEntity<>(accountAccess), UpdateAisConsentResponse.class, CONSENT_ID))
             .thenReturn(ResponseEntity.ok().build());
 
@@ -111,7 +111,7 @@ class AisConsentServiceRemoteTest {
     @Test
     void updateAspspAccountAccess_cmsRestException() {
         when(aisConsentRemoteUrls.updateAisAccountAccess()).thenReturn(URL);
-        AccountAccess accountAccess = buildEmptyAccountAccess();
+        Xs2aConsentAccountAccess accountAccess = buildEmptyAccountAccess();
         when(consentRestTemplate.exchange(URL, HttpMethod.PUT, new HttpEntity<>(accountAccess), UpdateAisConsentResponse.class, CONSENT_ID))
             .thenThrow(CmsRestException.class);
 
@@ -121,11 +121,11 @@ class AisConsentServiceRemoteTest {
         assertEquals(CmsError.TECHNICAL_ERROR, response.getError());
     }
 
-    private AccountAccess buildEmptyAccountAccess() {
-        return new AccountAccess(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), buildEmptyAdditionalInformationAccess());
+    private Xs2aConsentAccountAccess buildEmptyAccountAccess() {
+        return new Xs2aConsentAccountAccess(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), buildEmptyAdditionalInformationAccess());
     }
 
-    private AdditionalInformationAccess buildEmptyAdditionalInformationAccess() {
-        return new AdditionalInformationAccess(Collections.emptyList(), Collections.emptyList());
+    private Xs2aAdditionalInformationAccess buildEmptyAdditionalInformationAccess() {
+        return new Xs2aAdditionalInformationAccess(Collections.emptyList(), Collections.emptyList());
     }
 }

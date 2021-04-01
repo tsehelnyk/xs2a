@@ -19,8 +19,8 @@ package de.adorsys.psd2.consent.api.pis;
 import de.adorsys.psd2.consent.api.CmsAddress;
 import de.adorsys.psd2.xs2a.core.pis.PisDayOfExecution;
 import de.adorsys.psd2.xs2a.core.pis.PisExecutionRule;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -46,7 +46,7 @@ public class PisPayment {
     private String instructionIdentification;
 
     @ApiModelProperty(value = "Debtor account", required = true)
-    private AccountReference debtorAccount;
+    private Xs2aAccountReference debtorAccount;
 
     @ApiModelProperty(value = "Name of the ultimate debtor", required = true, example = "Mueller")
     private String ultimateDebtor;
@@ -58,7 +58,7 @@ public class PisPayment {
     private BigDecimal amount;
 
     @ApiModelProperty(value = "Creditor account", required = true)
-    private AccountReference creditorAccount;
+    private Xs2aAccountReference creditorAccount;
 
     @ApiModelProperty(value = "Creditor agent", example = "Telekom")
     private String creditorAgent;
@@ -88,7 +88,7 @@ public class PisPayment {
     private String purposeCode;
 
     @ApiModelProperty(name = "transactionStatus", example = "ACCP", required = true)
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
 
     /**
      * Next fields are used in order to create periodic payment

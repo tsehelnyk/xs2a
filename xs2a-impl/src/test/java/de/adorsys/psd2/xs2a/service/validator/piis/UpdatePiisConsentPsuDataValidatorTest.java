@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.validator.piis;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationServiceType;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
@@ -65,8 +65,8 @@ class UpdatePiisConsentPsuDataValidatorTest {
 
         when(piisAuthorisationValidator.validate(AUTHORISATION_ID, piisConsent)).thenReturn(ValidationResult.valid());
         when(piisPsuDataUpdateAuthorisationCheckerValidator.validate(psuIdData, psuIdData)).thenReturn(ValidationResult.valid());
-        when(piisAuthorisationStatusValidator.validate(ScaStatus.RECEIVED, false)).thenReturn(ValidationResult.valid());
-        when(authorisationStageCheckValidator.validate(updateConsentPsuDataReq, ScaStatus.RECEIVED, AuthorisationServiceType.PIIS)).thenReturn(ValidationResult.valid());
+        when(piisAuthorisationStatusValidator.validate(Xs2aScaStatus.RECEIVED, false)).thenReturn(ValidationResult.valid());
+        when(authorisationStageCheckValidator.validate(updateConsentPsuDataReq, Xs2aScaStatus.RECEIVED, AuthorisationServiceType.PIIS)).thenReturn(ValidationResult.valid());
 
         // When
         ValidationResult actual = updatePiisConsentPsuDataValidator.executeBusinessValidation(input);
@@ -85,8 +85,8 @@ class UpdatePiisConsentPsuDataValidatorTest {
 
         when(piisAuthorisationValidator.validate(AUTHORISATION_ID, piisConsent)).thenReturn(ValidationResult.valid());
         when(piisPsuDataUpdateAuthorisationCheckerValidator.validate(psuIdData, psuIdData)).thenReturn(ValidationResult.valid());
-        when(piisAuthorisationStatusValidator.validate(ScaStatus.RECEIVED, false)).thenReturn(ValidationResult.valid());
-        when(authorisationStageCheckValidator.validate(updateConsentPsuDataReq, ScaStatus.RECEIVED, AuthorisationServiceType.PIIS)).thenReturn(INVALID);
+        when(piisAuthorisationStatusValidator.validate(Xs2aScaStatus.RECEIVED, false)).thenReturn(ValidationResult.valid());
+        when(authorisationStageCheckValidator.validate(updateConsentPsuDataReq, Xs2aScaStatus.RECEIVED, AuthorisationServiceType.PIIS)).thenReturn(INVALID);
 
         // When
         ValidationResult actual = updatePiisConsentPsuDataValidator.executeBusinessValidation(input);
@@ -105,7 +105,7 @@ class UpdatePiisConsentPsuDataValidatorTest {
 
         when(piisAuthorisationValidator.validate(AUTHORISATION_ID, piisConsent)).thenReturn(ValidationResult.valid());
         when(piisPsuDataUpdateAuthorisationCheckerValidator.validate(psuIdData, psuIdData)).thenReturn(ValidationResult.valid());
-        when(piisAuthorisationStatusValidator.validate(ScaStatus.RECEIVED, false)).thenReturn(INVALID);
+        when(piisAuthorisationStatusValidator.validate(Xs2aScaStatus.RECEIVED, false)).thenReturn(INVALID);
 
         // When
         ValidationResult actual = updatePiisConsentPsuDataValidator.executeBusinessValidation(input);

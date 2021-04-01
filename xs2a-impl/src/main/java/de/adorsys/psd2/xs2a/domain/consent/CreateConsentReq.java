@@ -17,10 +17,10 @@
 package de.adorsys.psd2.xs2a.domain.consent;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.xs2a.core.ais.AccountAccessType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.tpp.TppNotificationData;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import de.adorsys.psd2.xs2a.domain.AccountReferenceCollector;
@@ -37,7 +37,7 @@ import static de.adorsys.psd2.xs2a.core.ais.AccountAccessType.ALL_ACCOUNTS;
 @Data
 public class CreateConsentReq implements AccountReferenceCollector {
     @NotNull
-    private AccountAccess access;
+    private Xs2aConsentAccountAccess access;
 
     private AccountAccessType availableAccounts;
 
@@ -68,7 +68,7 @@ public class CreateConsentReq implements AccountReferenceCollector {
 
     @JsonIgnore
     @Override
-    public Set<AccountReference> getAccountReferences() {
+    public Set<Xs2aAccountReference> getAccountReferences() {
         return getReferenceSet(this.access.getAccounts(), this.access.getBalances(), this.access.getTransactions());
     }
 
@@ -78,14 +78,14 @@ public class CreateConsentReq implements AccountReferenceCollector {
     }
 
     @SafeVarargs
-    private final Set<AccountReference> getReferenceSet(List<AccountReference>... referencesList) {
+    private final Set<Xs2aAccountReference> getReferenceSet(List<Xs2aAccountReference>... referencesList) {
         return Arrays.stream(referencesList)
                    .map(this::getReferenceList)
                    .flatMap(Collection::stream)
                    .collect(Collectors.toSet());
     }
 
-    private List<AccountReference> getReferenceList(List<AccountReference> reference) {
+    private List<Xs2aAccountReference> getReferenceList(List<Xs2aAccountReference> reference) {
         return Optional.ofNullable(reference)
                    .orElseGet(Collections::emptyList);
     }

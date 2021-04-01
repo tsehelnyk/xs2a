@@ -16,10 +16,10 @@
 
 package de.adorsys.psd2.xs2a.web.link;
 
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aCreatePisAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
@@ -48,7 +48,7 @@ class UpdatePisAuthorisationLinksTest {
     private UpdatePisAuthorisationLinks links;
     private Xs2aCreatePisAuthorisationRequest request;
     private Xs2aUpdatePisCommonPaymentPsuDataResponse response;
-    private AuthenticationObject authenticationObject;
+    private Xs2aAuthenticationObject authenticationObject;
 
     private Links expectedLinks;
 
@@ -61,25 +61,25 @@ class UpdatePisAuthorisationLinksTest {
         response = new Xs2aUpdatePisCommonPaymentPsuDataResponse();
         response.setAuthorisationId(AUTHORISATION_ID);
 
-        authenticationObject = jsonReader.getObjectFromFile("json/link/authentication-object.json", AuthenticationObject.class);
+        authenticationObject = jsonReader.getObjectFromFile("json/link/authentication-object.json", Xs2aAuthenticationObject.class);
     }
 
     @Test
     void isScaStatusMethodAuthenticated() {
-        response.setScaStatus(ScaStatus.PSUAUTHENTICATED);
+        response.setScaStatus(Xs2aScaStatus.PSUAUTHENTICATED);
         links = new UpdatePisAuthorisationLinks(HTTP_URL, scaApproachResolver, response, request);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
-        expectedLinks.setSelectAuthenticationMethod(new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setSelectAuthenticationMethod(new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 
     @Test
     void isAnotherScaStatus_failed() {
-        response.setScaStatus(ScaStatus.FAILED);
+        response.setScaStatus(Xs2aScaStatus.FAILED);
         links = new UpdatePisAuthorisationLinks(HTTP_URL, scaApproachResolver, response, request);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 
@@ -87,31 +87,31 @@ class UpdatePisAuthorisationLinksTest {
     void isScaStatusMethodSelectedAndEmbedded() {
         when(scaApproachResolver.getScaApproach(AUTHORISATION_ID)).thenReturn(ScaApproach.EMBEDDED);
 
-        response.setScaStatus(ScaStatus.SCAMETHODSELECTED);
+        response.setScaStatus(Xs2aScaStatus.SCAMETHODSELECTED);
         response.setChosenScaMethod(authenticationObject);
         links = new UpdatePisAuthorisationLinks(HTTP_URL, scaApproachResolver, response, request);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
-        expectedLinks.setAuthoriseTransaction(new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setAuthoriseTransaction(new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 
     @Test
     void isScaStatusFinalised() {
-        response.setScaStatus(ScaStatus.FINALISED);
+        response.setScaStatus(Xs2aScaStatus.FINALISED);
         links = new UpdatePisAuthorisationLinks(HTTP_URL, scaApproachResolver, response, request);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 
     @Test
     void isScaStatusMethodIdentified() {
-        response.setScaStatus(ScaStatus.PSUIDENTIFIED);
+        response.setScaStatus(Xs2aScaStatus.PSUIDENTIFIED);
         links = new UpdatePisAuthorisationLinks(HTTP_URL, scaApproachResolver, response, request);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
-        expectedLinks.setUpdatePsuAuthentication(new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setUpdatePsuAuthentication(new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 }

@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.core.authorisation;
 
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.Data;
 
 @Data
@@ -28,7 +28,7 @@ public class ConsentAuthorization {
     private String consentId;
 
     private PsuIdData psuIdData;
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     private String password;
     private ScaApproach chosenScaApproach;
 

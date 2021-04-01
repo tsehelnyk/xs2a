@@ -17,7 +17,7 @@
 package de.adorsys.psd2.consent.api.pis.proto;
 
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.NotificationSupportedMode;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -41,7 +41,7 @@ public class PisPaymentInfo {
     private PaymentType paymentType;
 
     @ApiModelProperty(name = "transactionStatus", example = "ACCP")
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
 
     @ApiModelProperty(name = "internalPaymentStatus", example = "INIT")
     private InternalPaymentStatus internalPaymentStatus;

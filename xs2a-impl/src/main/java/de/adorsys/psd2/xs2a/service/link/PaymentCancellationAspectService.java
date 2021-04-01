@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.link;
 
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentCancellationRequest;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.pis.CancelPaymentResponse;
 import de.adorsys.psd2.xs2a.service.RedirectIdService;
@@ -77,9 +77,9 @@ public class PaymentCancellationAspectService extends BaseAspectService<PaymentC
         return result;
     }
 
-    private boolean isStartAuthorisationLinksNeeded(boolean isScaRequired, TransactionStatus transactionStatus) {
+    private boolean isStartAuthorisationLinksNeeded(boolean isScaRequired, Xs2aTransactionStatus transactionStatus) {
         return transactionStatus.isNotFinalisedStatus()
-                   && transactionStatus != TransactionStatus.RCVD
+                   && transactionStatus != Xs2aTransactionStatus.RCVD
                    && isScaRequired;
     }
 }

@@ -21,10 +21,10 @@ import de.adorsys.psd2.consent.api.pis.CmsPaymentResponse;
 import de.adorsys.psd2.consent.psu.api.pis.CmsPisPsuDataAuthorisation;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -97,7 +97,7 @@ public interface CmsPsuPisService {
      * @return <code>true</code> if payment was found and status was updated. <code>false</code> otherwise.
      * @throws AuthorisationIsExpiredException if authorisation is expired
      */
-    boolean updateAuthorisationStatus(@NotNull PsuIdData psuIdData, @NotNull String paymentId, @NotNull String authorisationId, @NotNull ScaStatus status, @NotNull String instanceId, AuthenticationDataHolder authenticationDataHolder) throws AuthorisationIsExpiredException;
+    boolean updateAuthorisationStatus(@NotNull PsuIdData psuIdData, @NotNull String paymentId, @NotNull String authorisationId, @NotNull Xs2aScaStatus status, @NotNull String instanceId, AuthenticationDataHolder authenticationDataHolder) throws AuthorisationIsExpiredException;
 
     /**
      * Updates a Status of Payment object by its ID and PSU ID
@@ -107,7 +107,7 @@ public interface CmsPsuPisService {
      * @param instanceId optional ID of particular service instance
      * @return <code>true</code> if payment was found and status was updated. <code>false</code> otherwise.
      */
-    boolean updatePaymentStatus(@NotNull String paymentId, @NotNull TransactionStatus status, @NotNull String instanceId);
+    boolean updatePaymentStatus(@NotNull String paymentId, @NotNull Xs2aTransactionStatus status, @NotNull String instanceId);
 
     /**
      * Returns list of info objects about psu data and authorisation scaStatuses

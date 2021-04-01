@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.xs2a.domain.Transactions;
+import de.adorsys.psd2.xs2a.domain.Xs2aTransactions;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiTransaction;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
@@ -43,10 +43,10 @@ class SpiToXs2aTransactionMapperTest {
 
     @Test
     void mapToXs2aTransaction() {
-        Transactions transactions = mapper.mapToXs2aTransaction(
+        Xs2aTransactions transactions = mapper.mapToXs2aTransaction(
             jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/spi-transaction.json", SpiTransaction.class));
 
-        Transactions expectedTransactions = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/transactions.json", Transactions.class);
+        Xs2aTransactions expectedTransactions = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/transactions.json", Xs2aTransactions.class);
         assertEquals(expectedTransactions, transactions);
     }
 
@@ -57,10 +57,10 @@ class SpiToXs2aTransactionMapperTest {
 
     @Test
     void mapToXs2aTransactionList() {
-        List<Transactions> transactions = mapper.mapToXs2aTransactionList(
+        List<Xs2aTransactions> transactions = mapper.mapToXs2aTransactionList(
             Collections.singletonList(jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/spi-transaction.json", SpiTransaction.class)));
 
-        Transactions expectedTransactions = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/transactions.json", Transactions.class);
+        Xs2aTransactions expectedTransactions = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/transactions.json", Xs2aTransactions.class);
         assertEquals(expectedTransactions, transactions.get(0));
     }
 

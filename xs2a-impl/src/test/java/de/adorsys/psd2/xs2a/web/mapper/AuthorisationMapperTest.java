@@ -17,7 +17,9 @@ package de.adorsys.psd2.xs2a.web.mapper;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import de.adorsys.psd2.model.*;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -121,13 +123,13 @@ class AuthorisationMapperTest {
                                                                                        .body(xs2aUpdatePisCommonPaymentPsuDataResponse)
                                                                                        .build();
 
-        List<de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject> xs2aScaMethods = jsonReader.getObjectFromFile("json/service/mapper/authorisation-mapper/AuthorisationMapper-scaMethods.json", new TypeReference<List<de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject>>() {
+        List<Xs2aAuthenticationObject> xs2aScaMethods = jsonReader.getObjectFromFile("json/service/mapper/authorisation-mapper/AuthorisationMapper-scaMethods.json", new TypeReference<List<Xs2aAuthenticationObject>>() {
         });
         ScaMethods scaMethods = jsonReader.getObjectFromFile("json/service/mapper/authorisation-mapper/AuthorisationMapper-scaMethods.json", ScaMethods.class);
         when(scaMethodsMapper.mapToScaMethods(xs2aScaMethods)).thenReturn(scaMethods);
 
         ChallengeData challengeData = jsonReader.getObjectFromFile("json/service/mapper/authorisation-mapper/AuthorisationMapper-challengeData.json", ChallengeData.class);
-        de.adorsys.psd2.xs2a.core.sca.ChallengeData xs2aChallengeData = jsonReader.getObjectFromFile("json/service/mapper/authorisation-mapper/AuthorisationMapper-challengeData.json", de.adorsys.psd2.xs2a.core.sca.ChallengeData.class);
+        Xs2aChallengeData xs2aChallengeData = jsonReader.getObjectFromFile("json/service/mapper/authorisation-mapper/AuthorisationMapper-challengeData.json", Xs2aChallengeData.class);
         when(coreObjectsMapper.mapToChallengeData(xs2aChallengeData)).thenReturn(challengeData);
 
         // when
@@ -179,7 +181,7 @@ class AuthorisationMapperTest {
         assertEquals(expected, actual);
     }
 
-    private Map<String, HrefType> buildLinks() {
-        return Collections.singletonMap(SELF_LINK, new HrefType(LOCALHOST_LINK));
+    private Map<String, Xs2aHrefType> buildLinks() {
+        return Collections.singletonMap(SELF_LINK, new Xs2aHrefType(LOCALHOST_LINK));
     }
 }

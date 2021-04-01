@@ -23,7 +23,8 @@ import de.adorsys.psd2.core.payment.model.*;
 import de.adorsys.psd2.xs2a.core.pis.FrequencyCode;
 import de.adorsys.psd2.xs2a.core.pis.PisDayOfExecution;
 import de.adorsys.psd2.xs2a.core.pis.PisExecutionRule;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.core.tpp.TppRole;
@@ -66,7 +67,7 @@ class CmsCommonPaymentMapperSupportImplTest {
 
     @Test
     void mapToCmsSinglePayment() throws JsonProcessingException {
-        PaymentInitiationJson paymentInitiationJson = jsonReader.getObjectFromFile("json/payment-initiation-resp.json", PaymentInitiationJson.class);
+        Xs2aPisPaymentInitiationJson paymentInitiationJson = jsonReader.getObjectFromFile("json/payment-initiation-resp.json", Xs2aPisPaymentInitiationJson.class);
         cmsCommonPayment.setPaymentData(xs2aObjectMapper.writeValueAsBytes(paymentInitiationJson));
         CmsBasePaymentResponse actual = mapper.mapToCmsSinglePayment(cmsCommonPayment);
 
@@ -82,7 +83,7 @@ class CmsCommonPaymentMapperSupportImplTest {
 
     @Test
     void mapToCmsBulkPayment() throws JsonProcessingException {
-        BulkPaymentInitiationJson paymentInitiationJson = jsonReader.getObjectFromFile("json/bulk-payment-initiation-resp.json", BulkPaymentInitiationJson.class);
+        Xs2aPisBulkPaymentInitiationJson paymentInitiationJson = jsonReader.getObjectFromFile("json/bulk-payment-initiation-resp.json", Xs2aPisBulkPaymentInitiationJson.class);
         cmsCommonPayment.setPaymentData(xs2aObjectMapper.writeValueAsBytes(paymentInitiationJson));
         CmsBasePaymentResponse actual = mapper.mapToCmsBulkPayment(cmsCommonPayment);
 
@@ -98,7 +99,7 @@ class CmsCommonPaymentMapperSupportImplTest {
 
     @Test
     void mapToCmsPeriodicPayment() throws JsonProcessingException {
-        PeriodicPaymentInitiationJson paymentInitiationJson = jsonReader.getObjectFromFile("json/periodic-payment-initiation-resp.json", PeriodicPaymentInitiationJson.class);
+        Xs2aPisPeriodicPaymentInitiationJson paymentInitiationJson = jsonReader.getObjectFromFile("json/periodic-payment-initiation-resp.json", Xs2aPisPeriodicPaymentInitiationJson.class);
         cmsCommonPayment.setPaymentData(xs2aObjectMapper.writeValueAsBytes(paymentInitiationJson));
         CmsBasePaymentResponse actual = mapper.mapToCmsPeriodicPayment(cmsCommonPayment);
 
@@ -115,7 +116,7 @@ class CmsCommonPaymentMapperSupportImplTest {
     @Test
     void mapToCmsPeriodicPayment_remittanceIsNull() throws JsonProcessingException {
         // Given
-        PeriodicPaymentInitiationJson paymentInitiationJson = jsonReader.getObjectFromFile("json/periodic-payment-initiation-resp.json", PeriodicPaymentInitiationJson.class);
+        Xs2aPisPeriodicPaymentInitiationJson paymentInitiationJson = jsonReader.getObjectFromFile("json/periodic-payment-initiation-resp.json", Xs2aPisPeriodicPaymentInitiationJson.class);
         paymentInitiationJson.setRemittanceInformationStructured(null);
         cmsCommonPayment.setPaymentData(xs2aObjectMapper.writeValueAsBytes(paymentInitiationJson));
 
@@ -130,7 +131,7 @@ class CmsCommonPaymentMapperSupportImplTest {
 
     @Test
     void mapToCmsSinglePayment_noRemittanceInformationStructuredArray() throws JsonProcessingException {
-        PaymentInitiationJson paymentInitiationJson = jsonReader.getObjectFromFile("json/payment-initiation-resp.json", PaymentInitiationJson.class);
+        Xs2aPisPaymentInitiationJson paymentInitiationJson = jsonReader.getObjectFromFile("json/payment-initiation-resp.json", Xs2aPisPaymentInitiationJson.class);
         paymentInitiationJson.setRemittanceInformationStructuredArray(null);
         cmsCommonPayment.setPaymentData(xs2aObjectMapper.writeValueAsBytes(paymentInitiationJson));
 
@@ -141,7 +142,7 @@ class CmsCommonPaymentMapperSupportImplTest {
         assertEquals(Collections.emptyList(), actualSinglePayment.getRemittanceInformationStructuredArray());
     }
 
-    private CmsPeriodicPayment getCmsPeriodicPayment(PeriodicPaymentInitiationJson paymentInitiationJson) {
+    private CmsPeriodicPayment getCmsPeriodicPayment(Xs2aPisPeriodicPaymentInitiationJson paymentInitiationJson) {
         CmsPeriodicPayment payment = new CmsPeriodicPayment(PAYMENT_PRODUCT);
         payment.setEndToEndIdentification(paymentInitiationJson.getEndToEndIdentification());
         payment.setInstructionIdentification(paymentInitiationJson.getInstructionIdentification());
@@ -175,7 +176,7 @@ class CmsCommonPaymentMapperSupportImplTest {
         return payment;
     }
 
-    private CmsBulkPayment getCmsBulkPayment(BulkPaymentInitiationJson paymentInitiationJson, CmsCommonPayment cmsCommonPayment) {
+    private CmsBulkPayment getCmsBulkPayment(Xs2aPisBulkPaymentInitiationJson paymentInitiationJson, CmsCommonPayment cmsCommonPayment) {
         CmsBulkPayment payment = new CmsBulkPayment();
         payment.setPaymentProduct(cmsCommonPayment.getPaymentProduct());
         payment.setPaymentId(cmsCommonPayment.getPaymentId());
@@ -195,7 +196,7 @@ class CmsCommonPaymentMapperSupportImplTest {
         return payment;
     }
 
-    private List<CmsSinglePayment> getBulkPayments(PaymentInitiationJson paymentInitiationJson, CmsBasePaymentResponse parent) {
+    private List<CmsSinglePayment> getBulkPayments(Xs2aPisPaymentInitiationJson paymentInitiationJson, CmsBasePaymentResponse parent) {
         CmsSinglePayment singlePayment = new CmsSinglePayment(PAYMENT_PRODUCT);
         Xs2aAmount instructedAmount = paymentInitiationJson.getInstructedAmount();
         singlePayment.setEndToEndIdentification(paymentInitiationJson.getEndToEndIdentification());
@@ -206,7 +207,7 @@ class CmsCommonPaymentMapperSupportImplTest {
         singlePayment.setCreditorName(paymentInitiationJson.getCreditorName());
         singlePayment.setCreditorAddress(getCreditorAddress(paymentInitiationJson.getCreditorAddress()));
         singlePayment.setRemittanceInformationUnstructured(paymentInitiationJson.getRemittanceInformationUnstructured());
-        singlePayment.setPaymentStatus(TransactionStatus.RCVD);
+        singlePayment.setPaymentStatus(Xs2aTransactionStatus.RCVD);
         singlePayment.setPurposeCode(paymentInitiationJson.getPurposeCode().name());
         singlePayment.setUltimateDebtor(paymentInitiationJson.getUltimateDebtor());
         singlePayment.setUltimateCreditor(paymentInitiationJson.getUltimateCreditor());
@@ -223,7 +224,7 @@ class CmsCommonPaymentMapperSupportImplTest {
 
     private CmsCommonPayment createCmsCommonPayment() {
         CmsCommonPayment payment = new CmsCommonPayment(PAYMENT_PRODUCT);
-        payment.setTransactionStatus(TransactionStatus.RCVD);
+        payment.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         payment.setPaymentId("2Cixxv85Or_qoBBh_d7VTZC0M8PwzR5IGzsJuT-jYHNOMR1D7n69vIF46RgFd7Zn_=_bS6p6XvTWI");
         payment.setPsuIdDatas(Collections.singletonList(new PsuIdData("PSU ID", "PSU ID TYPE", "PSU CORPORATE ID", "PSU CORPORATE ID TYPE", "PSU IP ADDRESS")));
         TppInfo tppInfo = new TppInfo();
@@ -244,7 +245,7 @@ class CmsCommonPaymentMapperSupportImplTest {
         return payment;
     }
 
-    private CmsSinglePayment getCmsSinglePayment(PaymentInitiationJson paymentInitiationJson, CmsBasePaymentResponse parent) {
+    private CmsSinglePayment getCmsSinglePayment(Xs2aPisPaymentInitiationJson paymentInitiationJson, CmsBasePaymentResponse parent) {
         CmsSinglePayment payment = new CmsSinglePayment(PAYMENT_PRODUCT);
         payment.setEndToEndIdentification(paymentInitiationJson.getEndToEndIdentification());
         payment.setInstructionIdentification(paymentInitiationJson.getInstructionIdentification());
@@ -257,7 +258,7 @@ class CmsCommonPaymentMapperSupportImplTest {
         payment.setCreditorAddress(getCreditorAddress(paymentInitiationJson.getCreditorAddress()));
         payment.setRemittanceInformationUnstructured(paymentInitiationJson.getRemittanceInformationUnstructured());
         payment.setRequestedExecutionDate(paymentInitiationJson.getRequestedExecutionDate());
-        payment.setPaymentStatus(TransactionStatus.RCVD);
+        payment.setPaymentStatus(Xs2aTransactionStatus.RCVD);
         payment.setUltimateDebtor(paymentInitiationJson.getUltimateDebtor());
         payment.setUltimateCreditor(paymentInitiationJson.getUltimateCreditor());
         payment.setRemittanceInformationStructured(getRemittanceInformationStructured(paymentInitiationJson.getRemittanceInformationStructured()));
@@ -295,8 +296,8 @@ class CmsCommonPaymentMapperSupportImplTest {
         return remittanceInformationStructured;
     }
 
-    private de.adorsys.psd2.xs2a.core.profile.AccountReference getAccount(AccountReference accountReference) {
-        de.adorsys.psd2.xs2a.core.profile.AccountReference xs2aAccountReference = new de.adorsys.psd2.xs2a.core.profile.AccountReference();
+    private Xs2aAccountReference getAccount(Xs2aPisAccountReference accountReference) {
+        Xs2aAccountReference xs2aAccountReference = new Xs2aAccountReference();
         xs2aAccountReference.setIban(accountReference.getIban());
         xs2aAccountReference.setBban(accountReference.getBban());
         xs2aAccountReference.setPan(accountReference.getPan());
@@ -306,7 +307,7 @@ class CmsCommonPaymentMapperSupportImplTest {
         return xs2aAccountReference;
     }
 
-    private CmsAddress getCreditorAddress(Address address) {
+    private CmsAddress getCreditorAddress(Xs2aPisAddress address) {
         CmsAddress cmsAddress = new CmsAddress();
         cmsAddress.setCountry(address.getCountry());
         cmsAddress.setTownName(address.getTownName());

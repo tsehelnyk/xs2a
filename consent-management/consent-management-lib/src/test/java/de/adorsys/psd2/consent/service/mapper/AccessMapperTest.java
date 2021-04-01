@@ -19,8 +19,8 @@ package de.adorsys.psd2.consent.service.mapper;
 import de.adorsys.psd2.consent.api.ais.AdditionalAccountInformationType;
 import de.adorsys.psd2.consent.domain.account.AspspAccountAccess;
 import de.adorsys.psd2.consent.domain.account.TppAccountAccess;
-import de.adorsys.psd2.core.data.AccountAccess;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
 
@@ -35,15 +35,15 @@ class AccessMapperTest {
     @Test
     void mapTppAccessesToAccountAccess() {
         List<TppAccountAccess> tppAccountAccesses = jsonReader.getListFromFile("json/service/mapper/access-mapper/tpp-account-accesses-additional-information.json", TppAccountAccess.class);
-        AccountAccess actual = accessMapper.mapTppAccessesToAccountAccess(tppAccountAccesses, AdditionalAccountInformationType.DEDICATED_ACCOUNTS, AdditionalAccountInformationType.DEDICATED_ACCOUNTS);
+        Xs2aConsentAccountAccess actual = accessMapper.mapTppAccessesToAccountAccess(tppAccountAccesses, AdditionalAccountInformationType.DEDICATED_ACCOUNTS, AdditionalAccountInformationType.DEDICATED_ACCOUNTS);
 
-        AccountAccess expected = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-access-for-tpp-additional-information.json", AccountAccess.class);
+        Xs2aConsentAccountAccess expected = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-access-for-tpp-additional-information.json", Xs2aConsentAccountAccess.class);
         assertEquals(expected, actual);
     }
 
     @Test
     void mapToTppAccountAccess() {
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-access-for-tpp-additional-information.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-access-for-tpp-additional-information.json", Xs2aConsentAccountAccess.class);
         List<TppAccountAccess> actual = accessMapper.mapToTppAccountAccess(accountAccess);
 
         List<TppAccountAccess> expected = jsonReader.getListFromFile("json/service/mapper/access-mapper/tpp-account-accesses-additional-information.json", TppAccountAccess.class);
@@ -53,15 +53,15 @@ class AccessMapperTest {
     @Test
     void mapAspspAccessesToAccountAccess() {
         List<AspspAccountAccess> aspspAccountAccesses = jsonReader.getListFromFile("json/service/mapper/access-mapper/aspsp-account-accesses-additional-information.json", AspspAccountAccess.class);
-        AccountAccess actual = accessMapper.mapAspspAccessesToAccountAccess(aspspAccountAccesses, AdditionalAccountInformationType.DEDICATED_ACCOUNTS, AdditionalAccountInformationType.DEDICATED_ACCOUNTS);
+        Xs2aConsentAccountAccess actual = accessMapper.mapAspspAccessesToAccountAccess(aspspAccountAccesses, AdditionalAccountInformationType.DEDICATED_ACCOUNTS, AdditionalAccountInformationType.DEDICATED_ACCOUNTS);
 
-        AccountAccess expected = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-access-for-aspsp-additional-information.json", AccountAccess.class);
+        Xs2aConsentAccountAccess expected = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-access-for-aspsp-additional-information.json", Xs2aConsentAccountAccess.class);
         assertEquals(expected, actual);
     }
 
     @Test
     void mapToAspspAccountAccess() {
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-access-for-aspsp.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-access-for-aspsp.json", Xs2aConsentAccountAccess.class);
         List<AspspAccountAccess> actual = accessMapper.mapToAspspAccountAccess(accountAccess);
 
         List<AspspAccountAccess> expected = jsonReader.getListFromFile("json/service/mapper/access-mapper/aspsp-account-accesses.json", AspspAccountAccess.class);
@@ -70,7 +70,7 @@ class AccessMapperTest {
 
     @Test
     void mapToAspspAccountAccess_additionalInformation() {
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-access-for-aspsp-additional-information.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-access-for-aspsp-additional-information.json", Xs2aConsentAccountAccess.class);
         List<AspspAccountAccess> actual = accessMapper.mapToAspspAccountAccess(accountAccess);
 
         List<AspspAccountAccess> expected = jsonReader.getListFromFile("json/service/mapper/access-mapper/aspsp-account-accesses-additional-information.json", AspspAccountAccess.class);
@@ -79,7 +79,7 @@ class AccessMapperTest {
 
     @Test
     void mapToAspspAccountAccess_accountReference() {
-        AccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-reference.json", AccountReference.class);
+        Xs2aAccountReference accountReference = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-reference.json", Xs2aAccountReference.class);
         AspspAccountAccess expected = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/aspsp-account-accesses-account.json", AspspAccountAccess.class);
 
         AspspAccountAccess actual = accessMapper.mapToAspspAccountAccess(accountReference);
@@ -90,9 +90,9 @@ class AccessMapperTest {
     @Test
     void mapToAccountReference() {
         AspspAccountAccess aspspAccountAccess = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/aspsp-account-accesses-account.json", AspspAccountAccess.class);
-        AccountReference expected = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-reference.json", AccountReference.class);
+        Xs2aAccountReference expected = jsonReader.getObjectFromFile("json/service/mapper/access-mapper/account-reference.json", Xs2aAccountReference.class);
 
-        AccountReference actual = accessMapper.mapToAccountReference(aspspAccountAccess);
+        Xs2aAccountReference actual = accessMapper.mapToAccountReference(aspspAccountAccess);
 
         assertEquals(expected, actual);
     }

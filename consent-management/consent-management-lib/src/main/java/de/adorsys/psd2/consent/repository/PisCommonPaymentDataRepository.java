@@ -17,7 +17,7 @@
 package de.adorsys.psd2.consent.repository;
 
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface PisCommonPaymentDataRepository extends CrudRepository<PisCommonPaymentData, Long>, JpaSpecificationExecutor<PisCommonPaymentData> {
-    Optional<PisCommonPaymentData> findByPaymentIdAndTransactionStatusIn(String paymentId, List<TransactionStatus> status);
+    Optional<PisCommonPaymentData> findByPaymentIdAndTransactionStatusIn(String paymentId, List<Xs2aTransactionStatus> status);
 
     Optional<PisCommonPaymentData> findByPaymentId(String paymentId);
 
@@ -39,7 +39,7 @@ public interface PisCommonPaymentDataRepository extends CrudRepository<PisCommon
      */
     List<PisCommonPaymentData> findAllByPaymentIdIn(List<String> externalIds);
 
-    Long countByTransactionStatusIn(Set<TransactionStatus> statuses);
+    Long countByTransactionStatusIn(Set<Xs2aTransactionStatus> statuses);
 
-    List<PisCommonPaymentData> findByTransactionStatusIn(Set<TransactionStatus> statuses, Pageable pageable);
+    List<PisCommonPaymentData> findByTransactionStatusIn(Set<Xs2aTransactionStatus> statuses, Pageable pageable);
 }

@@ -27,13 +27,13 @@ import de.adorsys.psd2.consent.repository.specification.ConfirmationOfFundsConse
 import de.adorsys.psd2.consent.service.authorisation.CmsConsentAuthorisationServiceInternal;
 import de.adorsys.psd2.consent.service.mapper.CmsConfirmationOfFundsMapper;
 import de.adorsys.psd2.consent.service.mapper.CmsPsuAuthorisationMapper;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +58,7 @@ public class CmsPsuConfirmationOfFundsServiceInternal implements CmsPsuConfirmat
     @Override
     @Transactional
     public boolean updateAuthorisationStatus(@NotNull PsuIdData psuIdData, @NotNull String consentId,
-                                             @NotNull String authorisationId, @NotNull ScaStatus status,
+                                             @NotNull String authorisationId, @NotNull Xs2aScaStatus status,
                                              @NotNull String instanceId, AuthenticationDataHolder authenticationDataHolder) throws AuthorisationIsExpiredException {
         Optional<ConsentEntity> actualConsent = getActualConsent(consentId, instanceId);
 
@@ -125,7 +125,7 @@ public class CmsPsuConfirmationOfFundsServiceInternal implements CmsPsuConfirmat
 
     @Override
     @Transactional
-    public boolean updateConsentStatus(@NotNull String consentId, @NotNull ConsentStatus status, @NotNull String instanceId) {
+    public boolean updateConsentStatus(@NotNull String consentId, @NotNull Xs2aConsentStatus status, @NotNull String instanceId) {
         Optional<ConsentEntity> consentEntityOptional = getActualConsent(consentId, instanceId);
 
         if (consentEntityOptional.isEmpty()) {

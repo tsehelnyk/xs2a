@@ -20,9 +20,9 @@ import de.adorsys.psd2.consent.api.TypeAccess;
 import de.adorsys.psd2.consent.api.ais.AdditionalAccountInformationType;
 import de.adorsys.psd2.consent.domain.account.AspspAccountAccess;
 import de.adorsys.psd2.consent.domain.account.TppAccountAccess;
-import de.adorsys.psd2.core.data.AccountAccess;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import lombok.Getter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -34,12 +34,12 @@ import java.util.stream.Collectors;
 @Component
 public class AccessMapper {
 
-    public AccountAccess mapTppAccessesToAccountAccess(List<TppAccountAccess> tppAccountAccesses,
-                                                       AdditionalAccountInformationType ownerNameType,
-                                                       AdditionalAccountInformationType trustedBeneficiariesType) {
+    public Xs2aConsentAccountAccess mapTppAccessesToAccountAccess(List<TppAccountAccess> tppAccountAccesses,
+                                                                  AdditionalAccountInformationType ownerNameType,
+                                                                  AdditionalAccountInformationType trustedBeneficiariesType) {
         AccountAccessListHolder holder = new AccountAccessListHolder();
         tppAccountAccesses.forEach(a -> {
-            AccountReference accountReference = new AccountReference(a.getAccountReferenceType(),
+            Xs2aAccountReference accountReference = new Xs2aAccountReference(a.getAccountReferenceType(),
                                                                      a.getAccountIdentifier(),
                                                                      a.getCurrency());
             holder.addAccountReference(accountReference, a.getTypeAccess());
@@ -47,12 +47,12 @@ public class AccessMapper {
         return buildAccountAccess(holder, ownerNameType, trustedBeneficiariesType);
     }
 
-    public AccountAccess mapAspspAccessesToAccountAccess(List<AspspAccountAccess> aspspAccountAccesses,
-                                                         AdditionalAccountInformationType ownerNameType,
-                                                         AdditionalAccountInformationType trustedBeneficiariesType) {
+    public Xs2aConsentAccountAccess mapAspspAccessesToAccountAccess(List<AspspAccountAccess> aspspAccountAccesses,
+                                                                    AdditionalAccountInformationType ownerNameType,
+                                                                    AdditionalAccountInformationType trustedBeneficiariesType) {
         AccountAccessListHolder holder = new AccountAccessListHolder();
         aspspAccountAccesses.forEach(a -> {
-            AccountReference accountReference = new AccountReference(a.getAccountReferenceType(),
+            Xs2aAccountReference accountReference = new Xs2aAccountReference(a.getAccountReferenceType(),
                                                                      a.getAccountIdentifier(),
                                                                      a.getCurrency(),
                                                                      a.getResourceId(),
@@ -62,7 +62,7 @@ public class AccessMapper {
         return buildAccountAccess(holder, ownerNameType, trustedBeneficiariesType);
     }
 
-    public List<TppAccountAccess> mapToTppAccountAccess(AccountAccess accountAccess) {
+    public List<TppAccountAccess> mapToTppAccountAccess(Xs2aConsentAccountAccess accountAccess) {
         List<TppAccountAccess> tppAccountAccesses = new ArrayList<>();
         tppAccountAccesses.addAll(accountAccess.getAccounts().stream().map(a -> new TppAccountAccess(a.getUsedAccountReferenceSelector().getAccountValue(),
                                                                                                      TypeAccess.ACCOUNT,
@@ -76,7 +76,7 @@ public class AccessMapper {
                                                                                                          TypeAccess.TRANSACTION,
                                                                                                          a.getUsedAccountReferenceSelector().getAccountReferenceType(),
                                                                                                          a.getCurrency())).collect(Collectors.toList()));
-        AdditionalInformationAccess additionalInformationAccess = accountAccess.getAdditionalInformationAccess();
+        Xs2aAdditionalInformationAccess additionalInformationAccess = accountAccess.getAdditionalInformationAccess();
         if (additionalInformationAccess != null) {
             if (CollectionUtils.isNotEmpty(additionalInformationAccess.getOwnerName())) {
                 tppAccountAccesses.addAll(additionalInformationAccess.getOwnerName().stream().map(a -> new TppAccountAccess(a.getUsedAccountReferenceSelector().getAccountValue(),
@@ -95,7 +95,7 @@ public class AccessMapper {
         return tppAccountAccesses;
     }
 
-    public List<AspspAccountAccess> mapToAspspAccountAccess(AccountAccess accountAccess) {
+    public List<AspspAccountAccess> mapToAspspAccountAccess(Xs2aConsentAccountAccess accountAccess) {
         List<AspspAccountAccess> aspspAccountAccesses = new ArrayList<>();
         aspspAccountAccesses.addAll(accountAccess.getAccounts().stream().map(a -> new AspspAccountAccess(a.getUsedAccountReferenceSelector().getAccountValue(),
                                                                                                          TypeAccess.ACCOUNT,
@@ -115,7 +115,7 @@ public class AccessMapper {
                                                                                                              a.getCurrency(),
                                                                                                              a.getResourceId(),
                                                                                                              a.getAspspAccountId())).collect(Collectors.toList()));
-        AdditionalInformationAccess additionalInformationAccess = accountAccess.getAdditionalInformationAccess();
+        Xs2aAdditionalInformationAccess additionalInformationAccess = accountAccess.getAdditionalInformationAccess();
         if (additionalInformationAccess != null) {
             if (CollectionUtils.isNotEmpty(additionalInformationAccess.getOwnerName())) {
                 aspspAccountAccesses.addAll(additionalInformationAccess.getOwnerName().stream().map(a -> new AspspAccountAccess(a.getUsedAccountReferenceSelector().getAccountValue(),
@@ -138,7 +138,7 @@ public class AccessMapper {
         return aspspAccountAccesses;
     }
 
-    public AspspAccountAccess mapToAspspAccountAccess(AccountReference accountReference) {
+    public AspspAccountAccess mapToAspspAccountAccess(Xs2aAccountReference accountReference) {
         return new AspspAccountAccess(accountReference.getUsedAccountReferenceSelector().getAccountValue(),
                                       TypeAccess.ACCOUNT,
                                       accountReference.getUsedAccountReferenceSelector().getAccountReferenceType(),
@@ -147,8 +147,8 @@ public class AccessMapper {
                                       accountReference.getAspspAccountId());
     }
 
-    public AccountReference mapToAccountReference(AspspAccountAccess aspspAccountAccess) {
-        return new AccountReference(aspspAccountAccess.getAccountReferenceType(),
+    public Xs2aAccountReference mapToAccountReference(AspspAccountAccess aspspAccountAccess) {
+        return new Xs2aAccountReference(aspspAccountAccess.getAccountReferenceType(),
                                     aspspAccountAccess.getAccountIdentifier(),
                                     aspspAccountAccess.getCurrency(),
                                     aspspAccountAccess.getResourceId(),
@@ -157,13 +157,13 @@ public class AccessMapper {
 
     @Getter
     private static class AccountAccessListHolder {
-        List<AccountReference> accounts = new ArrayList<>();
-        List<AccountReference> balances = new ArrayList<>();
-        List<AccountReference> transactions = new ArrayList<>();
-        List<AccountReference> ownerNames = new ArrayList<>();
-        List<AccountReference> trustedBeneficiaries = new ArrayList<>();
+        List<Xs2aAccountReference> accounts = new ArrayList<>();
+        List<Xs2aAccountReference> balances = new ArrayList<>();
+        List<Xs2aAccountReference> transactions = new ArrayList<>();
+        List<Xs2aAccountReference> ownerNames = new ArrayList<>();
+        List<Xs2aAccountReference> trustedBeneficiaries = new ArrayList<>();
 
-        void addAccountReference(AccountReference accountReference, TypeAccess typeAccess) {
+        void addAccountReference(Xs2aAccountReference accountReference, TypeAccess typeAccess) {
             if (TypeAccess.ACCOUNT == typeAccess) {
                 accounts.add(accountReference);
             } else if (TypeAccess.BALANCE == typeAccess) {
@@ -178,12 +178,12 @@ public class AccessMapper {
         }
     }
 
-    private AccountAccess buildAccountAccess(AccountAccessListHolder holder,
-                                             AdditionalAccountInformationType ownerNameType,
-                                             AdditionalAccountInformationType trustedBeneficiariesType) {
+    private Xs2aConsentAccountAccess buildAccountAccess(AccountAccessListHolder holder,
+                                                        AdditionalAccountInformationType ownerNameType,
+                                                        AdditionalAccountInformationType trustedBeneficiariesType) {
 
-        return new AccountAccess(holder.getAccounts(), holder.getBalances(), holder.getTransactions(),
-                                 new AdditionalInformationAccess(resolveAdditionalAccountInformationType(ownerNameType).getReferencesByType(holder.getOwnerNames()),
+        return new Xs2aConsentAccountAccess(holder.getAccounts(), holder.getBalances(), holder.getTransactions(),
+                                 new Xs2aAdditionalInformationAccess(resolveAdditionalAccountInformationType(ownerNameType).getReferencesByType(holder.getOwnerNames()),
                                                                  resolveAdditionalAccountInformationType(trustedBeneficiariesType).getReferencesByType(holder.getTrustedBeneficiaries())));
     }
 

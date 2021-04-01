@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.domain.authorisation;
 
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 
 /**
  * Common interface for AIS and PIS update authorisation requests
@@ -30,7 +30,7 @@ public interface UpdateAuthorisationRequest {
 
     String getAuthorisationId();
 
-    ScaStatus getScaStatus();
+    Xs2aScaStatus getScaStatus();
 
     boolean isUpdatePsuIdentification();
 

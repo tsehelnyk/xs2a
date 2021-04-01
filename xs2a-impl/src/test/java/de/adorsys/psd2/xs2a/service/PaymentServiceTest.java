@@ -25,11 +25,11 @@ import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
@@ -69,7 +69,7 @@ import java.util.Optional;
 import static de.adorsys.psd2.xs2a.core.domain.TppMessageInformation.of;
 import static de.adorsys.psd2.xs2a.core.error.ErrorType.PIS_400;
 import static de.adorsys.psd2.xs2a.core.error.MessageErrorCode.*;
-import static de.adorsys.psd2.xs2a.core.pis.TransactionStatus.*;
+import static de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
@@ -346,7 +346,7 @@ class PaymentServiceTest {
         when(paymentServiceResolver.getCreatePaymentService(paymentInitiationParameters)).thenReturn(createPaymentService);
 
         SinglePaymentInitiationResponse paymentInitiationResponse = buildSinglePaymentInitiationResponse();
-        ScaStatus scaStatus = ScaStatus.PSUIDENTIFIED;
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.PSUIDENTIFIED;
         paymentInitiationResponse.setScaStatus(scaStatus);
         when(createPaymentService.createPayment(any(), any(), any()))
             .thenReturn(ResponseObject.<PaymentInitiationResponse>builder()
@@ -506,7 +506,7 @@ class PaymentServiceTest {
         when(readPaymentService.getPayment(pisCommonPaymentResponse, null, PAYMENT_ID, JSON_MEDIA_TYPE)).thenReturn(new PaymentInformationResponse<>(singlePayment));
         when(requestProviderService.getAcceptHeader()).thenReturn(JSON_MEDIA_TYPE);
 
-        TransactionStatus expectedStatus = singlePayment.getTransactionStatus();
+        Xs2aTransactionStatus expectedStatus = singlePayment.getTransactionStatus();
 
         // When
         ResponseObject response = paymentService.getPaymentById(PaymentType.SINGLE, PAYMENT_PRODUCT, PAYMENT_ID);
@@ -555,7 +555,7 @@ class PaymentServiceTest {
         when(readPaymentStatusService.readPaymentStatus(any(), any(SpiContextData.class), eq(PAYMENT_ID), eq(JSON_MEDIA_TYPE)))
             .thenReturn(new ReadPaymentStatusResponse(RCVD, null, MediaType.APPLICATION_JSON, null, PSU_MESSAGE));
         when(paymentServiceResolver.getReadPaymentStatusService(any(PisCommonPaymentResponse.class))).thenReturn(readPaymentStatusService);
-        when(updatePaymentStatusAfterSpiService.updatePaymentStatus(anyString(), any(TransactionStatus.class)))
+        when(updatePaymentStatusAfterSpiService.updatePaymentStatus(anyString(), any(Xs2aTransactionStatus.class)))
             .thenReturn(true);
         ArgumentCaptor<EventType> argumentCaptor = ArgumentCaptor.forClass(EventType.class);
         when(spiContextDataProvider.provideWithPsuIdData(any())).thenReturn(SPI_CONTEXT_DATA);
@@ -572,7 +572,7 @@ class PaymentServiceTest {
     @Test
     void getPaymentStatusById_shouldStoreTransactionStatusInLoggingContext() {
         // Given
-        TransactionStatus transactionStatus = RCVD;
+        Xs2aTransactionStatus transactionStatus = RCVD;
         when(getPaymentStatusByIdValidator.validate(any(GetPaymentStatusByIdPO.class)))
             .thenReturn(ValidationResult.valid());
 
@@ -581,7 +581,7 @@ class PaymentServiceTest {
         when(paymentServiceResolver.getReadPaymentStatusService(any(PisCommonPaymentResponse.class))).thenReturn(readPaymentStatusService);
         when(readPaymentStatusService.readPaymentStatus(any(), any(SpiContextData.class), eq(PAYMENT_ID), eq(JSON_MEDIA_TYPE)))
             .thenReturn(new ReadPaymentStatusResponse(transactionStatus, null, MediaType.APPLICATION_JSON, null, PSU_MESSAGE));
-        when(updatePaymentStatusAfterSpiService.updatePaymentStatus(anyString(), any(TransactionStatus.class)))
+        when(updatePaymentStatusAfterSpiService.updatePaymentStatus(anyString(), any(Xs2aTransactionStatus.class)))
             .thenReturn(true);
         when(requestProviderService.getAcceptHeader()).thenReturn(JSON_MEDIA_TYPE);
 
@@ -631,7 +631,7 @@ class PaymentServiceTest {
         when(xs2aPisCommonPaymentService.getPisCommonPaymentById(anyString())).thenReturn(Optional.of(pisCommonPaymentResponse));
         when(readPaymentStatusService.readPaymentStatus(any(), any(SpiContextData.class), any(String.class), eq(JSON_MEDIA_TYPE)))
             .thenReturn(new ReadPaymentStatusResponse(ACCP, null, MediaType.APPLICATION_JSON, null, PSU_MESSAGE));
-        when(updatePaymentStatusAfterSpiService.updatePaymentStatus(anyString(), any(TransactionStatus.class)))
+        when(updatePaymentStatusAfterSpiService.updatePaymentStatus(anyString(), any(Xs2aTransactionStatus.class)))
             .thenReturn(true);
         when(spiContextDataProvider.provideWithPsuIdData(any())).thenReturn(SPI_CONTEXT_DATA);
         when(paymentServiceResolver.getReadPaymentStatusService(any())).thenReturn(readPaymentStatusService);
@@ -656,7 +656,7 @@ class PaymentServiceTest {
         when(xs2aPisCommonPaymentService.getPisCommonPaymentById(anyString())).thenReturn(Optional.of(pisCommonPaymentResponse));
         when(readPaymentStatusService.readPaymentStatus(any(), any(SpiContextData.class), any(String.class), eq(JSON_MEDIA_TYPE)))
             .thenReturn(new ReadPaymentStatusResponse(ACCP, true, MediaType.APPLICATION_JSON, null, PSU_MESSAGE));
-        when(updatePaymentStatusAfterSpiService.updatePaymentStatus(anyString(), any(TransactionStatus.class)))
+        when(updatePaymentStatusAfterSpiService.updatePaymentStatus(anyString(), any(Xs2aTransactionStatus.class)))
             .thenReturn(true);
         when(spiContextDataProvider.provideWithPsuIdData(any())).thenReturn(SPI_CONTEXT_DATA);
         when(paymentServiceResolver.getReadPaymentStatusService(any())).thenReturn(readPaymentStatusService);
@@ -729,7 +729,7 @@ class PaymentServiceTest {
         CancelPaymentResponse cancelPaymentResponse = getCancelPaymentResponse();
         when(cancelPaymentService.cancelPayment(any(), any())).thenReturn(ResponseObject.<CancelPaymentResponse>builder().body(cancelPaymentResponse).build());
 
-        TransactionStatus expectedTransactionStatus = cancelPaymentResponse.getTransactionStatus();
+        Xs2aTransactionStatus expectedTransactionStatus = cancelPaymentResponse.getTransactionStatus();
 
         // When
         ResponseObject<CancelPaymentResponse> response = paymentService.cancelPayment(new PisPaymentCancellationRequest(PaymentType.SINGLE, PAYMENT_PRODUCT, PAYMENT_ID, false, null));
@@ -809,7 +809,7 @@ class PaymentServiceTest {
 
     private BulkPaymentInitiationResponse getBulkResponses() {
         BulkPaymentInitiationResponse response = new BulkPaymentInitiationResponse();
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setPaymentId(PAYMENT_ID);
         return response;
     }
@@ -862,7 +862,7 @@ class PaymentServiceTest {
     private SinglePaymentInitiationResponse buildSinglePaymentInitiationResponse() {
         SinglePaymentInitiationResponse response = new SinglePaymentInitiationResponse();
         response.setPaymentId(PAYMENT_ID);
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setAspspConsentDataProvider(initialSpiAspspConsentDataProvider);
         return response;
     }
@@ -870,7 +870,7 @@ class PaymentServiceTest {
     private PeriodicPaymentInitiationResponse buildPeriodicPaymentInitiationResponse() {
         PeriodicPaymentInitiationResponse response = new PeriodicPaymentInitiationResponse();
         response.setPaymentId(PAYMENT_ID);
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setAspspConsentDataProvider(initialSpiAspspConsentDataProvider);
         return response;
     }
@@ -889,13 +889,13 @@ class PaymentServiceTest {
         PisCommonPaymentResponse response = new PisCommonPaymentResponse();
         response.setPaymentProduct(PAYMENT_PRODUCT);
         response.setPayments(getFinalisedPisPayment());
-        response.setTransactionStatus(TransactionStatus.ACCC);
+        response.setTransactionStatus(Xs2aTransactionStatus.ACCC);
         return response;
     }
 
     private List<PisPayment> getFinalisedPisPayment() {
         PisPayment pisPayment = new PisPayment();
-        pisPayment.setTransactionStatus(TransactionStatus.RJCT);
+        pisPayment.setTransactionStatus(Xs2aTransactionStatus.RJCT);
         return Collections.singletonList(pisPayment);
     }
 }

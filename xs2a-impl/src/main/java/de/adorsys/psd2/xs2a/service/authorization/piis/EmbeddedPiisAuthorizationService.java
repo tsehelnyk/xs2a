@@ -20,7 +20,7 @@ import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentAuthorizationResponse;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
@@ -51,7 +51,7 @@ public class EmbeddedPiisAuthorizationService implements PiisAuthorizationServic
             return Optional.empty();
         }
 
-        return consentService.createConsentAuthorisation(consentId, ScaStatus.RECEIVED, psuData)
+        return consentService.createConsentAuthorisation(consentId, Xs2aScaStatus.RECEIVED, psuData)
                    .map(auth -> {
                        CreateConsentAuthorizationResponse resp = new CreateConsentAuthorizationResponse();
 
@@ -82,7 +82,7 @@ public class EmbeddedPiisAuthorizationService implements PiisAuthorizationServic
     }
 
     @Override
-    public Optional<ScaStatus> getAuthorisationScaStatus(String consentId, String authorisationId) {
+    public Optional<Xs2aScaStatus> getAuthorisationScaStatus(String consentId, String authorisationId) {
         return consentService.getAuthorisationScaStatus(consentId, authorisationId);
     }
 

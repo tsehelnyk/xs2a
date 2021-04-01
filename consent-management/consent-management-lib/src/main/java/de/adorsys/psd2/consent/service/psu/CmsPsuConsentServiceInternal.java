@@ -17,7 +17,7 @@
 package de.adorsys.psd2.consent.service.psu;
 
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
@@ -44,7 +44,7 @@ class CmsPsuConsentServiceInternal {
     private final PsuDataUpdater psuDataUpdater;
 
     boolean updatePsuData(AuthorisationEntity authorisation, PsuIdData psuIdData, ConsentType consentType) {
-        PsuData newPsuData = psuDataMapper.mapToPsuData(psuIdData, authorisation.getInstanceId());
+        CmsPsuData newPsuData = psuDataMapper.mapToPsuData(psuIdData, authorisation.getInstanceId());
 
         if (newPsuData == null || StringUtils.isBlank(newPsuData.getPsuId())) {
             log.info("Authorisation ID : [{}]. Update PSU data in consent failed in updatePsuData method, because newPsuData or psuId in newPsuData is empty or null.",
@@ -52,7 +52,7 @@ class CmsPsuConsentServiceInternal {
             return false;
         }
 
-        Optional<PsuData> optionalPsuData = Optional.ofNullable(authorisation.getPsuData());
+        Optional<CmsPsuData> optionalPsuData = Optional.ofNullable(authorisation.getPsuData());
         if (optionalPsuData.isPresent()) {
             newPsuData = psuDataUpdater.updatePsuDataEntity(optionalPsuData.get(), newPsuData);
         } else {
@@ -70,8 +70,8 @@ class CmsPsuConsentServiceInternal {
                 consentEntity = aisConsentLazyMigrationService.migrateIfNeeded(consentEntity);
             }
 
-            List<PsuData> psuDataList = consentEntity.getPsuDataList();
-            Optional<PsuData> psuDataOptional = cmsPsuService.definePsuDataForAuthorisation(newPsuData, psuDataList);
+            List<CmsPsuData> psuDataList = consentEntity.getPsuDataList();
+            Optional<CmsPsuData> psuDataOptional = cmsPsuService.definePsuDataForAuthorisation(newPsuData, psuDataList);
             if (psuDataOptional.isPresent()) {
                 newPsuData = psuDataOptional.get();
                 consentEntity.setPsuDataList(cmsPsuService.enrichPsuData(newPsuData, psuDataList));

@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.CmsAddress;
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.TppInfoEntity;
 import de.adorsys.psd2.consent.domain.payment.PisAddress;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
@@ -68,7 +68,7 @@ class PisCommonPaymentMapperTest {
         TppInfo tppInfo = jsonReader.getObjectFromFile("json/service/mapper/tpp-info.json", TppInfo.class);
         when(tppInfoMapper.mapToTppInfo(tppInfoEntity)).thenReturn(tppInfo);
 
-        PsuData psuDataEntity = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", PsuData.class);
+        CmsPsuData psuDataEntity = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", CmsPsuData.class);
         PsuIdData psuIdData = jsonReader.getObjectFromFile("json/service/mapper/psu-id-data.json", PsuIdData.class);
         when(psuDataMapper.mapToPsuIdDataList(Collections.singletonList(psuDataEntity)))
             .thenReturn(Collections.singletonList(psuIdData));
@@ -108,7 +108,7 @@ class PisCommonPaymentMapperTest {
     @Test
     void mapToPisCommonPaymentData() {
         //Given
-        PsuData psuDataEntity = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", PsuData.class);
+        CmsPsuData psuDataEntity = jsonReader.getObjectFromFile("json/service/mapper/psu-data.json", CmsPsuData.class);
         PsuIdData psuIdData = jsonReader.getObjectFromFile("json/service/mapper/psu-id-data.json", PsuIdData.class);
         when(psuDataMapper.mapToPsuDataList(Collections.singletonList(psuIdData), null))
             .thenReturn(Collections.singletonList(psuDataEntity));

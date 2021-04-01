@@ -24,7 +24,7 @@ import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
@@ -113,10 +113,10 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_withValidPaymentObject_shouldReturnValid() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.RECEIVED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.RECEIVED);
         when(pisAuthorisationValidator.validate(AUTHORISATION_ID, commonPaymentResponse))
             .thenReturn(ValidationResult.valid());
-        when(pisAuthorisationStatusValidator.validate(ScaStatus.RECEIVED, CONFIRMATION_CODE_RECEIVED_FALSE))
+        when(pisAuthorisationStatusValidator.validate(Xs2aScaStatus.RECEIVED, CONFIRMATION_CODE_RECEIVED_FALSE))
             .thenReturn(ValidationResult.valid());
 
         when(pisTppInfoValidator.validateTpp(TPP_INFO)).thenReturn(ValidationResult.valid());
@@ -142,7 +142,7 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_withInvalidPaymentProduct_shouldReturnPaymentProductValidationError() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.RECEIVED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.RECEIVED);
         commonPaymentResponse.setPaymentProduct(WRONG_PAYMENT_PRODUCT);
         // When
         ValidationResult validationResult = updatePisCancellationPsuDataValidator.validate(new UpdatePaymentPsuDataPO(commonPaymentResponse, buildUpdateRequest(AUTHORISATION_ID, PSU_ID_DATA_1)));
@@ -156,7 +156,7 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_withInvalidTppInPayment_shouldReturnTppValidationError() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(INVALID_TPP_INFO, ScaStatus.RECEIVED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(INVALID_TPP_INFO, Xs2aScaStatus.RECEIVED);
         when(pisTppInfoValidator.validateTpp(INVALID_TPP_INFO)).thenReturn(ValidationResult.invalid(TPP_VALIDATION_ERROR));
 
         // When
@@ -173,7 +173,7 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_withInvalidAuthorisationForEndpoint_shouldReturnValidationError() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.RECEIVED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.RECEIVED);
         when(pisTppInfoValidator.validateTpp(TPP_INFO)).thenReturn(ValidationResult.valid());
 
         when(pisEndpointAccessCheckerService.isEndpointAccessible(INVALID_AUTHORISATION_ID_FOR_ENDPOINT, CONFIRMATION_CODE_RECEIVED_FALSE))
@@ -193,7 +193,7 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_withInvalidTppAndInvalidAuthorisationForEndpoint_shouldReturnTppValidationErrorFirst() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(INVALID_TPP_INFO, ScaStatus.RECEIVED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(INVALID_TPP_INFO, Xs2aScaStatus.RECEIVED);
         when(pisTppInfoValidator.validateTpp(INVALID_TPP_INFO)).thenReturn(ValidationResult.invalid(TPP_VALIDATION_ERROR));
 
         // When
@@ -212,7 +212,7 @@ class UpdatePisCancellationPsuDataValidatorTest {
         // Given
         when(pisEndpointAccessCheckerService.isEndpointAccessible(INVALID_AUTHORISATION_ID, CONFIRMATION_CODE_RECEIVED_FALSE))
             .thenReturn(true);
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.RECEIVED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.RECEIVED);
         when(pisAuthorisationValidator.validate(INVALID_AUTHORISATION_ID, commonPaymentResponse))
             .thenReturn(ValidationResult.invalid(INVALID_AUTHORISATION_ERROR));
 
@@ -232,10 +232,10 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_withInvalidScaStatus_shouldReturnStatusValidationError() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.FAILED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.FAILED);
         when(pisAuthorisationValidator.validate(AUTHORISATION_ID, commonPaymentResponse))
             .thenReturn(ValidationResult.valid());
-        when(pisAuthorisationStatusValidator.validate(ScaStatus.FAILED, CONFIRMATION_CODE_RECEIVED_FALSE))
+        when(pisAuthorisationStatusValidator.validate(Xs2aScaStatus.FAILED, CONFIRMATION_CODE_RECEIVED_FALSE))
             .thenReturn(ValidationResult.invalid(STATUS_VALIDATION_ERROR));
 
         when(pisTppInfoValidator.validateTpp(TPP_INFO)).thenReturn(ValidationResult.valid());
@@ -259,10 +259,10 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_withInvalidScaStatusInConfirmationAuthorisationFlow_shouldReturnScaInvalid() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.FAILED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.FAILED);
         when(pisAuthorisationValidator.validate(AUTHORISATION_ID, commonPaymentResponse))
             .thenReturn(ValidationResult.valid());
-        when(pisAuthorisationStatusValidator.validate(ScaStatus.FAILED, CONFIRMATION_CODE_RECEIVED_TRUE))
+        when(pisAuthorisationStatusValidator.validate(Xs2aScaStatus.FAILED, CONFIRMATION_CODE_RECEIVED_TRUE))
             .thenReturn(ValidationResult.invalid(SCA_INVALID_ERROR));
 
         when(pisTppInfoValidator.validateTpp(TPP_INFO)).thenReturn(ValidationResult.valid());
@@ -286,7 +286,7 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_withNoAuthorisation_shouldReturnAuthorisationValidationError() {
         //Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.RECEIVED, INVALID_AUTHORISATION_ID, PSU_ID_DATA_1);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.RECEIVED, INVALID_AUTHORISATION_ID, PSU_ID_DATA_1);
         when(pisAuthorisationValidator.validate(AUTHORISATION_ID, commonPaymentResponse))
             .thenReturn(ValidationResult.valid());
         when(pisTppInfoValidator.validateTpp(TPP_INFO)).thenReturn(ValidationResult.valid());
@@ -306,7 +306,7 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_withBothPsusAbsent_shouldReturnFormatError() {
         //Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.RECEIVED, AUTHORISATION_ID, null);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.RECEIVED, AUTHORISATION_ID, null);
         PsuIdData psuIdData = new PsuIdData(null, null, null, null, null);
 
         when(pisAuthorisationValidator.validate(AUTHORISATION_ID, commonPaymentResponse))
@@ -329,7 +329,7 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_cantPsuUpdateAuthorisation_shouldReturnCredentialsInvalidError() {
         //Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.RECEIVED, AUTHORISATION_ID, PSU_ID_DATA_2);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.RECEIVED, AUTHORISATION_ID, PSU_ID_DATA_2);
 
         when(pisAuthorisationValidator.validate(AUTHORISATION_ID, commonPaymentResponse))
             .thenReturn(ValidationResult.valid());
@@ -351,13 +351,13 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_validationFailure_wrongAuthorisationStageDataProvided_received() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.RECEIVED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.RECEIVED);
         Xs2aUpdatePisCommonPaymentPsuDataRequest updateRequest = buildUpdateRequest(AUTHORISATION_ID, PSU_ID_DATA_1);
         when(pisAuthorisationValidator.validate(AUTHORISATION_ID, commonPaymentResponse))
             .thenReturn(ValidationResult.valid());
-        when(pisAuthorisationStatusValidator.validate(ScaStatus.RECEIVED, CONFIRMATION_CODE_RECEIVED_FALSE))
+        when(pisAuthorisationStatusValidator.validate(Xs2aScaStatus.RECEIVED, CONFIRMATION_CODE_RECEIVED_FALSE))
             .thenReturn(ValidationResult.valid());
-        when(authorisationStageCheckValidator.validate(updateRequest, ScaStatus.RECEIVED, PIS_CANCELLATION))
+        when(authorisationStageCheckValidator.validate(updateRequest, Xs2aScaStatus.RECEIVED, PIS_CANCELLATION))
             .thenReturn(ValidationResult.invalid(PIS_400, SERVICE_INVALID_400));
 
         when(pisTppInfoValidator.validateTpp(TPP_INFO)).thenReturn(ValidationResult.valid());
@@ -382,13 +382,13 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_validationFailure_wrongAuthorisationStageDataProvided_psuidentified() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.PSUIDENTIFIED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.PSUIDENTIFIED);
         Xs2aUpdatePisCommonPaymentPsuDataRequest updateRequest = buildUpdateRequest(AUTHORISATION_ID, PSU_ID_DATA_1);
         when(pisAuthorisationValidator.validate(AUTHORISATION_ID, commonPaymentResponse))
             .thenReturn(ValidationResult.valid());
-        when(pisAuthorisationStatusValidator.validate(ScaStatus.PSUIDENTIFIED, CONFIRMATION_CODE_RECEIVED_FALSE))
+        when(pisAuthorisationStatusValidator.validate(Xs2aScaStatus.PSUIDENTIFIED, CONFIRMATION_CODE_RECEIVED_FALSE))
             .thenReturn(ValidationResult.valid());
-        when(authorisationStageCheckValidator.validate(updateRequest, ScaStatus.PSUIDENTIFIED, PIS_CANCELLATION))
+        when(authorisationStageCheckValidator.validate(updateRequest, Xs2aScaStatus.PSUIDENTIFIED, PIS_CANCELLATION))
             .thenReturn(ValidationResult.invalid(PIS_400, SERVICE_INVALID_400));
 
         when(pisTppInfoValidator.validateTpp(TPP_INFO)).thenReturn(ValidationResult.valid());
@@ -412,13 +412,13 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_validationFailure_wrongAuthorisationStageDataProvided_psuauthenticated() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.PSUAUTHENTICATED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.PSUAUTHENTICATED);
         Xs2aUpdatePisCommonPaymentPsuDataRequest updateRequest = buildUpdateRequest(AUTHORISATION_ID, PSU_ID_DATA_1);
         when(pisAuthorisationValidator.validate(AUTHORISATION_ID, commonPaymentResponse))
             .thenReturn(ValidationResult.valid());
-        when(pisAuthorisationStatusValidator.validate(ScaStatus.PSUAUTHENTICATED, CONFIRMATION_CODE_RECEIVED_FALSE))
+        when(pisAuthorisationStatusValidator.validate(Xs2aScaStatus.PSUAUTHENTICATED, CONFIRMATION_CODE_RECEIVED_FALSE))
             .thenReturn(ValidationResult.valid());
-        when(authorisationStageCheckValidator.validate(updateRequest, ScaStatus.PSUAUTHENTICATED, PIS_CANCELLATION))
+        when(authorisationStageCheckValidator.validate(updateRequest, Xs2aScaStatus.PSUAUTHENTICATED, PIS_CANCELLATION))
             .thenReturn(ValidationResult.invalid(PIS_400, SERVICE_INVALID_400));
 
         when(pisTppInfoValidator.validateTpp(TPP_INFO)).thenReturn(ValidationResult.valid());
@@ -442,13 +442,13 @@ class UpdatePisCancellationPsuDataValidatorTest {
     @Test
     void validate_validationFailure_wrongAuthorisationStageDataProvided_scamethodselected() {
         // Given
-        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, ScaStatus.SCAMETHODSELECTED);
+        PisCommonPaymentResponse commonPaymentResponse = buildPisCommonPaymentResponse(TPP_INFO, Xs2aScaStatus.SCAMETHODSELECTED);
         Xs2aUpdatePisCommonPaymentPsuDataRequest updateRequest = buildUpdateRequest(AUTHORISATION_ID, PSU_ID_DATA_1);
         when(pisAuthorisationValidator.validate(AUTHORISATION_ID, commonPaymentResponse))
             .thenReturn(ValidationResult.valid());
-        when(pisAuthorisationStatusValidator.validate(ScaStatus.SCAMETHODSELECTED, CONFIRMATION_CODE_RECEIVED_FALSE))
+        when(pisAuthorisationStatusValidator.validate(Xs2aScaStatus.SCAMETHODSELECTED, CONFIRMATION_CODE_RECEIVED_FALSE))
             .thenReturn(ValidationResult.valid());
-        when(authorisationStageCheckValidator.validate(updateRequest, ScaStatus.SCAMETHODSELECTED, PIS_CANCELLATION))
+        when(authorisationStageCheckValidator.validate(updateRequest, Xs2aScaStatus.SCAMETHODSELECTED, PIS_CANCELLATION))
             .thenReturn(ValidationResult.invalid(PIS_400, SERVICE_INVALID_400));
 
         when(pisTppInfoValidator.validateTpp(TPP_INFO)).thenReturn(ValidationResult.valid());
@@ -475,11 +475,11 @@ class UpdatePisCancellationPsuDataValidatorTest {
         return tppInfo;
     }
 
-    private PisCommonPaymentResponse buildPisCommonPaymentResponse(TppInfo tppInfo, ScaStatus scaStatus) {
+    private PisCommonPaymentResponse buildPisCommonPaymentResponse(TppInfo tppInfo, Xs2aScaStatus scaStatus) {
         return buildPisCommonPaymentResponse(tppInfo, scaStatus, AUTHORISATION_ID, PSU_ID_DATA_1);
     }
 
-    private PisCommonPaymentResponse buildPisCommonPaymentResponse(TppInfo tppInfo, ScaStatus scaStatus, String authorisationId, PsuIdData psuIdData) {
+    private PisCommonPaymentResponse buildPisCommonPaymentResponse(TppInfo tppInfo, Xs2aScaStatus scaStatus, String authorisationId, PsuIdData psuIdData) {
         PisCommonPaymentResponse pisCommonPaymentResponse = new PisCommonPaymentResponse();
         pisCommonPaymentResponse.setTppInfo(tppInfo);
         pisCommonPaymentResponse.setPaymentProduct(CORRECT_PAYMENT_PRODUCT);
@@ -488,7 +488,7 @@ class UpdatePisCancellationPsuDataValidatorTest {
         return pisCommonPaymentResponse;
     }
 
-    private List<Authorisation> buildAuthorisation(ScaStatus scaStatus, String authorisationId, PsuIdData psuIdData) {
+    private List<Authorisation> buildAuthorisation(Xs2aScaStatus scaStatus, String authorisationId, PsuIdData psuIdData) {
         return Collections.singletonList(new Authorisation(authorisationId, psuIdData, "paymentId", AuthorisationType.PIS_CANCELLATION, scaStatus));
     }
 

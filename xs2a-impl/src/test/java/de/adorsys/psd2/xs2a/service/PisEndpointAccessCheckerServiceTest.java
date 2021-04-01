@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.api.service.AuthorisationServiceEncrypted;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.profile.ScaRedirectFlow;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
 import de.adorsys.psd2.xs2a.service.validator.PisEndpointAccessCheckerService;
 import org.junit.jupiter.api.Test;
@@ -117,7 +117,7 @@ class PisEndpointAccessCheckerServiceTest {
         return buildGetPisAuthorisationResponse(scaApproach, null);
     }
 
-    private CmsResponse<Authorisation> buildGetPisAuthorisationResponse(ScaApproach scaApproach, ScaStatus scaStatus) {
+    private CmsResponse<Authorisation> buildGetPisAuthorisationResponse(ScaApproach scaApproach, Xs2aScaStatus scaStatus) {
         Authorisation response = new Authorisation();
         response.setChosenScaApproach(scaApproach);
         response.setScaStatus(scaStatus);

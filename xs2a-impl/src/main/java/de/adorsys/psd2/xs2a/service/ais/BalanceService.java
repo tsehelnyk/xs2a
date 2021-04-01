@@ -17,14 +17,14 @@
 package de.adorsys.psd2.xs2a.service.ais;
 
 import de.adorsys.psd2.consent.api.TypeAccess;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aBalancesReport;
@@ -83,7 +83,7 @@ public class BalanceService extends AbstractBalanceService {
 
     @Override
     protected SpiResponse<List<SpiAccountBalance>> getSpiResponse(AisConsent aisConsent, String consentId, String accountId) {
-        AccountAccess access = aisConsent.getAspspAccountAccesses();
+        Xs2aConsentAccountAccess access = aisConsent.getAspspAccountAccesses();
         SpiAccountReference requestedAccountReference = accountServicesHolder.findAccountReference(access.getBalances(), accountId);
 
         return accountSpi.requestBalancesForAccount(accountServicesHolder.getSpiContextData(),
@@ -108,8 +108,8 @@ public class BalanceService extends AbstractBalanceService {
                                                                                      String consentId,
                                                                                      String requestUri,
                                                                                      List<SpiAccountBalance> payload) {
-        AccountAccess access = accountConsent.getAspspAccountAccesses();
-        List<AccountReference> balances = access.getBalances();
+        Xs2aConsentAccountAccess access = accountConsent.getAspspAccountAccesses();
+        List<Xs2aAccountReference> balances = access.getBalances();
         if (hasNoAccessToSource(balances)) {
             return ResponseObject.<Xs2aBalancesReport>builder()
                        .fail(AIS_401, TppMessageInformation.of(CONSENT_INVALID))
@@ -131,8 +131,8 @@ public class BalanceService extends AbstractBalanceService {
         return response;
     }
 
-    private boolean hasNoAccessToSource(List<AccountReference> references) {
+    private boolean hasNoAccessToSource(List<Xs2aAccountReference> references) {
         return references.stream()
-                   .allMatch(AccountReference::isNotIbanAccount);
+                   .allMatch(Xs2aAccountReference::isNotIbanAccount);
     }
 }

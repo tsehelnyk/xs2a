@@ -31,7 +31,7 @@ import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
@@ -203,8 +203,8 @@ public class PisAuthorisationService {
      * @param authorisationId String representation of the authorisation identifier
      * @return SCA status of the authorisation
      */
-    public Optional<ScaStatus> getAuthorisationScaStatus(String paymentId, String authorisationId) {
-        CmsResponse<ScaStatus> cmsResponse = authorisationServiceEncrypted.getAuthorisationScaStatus(authorisationId, new PisAuthorisationParentHolder(paymentId));
+    public Optional<Xs2aScaStatus> getAuthorisationScaStatus(String paymentId, String authorisationId) {
+        CmsResponse<Xs2aScaStatus> cmsResponse = authorisationServiceEncrypted.getAuthorisationScaStatus(authorisationId, new PisAuthorisationParentHolder(paymentId));
 
         if (cmsResponse.hasError()) {
             return Optional.empty();
@@ -220,8 +220,8 @@ public class PisAuthorisationService {
      * @param authorisationId String representation of the authorisation identifier
      * @return SCA status of the authorisation
      */
-    public Optional<ScaStatus> getCancellationAuthorisationScaStatus(String paymentId, String authorisationId) {
-        CmsResponse<ScaStatus> cmsResponse = authorisationServiceEncrypted.getAuthorisationScaStatus(authorisationId, new PisCancellationAuthorisationParentHolder(paymentId));
+    public Optional<Xs2aScaStatus> getCancellationAuthorisationScaStatus(String paymentId, String authorisationId) {
+        CmsResponse<Xs2aScaStatus> cmsResponse = authorisationServiceEncrypted.getAuthorisationScaStatus(authorisationId, new PisCancellationAuthorisationParentHolder(paymentId));
 
         if (cmsResponse.hasError()) {
             return Optional.empty();

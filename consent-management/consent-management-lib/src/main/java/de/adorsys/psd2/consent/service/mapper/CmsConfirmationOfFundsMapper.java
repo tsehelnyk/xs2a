@@ -24,7 +24,7 @@ import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.domain.consent.ConsentTppInformationEntity;
 import de.adorsys.psd2.core.data.piis.PiisConsentData;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
@@ -67,10 +67,10 @@ public class CmsConfirmationOfFundsMapper {
         );
     }
 
-    private AccountReference getAccountReference(ConsentEntity consent) {
+    private Xs2aAccountReference getAccountReference(ConsentEntity consent) {
         if (consent != null && CollectionUtils.isNotEmpty(consent.getTppAccountAccesses())) {
             TppAccountAccess tppAccountAccess = consent.getTppAccountAccesses().get(0);
-            return new AccountReference(tppAccountAccess.getAccountReferenceType(),
+            return new Xs2aAccountReference(tppAccountAccess.getAccountReferenceType(),
                                         tppAccountAccess.getAccountIdentifier(),
                                         tppAccountAccess.getCurrency());
         }

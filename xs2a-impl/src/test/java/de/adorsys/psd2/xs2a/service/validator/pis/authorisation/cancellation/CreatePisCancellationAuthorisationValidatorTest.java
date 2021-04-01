@@ -22,7 +22,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.service.validator.authorisation.AuthorisationPsuDataChecker;
@@ -185,7 +185,7 @@ class CreatePisCancellationAuthorisationValidatorTest {
     }
 
     private PisCommonPaymentResponse buildPisCommonPaymentResponseWithPsuIdDataAndAuthorisation(TppInfo tppInfo) {
-        Authorisation authorisation = new Authorisation("1", PSU_ID_DATA, "consentId", AuthorisationType.PIS_CANCELLATION, ScaStatus.FINALISED);
+        Authorisation authorisation = new Authorisation("1", PSU_ID_DATA, "consentId", AuthorisationType.PIS_CANCELLATION, Xs2aScaStatus.FINALISED);
 
         PisCommonPaymentResponse pisCommonPaymentResponse = buildPisCommonPaymentResponse(tppInfo);
         pisCommonPaymentResponse.setAuthorisations(Collections.singletonList(authorisation));

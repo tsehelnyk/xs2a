@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.service.sha;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -35,8 +35,8 @@ public class AisChecksumCalculatingServiceV3 extends AisAbstractChecksumCalculat
     }
 
     @Override
-    protected Comparator<AccountReference> getComparator() {
-        return Comparator.comparing(AccountReference::getAccountReferenceType)
+    protected Comparator<Xs2aAccountReference> getComparator() {
+        return Comparator.comparing(Xs2aAccountReference::getAccountReferenceType)
                    .thenComparing(acc -> Optional.ofNullable(acc.getCurrency())
                                              .map(Currency::getCurrencyCode)
                                              .orElse(StringUtils.EMPTY));

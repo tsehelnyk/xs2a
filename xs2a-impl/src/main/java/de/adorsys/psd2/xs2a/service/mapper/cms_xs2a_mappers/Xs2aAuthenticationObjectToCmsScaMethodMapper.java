@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers;
 
 import de.adorsys.psd2.consent.api.CmsScaMethod;
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
@@ -27,14 +27,14 @@ import java.util.stream.Collectors;
 @Component
 public class Xs2aAuthenticationObjectToCmsScaMethodMapper {
     @NotNull
-    public List<CmsScaMethod> mapToCmsScaMethods(@NotNull List<AuthenticationObject> authenticationObjects) {
+    public List<CmsScaMethod> mapToCmsScaMethods(@NotNull List<Xs2aAuthenticationObject> authenticationObjects) {
         return authenticationObjects.stream()
                    .map(this::mapToCmsScaMethod)
                    .collect(Collectors.toList());
     }
 
     @NotNull
-    public CmsScaMethod mapToCmsScaMethod(@NotNull AuthenticationObject authenticationObject) {
+    public CmsScaMethod mapToCmsScaMethod(@NotNull Xs2aAuthenticationObject authenticationObject) {
         return new CmsScaMethod(authenticationObject.getAuthenticationMethodId(),
                                 authenticationObject.isDecoupled());
     }

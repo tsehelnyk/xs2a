@@ -30,18 +30,18 @@ class AccountReferenceTest {
     private static final String ASPSP_ACCOUNT_ID = "aspspAccountId";
     private static final Currency CURRENCY = Currency.getInstance("EUR");
 
-    private AccountReference accountReference;
+    private Xs2aAccountReference accountReference;
 
     @BeforeEach
     void setUp() {
-        accountReference = new AccountReference(null, null, CURRENCY, RESOURCE_ID, ASPSP_ACCOUNT_ID);
+        accountReference = new Xs2aAccountReference(null, null, CURRENCY, RESOURCE_ID, ASPSP_ACCOUNT_ID);
         assertEquals(RESOURCE_ID, accountReference.getResourceId());
         assertEquals(ASPSP_ACCOUNT_ID, accountReference.getAspspAccountId());
     }
 
     @Test
     void createWithSpecificAccountReferenceType_iban() {
-        accountReference = new AccountReference(AccountReferenceType.IBAN, ACCOUNT_REFERENCE_VALUE, CURRENCY);
+        accountReference = new Xs2aAccountReference(AccountReferenceType.IBAN, ACCOUNT_REFERENCE_VALUE, CURRENCY);
         assertEquals(ACCOUNT_REFERENCE_VALUE, accountReference.getIban());
         assertNull(accountReference.getBban());
         assertNull(accountReference.getPan());
@@ -51,7 +51,7 @@ class AccountReferenceTest {
 
     @Test
     void createWithSpecificAccountReferenceType_bban() {
-        accountReference = new AccountReference(AccountReferenceType.BBAN, ACCOUNT_REFERENCE_VALUE, CURRENCY);
+        accountReference = new Xs2aAccountReference(AccountReferenceType.BBAN, ACCOUNT_REFERENCE_VALUE, CURRENCY);
         assertEquals(ACCOUNT_REFERENCE_VALUE, accountReference.getBban());
         assertNull(accountReference.getIban());
         assertNull(accountReference.getPan());
@@ -61,7 +61,7 @@ class AccountReferenceTest {
 
     @Test
     void createWithSpecificAccountReferenceType_pan() {
-        accountReference = new AccountReference(AccountReferenceType.PAN, ACCOUNT_REFERENCE_VALUE, CURRENCY);
+        accountReference = new Xs2aAccountReference(AccountReferenceType.PAN, ACCOUNT_REFERENCE_VALUE, CURRENCY);
         assertEquals(ACCOUNT_REFERENCE_VALUE, accountReference.getPan());
         assertNull(accountReference.getIban());
         assertNull(accountReference.getBban());
@@ -71,7 +71,7 @@ class AccountReferenceTest {
 
     @Test
     void createWithSpecificAccountReferenceType_maskedPan() {
-        accountReference = new AccountReference(AccountReferenceType.MASKED_PAN, ACCOUNT_REFERENCE_VALUE, CURRENCY);
+        accountReference = new Xs2aAccountReference(AccountReferenceType.MASKED_PAN, ACCOUNT_REFERENCE_VALUE, CURRENCY);
         assertEquals(ACCOUNT_REFERENCE_VALUE, accountReference.getMaskedPan());
         assertNull(accountReference.getIban());
         assertNull(accountReference.getBban());
@@ -81,7 +81,7 @@ class AccountReferenceTest {
 
     @Test
     void createWithSpecificAccountReferenceType_msisdn() {
-        accountReference = new AccountReference(AccountReferenceType.MSISDN, ACCOUNT_REFERENCE_VALUE, CURRENCY);
+        accountReference = new Xs2aAccountReference(AccountReferenceType.MSISDN, ACCOUNT_REFERENCE_VALUE, CURRENCY);
         assertEquals(ACCOUNT_REFERENCE_VALUE, accountReference.getMsisdn());
         assertNull(accountReference.getIban());
         assertNull(accountReference.getBban());

@@ -21,12 +21,12 @@ import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.psd2.model.*;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.consent.*;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
@@ -166,7 +166,7 @@ class ConsentModelMapperTest {
     @Test
     void mapToCreateConsentReq_AvailableAccountsWithBalance() {
         //Given
-        when(xs2aObjectMapper.convertValue(buildAccountReferenceWithoutIds(), AccountReference.class)).thenReturn(buildXs2aAccountReference());
+        when(xs2aObjectMapper.convertValue(buildAccountReferenceWithoutIds(), Xs2aAccountReference.class)).thenReturn(buildXs2aAccountReference());
         Consents consent = jsonReader.getObjectFromFile("json/ConsentsAvailableAccountsWithBalances.json", Consents.class);
         CreateConsentReq expected = jsonReader.getObjectFromFile("json/CreateConsentReqAvailableAccountsWithBalances.json", CreateConsentReq.class);
         //When
@@ -178,8 +178,8 @@ class ConsentModelMapperTest {
     @Test
     void mapToCreateConsentReq_AdditionalAccountInformation() {
         //Given
-        when(xs2aObjectMapper.convertValue(buildAccountReferenceWithoutIds(), AccountReference.class)).thenReturn(buildXs2aAccountReference());
-        when(xs2aObjectMapper.convertValue(buildAdditionalInformationAccountReference(), AccountReference.class)).thenReturn(buildAdditionalInformationXs2aAccountReference());
+        when(xs2aObjectMapper.convertValue(buildAccountReferenceWithoutIds(), Xs2aAccountReference.class)).thenReturn(buildXs2aAccountReference());
+        when(xs2aObjectMapper.convertValue(buildAdditionalInformationAccountReference(), Xs2aAccountReference.class)).thenReturn(buildAdditionalInformationXs2aAccountReference());
         Consents consent = jsonReader.getObjectFromFile("json/ConsentsAdditionalAccountInformation.json", Consents.class);
         CreateConsentReq expected = jsonReader.getObjectFromFile("json/CreateConsentReqAdditionalAccountInformation.json", CreateConsentReq.class);
         //When
@@ -191,7 +191,7 @@ class ConsentModelMapperTest {
     @Test
     void mapToCreateConsentReq_AdditionalAccountInformationOwnerNameEmpty() {
         //Given
-        when(xs2aObjectMapper.convertValue(buildAccountReferenceWithoutIds(), AccountReference.class)).thenReturn(buildXs2aAccountReference());
+        when(xs2aObjectMapper.convertValue(buildAccountReferenceWithoutIds(), Xs2aAccountReference.class)).thenReturn(buildXs2aAccountReference());
         Consents consent = jsonReader.getObjectFromFile("json/ConsentsAdditionalAccountInformation.json", Consents.class);
         consent.getAccess().getAdditionalInformation().setOwnerName(Collections.emptyList());
         CreateConsentReq expected = jsonReader.getObjectFromFile("json/CreateConsentReqAdditionalAccountInformationOwnerNameEmpty.json", CreateConsentReq.class);
@@ -204,7 +204,7 @@ class ConsentModelMapperTest {
     @Test
     void mapToCreateConsentReq_TppBrandLoggingInformation() {
         //Given
-        when(xs2aObjectMapper.convertValue(buildAccountReferenceWithoutIds(), AccountReference.class)).thenReturn(buildXs2aAccountReference());
+        when(xs2aObjectMapper.convertValue(buildAccountReferenceWithoutIds(), Xs2aAccountReference.class)).thenReturn(buildXs2aAccountReference());
         Consents consent = jsonReader.getObjectFromFile("json/ConsentsAvailableAccountsWithBalances.json", Consents.class);
         CreateConsentReq expected = jsonReader.getObjectFromFile("json/CreateConsentReqTppBrandLoggingInformation.json", CreateConsentReq.class);
         //When
@@ -285,7 +285,7 @@ class ConsentModelMapperTest {
     @Test
     void mapToConsentStatusResponse200_WithCorrectInput() {
         // Given
-        ConsentStatusResponse inputData = new ConsentStatusResponse(ConsentStatus.RECEIVED, PSU_MESSAGE);
+        ConsentStatusResponse inputData = new ConsentStatusResponse(Xs2aConsentStatus.RECEIVED, PSU_MESSAGE);
         ConsentStatusResponse200 expected = jsonReader.getObjectFromFile("json/service/mapper/consent-status-response-200.json",
                                                                          ConsentStatusResponse200.class);
         // When
@@ -338,12 +338,12 @@ class ConsentModelMapperTest {
         assertFalse(actual.getLinks().isEmpty());
 
         assertNotNull(actual.getLinks().get(SELF_LINK));
-        HrefType selfMap = (HrefType) actual.getLinks().get(SELF_LINK);
+        Xs2aHrefType selfMap = (Xs2aHrefType) actual.getLinks().get(SELF_LINK);
         assertEquals(LOCALHOST_LINK, selfMap.getHref());
     }
 
-    private Map<String, HrefType> buildLinks() {
-        return Collections.singletonMap(SELF_LINK, new HrefType(LOCALHOST_LINK));
+    private Map<String, Xs2aHrefType> buildLinks() {
+        return Collections.singletonMap(SELF_LINK, new Xs2aHrefType(LOCALHOST_LINK));
     }
 
     private Map getBodyMap() {
@@ -365,12 +365,12 @@ class ConsentModelMapperTest {
         return aisConsent;
     }
 
-    private static AccountReference buildXs2aAccountReference() {
-        return new AccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
+    private static Xs2aAccountReference buildXs2aAccountReference() {
+        return new Xs2aAccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
     }
 
-    private static AccountReference buildAdditionalInformationXs2aAccountReference() {
-        AccountReference accountReference = new AccountReference();
+    private static Xs2aAccountReference buildAdditionalInformationXs2aAccountReference() {
+        Xs2aAccountReference accountReference = new Xs2aAccountReference();
         accountReference.setIban(IBAN);
         return accountReference;
 

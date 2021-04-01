@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.validator.authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumSet;
@@ -34,6 +34,6 @@ public class AuthorisationStatusChecker {
                    .stream()
                    .filter(auth -> psuDataFromRequest.contentEquals(auth.getPsuIdData()))
                    .filter(auth -> auth.getAuthorisationType() == authorisationType)
-                   .anyMatch(auth -> EnumSet.of(ScaStatus.FINALISED, ScaStatus.EXEMPTED).contains(auth.getScaStatus()));
+                   .anyMatch(auth -> EnumSet.of(Xs2aScaStatus.FINALISED, Xs2aScaStatus.EXEMPTED).contains(auth.getScaStatus()));
     }
 }

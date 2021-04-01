@@ -22,7 +22,7 @@ import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.integration.UrlBuilder;
 import de.adorsys.psd2.consent.repository.PisCommonPaymentDataRepository;
 import de.adorsys.psd2.consent.repository.specification.PisCommonPaymentDataSpecification;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,7 +62,7 @@ class CmsAspspPisTransactionControllerIT {
 
     private static final String INSTANCE_ID = "bank-instance-id";
     private static final String PAYMENT_ID = "cea9dda3-5154-420d-b1a7-6b4798fccb4b";
-    private static final String STATUS = TransactionStatus.PATC.name();
+    private static final String STATUS = Xs2aTransactionStatus.PATC.name();
 
     @Autowired
     private MockMvc mockMvc;

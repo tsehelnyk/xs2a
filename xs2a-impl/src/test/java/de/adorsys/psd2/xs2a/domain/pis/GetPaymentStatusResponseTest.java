@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.domain.pis;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -26,35 +26,35 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class GetPaymentStatusResponseTest {
     @Test
     void isResponseContentTypeJson_withJson() {
-        GetPaymentStatusResponse getPaymentStatusResponse = new GetPaymentStatusResponse(TransactionStatus.ACSP, null, MediaType.APPLICATION_JSON, null, null);
+        GetPaymentStatusResponse getPaymentStatusResponse = new GetPaymentStatusResponse(Xs2aTransactionStatus.ACSP, null, MediaType.APPLICATION_JSON, null, null);
 
         assertTrue(getPaymentStatusResponse.isResponseContentTypeJson());
     }
 
     @Test
     void isResponseContentTypeJson_withUtf8Json() {
-        GetPaymentStatusResponse getPaymentStatusResponse = new GetPaymentStatusResponse(TransactionStatus.ACSP, null, MediaType.APPLICATION_JSON_UTF8, null, null);
+        GetPaymentStatusResponse getPaymentStatusResponse = new GetPaymentStatusResponse(Xs2aTransactionStatus.ACSP, null, MediaType.APPLICATION_JSON_UTF8, null, null);
 
         assertTrue(getPaymentStatusResponse.isResponseContentTypeJson());
     }
 
     @Test
     void isResponseContentTypeJson_withXml_shouldReturnFalse() {
-        GetPaymentStatusResponse getPaymentStatusResponse = new GetPaymentStatusResponse(TransactionStatus.ACSP, null, MediaType.APPLICATION_XML, null, null);
+        GetPaymentStatusResponse getPaymentStatusResponse = new GetPaymentStatusResponse(Xs2aTransactionStatus.ACSP, null, MediaType.APPLICATION_XML, null, null);
 
         assertFalse(getPaymentStatusResponse.isResponseContentTypeJson());
     }
 
     @Test
     void isResponseContentTypeJson_withAll_shouldReturnFalse() {
-        GetPaymentStatusResponse getPaymentStatusResponse = new GetPaymentStatusResponse(TransactionStatus.ACSP, null, MediaType.ALL, null, null);
+        GetPaymentStatusResponse getPaymentStatusResponse = new GetPaymentStatusResponse(Xs2aTransactionStatus.ACSP, null, MediaType.ALL, null, null);
 
         assertFalse(getPaymentStatusResponse.isResponseContentTypeJson());
     }
 
     @Test
     void isResponseContentTypeJson_withWildcardApplication_shouldReturnFalse() {
-        GetPaymentStatusResponse getPaymentStatusResponse = new GetPaymentStatusResponse(TransactionStatus.ACSP, null, MediaType.parseMediaType("application/*"), null, null);
+        GetPaymentStatusResponse getPaymentStatusResponse = new GetPaymentStatusResponse(Xs2aTransactionStatus.ACSP, null, MediaType.parseMediaType("application/*"), null, null);
 
         assertFalse(getPaymentStatusResponse.isResponseContentTypeJson());
     }

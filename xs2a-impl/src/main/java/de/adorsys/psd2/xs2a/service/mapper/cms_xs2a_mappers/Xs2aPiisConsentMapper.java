@@ -17,12 +17,12 @@
 package de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers;
 
 import de.adorsys.psd2.consent.api.ais.CmsConsent;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.piis.PiisConsentData;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationTemplate;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -73,13 +73,13 @@ public abstract class Xs2aPiisConsentMapper {
         cmsConsent.setPsuIdDataList(Collections.singletonList(psuData));
         cmsConsent.setConsentType(ConsentType.PIIS_TPP);
 
-        AccountAccess accountAccess = new AccountAccess(Collections.singletonList(request.getAccount()),
+        Xs2aConsentAccountAccess accountAccess = new Xs2aConsentAccountAccess(Collections.singletonList(request.getAccount()),
                                                         Collections.emptyList(),
                                                         Collections.emptyList(),
                                                         null);
         cmsConsent.setTppAccountAccesses(accountAccess);
-        cmsConsent.setAspspAccountAccesses(AccountAccess.EMPTY_ACCESS);
-        cmsConsent.setConsentStatus(ConsentStatus.RECEIVED);
+        cmsConsent.setAspspAccountAccesses(Xs2aConsentAccountAccess.EMPTY_ACCESS);
+        cmsConsent.setConsentStatus(Xs2aConsentStatus.RECEIVED);
         cmsConsent.setInstanceId(requestProviderService.getInstanceId());
         return cmsConsent;
     }

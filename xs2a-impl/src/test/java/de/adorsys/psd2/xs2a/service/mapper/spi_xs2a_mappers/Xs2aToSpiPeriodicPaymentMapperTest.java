@@ -16,11 +16,11 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.core.payment.model.PurposeCode;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
 import de.adorsys.psd2.xs2a.core.domain.address.Xs2aAddress;
 import de.adorsys.psd2.xs2a.core.domain.address.Xs2aCountryCode;
 import de.adorsys.psd2.xs2a.core.pis.*;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.domain.pis.PeriodicPayment;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountReference;
@@ -73,7 +73,7 @@ class Xs2aToSpiPeriodicPaymentMapperTest {
     private static final LocalDate END_DATE = LocalDate.now().plusDays(1);
     private static final LocalDate REQUESTED_EXECUTION_DATE = LocalDate.now();
     private static final OffsetDateTime REQUESTED_EXECUTION_TIME = OffsetDateTime.now();
-    private static final TransactionStatus TRANSACTION_STATUS = TransactionStatus.RCVD;
+    private static final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.RCVD;
     private final Currency EUR_CURRENCY = Currency.getInstance("EUR");
     private static final List<PsuIdData> psuDataList = new ArrayList<>();
     private static final List<SpiPsuData> spiPsuDataList = new ArrayList<>();
@@ -82,7 +82,7 @@ class Xs2aToSpiPeriodicPaymentMapperTest {
                                                                                     ZoneOffset.UTC);
     private static final String ULTIMATE_DEBTOR = "ultimate debtor";
     private static final String ULTIMATE_CREDITOR = "ultimate creditor";
-    private static final PurposeCode PURPOSE_CODE = PurposeCode.fromValue("BKDF");
+    private static final Xs2aPisPurposeCode PURPOSE_CODE = Xs2aPisPurposeCode.fromValue("BKDF");
     private static final String REMITTANCE = "reference";
 
     @InjectMocks
@@ -212,8 +212,8 @@ class Xs2aToSpiPeriodicPaymentMapperTest {
         return new SpiAmount(currency, new BigDecimal("100"));
     }
 
-    private AccountReference buildAccountReference(String accountId) {
-        AccountReference reference = new AccountReference();
+    private Xs2aAccountReference buildAccountReference(String accountId) {
+        Xs2aAccountReference reference = new Xs2aAccountReference();
         reference.setIban(IBAN);
         reference.setCurrency(EUR_CURRENCY);
         reference.setAspspAccountId(accountId);

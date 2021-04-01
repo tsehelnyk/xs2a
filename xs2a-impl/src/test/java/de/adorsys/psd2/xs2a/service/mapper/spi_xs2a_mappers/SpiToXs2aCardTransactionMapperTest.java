@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import de.adorsys.psd2.xs2a.domain.CardTransaction;
+import de.adorsys.psd2.xs2a.domain.Xs2aCardTransaction;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiCardTransaction;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
@@ -46,10 +46,10 @@ class SpiToXs2aCardTransactionMapperTest {
         });
         SpiCardTransaction spiCardTransaction = spiCardTransactions.get(0);
 
-        CardTransaction expectedCardTransaction = jsonReader.getObjectFromFile("json/CardAccountTransaction.json", CardTransaction.class);
+        Xs2aCardTransaction expectedCardTransaction = jsonReader.getObjectFromFile("json/CardAccountTransaction.json", Xs2aCardTransaction.class);
 
         //When
-        CardTransaction actualCardTransaction = spiToXs2aCardTransactionMapper.mapToXs2aCardTransaction(spiCardTransaction);
+        Xs2aCardTransaction actualCardTransaction = spiToXs2aCardTransactionMapper.mapToXs2aCardTransaction(spiCardTransaction);
 
         //Then
         assertEquals(expectedCardTransaction, actualCardTransaction);
@@ -61,11 +61,11 @@ class SpiToXs2aCardTransactionMapperTest {
         List<SpiCardTransaction> spiCardTransactions = jsonReader.getObjectFromFile("json/SpiCardTransactions.json", new TypeReference<List<SpiCardTransaction>>() {
         });
 
-        List<CardTransaction> expectedCardTransactions = jsonReader.getObjectFromFile("json/CardAccountTransactions.json",  new TypeReference<List<CardTransaction>>() {
+        List<Xs2aCardTransaction> expectedCardTransactions = jsonReader.getObjectFromFile("json/CardAccountTransactions.json",  new TypeReference<List<Xs2aCardTransaction>>() {
         });
 
         //When
-        List<CardTransaction>  actualCardTransactions = spiToXs2aCardTransactionMapper.mapToXs2aCardTransactionList(spiCardTransactions);
+        List<Xs2aCardTransaction>  actualCardTransactions = spiToXs2aCardTransactionMapper.mapToXs2aCardTransactionList(spiCardTransactions);
 
         //Then
         assertEquals(expectedCardTransactions, actualCardTransactions);
@@ -74,7 +74,7 @@ class SpiToXs2aCardTransactionMapperTest {
     @Test
     void mapToXs2aCardTransaction_null() {
         //When
-        CardTransaction actualCardTransaction = spiToXs2aCardTransactionMapper.mapToXs2aCardTransaction(null);
+        Xs2aCardTransaction actualCardTransaction = spiToXs2aCardTransactionMapper.mapToXs2aCardTransaction(null);
 
         //Then
         assertNull(actualCardTransaction);
@@ -83,7 +83,7 @@ class SpiToXs2aCardTransactionMapperTest {
     @Test
     void mapToXs2aCardTransactionList_null() {
         //When
-        List<CardTransaction>  actualCardTransactions = spiToXs2aCardTransactionMapper.mapToXs2aCardTransactionList(null);
+        List<Xs2aCardTransaction>  actualCardTransactions = spiToXs2aCardTransactionMapper.mapToXs2aCardTransactionList(null);
 
         //Then
         assertNull(actualCardTransactions);

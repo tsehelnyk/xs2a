@@ -25,8 +25,8 @@ import de.adorsys.psd2.consent.api.ais.AisConsentActionRequest;
 import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.service.AisConsentService;
 import de.adorsys.psd2.consent.service.security.SecurityDataService;
-import de.adorsys.psd2.core.data.AccountAccess;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -83,7 +83,7 @@ class AisConsentServiceInternalEncryptedTest {
     void updateAccountAccess_success() throws WrongChecksumException {
         // Given
         CmsConsent cmsConsent = buildCmsConsent();
-        AccountAccess accountAccess = buildAccountAccess();
+        Xs2aConsentAccountAccess accountAccess = buildAccountAccess();
         when(securityDataService.decryptId(ENCRYPTED_CONSENT_ID)).thenReturn(Optional.of(DECRYPTED_CONSENT_ID));
         when(aisConsentService.updateAspspAccountAccess(eq(DECRYPTED_CONSENT_ID), any()))
             .thenReturn(CmsResponse.<CmsConsent>builder()
@@ -109,7 +109,7 @@ class AisConsentServiceInternalEncryptedTest {
                             .build());
 
         // Given
-        AccountAccess accountAccess = buildAccountAccess();
+        Xs2aConsentAccountAccess accountAccess = buildAccountAccess();
 
         // When
         CmsResponse<CmsConsent> actual = aisConsentServiceInternalEncrypted.updateAspspAccountAccess(ENCRYPTED_CONSENT_ID, accountAccess);
@@ -124,7 +124,7 @@ class AisConsentServiceInternalEncryptedTest {
     @Test
     void updateAccountAccess_decryptionFailed() throws WrongChecksumException {
         // Given
-        AccountAccess accountAccess = buildAccountAccess();
+        Xs2aConsentAccountAccess accountAccess = buildAccountAccess();
 
         // When
         CmsResponse<CmsConsent> actual = aisConsentServiceInternalEncrypted.updateAspspAccountAccess(UNDECRYPTABLE_CONSENT_ID, accountAccess);
@@ -146,12 +146,12 @@ class AisConsentServiceInternalEncryptedTest {
         return new AisConsentActionRequest("tpp id", consentId, ActionStatus.SUCCESS, "request/uri", true, null, null);
     }
 
-    private AccountAccess buildAccountAccess() {
-        return new AccountAccess(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), buildAdditionalInformationAccess());
+    private Xs2aConsentAccountAccess buildAccountAccess() {
+        return new Xs2aConsentAccountAccess(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), buildAdditionalInformationAccess());
     }
 
-    private AdditionalInformationAccess buildAdditionalInformationAccess() {
-        return new AdditionalInformationAccess(Collections.emptyList(), Collections.emptyList());
+    private Xs2aAdditionalInformationAccess buildAdditionalInformationAccess() {
+        return new Xs2aAdditionalInformationAccess(Collections.emptyList(), Collections.emptyList());
     }
 }
 

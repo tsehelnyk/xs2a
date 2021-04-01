@@ -19,12 +19,13 @@ package de.adorsys.psd2.xs2a.web.mapper;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentCancellationRequest;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.psd2.model.*;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
 import de.adorsys.psd2.xs2a.core.profile.NotificationSupportedMode;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ChallengeData;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
 import de.adorsys.psd2.xs2a.core.tpp.TppAttributes;
 import de.adorsys.psd2.xs2a.core.tpp.TppNotificationData;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
@@ -61,7 +62,7 @@ class PaymentModelMapperPsd2Test {
     private static final String PAYMENT_TYPE = "payments";
     private static final String NON_STANDARD_PAYMENT_PRODUCT = "pain.001-sepa-credit-transfers";
     private static final String PSU_MESSAGE = "PSU message";
-    private static final TransactionStatus TRANSACTION_STATUS = TransactionStatus.ACCP;
+    private static final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.ACCP;
     private static final boolean FUNDS_AVAILABLE = true;
     private static final GetPaymentStatusResponse PAYMENT_STATUS_RESPONSE = new GetPaymentStatusResponse(TRANSACTION_STATUS, FUNDS_AVAILABLE, MediaType.APPLICATION_JSON, null, PSU_MESSAGE);
     private static final List<NotificationSupportedMode> NOTIFICATION_MODES = Arrays.asList(NotificationSupportedMode.SCA, NotificationSupportedMode.LAST);
@@ -100,7 +101,7 @@ class PaymentModelMapperPsd2Test {
     void mapToGetPaymentResponse_standardPayment() {
         CommonPayment payment = new CommonPayment();
         payment.setPaymentData(jsonReader.getBytesFromFile("json/service/mapper/common-payment.json"));
-        payment.setTransactionStatus(TransactionStatus.RCVD);
+        payment.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         payment.setPaymentProduct(PAYMENT_PRODUCT);
 
         Map actual = (Map) mapper.mapToGetPaymentResponse(payment);
@@ -108,7 +109,7 @@ class PaymentModelMapperPsd2Test {
         assertEquals(7, actual.size());
         assertEquals(PAYMENT_TYPE, actual.get("paymentType"));
         assertEquals("26bb59a3-2f63-4027-ad38-67d87e59611a", actual.get("aspspAccountId"));
-        assertEquals(TransactionStatus.RCVD.name(), actual.get("transactionStatus"));
+        assertEquals(Xs2aTransactionStatus.RCVD.name(), actual.get("transactionStatus"));
         assertEquals(ENCRYPTED_PAYMENT_ID, actual.get("paymentId"));
         assertEquals(false, actual.get("transactionFeeIndicator"));
         assertEquals(true, actual.get("multilevelScaRequired"));
@@ -119,7 +120,7 @@ class PaymentModelMapperPsd2Test {
     void mapToGetPaymentResponse_nonStandardPayment() {
         CommonPayment payment = new CommonPayment();
         payment.setPaymentData(jsonReader.getBytesFromFile("json/service/mapper/common-payment.json"));
-        payment.setTransactionStatus(TransactionStatus.RCVD);
+        payment.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         payment.setPaymentProduct(NON_STANDARD_PAYMENT_PRODUCT);
 
         String actual = (String) mapper.mapToGetPaymentResponse(payment);
@@ -158,12 +159,12 @@ class PaymentModelMapperPsd2Test {
     @Test
     void mapToPaymentInitiationResponse() {
         PaymentInitiationResponse paymentInitiationResponse = mock(PaymentInitiationResponse.class);
-        when(paymentInitiationResponse.getTransactionStatus()).thenReturn(TransactionStatus.RCVD);
+        when(paymentInitiationResponse.getTransactionStatus()).thenReturn(Xs2aTransactionStatus.RCVD);
         when(paymentInitiationResponse.getPaymentId()).thenReturn(PAYMENT_ID);
         when(paymentInitiationResponse.getTransactionFees()).thenReturn(new Xs2aAmount(Currency.getInstance("EUR"), "20.00"));
         when(paymentInitiationResponse.getTransactionFeeIndicator()).thenReturn(true);
-        when(paymentInitiationResponse.getScaMethods()).thenReturn(Collections.singletonList(new de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject()));
-        when(paymentInitiationResponse.getChallengeData()).thenReturn(new ChallengeData());
+        when(paymentInitiationResponse.getScaMethods()).thenReturn(Collections.singletonList(new Xs2aAuthenticationObject()));
+        when(paymentInitiationResponse.getChallengeData()).thenReturn(new Xs2aChallengeData());
         when(paymentInitiationResponse.getLinks()).thenReturn(null);
         when(paymentInitiationResponse.getPsuMessage()).thenReturn("psu message");
         when(paymentInitiationResponse.getCurrencyConversionFee()).thenReturn(new Xs2aAmount(Currency.getInstance("EUR"), "1200"));
@@ -210,8 +211,8 @@ class PaymentModelMapperPsd2Test {
     @Test
     void mapToPaymentInitiationCancelResponse() {
         CancelPaymentResponse cancelPaymentResponse = new CancelPaymentResponse();
-        cancelPaymentResponse.setTransactionStatus(TransactionStatus.CANC);
-        de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject authenticationObjec = new de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject();
+        cancelPaymentResponse.setTransactionStatus(Xs2aTransactionStatus.CANC);
+        Xs2aAuthenticationObject authenticationObjec = new Xs2aAuthenticationObject();
         authenticationObjec.setAuthenticationMethodId("authenticationMethodId");
         authenticationObjec.setAuthenticationType("authenticationType");
         authenticationObjec.setAuthenticationVersion("authenticationVersion");

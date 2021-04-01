@@ -26,13 +26,13 @@ import de.adorsys.psd2.consent.repository.specification.ConfirmationOfFundsConse
 import de.adorsys.psd2.consent.service.authorisation.CmsConsentAuthorisationServiceInternal;
 import de.adorsys.psd2.consent.service.mapper.*;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -108,11 +108,11 @@ class CmsPsuConfirmationOfFundsServiceInternalTest {
             .thenReturn(Optional.of(consentEntity));
         when(consentAuthorisationService.getAuthorisationByAuthorisationId(AUTHORISATION_ID, INSTANCE_ID))
             .thenReturn(Optional.of(authorisationEntity));
-        when(consentAuthorisationService.updateScaStatusAndAuthenticationData(ScaStatus.RECEIVED, authorisationEntity, authenticationDataHolder))
+        when(consentAuthorisationService.updateScaStatusAndAuthenticationData(Xs2aScaStatus.RECEIVED, authorisationEntity, authenticationDataHolder))
             .thenReturn(true);
 
         boolean result = cmsPsuConfirmationOfFundsServiceInternal.updateAuthorisationStatus(psuIdData, CONSENT_ID,
-                                                                                            AUTHORISATION_ID, ScaStatus.RECEIVED,
+                                                                                            AUTHORISATION_ID, Xs2aScaStatus.RECEIVED,
                                                                                             INSTANCE_ID, authenticationDataHolder);
         assertTrue(result);
     }
@@ -128,7 +128,7 @@ class CmsPsuConfirmationOfFundsServiceInternalTest {
             .thenReturn(Optional.empty());
 
         // When
-        boolean result = cmsPsuConfirmationOfFundsServiceInternal.updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED,
+        boolean result = cmsPsuConfirmationOfFundsServiceInternal.updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED,
                                                                                             INSTANCE_ID, authenticationDataHolder);
 
         assertFalse(result);
@@ -144,7 +144,7 @@ class CmsPsuConfirmationOfFundsServiceInternalTest {
             .thenReturn(Optional.empty());
 
         // When
-        boolean result = cmsPsuConfirmationOfFundsServiceInternal.updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED,
+        boolean result = cmsPsuConfirmationOfFundsServiceInternal.updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED,
                                                                                             INSTANCE_ID, authenticationDataHolder);
 
         assertFalse(result);
@@ -272,7 +272,7 @@ class CmsPsuConfirmationOfFundsServiceInternalTest {
         when(consentJpaRepository.findOne(any(Specification.class)))
             .thenReturn(Optional.of(consentEntity));
 
-        ConsentStatus consentStatus = ConsentStatus.VALID;
+        Xs2aConsentStatus consentStatus = Xs2aConsentStatus.VALID;
         //When
         boolean result = cmsPsuConfirmationOfFundsServiceInternal.updateConsentStatus(CONSENT_ID, consentStatus, INSTANCE_ID);
         //Then
@@ -287,7 +287,7 @@ class CmsPsuConfirmationOfFundsServiceInternalTest {
             .thenReturn((root, criteriaQuery, criteriaBuilder) -> null);
         when(consentJpaRepository.findOne(any(Specification.class)))
             .thenReturn(Optional.empty());
-        ConsentStatus consentStatus = ConsentStatus.VALID;
+        Xs2aConsentStatus consentStatus = Xs2aConsentStatus.VALID;
         //When
         boolean result = cmsPsuConfirmationOfFundsServiceInternal.updateConsentStatus(CONSENT_ID, consentStatus, INSTANCE_ID);
         //Then

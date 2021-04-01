@@ -24,7 +24,7 @@ import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
@@ -135,7 +135,7 @@ class CreateCommonPaymentServiceTest {
         assertThat(pisPaymentInfo.getContentType()).isEqualTo(contentTypeHeader);
         assertThat(actualResponse.hasError()).isFalse();
         assertThat(actualResponse.getBody().getPaymentId()).isEqualTo(PAYMENT_ID);
-        assertThat(actualResponse.getBody().getTransactionStatus()).isEqualTo(TransactionStatus.RCVD);
+        assertThat(actualResponse.getBody().getTransactionStatus()).isEqualTo(Xs2aTransactionStatus.RCVD);
         assertThat(actualResponse.getBody().getInternalRequestId()).isEqualTo(INTERNAL_REQUEST_ID);
     }
 
@@ -247,7 +247,7 @@ class CreateCommonPaymentServiceTest {
     private static CommonPaymentInitiationResponse buildCommonPaymentInitiationResponse(InitialSpiAspspConsentDataProvider initialSpiAspcpConsentDataProvider) {
         CommonPaymentInitiationResponse response = new CommonPaymentInitiationResponse();
         response.setPaymentId(PAYMENT_ID);
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setAspspConsentDataProvider(initialSpiAspcpConsentDataProvider);
         return response;
     }

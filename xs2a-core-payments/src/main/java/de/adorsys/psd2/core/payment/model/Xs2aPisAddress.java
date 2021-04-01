@@ -19,7 +19,7 @@ package de.adorsys.psd2.core.payment.model;
 import lombok.Data;
 
 @Data
-public class Address {
+public class Xs2aPisAddress {
     private String streetName;
     private String buildingNumber;
     private String townName;

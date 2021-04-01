@@ -25,8 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.EnumSet;
 
-import static de.adorsys.psd2.xs2a.core.consent.ConsentStatus.RECEIVED;
-import static de.adorsys.psd2.xs2a.core.consent.ConsentStatus.VALID;
+import static de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus.RECEIVED;
+import static de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus.VALID;
 
 
 @Slf4j

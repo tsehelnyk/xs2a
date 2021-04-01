@@ -17,12 +17,12 @@
 package de.adorsys.psd2.consent.service.authorisation;
 
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.repository.AuthorisationRepository;
 import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,8 +43,8 @@ class AuthorisationClosingServiceTest {
     private static final String PSU_ID = "psu-id-1";
     private static final PsuIdData PSU_ID_DATA = new PsuIdData(PSU_ID, null, null, null, null);
     private static final PsuIdData EMPTY_PSU_ID_DATA = new PsuIdData(null, null, null, null, null);
-    private static final PsuData PSU_DATA = new PsuData(PSU_ID, null, null, null, null);
-    private static final PsuData WRONG_PSU_DATA = new PsuData("wrong psu-id", null, null, null, null);
+    private static final CmsPsuData PSU_DATA = new CmsPsuData(PSU_ID, null, null, null, null);
+    private static final CmsPsuData WRONG_PSU_DATA = new CmsPsuData("wrong psu-id", null, null, null, null);
     private static final String PARENT_ID = "parent id";
     private static final String AUTHORISATION_ID = "authorisation id";
     private static final String PREVIOUS_AUTHORISATION_ID = "previous authorisation id";
@@ -84,7 +84,7 @@ class AuthorisationClosingServiceTest {
         verify(authorisationRepository).save(authorisationsCaptor.capture());
 
         AuthorisationEntity capturedAuthorisation = authorisationsCaptor.getValue();
-        assertEquals(ScaStatus.FAILED, capturedAuthorisation.getScaStatus());
+        assertEquals(Xs2aScaStatus.FAILED, capturedAuthorisation.getScaStatus());
     }
 
     @Test
@@ -178,7 +178,7 @@ class AuthorisationClosingServiceTest {
         verify(authorisationRepository).save(authorisationsCaptor.capture());
 
         AuthorisationEntity capturedAuthorisation = authorisationsCaptor.getValue();
-        assertEquals(ScaStatus.FAILED, capturedAuthorisation.getScaStatus());
+        assertEquals(Xs2aScaStatus.FAILED, capturedAuthorisation.getScaStatus());
         assertEquals(PREVIOUS_AUTHORISATION_ID, capturedAuthorisation.getExternalId());
     }
 
@@ -263,7 +263,7 @@ class AuthorisationClosingServiceTest {
     }
 
     @NotNull
-    private AuthorisationEntity buildAuthorisationEntity(String externalId, AuthorisationType authorisationType, PsuData psuData) {
+    private AuthorisationEntity buildAuthorisationEntity(String externalId, AuthorisationType authorisationType, CmsPsuData psuData) {
         AuthorisationEntity authorisation = new AuthorisationEntity();
         authorisation.setExternalId(externalId);
         authorisation.setParentExternalId(PARENT_ID);

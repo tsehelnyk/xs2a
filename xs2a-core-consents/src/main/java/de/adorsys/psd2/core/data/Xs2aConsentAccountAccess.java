@@ -18,8 +18,8 @@ package de.adorsys.psd2.core.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import lombok.Value;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -27,16 +27,16 @@ import java.util.Collections;
 import java.util.List;
 
 @Value
-public class AccountAccess {
-    public static final AccountAccess EMPTY_ACCESS = new AccountAccess(Collections.emptyList(),
+public class Xs2aConsentAccountAccess {
+    public static final Xs2aConsentAccountAccess EMPTY_ACCESS = new Xs2aConsentAccountAccess(Collections.emptyList(),
                                                                        Collections.emptyList(),
                                                                        Collections.emptyList(),
-                                                                       new AdditionalInformationAccess(Collections.emptyList(), Collections.emptyList()));
+                                                                       new Xs2aAdditionalInformationAccess(Collections.emptyList(), Collections.emptyList()));
 
-    private List<AccountReference> accounts;
-    private List<AccountReference> balances;
-    private List<AccountReference> transactions;
-    private AdditionalInformationAccess additionalInformationAccess;
+    private List<Xs2aAccountReference> accounts;
+    private List<Xs2aAccountReference> balances;
+    private List<Xs2aAccountReference> transactions;
+    private Xs2aAdditionalInformationAccess additionalInformationAccess;
 
     @JsonIgnore
     public boolean isNotEmpty(AisConsentData aisConsentData) {

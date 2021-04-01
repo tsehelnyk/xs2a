@@ -20,7 +20,7 @@ import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.consent.PaymentScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aScaStatusResponse;
@@ -66,7 +66,7 @@ public abstract class PaymentServiceForAuthorisation {
 
         SpiContextData contextData = getSpiContextData();
         SpiAspspConsentDataProvider spiAspspConsentDataProvider = aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(paymentId);
-        ScaStatus scaStatus = paymentScaStatusResponse.getBody().getScaStatus();
+        Xs2aScaStatus scaStatus = paymentScaStatusResponse.getBody().getScaStatus();
         SpiPayment spiPayment = xs2aToSpiPaymentMapper.mapToSpiPayment(paymentScaStatusResponse.getBody().getPisCommonPaymentResponse());
 
         SpiResponse<SpiScaStatusResponse> spiScaStatusResponse = getScaStatus(scaStatus, contextData, authorisationId, spiPayment, spiAspspConsentDataProvider);
@@ -100,7 +100,7 @@ public abstract class PaymentServiceForAuthorisation {
     abstract ResponseObject<PaymentScaStatus> getCMSScaStatus(String paymentId, String authorisationId,
                                                                   PaymentType paymentType, String paymentProduct);
 
-    abstract SpiResponse<SpiScaStatusResponse> getScaStatus(@NotNull ScaStatus scaStatus,
+    abstract SpiResponse<SpiScaStatusResponse> getScaStatus(@NotNull Xs2aScaStatus scaStatus,
                                                             @NotNull SpiContextData contextData,
                                                             @NotNull String authorisationId,
                                                             @NotNull SpiPayment businessObject,

@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * This data element is containing information about the status of the SCA method applied.
  */
-public enum ScaStatus {
+public enum Xs2aScaStatus {
     /**
      * An authorisation or cancellation-authorisation resource has been created
      * successfully.
@@ -70,10 +70,10 @@ public enum ScaStatus {
      */
     UNCONFIRMED("unconfirmed", false);
 
-    private static final Map<String, ScaStatus> HOLDER = new HashMap<>();
+    private static final Map<String, Xs2aScaStatus> HOLDER = new HashMap<>();
 
     static {
-        for (ScaStatus status : ScaStatus.values()) {
+        for (Xs2aScaStatus status : Xs2aScaStatus.values()) {
             HOLDER.put(status.value.toLowerCase(), status);
         }
     }
@@ -81,7 +81,7 @@ public enum ScaStatus {
     private String value;
     private final boolean finalisedStatus;
 
-    ScaStatus(String value, boolean finalisedStatus) {
+    Xs2aScaStatus(String value, boolean finalisedStatus) {
         this.value = value;
         this.finalisedStatus = finalisedStatus;
     }
@@ -94,7 +94,7 @@ public enum ScaStatus {
      * @return Enum value mapped. Null otherwise.
      */
     @JsonCreator
-    public static ScaStatus fromValue(String text) {
+    public static Xs2aScaStatus fromValue(String text) {
         return HOLDER.get(text.trim().toLowerCase());
     }
 

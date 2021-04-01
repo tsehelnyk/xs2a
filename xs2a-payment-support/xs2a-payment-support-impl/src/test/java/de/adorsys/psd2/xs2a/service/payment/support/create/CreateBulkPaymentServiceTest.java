@@ -23,9 +23,9 @@ import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
@@ -123,7 +123,7 @@ class CreateBulkPaymentServiceTest {
         //Then
         assertThat(actualResponse.hasError()).isFalse();
         assertThat(actualResponse.getBody().getPaymentId()).isEqualTo(PAYMENT_ID);
-        assertThat(actualResponse.getBody().getTransactionStatus()).isEqualTo(TransactionStatus.RCVD);
+        assertThat(actualResponse.getBody().getTransactionStatus()).isEqualTo(Xs2aTransactionStatus.RCVD);
     }
 
     @Test
@@ -219,7 +219,7 @@ class CreateBulkPaymentServiceTest {
         payment.setPaymentId(PAYMENT_ID);
         payment.setPayments(buildListSinglePayment());
         payment.setDebtorAccount(buildReference());
-        payment.setTransactionStatus(TransactionStatus.RCVD);
+        payment.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         return payment;
     }
 
@@ -230,7 +230,7 @@ class CreateBulkPaymentServiceTest {
         payment.setInstructedAmount(amount);
         payment.setDebtorAccount(buildReference());
         payment.setCreditorAccount(buildReference());
-        payment.setTransactionStatus(TransactionStatus.RCVD);
+        payment.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         list.add(payment);
         return list;
     }
@@ -242,8 +242,8 @@ class CreateBulkPaymentServiceTest {
         return amount;
     }
 
-    private static AccountReference buildReference() {
-        AccountReference reference = new AccountReference();
+    private static Xs2aAccountReference buildReference() {
+        Xs2aAccountReference reference = new Xs2aAccountReference();
         reference.setIban(IBAN);
         reference.setCurrency(EUR_CURRENCY);
         return reference;
@@ -260,7 +260,7 @@ class CreateBulkPaymentServiceTest {
     private static BulkPaymentInitiationResponse buildBulkPaymentInitiationResponse(InitialSpiAspspConsentDataProvider initialSpiAspspConsentDataProvider) {
         BulkPaymentInitiationResponse response = new BulkPaymentInitiationResponse();
         response.setPaymentId(PAYMENT_ID);
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setAspspConsentDataProvider(initialSpiAspspConsentDataProvider);
         response.setInternalRequestId(INTERNAL_REQUEST_ID);
         return response;

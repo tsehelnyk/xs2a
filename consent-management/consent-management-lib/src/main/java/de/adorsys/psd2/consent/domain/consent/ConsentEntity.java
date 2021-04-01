@@ -20,12 +20,12 @@ import de.adorsys.psd2.consent.api.ais.AdditionalAccountInformationType;
 import de.adorsys.psd2.consent.domain.Authorisable;
 import de.adorsys.psd2.consent.domain.AuthorisationTemplateEntity;
 import de.adorsys.psd2.consent.domain.InstanceDependableEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.account.AisConsentUsage;
 import de.adorsys.psd2.consent.domain.account.AspspAccountAccess;
 import de.adorsys.psd2.consent.domain.account.TppAccountAccess;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -57,7 +57,7 @@ public class ConsentEntity extends InstanceDependableEntity implements Authorisa
 
     @Enumerated(EnumType.STRING)
     @Column(name = "consent_status", nullable = false)
-    private ConsentStatus consentStatus;
+    private Xs2aConsentStatus consentStatus;
 
     @Column(name = "consent_type", nullable = false)
     private String consentType;
@@ -112,7 +112,7 @@ public class ConsentEntity extends InstanceDependableEntity implements Authorisa
     @JoinTable(name = "consent_psu_data",
         joinColumns = @JoinColumn(name = "consent_id"),
         inverseJoinColumns = @JoinColumn(name = "psu_data_id"))
-    private List<PsuData> psuDataList = new ArrayList<>();
+    private List<CmsPsuData> psuDataList = new ArrayList<>();
 
     @OneToMany(mappedBy = "consent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AisConsentUsage> usages = new ArrayList<>();
@@ -140,7 +140,7 @@ public class ConsentEntity extends InstanceDependableEntity implements Authorisa
     private boolean signingBasketAuthorised;
 
     @Transient
-    private ConsentStatus previousConsentStatus;
+    private Xs2aConsentStatus previousConsentStatus;
 
     @PostLoad
     public void consentPostLoad() {
@@ -162,7 +162,7 @@ public class ConsentEntity extends InstanceDependableEntity implements Authorisa
     }
 
     public boolean isConfirmationExpired(long expirationPeriodMs) {
-        if (EnumSet.of(ConsentStatus.RECEIVED, ConsentStatus.PARTIALLY_AUTHORISED).contains(consentStatus)) {
+        if (EnumSet.of(Xs2aConsentStatus.RECEIVED, Xs2aConsentStatus.PARTIALLY_AUTHORISED).contains(consentStatus)) {
             return creationTimestamp.plus(expirationPeriodMs, ChronoUnit.MILLIS)
                        .isBefore(OffsetDateTime.now());
         }

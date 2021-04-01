@@ -22,8 +22,8 @@ import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.AuthorisationRepository;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.IterableUtils;
@@ -65,7 +65,7 @@ public class AisConsentConfirmationExpirationServiceImpl implements AisConsentCo
     @Override
     public ConsentEntity expireConsent(ConsentEntity consent) {
         LocalDate now = LocalDate.now();
-        consent.setConsentStatus(ConsentStatus.EXPIRED);
+        consent.setConsentStatus(Xs2aConsentStatus.EXPIRED);
         consent.setExpireDate(now);
         consent.setLastActionDate(now);
         return consentJpaRepository.save(consent);
@@ -90,9 +90,9 @@ public class AisConsentConfirmationExpirationServiceImpl implements AisConsentCo
     }
 
     private ConsentEntity obsoleteConsent(ConsentEntity consent) {
-        consent.setConsentStatus(ConsentStatus.REJECTED);
+        consent.setConsentStatus(Xs2aConsentStatus.REJECTED);
         List<AuthorisationEntity> authorisations = authorisationRepository.findAllByParentExternalIdAndType(consent.getExternalId(), AuthorisationType.CONSENT);
-        authorisations.forEach(auth -> auth.setScaStatus(ScaStatus.FAILED));
+        authorisations.forEach(auth -> auth.setScaStatus(Xs2aScaStatus.FAILED));
         authorisationRepository.saveAll(authorisations);
         consent.setLastActionDate(LocalDate.now());
         return consent;

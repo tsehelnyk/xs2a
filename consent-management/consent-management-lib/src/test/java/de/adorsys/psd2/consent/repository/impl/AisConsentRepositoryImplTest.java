@@ -24,7 +24,7 @@ import de.adorsys.psd2.consent.service.mapper.AisConsentMapper;
 import de.adorsys.psd2.consent.service.sha.ChecksumCalculatingFactory;
 import de.adorsys.psd2.consent.service.sha.ChecksumCalculatingService;
 import de.adorsys.psd2.core.data.ais.AisConsent;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +67,7 @@ class AisConsentRepositoryImplTest {
 
     @BeforeEach
     void setUp() {
-        consentEntity = buildConsentEntity(ConsentStatus.VALID);
+        consentEntity = buildConsentEntity(Xs2aConsentStatus.VALID);
         aisConsent = jsonReader.getObjectFromFile("json/ais-consent.json", AisConsent.class);
     }
 
@@ -76,7 +76,7 @@ class AisConsentRepositoryImplTest {
         // Given
         when(calculatingFactory.getServiceByChecksum(any(), eq(ConsentType.AIS)))
             .thenReturn(Optional.of(checksumCalculatingService));
-        ConsentEntity previousConsentEntity = buildConsentEntity(ConsentStatus.RECEIVED);
+        ConsentEntity previousConsentEntity = buildConsentEntity(Xs2aConsentStatus.RECEIVED);
         when(aisConsentRepository.findByExternalId(consentEntity.getExternalId()))
             .thenReturn(Optional.of(previousConsentEntity));
         when(aisConsentRepository.save(consentEntity))
@@ -102,7 +102,7 @@ class AisConsentRepositoryImplTest {
         when(checksumCalculatingService.verifyConsentWithChecksum(aisConsent, CHECKSUM))
             .thenReturn(false);
 
-        consentEntity.setConsentStatus(ConsentStatus.REJECTED);
+        consentEntity.setConsentStatus(Xs2aConsentStatus.REJECTED);
         consentEntity.setChecksum(CHECKSUM);
 
         // When
@@ -242,7 +242,7 @@ class AisConsentRepositoryImplTest {
 
     @Test
     void getActualAisConsent_empty() {
-        consentEntity.setConsentStatus(ConsentStatus.REJECTED);
+        consentEntity.setConsentStatus(Xs2aConsentStatus.REJECTED);
         // Given
         when(aisConsentRepository.findByExternalId(consentEntity.getExternalId()))
             .thenReturn(Optional.of(consentEntity));
@@ -254,7 +254,7 @@ class AisConsentRepositoryImplTest {
         assertEquals(Optional.empty(), optionalConsentEntity);
     }
 
-    private ConsentEntity buildConsentEntity(ConsentStatus currentStatus) {
+    private ConsentEntity buildConsentEntity(Xs2aConsentStatus currentStatus) {
         ConsentEntity consentEntity = jsonReader.getObjectFromFile("json/consent-entity.json", ConsentEntity.class);
         consentEntity.setConsentStatus(currentStatus);
 

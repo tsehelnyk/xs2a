@@ -23,7 +23,7 @@ import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.error.TppMessage;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
@@ -55,12 +55,12 @@ class CommonDecoupledPiisServiceTest {
     private static final String AUTHORISATION = "Bearer 1111111";
     private static final String AUTHORISATION_ID = "Test authorisationId";
     private static final String PSU_SUCCESS_MESSAGE = "Test psuSuccessMessage";
-    private static final ScaStatus FAILED_SCA_STATUS = ScaStatus.FAILED;
+    private static final Xs2aScaStatus FAILED_SCA_STATUS = Xs2aScaStatus.FAILED;
     private static final SpiPsuData SPI_PSU_DATA = SpiPsuData.builder().build();
     private static final PsuIdData PSU_ID_DATA = new PsuIdData(PSU_ID, null, null, null, null);
     private static final SpiContextData SPI_CONTEXT_DATA = TestSpiDataProvider.buildWithPsuTppAuthToken(SPI_PSU_DATA, new TppInfo(), AUTHORISATION);
     private static final String PSU_ERROR_MESSAGE = "Test psuErrorMessage";
-    private static final ScaStatus METHOD_SELECTED_SCA_STATUS = ScaStatus.SCAMETHODSELECTED;
+    private static final Xs2aScaStatus METHOD_SELECTED_SCA_STATUS = Xs2aScaStatus.SCAMETHODSELECTED;
     private static final String AUTHENTICATION_METHOD_ID = "Test authentication method id";
     private static final UpdateConsentPsuDataResponse UPDATE_CONSENT_PSU_DATA_RESPONSE = buildUpdateConsentPsuDataResponse();
 
@@ -94,7 +94,7 @@ class CommonDecoupledPiisServiceTest {
     void proceedDecoupledApproach_Success() {
         // Given
         when(piisConsentSpi.startScaDecoupled(SPI_CONTEXT_DATA, AUTHORISATION_ID, AUTHENTICATION_METHOD_ID, spiPiisConsent, spiAspspConsentDataProvider))
-            .thenReturn(buildSuccessSpiResponse(new SpiAuthorisationDecoupledScaResponse(ScaStatus.SCAMETHODSELECTED, PSU_SUCCESS_MESSAGE)));
+            .thenReturn(buildSuccessSpiResponse(new SpiAuthorisationDecoupledScaResponse(Xs2aScaStatus.SCAMETHODSELECTED, PSU_SUCCESS_MESSAGE)));
 
         // When
         UpdateConsentPsuDataResponse actualResponse = commonDecoupledPiisService.proceedDecoupledApproach(CONSENT_ID, AUTHORISATION_ID, spiPiisConsent, AUTHENTICATION_METHOD_ID, PSU_ID_DATA);
@@ -108,7 +108,7 @@ class CommonDecoupledPiisServiceTest {
     @Test
     void proceedDecoupledApproach_Failure_StartScaDecoupledHasError() {
         // Given
-        SpiAuthorisationDecoupledScaResponse spiAuthorisationDecoupledScaResponse = new SpiAuthorisationDecoupledScaResponse(ScaStatus.SCAMETHODSELECTED, PSU_ERROR_MESSAGE);
+        SpiAuthorisationDecoupledScaResponse spiAuthorisationDecoupledScaResponse = new SpiAuthorisationDecoupledScaResponse(Xs2aScaStatus.SCAMETHODSELECTED, PSU_ERROR_MESSAGE);
         when(piisConsentSpi.startScaDecoupled(SPI_CONTEXT_DATA, AUTHORISATION_ID, AUTHENTICATION_METHOD_ID, spiPiisConsent, spiAspspConsentDataProvider))
             .thenReturn(buildErrorSpiResponse(spiAuthorisationDecoupledScaResponse));
         when(spiErrorMapper.mapToErrorHolder(buildErrorSpiResponse(spiAuthorisationDecoupledScaResponse), ServiceType.PIIS))

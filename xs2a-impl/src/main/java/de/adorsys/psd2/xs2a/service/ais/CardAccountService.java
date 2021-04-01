@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.ais;
 import de.adorsys.psd2.consent.api.CmsError;
 import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.consent.api.TypeAccess;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
@@ -201,7 +201,7 @@ public class CardAccountService {
 
     private SpiResponse<SpiCardAccountDetails> getAccountDetailsSpiResponse(AisConsent aisConsent,
                                                                             String consentId, String accountId) {
-        AccountAccess access = aisConsent.getAccess();
+        Xs2aConsentAccountAccess access = aisConsent.getAccess();
         SpiAccountReference requestedAccountReference = aisConsent.isGlobalConsent() ?
                                                             SpiAccountReference.builder().resourceId(accountId).build() :
                                                             accountHelperService.findAccountReference(access.getAccounts(), accountId);

@@ -16,11 +16,11 @@
 
 package de.adorsys.psd2.xs2a.web.mapper;
 
-import de.adorsys.psd2.core.payment.model.PurposeCode;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface PurposeCodeMapper {
-    PurposeCode mapToPurposeCode(de.adorsys.psd2.model.PurposeCode purposeCode);
-    de.adorsys.psd2.model.PurposeCode mapToPurposeCode(PurposeCode purposeCode);
+    Xs2aPisPurposeCode mapToPurposeCode(de.adorsys.psd2.model.PurposeCode purposeCode);
+    de.adorsys.psd2.model.PurposeCode mapToPurposeCode(Xs2aPisPurposeCode purposeCode);
 }

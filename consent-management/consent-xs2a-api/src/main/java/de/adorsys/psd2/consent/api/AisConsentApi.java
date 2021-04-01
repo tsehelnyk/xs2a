@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.api;
 
 import de.adorsys.psd2.consent.api.ais.AisConsentActionRequest;
 import de.adorsys.psd2.consent.api.config.InternalCmsXs2aApiTagName;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +43,5 @@ public interface AisConsentApi {
             example = "bf489af6-a2cb-4b75-b71d-d66d58b934d7",
             required = true)
         @PathVariable("encrypted-consent-id") String encryptedConsentId,
-        @RequestBody AccountAccess request);
+        @RequestBody Xs2aConsentAccountAccess request);
 }

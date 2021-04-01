@@ -26,7 +26,7 @@ import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -275,13 +275,13 @@ class PiisConsentAuthorisationServiceTest {
     @Test
     void getConsentAuthorisationScaStatus_success() {
         //Given
-        ConfirmationOfFundsConsentScaStatus consentScaStatus = new ConfirmationOfFundsConsentScaStatus(PSU_ID_DATA, piisConsent, ScaStatus.RECEIVED);
+        ConfirmationOfFundsConsentScaStatus consentScaStatus = new ConfirmationOfFundsConsentScaStatus(PSU_ID_DATA, piisConsent, Xs2aScaStatus.RECEIVED);
         when(xs2aPiisConsentService.getPiisConsentById(CONSENT_ID)).thenReturn(Optional.of(piisConsent));
         when(confirmationOfFundsConsentValidationService.validateConsentAuthorisationScaStatus(piisConsent, AUTHORISATION_ID))
             .thenReturn(ValidationResult.valid());
         when(piisScaAuthorisationServiceResolver.getService(AUTHORISATION_ID)).thenReturn(redirectPiisAuthorizationService);
         when(redirectPiisAuthorizationService.getAuthorisationScaStatus(CONSENT_ID, AUTHORISATION_ID))
-            .thenReturn(Optional.of(ScaStatus.RECEIVED));
+            .thenReturn(Optional.of(Xs2aScaStatus.RECEIVED));
         when(psuIdDataAuthorisationService.getPsuIdData(AUTHORISATION_ID, Collections.singletonList(PSU_ID_DATA))).thenReturn(PSU_ID_DATA);
         //When
         ResponseObject<ConfirmationOfFundsConsentScaStatus> confirmationOfFundsConsentScaStatusResponseObject = service.getConsentAuthorisationScaStatus(CONSENT_ID, AUTHORISATION_ID);
@@ -296,7 +296,7 @@ class PiisConsentAuthorisationServiceTest {
     private CreateConsentAuthorizationResponse buildCreateConsentAuthorizationResponse() {
         CreateConsentAuthorizationResponse createConsentAuthorizationResponse = new CreateConsentAuthorizationResponse();
         createConsentAuthorizationResponse.setAuthorisationId(AUTHORISATION_ID);
-        createConsentAuthorizationResponse.setScaStatus(ScaStatus.RECEIVED);
+        createConsentAuthorizationResponse.setScaStatus(Xs2aScaStatus.RECEIVED);
         createConsentAuthorizationResponse.setPsuIdData(PSU_ID_DATA);
         return createConsentAuthorizationResponse;
     }
@@ -321,6 +321,6 @@ class PiisConsentAuthorisationServiceTest {
     }
 
     private UpdateConsentPsuDataResponse buildUpdateConsentPsuDataResponse() {
-        return new UpdateConsentPsuDataResponse(ScaStatus.RECEIVED, CONSENT_ID, AUTHORISATION_ID, PSU_ID_DATA);
+        return new UpdateConsentPsuDataResponse(Xs2aScaStatus.RECEIVED, CONSENT_ID, AUTHORISATION_ID, PSU_ID_DATA);
     }
 }

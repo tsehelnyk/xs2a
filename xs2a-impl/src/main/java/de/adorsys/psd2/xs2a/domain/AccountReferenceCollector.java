@@ -16,10 +16,10 @@
 
 package de.adorsys.psd2.xs2a.domain;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 
 import java.util.Set;
 
 public interface AccountReferenceCollector {
-    Set<AccountReference> getAccountReferences();
+    Set<Xs2aAccountReference> getAccountReferences();
 }

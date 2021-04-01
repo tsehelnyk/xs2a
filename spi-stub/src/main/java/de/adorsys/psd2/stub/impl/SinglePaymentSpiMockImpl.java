@@ -17,8 +17,8 @@
 package de.adorsys.psd2.stub.impl;
 
 import de.adorsys.psd2.stub.impl.service.PaymentServiceMock;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiCheckConfirmationCodeRequest;
@@ -55,7 +55,7 @@ public class SinglePaymentSpiMockImpl implements SinglePaymentSpi {
     public SpiResponse<SpiSinglePaymentInitiationResponse> initiatePayment(@NotNull SpiContextData contextData, @NotNull SpiSinglePayment payment, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
         log.info("SinglePaymentSpi#initiatePayment: contextData {}, spiSinglePayment {}, aspspConsentData {}", contextData, payment, aspspConsentDataProvider.loadAspspConsentData());
         SpiSinglePaymentInitiationResponse response = new SpiSinglePaymentInitiationResponse();
-        response.setTransactionStatus(TransactionStatus.RCVD);
+        response.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         response.setPaymentId(UUID.randomUUID().toString());
         response.setAspspAccountId("11111-11118");
         aspspConsentDataProvider.updateAspspConsentData(TEST_ASPSP_DATA.getBytes());
@@ -98,7 +98,7 @@ public class SinglePaymentSpiMockImpl implements SinglePaymentSpi {
         log.info("SinglePaymentSpi#executePaymentWithoutSca: contextData {}, spiSinglePayment {}, aspspConsentData {}", contextData, payment, aspspConsentDataProvider.loadAspspConsentData());
 
         return SpiResponse.<SpiPaymentExecutionResponse>builder()
-                   .payload(new SpiPaymentExecutionResponse(TransactionStatus.ACCP))
+                   .payload(new SpiPaymentExecutionResponse(Xs2aTransactionStatus.ACCP))
                    .build();
     }
 
@@ -108,7 +108,7 @@ public class SinglePaymentSpiMockImpl implements SinglePaymentSpi {
         log.info("SinglePaymentSpi#verifyScaAuthorisationAndExecutePayment: contextData {}, spiScaConfirmation{}, spiSinglePayment {}, aspspConsentData {}", contextData, spiScaConfirmation, payment, aspspConsentDataProvider.loadAspspConsentData());
 
         return SpiResponse.<SpiPaymentExecutionResponse>builder()
-                   .payload(new SpiPaymentExecutionResponse(TransactionStatus.ACCP))
+                   .payload(new SpiPaymentExecutionResponse(Xs2aTransactionStatus.ACCP))
                    .build();
     }
 
@@ -117,7 +117,7 @@ public class SinglePaymentSpiMockImpl implements SinglePaymentSpi {
         log.info("SinglePaymentSpi#checkConfirmationCode: contextData {}, spiCheckConfirmationCodeRequest{}, authorisationId {}, aspspConsentData {}", contextData, spiCheckConfirmationCodeRequest.getConfirmationCode(), spiCheckConfirmationCodeRequest.getAuthorisationId(), aspspConsentDataProvider.loadAspspConsentData());
 
         return SpiResponse.<SpiPaymentConfirmationCodeValidationResponse>builder()
-                   .payload(new SpiPaymentConfirmationCodeValidationResponse(ScaStatus.FINALISED, TransactionStatus.ACSP))
+                   .payload(new SpiPaymentConfirmationCodeValidationResponse(Xs2aScaStatus.FINALISED, Xs2aTransactionStatus.ACSP))
                    .build();
     }
 

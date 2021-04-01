@@ -28,7 +28,7 @@ import de.adorsys.psd2.consent.service.security.SecurityDataService;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -78,7 +78,7 @@ public class AuthorisationServiceInternalEncrypted implements AuthorisationServi
 
     @Transactional
     @Override
-    public CmsResponse<Boolean> updateAuthorisationStatus(String authorisationId, ScaStatus scaStatus) {
+    public CmsResponse<Boolean> updateAuthorisationStatus(String authorisationId, Xs2aScaStatus scaStatus) {
         return authorisationService.updateAuthorisationStatus(authorisationId, scaStatus);
     }
 
@@ -101,14 +101,14 @@ public class AuthorisationServiceInternalEncrypted implements AuthorisationServi
 
     @Transactional
     @Override
-    public CmsResponse<ScaStatus> getAuthorisationScaStatus(String authorisationId, AuthorisationParentHolder parentHolder) {
+    public CmsResponse<Xs2aScaStatus> getAuthorisationScaStatus(String authorisationId, AuthorisationParentHolder parentHolder) {
         String encryptedId = parentHolder.getParentId();
         Optional<String> decryptedIdOptional = securityDataService.decryptId(encryptedId);
 
         if (decryptedIdOptional.isEmpty()) {
             log.info("Encrypted Parent ID: [{}]. Get SCA status has failed, couldn't decrypt parent id",
                      encryptedId);
-            return CmsResponse.<ScaStatus>builder()
+            return CmsResponse.<Xs2aScaStatus>builder()
                        .error(TECHNICAL_ERROR)
                        .build();
         }

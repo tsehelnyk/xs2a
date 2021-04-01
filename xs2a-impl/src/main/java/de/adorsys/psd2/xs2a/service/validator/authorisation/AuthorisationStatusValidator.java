@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.validator.authorisation;
 
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +34,8 @@ public abstract class AuthorisationStatusValidator {
     private final AspspProfileServiceWrapper aspspProfileService;
 
     @NotNull
-    public ValidationResult validate(@NotNull ScaStatus scaStatus, @NotNull boolean confirmationCodeReceived) {
-        if (scaStatus != ScaStatus.FAILED) {
+    public ValidationResult validate(@NotNull Xs2aScaStatus scaStatus, @NotNull boolean confirmationCodeReceived) {
+        if (scaStatus != Xs2aScaStatus.FAILED) {
             return ValidationResult.valid();
         }
 

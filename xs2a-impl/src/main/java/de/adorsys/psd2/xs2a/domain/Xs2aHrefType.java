@@ -19,6 +19,6 @@ package de.adorsys.psd2.xs2a.domain;
 import lombok.Value;
 
 @Value
-public class HrefType {
+public class Xs2aHrefType {
     String href;
 }

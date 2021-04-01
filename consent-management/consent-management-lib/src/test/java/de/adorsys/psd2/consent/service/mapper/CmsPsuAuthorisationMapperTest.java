@@ -17,12 +17,12 @@
 package de.adorsys.psd2.consent.service.mapper;
 
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.psu.api.CmsPsuAuthorisation;
 import de.adorsys.psd2.consent.psu.api.CmsPsuConfirmationOfFundsAuthorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -122,8 +122,8 @@ class CmsPsuAuthorisationMapperTest {
         piisAuthorization.setType(AuthorisationType.CONSENT);
         piisAuthorization.setExternalId(EXTERNAL_ID);
         piisAuthorization.setParentExternalId(PARENT_ID);
-        piisAuthorization.setScaStatus(ScaStatus.RECEIVED);
-        piisAuthorization.setPsuData(new PsuData(PSU_ID, PSU_ID_TYPE, null, null, null));
+        piisAuthorization.setScaStatus(Xs2aScaStatus.RECEIVED);
+        piisAuthorization.setPsuData(new CmsPsuData(PSU_ID, PSU_ID_TYPE, null, null, null));
         piisAuthorization.setScaApproach(ScaApproach.EMBEDDED);
         piisAuthorization.setTppOkRedirectUri(OK_REDIRECT_URI);
         piisAuthorization.setTppNokRedirectUri(NOK_REDIRECT_URI);
@@ -137,8 +137,8 @@ class CmsPsuAuthorisationMapperTest {
         AuthorisationEntity pisAuthorization = new AuthorisationEntity();
         pisAuthorization.setType(AuthorisationType.PIS_CREATION);
         pisAuthorization.setExternalId(EXTERNAL_ID);
-        pisAuthorization.setScaStatus(ScaStatus.RECEIVED);
-        pisAuthorization.setPsuData(new PsuData(PSU_ID, PSU_ID_TYPE, "", "", ""));
+        pisAuthorization.setScaStatus(Xs2aScaStatus.RECEIVED);
+        pisAuthorization.setPsuData(new CmsPsuData(PSU_ID, PSU_ID_TYPE, "", "", ""));
         pisAuthorization.setAuthorisationExpirationTimestamp(EXPIRATION_TIMESTAMP);
         pisAuthorization.setScaApproach(ScaApproach.EMBEDDED);
         pisAuthorization.setTppOkRedirectUri(OK_REDIRECT_URI);
@@ -151,8 +151,8 @@ class CmsPsuAuthorisationMapperTest {
         AuthorisationEntity pisAuthorization = new AuthorisationEntity();
         pisAuthorization.setType(AuthorisationType.PIS_CANCELLATION);
         pisAuthorization.setExternalId(EXTERNAL_ID);
-        pisAuthorization.setScaStatus(ScaStatus.RECEIVED);
-        pisAuthorization.setPsuData(new PsuData(PSU_ID, PSU_ID_TYPE, "", "", ""));
+        pisAuthorization.setScaStatus(Xs2aScaStatus.RECEIVED);
+        pisAuthorization.setPsuData(new CmsPsuData(PSU_ID, PSU_ID_TYPE, "", "", ""));
         pisAuthorization.setAuthorisationExpirationTimestamp(EXPIRATION_TIMESTAMP);
         pisAuthorization.setScaApproach(ScaApproach.EMBEDDED);
         pisAuthorization.setTppOkRedirectUri(OK_REDIRECT_URI);
@@ -165,8 +165,8 @@ class CmsPsuAuthorisationMapperTest {
         AuthorisationEntity authorization = new AuthorisationEntity();
         authorization.setType(AuthorisationType.CONSENT);
         authorization.setExternalId(EXTERNAL_ID);
-        authorization.setScaStatus(ScaStatus.RECEIVED);
-        authorization.setPsuData(new PsuData("PSU ID", "PSU ID type", "", "", ""));
+        authorization.setScaStatus(Xs2aScaStatus.RECEIVED);
+        authorization.setPsuData(new CmsPsuData("PSU ID", "PSU ID type", "", "", ""));
         authorization.setAuthorisationExpirationTimestamp(EXPIRATION_TIMESTAMP);
         authorization.setScaApproach(ScaApproach.EMBEDDED);
         authorization.setTppOkRedirectUri(OK_REDIRECT_URI);

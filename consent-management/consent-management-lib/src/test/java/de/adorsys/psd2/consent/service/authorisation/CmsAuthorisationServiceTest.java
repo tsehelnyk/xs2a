@@ -22,12 +22,12 @@ import de.adorsys.psd2.aspsp.profile.service.AspspProfileService;
 import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.service.ConfirmationExpirationService;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,7 +46,7 @@ import static org.mockito.Mockito.*;
 class CmsAuthorisationServiceTest {
     private static final String PARENT_ID = "payment ID";
     private static final String AUTHORISATION_ID = "4b112130-6a96-4941-a220-2da8a4af2c65";
-    private static final PsuData PSU_DATA = new PsuData("PSU_ID", null, null, null, null);
+    private static final CmsPsuData PSU_DATA = new CmsPsuData("PSU_ID", null, null, null, null);
     private static final PsuIdData PSU_ID_DATA = new PsuIdData("PSU_ID", null, null, null, null);
 
     @InjectMocks
@@ -107,14 +107,14 @@ class CmsAuthorisationServiceTest {
     @Test
     void doUpdateAuthorisation_success() {
         AuthorisationEntity entity = new AuthorisationEntity();
-        entity.setScaStatus(ScaStatus.RECEIVED);
+        entity.setScaStatus(Xs2aScaStatus.RECEIVED);
         entity.setPsuData(PSU_DATA);
         entity.setParentExternalId(PARENT_ID);
         entity.setAuthenticationMethodId("111");
 
         UpdateAuthorisationRequest request = new UpdateAuthorisationRequest();
         request.setPsuData(PSU_ID_DATA);
-        request.setScaStatus(ScaStatus.SCAMETHODSELECTED);
+        request.setScaStatus(Xs2aScaStatus.SCAMETHODSELECTED);
         request.setAuthenticationMethodId("222");
 
         assertNotEquals(request.getScaStatus(), entity.getScaStatus());
@@ -142,13 +142,13 @@ class CmsAuthorisationServiceTest {
     @Test
     void doUpdateAuthorisation_authorisationParentNotFound() {
         AuthorisationEntity entity = new AuthorisationEntity();
-        entity.setScaStatus(ScaStatus.RECEIVED);
+        entity.setScaStatus(Xs2aScaStatus.RECEIVED);
         entity.setPsuData(PSU_DATA);
         entity.setParentExternalId(PARENT_ID);
 
         UpdateAuthorisationRequest request = new UpdateAuthorisationRequest();
         request.setPsuData(PSU_ID_DATA);
-        request.setScaStatus(ScaStatus.PSUIDENTIFIED);
+        request.setScaStatus(Xs2aScaStatus.PSUIDENTIFIED);
         assertNotEquals(request.getScaStatus(), entity.getScaStatus());
 
         when(psuService.mapToPsuData(PSU_ID_DATA, DEFAULT_SERVICE_INSTANCE_ID)).thenReturn(PSU_DATA);
@@ -167,7 +167,7 @@ class CmsAuthorisationServiceTest {
     void doUpdateAuthorisation_isNotPsuDataRequestCorrect() {
         AuthorisationEntity entity = new AuthorisationEntity();
         entity.setPsuData(PSU_DATA);
-        entity.setScaStatus(ScaStatus.RECEIVED);
+        entity.setScaStatus(Xs2aScaStatus.RECEIVED);
 
         UpdateAuthorisationRequest request = new UpdateAuthorisationRequest();
         request.setPsuData(PSU_ID_DATA);
@@ -183,7 +183,7 @@ class CmsAuthorisationServiceTest {
     @Test
     void doUpdateAuthorisation_scaStatusNotReceived() {
         AuthorisationEntity entity = new AuthorisationEntity();
-        entity.setScaStatus(ScaStatus.PSUIDENTIFIED);
+        entity.setScaStatus(Xs2aScaStatus.PSUIDENTIFIED);
 
         UpdateAuthorisationRequest request = new UpdateAuthorisationRequest();
         request.setPsuData(PSU_ID_DATA);

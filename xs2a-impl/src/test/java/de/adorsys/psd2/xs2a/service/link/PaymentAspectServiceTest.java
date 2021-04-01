@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.link;
 
 import de.adorsys.psd2.aspsp.profile.domain.AspspSettings;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.pis.PaymentInitiationParameters;
 import de.adorsys.psd2.xs2a.domain.pis.PaymentInitiationResponse;
@@ -65,7 +65,7 @@ class PaymentAspectServiceTest {
         when(requestParameters.isTppExplicitAuthorisationPreferred()).thenReturn(true);
         when(paymentInitiationResponse.isMultilevelScaRequired()).thenReturn(true);
         when(authorisationMethodDecider.isExplicitMethod(true, true)).thenReturn(true);
-        when(paymentInitiationResponse.getTransactionStatus()).thenReturn(TransactionStatus.RJCT);
+        when(paymentInitiationResponse.getTransactionStatus()).thenReturn(Xs2aTransactionStatus.RJCT);
 
         responseObject = ResponseObject.<PaymentInitiationResponse>builder()
                              .body(paymentInitiationResponse)

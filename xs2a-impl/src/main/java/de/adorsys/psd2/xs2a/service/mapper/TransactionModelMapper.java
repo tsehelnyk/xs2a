@@ -17,7 +17,8 @@
 package de.adorsys.psd2.xs2a.service.mapper;
 
 import de.adorsys.psd2.model.*;
-import de.adorsys.psd2.xs2a.domain.Transactions;
+import de.adorsys.psd2.xs2a.domain.Xs2aTransactions;
+import de.adorsys.psd2.xs2a.domain.Xs2aEntryDetails;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountReport;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aTransactionsReport;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
@@ -79,7 +80,7 @@ public abstract class TransactionModelMapper {
     @Mapping(target = "remittanceInformationStructured", source = "transactionInfo.remittanceInformationStructured")
     @Mapping(target = "remittanceInformationStructuredArray", source = "transactionInfo.remittanceInformationStructuredArray")
     @Mapping(target = "purposeCode", source = "transactionInfo.purposeCode")
-    public abstract de.adorsys.psd2.model.Transactions mapToTransactions(Transactions transactions);
+    public abstract de.adorsys.psd2.model.Transactions mapToTransactions(Xs2aTransactions transactions);
 
     @Mapping(target = "creditorName", source = "transactionInfo.creditorName")
     @Mapping(target = "creditorAccount", source = "transactionInfo.creditorAccount")
@@ -94,9 +95,9 @@ public abstract class TransactionModelMapper {
     @Mapping(target = "remittanceInformationStructured", source = "transactionInfo.remittanceInformationStructured")
     @Mapping(target = "remittanceInformationStructuredArray", source = "transactionInfo.remittanceInformationStructuredArray")
     @Mapping(target = "purposeCode", source = "transactionInfo.purposeCode")
-    public abstract de.adorsys.psd2.model.EntryDetails mapToEntryDetails(de.adorsys.psd2.xs2a.domain.EntryDetails entryDetails);
+    public abstract de.adorsys.psd2.model.EntryDetails mapToEntryDetails(Xs2aEntryDetails entryDetails);
 
-    public InlineResponse2001 mapToTransactionDetails(Transactions transactions) {
+    public InlineResponse2001 mapToTransactionDetails(Xs2aTransactions transactions) {
         InlineResponse2001 inlineResponse2001 = new InlineResponse2001();
         TransactionDetailsBody transactionDetailsBody = new TransactionDetailsBody();
         transactionDetailsBody.setTransactionDetails(mapToTransactions(transactions));
@@ -104,7 +105,7 @@ public abstract class TransactionModelMapper {
         return inlineResponse2001;
     }
 
-    protected @Nullable TransactionList mapToTransactionList(@Nullable List<Transactions> transactions) {
+    protected @Nullable TransactionList mapToTransactionList(@Nullable List<Xs2aTransactions> transactions) {
         if (CollectionUtils.isEmpty(transactions)) {
             return null;
         }

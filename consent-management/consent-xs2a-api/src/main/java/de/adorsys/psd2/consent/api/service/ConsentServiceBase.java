@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.consent.api.WrongChecksumException;
 import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 
 import java.util.List;
@@ -49,7 +49,7 @@ interface ConsentServiceBase {
      * @param consentId id of consent
      * @return ConsentStatus
      */
-    CmsResponse<ConsentStatus> getConsentStatusById(String consentId);
+    CmsResponse<Xs2aConsentStatus> getConsentStatusById(String consentId);
 
     /**
      * Updates consent status by id
@@ -59,7 +59,7 @@ interface ConsentServiceBase {
      * @return true if consent was found and status was updated, false otherwise.
      * @throws WrongChecksumException in case of any attempt to change definite consent fields after its status became valid.
      */
-    CmsResponse<Boolean> updateConsentStatusById(String consentId, ConsentStatus status) throws WrongChecksumException;
+    CmsResponse<Boolean> updateConsentStatusById(String consentId, Xs2aConsentStatus status) throws WrongChecksumException;
 
     /**
      * Reads full information of consent by id

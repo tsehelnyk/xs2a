@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.config.factory;
 
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 
 /**
  * This is specific factory intended to retrieve specific, stage-dependent SCA update authorisation services for PIS.
@@ -28,11 +28,11 @@ public interface PisScaStageAuthorisationFactory extends ServiceFactory {
     String CANCELLATION_SERVICE_STATUS_PATTERN = "PIS_CANCELLATION_%s_%s";
     String SERVICE_STATUS_PATTERN = "PIS_%s_%s";
 
-    static String getCancellationServiceName(ScaApproach scaApproach, ScaStatus scaStatus) {
+    static String getCancellationServiceName(ScaApproach scaApproach, Xs2aScaStatus scaStatus) {
         return String.format(CANCELLATION_SERVICE_STATUS_PATTERN, scaApproach, scaStatus);
     }
 
-    static String getServiceName(ScaApproach scaApproach, ScaStatus scaStatus) {
+    static String getServiceName(ScaApproach scaApproach, Xs2aScaStatus scaStatus) {
         return String.format(SERVICE_STATUS_PATTERN, scaApproach, scaStatus);
     }
 }

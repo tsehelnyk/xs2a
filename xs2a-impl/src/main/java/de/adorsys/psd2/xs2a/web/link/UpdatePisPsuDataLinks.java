@@ -16,10 +16,10 @@
 
 package de.adorsys.psd2.xs2a.web.link;
 
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
 import de.adorsys.psd2.xs2a.service.ScaApproachResolver;
 
@@ -28,12 +28,12 @@ public class UpdatePisPsuDataLinks extends AbstractLinks {
     private final ScaApproachResolver scaApproachResolver;
 
     public UpdatePisPsuDataLinks(String httpUrl, ScaApproachResolver scaApproachResolver,
-                                 Xs2aUpdatePisCommonPaymentPsuDataRequest request, ScaStatus scaStatus,
-                                 AuthenticationObject chosenScaMethod) {
+                                 Xs2aUpdatePisCommonPaymentPsuDataRequest request, Xs2aScaStatus scaStatus,
+                                 Xs2aAuthenticationObject chosenScaMethod) {
         super(httpUrl);
         this.scaApproachResolver = scaApproachResolver;
 
-        HrefType authorisationLink = buildAuthorisationLink(request);
+        Xs2aHrefType authorisationLink = buildAuthorisationLink(request);
         setScaStatus(authorisationLink);
 
         if (isScaStatusMethodAuthenticated(scaStatus)) {
@@ -47,7 +47,7 @@ public class UpdatePisPsuDataLinks extends AbstractLinks {
         }
     }
 
-    private HrefType buildAuthorisationLink(Xs2aUpdatePisCommonPaymentPsuDataRequest request) {
+    private Xs2aHrefType buildAuthorisationLink(Xs2aUpdatePisCommonPaymentPsuDataRequest request) {
         return buildPath(UrlHolder.PIS_AUTHORISATION_LINK_URL, request.getPaymentService().getValue(), request.getPaymentProduct(),
                          request.getPaymentId(), request.getAuthorisationId());
     }
@@ -56,7 +56,7 @@ public class UpdatePisPsuDataLinks extends AbstractLinks {
         return scaApproachResolver.getScaApproach(authorisationId) == ScaApproach.EMBEDDED;
     }
 
-    private boolean isScaStatusFinalised(ScaStatus scaStatus) {
-        return scaStatus == ScaStatus.FINALISED;
+    private boolean isScaStatusFinalised(Xs2aScaStatus scaStatus) {
+        return scaStatus == Xs2aScaStatus.FINALISED;
     }
 }

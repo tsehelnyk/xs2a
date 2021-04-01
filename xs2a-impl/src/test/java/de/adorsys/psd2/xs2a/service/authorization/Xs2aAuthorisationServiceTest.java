@@ -24,12 +24,12 @@ import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationResponse;
 import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.service.AuthorisationServiceEncrypted;
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers.Xs2aAuthenticationObjectToCmsScaMethodMapper;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
@@ -121,7 +121,7 @@ class Xs2aAuthorisationServiceTest {
 
     @Test
     void saveAuthenticationMethods() {
-        List<AuthenticationObject> methods = Collections.singletonList(new AuthenticationObject());
+        List<Xs2aAuthenticationObject> methods = Collections.singletonList(new Xs2aAuthenticationObject());
         List<CmsScaMethod> cmsScaMethods = xs2aAuthenticationObjectToCmsScaMethodMapper.mapToCmsScaMethods(methods);
 
         when(authorisationServiceEncrypted.saveAuthenticationMethods(AUTHORISATION_ID, cmsScaMethods))
@@ -132,7 +132,7 @@ class Xs2aAuthorisationServiceTest {
 
     @Test
     void saveAuthenticationMethods_isNotSuccessful() {
-        List<AuthenticationObject> methods = Collections.singletonList(new AuthenticationObject());
+        List<Xs2aAuthenticationObject> methods = Collections.singletonList(new Xs2aAuthenticationObject());
         List<CmsScaMethod> cmsScaMethods = xs2aAuthenticationObjectToCmsScaMethodMapper.mapToCmsScaMethods(methods);
 
         when(authorisationServiceEncrypted.saveAuthenticationMethods(AUTHORISATION_ID, cmsScaMethods))
@@ -143,8 +143,8 @@ class Xs2aAuthorisationServiceTest {
 
     @Test
     void updateAuthorisationStatus() {
-        authorisationService.updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.RECEIVED);
-        verify(authorisationServiceEncrypted, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.RECEIVED);
+        authorisationService.updateAuthorisationStatus(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED);
+        verify(authorisationServiceEncrypted, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED);
     }
 
     @Test
@@ -217,20 +217,20 @@ class Xs2aAuthorisationServiceTest {
     @Test
     void getAuthorisationScaStatus() {
         when(authorisationServiceEncrypted.getAuthorisationScaStatus(AUTHORISATION_ID, new AisAuthorisationParentHolder(CONSENT_ID)))
-            .thenReturn(CmsResponse.<ScaStatus>builder().payload(ScaStatus.PSUIDENTIFIED).build());
+            .thenReturn(CmsResponse.<Xs2aScaStatus>builder().payload(Xs2aScaStatus.PSUIDENTIFIED).build());
 
-        Optional<ScaStatus> actual = authorisationService.getAuthorisationScaStatus(AUTHORISATION_ID, CONSENT_ID, AuthorisationType.CONSENT);
+        Optional<Xs2aScaStatus> actual = authorisationService.getAuthorisationScaStatus(AUTHORISATION_ID, CONSENT_ID, AuthorisationType.CONSENT);
 
         assertTrue(actual.isPresent());
-        assertEquals(ScaStatus.PSUIDENTIFIED, actual.get());
+        assertEquals(Xs2aScaStatus.PSUIDENTIFIED, actual.get());
     }
 
     @Test
     void getAuthorisationScaStatus_hasError() {
         when(authorisationServiceEncrypted.getAuthorisationScaStatus(AUTHORISATION_ID, new AisAuthorisationParentHolder(CONSENT_ID)))
-            .thenReturn(CmsResponse.<ScaStatus>builder().error(CmsError.TECHNICAL_ERROR).build());
+            .thenReturn(CmsResponse.<Xs2aScaStatus>builder().error(CmsError.TECHNICAL_ERROR).build());
 
-        Optional<ScaStatus> actual = authorisationService.getAuthorisationScaStatus(AUTHORISATION_ID, CONSENT_ID, AuthorisationType.CONSENT);
+        Optional<Xs2aScaStatus> actual = authorisationService.getAuthorisationScaStatus(AUTHORISATION_ID, CONSENT_ID, AuthorisationType.CONSENT);
 
         assertTrue(actual.isEmpty());
     }

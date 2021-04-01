@@ -22,10 +22,10 @@ import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.consent.domain.Authorisable;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.service.ConfirmationExpirationService;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,8 +53,8 @@ public abstract class CmsAuthorisationService<T extends Authorisable> implements
 
     @Override
     public AuthorisationEntity saveAuthorisation(CreateAuthorisationRequest request, Authorisable authorisationParent) {
-        List<PsuData> psuDataList = authorisationParent.getPsuDataList();
-        Optional<PsuData> psuDataOptional = psuService.definePsuDataForAuthorisation(psuService.mapToPsuData(request.getPsuData(), authorisationParent.getInstanceId()), psuDataList);
+        List<CmsPsuData> psuDataList = authorisationParent.getPsuDataList();
+        Optional<CmsPsuData> psuDataOptional = psuService.definePsuDataForAuthorisation(psuService.mapToPsuData(request.getPsuData(), authorisationParent.getInstanceId()), psuDataList);
 
         psuDataOptional.ifPresent(psuData -> authorisationParent.setPsuDataList(psuService.enrichPsuData(psuData, psuDataList)));
         authorisationParent.setPsuDataList(psuDataList);
@@ -68,8 +68,8 @@ public abstract class CmsAuthorisationService<T extends Authorisable> implements
 
     @Override
     public AuthorisationEntity doUpdateAuthorisation(AuthorisationEntity authorisationEntity, UpdateAuthorisationRequest updateAuthorisationRequest) {
-        PsuData psuRequest = psuService.mapToPsuData(updateAuthorisationRequest.getPsuData(), authorisationEntity.getInstanceId());
-        if (ScaStatus.RECEIVED == authorisationEntity.getScaStatus()) {
+        CmsPsuData psuRequest = psuService.mapToPsuData(updateAuthorisationRequest.getPsuData(), authorisationEntity.getInstanceId());
+        if (Xs2aScaStatus.RECEIVED == authorisationEntity.getScaStatus()) {
 
             if (!psuService.isPsuDataRequestCorrect(psuRequest, authorisationEntity.getPsuData())) {
                 log.info("Authorisation ID: [{}], SCA status: [{}]. Update authorisation failed, because psu data request does not match stored psu data",
@@ -85,10 +85,10 @@ public abstract class CmsAuthorisationService<T extends Authorisable> implements
             }
 
             Authorisable authorisationParent = aisConsentOptional.get();
-            Optional<PsuData> psuDataOptional = psuService.definePsuDataForAuthorisation(psuRequest, authorisationParent.getPsuDataList());
+            Optional<CmsPsuData> psuDataOptional = psuService.definePsuDataForAuthorisation(psuRequest, authorisationParent.getPsuDataList());
 
             if (psuDataOptional.isPresent()) {
-                PsuData psuData = psuDataOptional.get();
+                CmsPsuData psuData = psuDataOptional.get();
                 authorisationParent.setPsuDataList(psuService.enrichPsuData(psuData, authorisationParent.getPsuDataList()));
                 authorisationEntity.setPsuData(psuData);
                 updateAuthorisable(authorisationParent);
@@ -103,7 +103,7 @@ public abstract class CmsAuthorisationService<T extends Authorisable> implements
             }
         }
 
-        if (ScaStatus.SCAMETHODSELECTED == updateAuthorisationRequest.getScaStatus()) {
+        if (Xs2aScaStatus.SCAMETHODSELECTED == updateAuthorisationRequest.getScaStatus()) {
             authorisationEntity.setAuthenticationMethodId(updateAuthorisationRequest.getAuthenticationMethodId());
         }
 
@@ -111,7 +111,7 @@ public abstract class CmsAuthorisationService<T extends Authorisable> implements
         return authorisationService.save(authorisationEntity);
     }
 
-    private boolean isPsuDataCorrectIfPresent(PsuData psuRequest, AuthorisationEntity authorisationEntity) {
+    private boolean isPsuDataCorrectIfPresent(CmsPsuData psuRequest, AuthorisationEntity authorisationEntity) {
         if (psuRequest != null) {
             return authorisationEntity.getPsuData().contentEquals(psuRequest);
         } else {

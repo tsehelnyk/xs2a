@@ -23,7 +23,7 @@ import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.RequestProviderService;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PisAuthorisationValidatorTest {
     private static final String AUTHORISATION_ID = "62561aa4-5d69-4bac-9483-09376188eb78";
     private static final String UNKNOWN_AUTHORISATION_ID = "unknown id";
-    private static final ScaStatus SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus SCA_STATUS = Xs2aScaStatus.RECEIVED;
     private static final PsuIdData PSU_ID_DATA = new PsuIdData("psu-id", null, null, null, null);
 
     private static final MessageError UNKNOWN_AUTHORISATION_ERROR =

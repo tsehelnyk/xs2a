@@ -16,8 +16,8 @@
 
 package de.adorsys.psd2.xs2a.spi.domain.payment;
 
-import de.adorsys.psd2.core.payment.model.PurposeCode;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountReference;
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiAmount;
@@ -44,7 +44,7 @@ public class SpiSinglePayment implements SpiPayment {
     private String creditorName;
     private SpiAddress creditorAddress;
     private String remittanceInformationUnstructured;
-    private TransactionStatus paymentStatus;
+    private Xs2aTransactionStatus paymentStatus;
     protected String paymentProduct;
     private LocalDate requestedExecutionDate;
     private OffsetDateTime requestedExecutionTime;
@@ -52,7 +52,7 @@ public class SpiSinglePayment implements SpiPayment {
     private OffsetDateTime statusChangeTimestamp;
     private String ultimateDebtor;
     private String ultimateCreditor;
-    private PurposeCode purposeCode;
+    private Xs2aPisPurposeCode purposeCode;
     private String remittanceInformationStructured;
     private List<String> remittanceInformationStructuredArray;
     private OffsetDateTime creationTimestamp;
@@ -76,12 +76,12 @@ public class SpiSinglePayment implements SpiPayment {
     }
 
     @Override
-    public TransactionStatus getPaymentStatus() {
+    public Xs2aTransactionStatus getPaymentStatus() {
         return paymentStatus;
     }
 
     @Override
-    public void setPaymentStatus(TransactionStatus paymentStatus) {
+    public void setPaymentStatus(Xs2aTransactionStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 }

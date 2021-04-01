@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.domain.consent;
 
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponseType;
 import de.adorsys.psd2.xs2a.domain.authorisation.CancellationAuthorisationResponse;
@@ -30,12 +30,12 @@ import org.jetbrains.annotations.NotNull;
 public class Xs2aCreatePisCancellationAuthorisationResponse implements CancellationAuthorisationResponse {
     @NotNull
     private String authorisationId;
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     private PaymentType paymentType;
     private Links links = new Links();
     private String internalRequestId;
 
-    public Xs2aCreatePisCancellationAuthorisationResponse(@NotNull String authorisationId, ScaStatus scaStatus, PaymentType paymentType, String internalRequestId) {
+    public Xs2aCreatePisCancellationAuthorisationResponse(@NotNull String authorisationId, Xs2aScaStatus scaStatus, PaymentType paymentType, String internalRequestId) {
         this.authorisationId = authorisationId;
         this.scaStatus = scaStatus;
         this.paymentType = paymentType;

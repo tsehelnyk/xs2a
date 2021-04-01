@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.integration.UrlBuilder;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.repository.TppInfoRepository;
 import de.adorsys.psd2.consent.repository.specification.PiisConsentEntitySpecification;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import java.util.Collections;
 import java.util.Optional;
 
-import static de.adorsys.psd2.xs2a.core.consent.ConsentStatus.TERMINATED_BY_ASPSP;
+import static de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus.TERMINATED_BY_ASPSP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -86,7 +86,7 @@ class CmsAspspPiisControllerIT {
     private final JsonReader jsonReader = new JsonReader();
     private HttpHeaders httpHeaders;
     private PsuIdData psuIdData;
-    private AccountReference accountReference;
+    private Xs2aAccountReference accountReference;
     private ConsentEntity consentEntity;
 
     @BeforeEach
@@ -101,7 +101,7 @@ class CmsAspspPiisControllerIT {
         httpHeaders.add("instance-id", INSTANCE_ID);
 
         psuIdData = jsonReader.getObjectFromFile("json/consent/integration/aspsp/psu-id-data.json", PsuIdData.class);
-        accountReference = jsonReader.getObjectFromFile("json/consent/integration/aspsp/account-reference.json", AccountReference.class);
+        accountReference = jsonReader.getObjectFromFile("json/consent/integration/aspsp/account-reference.json", Xs2aAccountReference.class);
 
         consentEntity = jsonReader.getObjectFromFile("json/consent/integration/aspsp/consent-entity.json", ConsentEntity.class);
         consentEntity.setData(jsonReader.getBytesFromFile("json/consent/integration/aspsp/piis-consent-data.json"));

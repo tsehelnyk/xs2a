@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.web.mapper;
 
 import de.adorsys.psd2.model.ConsentsConfirmationOfFundsResponse;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aConfirmationOfFundsResponse;
 import de.adorsys.psd2.xs2a.service.mapper.AccountModelMapper;
@@ -81,11 +81,11 @@ class PiisConsentModelMapperTest {
         assertFalse(actual.getLinks().isEmpty());
 
         assertNotNull(actual.getLinks().get(SELF_LINK));
-        HrefType selfMap = (HrefType) actual.getLinks().get(SELF_LINK);
+        Xs2aHrefType selfMap = (Xs2aHrefType) actual.getLinks().get(SELF_LINK);
         assertEquals(LOCALHOST_LINK, selfMap.getHref());
     }
 
-    private Map<String, HrefType> buildLinks() {
-        return Collections.singletonMap(SELF_LINK, new HrefType(LOCALHOST_LINK));
+    private Map<String, Xs2aHrefType> buildLinks() {
+        return Collections.singletonMap(SELF_LINK, new Xs2aHrefType(LOCALHOST_LINK));
     }
 }

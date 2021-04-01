@@ -29,7 +29,7 @@ public interface CoreCommonPayment {
 
     byte[] getPaymentData();
 
-    TransactionStatus getTransactionStatus();
+    Xs2aTransactionStatus getTransactionStatus();
 
     OffsetDateTime getStatusChangeTimestamp();
 

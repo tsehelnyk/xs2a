@@ -17,7 +17,7 @@
 package de.adorsys.psd2.consent.service.psu;
 
 import de.adorsys.psd2.consent.api.piis.v1.CmsPiisConsent;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.repository.specification.PiisConsentEntitySpecification;
@@ -25,7 +25,7 @@ import de.adorsys.psd2.consent.service.mapper.PiisConsentMapper;
 import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
 import de.adorsys.psd2.consent.service.migration.PiisConsentLazyMigrationService;
 import de.adorsys.psd2.consent.service.psu.util.PageRequestBuilder;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,7 +59,7 @@ class CmsPsuPiisServiceInternalTest {
     private ConsentEntity piisConsentEntity;
     private PsuIdData psuIdData;
     private PsuIdData psuIdDataNotExist;
-    private PsuData psuData;
+    private CmsPsuData psuData;
 
     @InjectMocks
     private CmsPsuPiisServiceInternal cmsPsuPiisServiceInternal;
@@ -83,7 +83,7 @@ class CmsPsuPiisServiceInternalTest {
     @BeforeEach
     void setUp() {
         psuIdDataNotExist = jsonReader.getObjectFromFile("json/service/psu/piis/psu-data-invalid.json", PsuIdData.class);
-        psuData = jsonReader.getObjectFromFile("json/service/psu/piis/psu-data.json", PsuData.class);
+        psuData = jsonReader.getObjectFromFile("json/service/psu/piis/psu-data.json", CmsPsuData.class);
         psuIdData = jsonReader.getObjectFromFile("json/service/psu/piis/psu-data.json", PsuIdData.class);
         piisConsentEntity = buildPiisConsentEntity();
         cmsPiisConsent = buildCmsPiisConsent();
@@ -133,7 +133,7 @@ class CmsPsuPiisServiceInternalTest {
         // Given
         when(piisConsentEntitySpecification.byConsentIdAndInstanceId(EXTERNAL_CONSENT_ID, DEFAULT_SERVICE_INSTANCE_ID))
             .thenReturn((root, criteriaQuery, criteriaBuilder) -> null);
-        PsuData invalidPsuData = jsonReader.getObjectFromFile("json/service/psu/piis/psu-data-invalid.json", PsuData.class);
+        CmsPsuData invalidPsuData = jsonReader.getObjectFromFile("json/service/psu/piis/psu-data-invalid.json", CmsPsuData.class);
         when(psuDataMapper.mapToPsuIdData(invalidPsuData)).thenReturn(psuIdDataNotExist);
         ConsentEntity consentEntityWithInvalidPsu = buildPiisConsentEntity(invalidPsuData);
         when(consentJpaRepository.findOne(any())).thenReturn(Optional.of(consentEntityWithInvalidPsu));
@@ -282,7 +282,7 @@ class CmsPsuPiisServiceInternalTest {
 
     private ConsentEntity buildFinalisedPiisConsentEntity() {
         ConsentEntity consentEntity = buildPiisConsentEntity();
-        consentEntity.setConsentStatus(ConsentStatus.EXPIRED);
+        consentEntity.setConsentStatus(Xs2aConsentStatus.EXPIRED);
         return consentEntity;
     }
 
@@ -290,10 +290,10 @@ class CmsPsuPiisServiceInternalTest {
         return buildPiisConsentEntity(psuData);
     }
 
-    private ConsentEntity buildPiisConsentEntity(PsuData customPsuData) {
+    private ConsentEntity buildPiisConsentEntity(CmsPsuData customPsuData) {
         ConsentEntity piisConsentEntity = new ConsentEntity();
         piisConsentEntity.setPsuDataList(Collections.singletonList(customPsuData));
-        piisConsentEntity.setConsentStatus(ConsentStatus.VALID);
+        piisConsentEntity.setConsentStatus(Xs2aConsentStatus.VALID);
         return piisConsentEntity;
     }
 

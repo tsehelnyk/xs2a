@@ -17,14 +17,14 @@
 package de.adorsys.psd2.xs2a.domain.account;
 
 import de.adorsys.psd2.xs2a.core.domain.address.Xs2aAddress;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import lombok.Value;
 
 @Value
 public class Xs2aTrustedBeneficiaries {
     private String trustedBeneficiaryId;
-    private AccountReference debtorAccount;
-    private AccountReference creditorAccount;
+    private Xs2aAccountReference debtorAccount;
+    private Xs2aAccountReference creditorAccount;
     private String creditorAgent;
     private String creditorName;
     private String creditorAlias;

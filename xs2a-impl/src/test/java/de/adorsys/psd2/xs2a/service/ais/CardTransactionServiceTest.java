@@ -16,13 +16,13 @@
 
 package de.adorsys.psd2.xs2a.service.ais;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.ais.BookingStatus;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
@@ -31,7 +31,7 @@ import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.error.TppMessage;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
@@ -103,7 +103,7 @@ class CardTransactionServiceTest {
     private static final LocalDate DATE_TO = LocalDate.now();
     private static final SpiAccountConsent SPI_ACCOUNT_CONSENT = new SpiAccountConsent();
     private static final SpiAccountReference SPI_ACCOUNT_REFERENCE_GLOBAL = buildSpiAccountReferenceGlobal();
-    private static final AccountReference XS2A_ACCOUNT_REFERENCE = buildXs2aAccountReference();
+    private static final Xs2aAccountReference XS2A_ACCOUNT_REFERENCE = buildXs2aAccountReference();
     private static final SpiCardTransactionReport SPI_CARD_TRANSACTION_REPORT = buildSpiTransactionReport();
     private static final SpiContextData SPI_CONTEXT_DATA = TestSpiDataProvider.getSpiContextData();
     private static final BookingStatus BOOKING_STATUS = BookingStatus.BOTH;
@@ -448,14 +448,14 @@ class CardTransactionServiceTest {
             .thenReturn(Collections.emptyList());
         when(consentMapper.mapToSpiAccountConsent(any()))
             .thenReturn(SPI_ACCOUNT_CONSENT);
-        ArgumentCaptor<ConsentStatus> argumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> argumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
 
         // When
         cardTransactionService.getCardTransactionsReportByPeriod(XS2A_TRANSACTIONS_REPORT_BY_PERIOD_REQUEST);
 
         // Then
         verify(loggingContextService).storeConsentStatus(argumentCaptor.capture());
-        assertThat(argumentCaptor.getValue()).isEqualTo(ConsentStatus.VALID);
+        assertThat(argumentCaptor.getValue()).isEqualTo(Xs2aConsentStatus.VALID);
     }
 
     private void checkPassingParametersWithoutAnyChanges(SpiTransactionReportParameters parameters) {
@@ -503,13 +503,13 @@ class CardTransactionServiceTest {
         assertThat(actualResponse.hasError()).isFalse();
     }
 
-    private static AisConsent createConsent(AccountAccess accountAccess) {
+    private static AisConsent createConsent(Xs2aConsentAccountAccess accountAccess) {
         AisConsent aisConsent = new AisConsent();
         aisConsent.setConsentData(buildAisConsentData());
         aisConsent.setId(CONSENT_ID);
         aisConsent.setValidUntil(LocalDate.now());
         aisConsent.setFrequencyPerDay(4);
-        aisConsent.setConsentStatus(ConsentStatus.VALID);
+        aisConsent.setConsentStatus(Xs2aConsentStatus.VALID);
         aisConsent.setAuthorisations(Collections.emptyList());
         aisConsent.setConsentTppInformation(buildConsentTppInformation());
         aisConsent.setStatusChangeTimestamp(OffsetDateTime.now());
@@ -536,20 +536,20 @@ class CardTransactionServiceTest {
         return tppInfo;
     }
 
-    private static AccountAccess createAccountAccess() {
-        return new AccountAccess(Collections.singletonList(XS2A_ACCOUNT_REFERENCE), Collections.singletonList(XS2A_ACCOUNT_REFERENCE), Collections.singletonList(XS2A_ACCOUNT_REFERENCE), null);
+    private static Xs2aConsentAccountAccess createAccountAccess() {
+        return new Xs2aConsentAccountAccess(Collections.singletonList(XS2A_ACCOUNT_REFERENCE), Collections.singletonList(XS2A_ACCOUNT_REFERENCE), Collections.singletonList(XS2A_ACCOUNT_REFERENCE), null);
     }
 
-    private static AccountAccess createAccountAccessWithoutTransactions() {
-        return new AccountAccess(Collections.singletonList(XS2A_ACCOUNT_REFERENCE), Collections.singletonList(XS2A_ACCOUNT_REFERENCE), null, null);
+    private static Xs2aConsentAccountAccess createAccountAccessWithoutTransactions() {
+        return new Xs2aConsentAccountAccess(Collections.singletonList(XS2A_ACCOUNT_REFERENCE), Collections.singletonList(XS2A_ACCOUNT_REFERENCE), null, null);
     }
 
     private static SpiAccountReference buildSpiAccountReferenceGlobal() {
         return SpiAccountReference.builder().resourceId(ACCOUNT_ID).build();
     }
 
-    private static AccountReference buildXs2aAccountReference() {
-        return new AccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
+    private static Xs2aAccountReference buildXs2aAccountReference() {
+        return new Xs2aAccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
     }
 
     // Needed because SpiCardTransactionReport is final, so it's impossible to mock it

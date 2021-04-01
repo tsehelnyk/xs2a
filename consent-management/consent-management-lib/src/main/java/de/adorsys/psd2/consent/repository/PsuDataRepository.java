@@ -16,9 +16,9 @@
 
 package de.adorsys.psd2.consent.repository;
 
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import org.springframework.data.repository.CrudRepository;
 
-public interface PsuDataRepository extends CrudRepository<PsuData, Long> {
+public interface PsuDataRepository extends CrudRepository<CmsPsuData, Long> {
 
 }

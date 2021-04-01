@@ -18,6 +18,7 @@ package de.adorsys.psd2.xs2a.web.mapper;
 
 import de.adorsys.psd2.model.AuthenticationObject;
 import de.adorsys.psd2.model.ScaMethods;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ScaMethodsMapper {
 
-    ScaMethods mapToScaMethods(List<de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject> authenticationObjects);
+    ScaMethods mapToScaMethods(List<Xs2aAuthenticationObject> authenticationObjects);
 
-    AuthenticationObject mapToAuthenticationObject(de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject authenticationObject);
+    AuthenticationObject mapToAuthenticationObject(Xs2aAuthenticationObject authenticationObject);
 }

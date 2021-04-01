@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.config.factory;
 
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,13 +26,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PisScaStageAuthorisationFactoryTest {
     @Test
     void getCancellationServiceName() {
-        assertThat(PisScaStageAuthorisationFactory.getCancellationServiceName(ScaApproach.REDIRECT, ScaStatus.FINALISED))
+        assertThat(PisScaStageAuthorisationFactory.getCancellationServiceName(ScaApproach.REDIRECT, Xs2aScaStatus.FINALISED))
             .isEqualTo("PIS_CANCELLATION_REDIRECT_FINALISED");
     }
 
     @Test
     void getServiceName() {
-        assertThat(PisScaStageAuthorisationFactory.getServiceName(ScaApproach.EMBEDDED, ScaStatus.FINALISED))
+        assertThat(PisScaStageAuthorisationFactory.getServiceName(ScaApproach.EMBEDDED, Xs2aScaStatus.FINALISED))
             .isEqualTo("PIS_EMBEDDED_FINALISED");
     }
 }

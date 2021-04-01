@@ -37,12 +37,12 @@ import de.adorsys.psd2.xs2a.config.Xs2aEndpointPathConstant;
 import de.adorsys.psd2.xs2a.config.Xs2aInterfaceConfig;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import de.adorsys.psd2.xs2a.integration.builder.AspspSettingsBuilder;
@@ -93,7 +93,7 @@ class PaymentStartCancellationAuthorisationIT {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
     private static final String SEPA_PAYMENT_PRODUCT = "sepa-credit-transfers";
     private static final PaymentType SINGLE_PAYMENT_TYPE = PaymentType.SINGLE;
-    private static final ScaStatus PIS_AUTHORISATION_SCA_STATUS = ScaStatus.PSUIDENTIFIED;
+    private static final Xs2aScaStatus PIS_AUTHORISATION_SCA_STATUS = Xs2aScaStatus.PSUIDENTIFIED;
     private static final String PAYMENT_ID = "JKDQjM02y1a9G7_kLTgAy8HJCLIOYVWZ-fQThyI7gYhZvqcmJ6kZg7CmJFgTANLhcgftJbETkzvNvu5mZQqWcA==_=_psGLvQpt9Q";
     private static final TppInfo TPP_INFO = TppInfoBuilder.buildTppInfo();
     private static final String PSU_ID = "PSU-123";
@@ -204,7 +204,7 @@ class PaymentStartCancellationAuthorisationIT {
         pisCommonPaymentResponse.setTppInfo(TPP_INFO);
         pisCommonPaymentResponse.setPaymentType(SINGLE_PAYMENT_TYPE);
         pisCommonPaymentResponse.setPaymentProduct(SEPA_PAYMENT_PRODUCT);
-        pisCommonPaymentResponse.setTransactionStatus(TransactionStatus.ACSP);
+        pisCommonPaymentResponse.setTransactionStatus(Xs2aTransactionStatus.ACSP);
         pisCommonPaymentResponse.setInternalPaymentStatus(InternalPaymentStatus.CANCELLED_INITIATED);
         return pisCommonPaymentResponse;
     }

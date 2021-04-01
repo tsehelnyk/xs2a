@@ -32,7 +32,7 @@ import de.adorsys.psd2.xs2a.config.CorsConfigurationProperties;
 import de.adorsys.psd2.xs2a.config.WebConfig;
 import de.adorsys.psd2.xs2a.config.Xs2aEndpointPathConstant;
 import de.adorsys.psd2.xs2a.config.Xs2aInterfaceConfig;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
@@ -142,7 +142,7 @@ class DeleteConsentIT {
             .willReturn(SpiResponse.<SpiResponse.VoidResponse>builder()
                             .payload(SpiResponse.voidResponse())
                             .build());
-        given(consentServiceEncrypted.updateConsentStatusById(ENCRYPTED_CONSENT_ID, ConsentStatus.TERMINATED_BY_TPP))
+        given(consentServiceEncrypted.updateConsentStatusById(ENCRYPTED_CONSENT_ID, Xs2aConsentStatus.TERMINATED_BY_TPP))
             .willReturn(CmsResponse.<Boolean>builder()
                             .payload(true)
                             .build());

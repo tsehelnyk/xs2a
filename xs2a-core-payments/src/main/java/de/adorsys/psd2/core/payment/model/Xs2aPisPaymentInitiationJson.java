@@ -6,22 +6,22 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class PaymentInitiationJson {
+public class Xs2aPisPaymentInitiationJson {
     private String endToEndIdentification;
     private String instructionIdentification;
     private String debtorName;
-    private AccountReference debtorAccount;
+    private Xs2aPisAccountReference debtorAccount;
     private String ultimateDebtor;
     private Xs2aAmount instructedAmount;
-    private AccountReference creditorAccount;
+    private Xs2aPisAccountReference creditorAccount;
     private String creditorAgent;
     private String creditorAgentName;
     private String creditorName;
-    private Address creditorAddress;
+    private Xs2aPisAddress creditorAddress;
     private String creditorId;
     private String ultimateCreditor;
-    private PurposeCode purposeCode;
-    private ChargeBearer chargeBearer;
+    private Xs2aPisPurposeCode purposeCode;
+    private Xs2aPisChargeBearer chargeBearer;
     private String remittanceInformationUnstructured;
     private RemittanceInformationStructured remittanceInformationStructured;
     private List<RemittanceInformationStructured> remittanceInformationStructuredArray;

@@ -22,7 +22,7 @@ import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.domain.payment.PisPaymentData;
 import de.adorsys.psd2.consent.service.CorePaymentsConvertService;
 import de.adorsys.psd2.xs2a.core.pis.FrequencyCode;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -170,9 +170,9 @@ public class CmsPsuPisMapper {
         return singlePayment;
     }
 
-    private AccountReference mapToAccountReference(AccountReferenceEntity pisAccountReference) {
+    private Xs2aAccountReference mapToAccountReference(AccountReferenceEntity pisAccountReference) {
         return Optional.ofNullable(pisAccountReference)
-                   .map(ref -> new AccountReference(null,
+                   .map(ref -> new Xs2aAccountReference(null,
                                                     null,
                                                     ref.getIban(),
                                                     ref.getBban(),

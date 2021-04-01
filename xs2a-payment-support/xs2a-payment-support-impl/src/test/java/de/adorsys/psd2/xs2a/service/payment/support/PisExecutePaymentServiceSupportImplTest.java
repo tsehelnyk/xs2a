@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.payment.support;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.service.payment.support.mapper.spi.SpiPaymentMapper;
 import de.adorsys.psd2.xs2a.service.profile.StandardPaymentProductsResolver;
@@ -53,7 +53,7 @@ class PisExecutePaymentServiceSupportImplTest {
     private static final SpiBulkPayment SPI_BULK_PAYMENT = new SpiBulkPayment();
     private static final SpiScaConfirmation SPI_SCA_CONFIRMATION = new SpiScaConfirmation();
     private static final SpiPaymentExecutionResponse SPI_PAYMENT_EXECUTION_RESPONSE =
-        new SpiPaymentExecutionResponse(TransactionStatus.ACCP);
+        new SpiPaymentExecutionResponse(Xs2aTransactionStatus.ACCP);
 
     @Mock
     private StandardPaymentProductsResolver standardPaymentProductsResolver;

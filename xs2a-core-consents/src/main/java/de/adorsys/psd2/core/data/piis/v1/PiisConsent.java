@@ -19,7 +19,7 @@ package de.adorsys.psd2.core.data.piis.v1;
 import de.adorsys.psd2.core.data.Consent;
 import de.adorsys.psd2.core.data.piis.PiisConsentData;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -34,14 +34,14 @@ public class PiisConsent extends Consent<PiisConsentData> {
         setConsentType(consentType);
     }
 
-    public AccountReference getAccountReference() {
-        List<AccountReference> accounts = getAspspAccountAccesses().getAccounts();
+    public Xs2aAccountReference getAccountReference() {
+        List<Xs2aAccountReference> accounts = getAspspAccountAccesses().getAccounts();
 
         if (CollectionUtils.isNotEmpty(accounts)) {
             return accounts.get(0);
         }
 
-        List<AccountReference> tppAccounts = getTppAccountAccesses().getAccounts();
+        List<Xs2aAccountReference> tppAccounts = getTppAccountAccesses().getAccounts();
         if (CollectionUtils.isNotEmpty(tppAccounts)) {
             return tppAccounts.get(0);
         }

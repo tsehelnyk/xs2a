@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
 import de.adorsys.psd2.consent.api.service.PisCommonPaymentService;
 import de.adorsys.psd2.consent.api.service.PisCommonPaymentServiceEncrypted;
 import de.adorsys.psd2.consent.service.security.SecurityDataService;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,13 +69,13 @@ public class PisCommonPaymentServiceInternalEncrypted implements PisCommonPaymen
 
     @Override
     @Transactional
-    public CmsResponse<TransactionStatus> getPisCommonPaymentStatusById(String encryptedPaymentId) {
+    public CmsResponse<Xs2aTransactionStatus> getPisCommonPaymentStatusById(String encryptedPaymentId) {
         Optional<String> decryptIdOptional = securityDataService.decryptId(encryptedPaymentId);
 
         if (decryptIdOptional.isEmpty()) {
             log.info("Encrypted Payment ID: [{}]. Get common payment status by ID failed, couldn't decrypt consent id",
                      encryptedPaymentId);
-            return CmsResponse.<TransactionStatus>builder()
+            return CmsResponse.<Xs2aTransactionStatus>builder()
                        .error(TECHNICAL_ERROR)
                        .build();
         }
@@ -101,7 +101,7 @@ public class PisCommonPaymentServiceInternalEncrypted implements PisCommonPaymen
 
     @Override
     @Transactional
-    public CmsResponse<Boolean> updateCommonPaymentStatusById(String encryptedPaymentId, TransactionStatus status) {
+    public CmsResponse<Boolean> updateCommonPaymentStatusById(String encryptedPaymentId, Xs2aTransactionStatus status) {
         Optional<String> decryptIdOptional = securityDataService.decryptId(encryptedPaymentId);
 
         if (decryptIdOptional.isEmpty()) {

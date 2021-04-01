@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.domain.fund;
 
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,7 +30,7 @@ public class FundsConfirmationRequest {
     private String cardNumber;
 
     @NotNull
-    private AccountReference psuAccount;
+    private Xs2aAccountReference psuAccount;
 
     private String payee;
 

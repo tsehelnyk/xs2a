@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.validator.ais.account;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType;
@@ -144,7 +144,7 @@ class GetBalancesReportValidatorTest {
 
     private AisConsent buildAisConsent(TppInfo tppInfo) {
         AisConsent aisConsent = jsonReader.getObjectFromFile("json/service/ais-consent.json", AisConsent.class);
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", Xs2aConsentAccountAccess.class);
 
         aisConsent.setTppAccountAccesses(accountAccess);
         aisConsent.setAspspAccountAccesses(accountAccess);

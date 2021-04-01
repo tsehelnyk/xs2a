@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 adorsys GmbH & Co KG
+ * Copyright 2018-2021 adorsys GmbH & Co KG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package de.adorsys.psd2.xs2a.core.profile;
+package de.adorsys.psd2.xs2a.domain;
 
-import lombok.Value;
-import org.jetbrains.annotations.Nullable;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
+import lombok.Data;
 
 import java.util.List;
 
-@Value
-public class AdditionalInformationAccess {
-    @Nullable
-    private List<AccountReference> ownerName;
-    @Nullable
-    private List<AccountReference> trustedBeneficiaries;
-
-    public boolean noAdditionalInformationAccess() {
-        return ownerName == null && trustedBeneficiaries == null;
-    }
+@Data
+public class Xs2aEntryDetails {
+    private String endToEndId;
+    private String mandateId;
+    private String checkId;
+    private String creditorId;
+    private Xs2aAmount transactionAmount;
+    private List<Xs2aExchangeRate> currencyExchange;
+    private TransactionInfo transactionInfo;
 }
+

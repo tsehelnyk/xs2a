@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
 import de.adorsys.psd2.xs2a.core.domain.address.Xs2aAddress;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aTrustedBeneficiaries;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountReference;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiTrustedBeneficiaries;
@@ -54,8 +54,8 @@ class SpiToXs2aTrustedBeneficiariesMapperTest {
         SpiTrustedBeneficiaries input = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/spi-trusted-beneficiaries.json", SpiTrustedBeneficiaries.class);
         SpiAccountReference spiDebtor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/debtor-account.json", SpiAccountReference.class);
         SpiAccountReference spiCreditor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/creditor-account.json", SpiAccountReference.class);
-        AccountReference xs2aDebtor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/debtor-account.json", AccountReference.class);
-        AccountReference xs2aCreditor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/creditor-account.json", AccountReference.class);
+        Xs2aAccountReference xs2aDebtor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/debtor-account.json", Xs2aAccountReference.class);
+        Xs2aAccountReference xs2aCreditor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/creditor-account.json", Xs2aAccountReference.class);
         SpiAddress spiAddress = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/creditor-address.json", SpiAddress.class);
         Xs2aAddress xs2aAddress = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/xs2a-address.json", Xs2aAddress.class);
 
@@ -89,8 +89,8 @@ class SpiToXs2aTrustedBeneficiariesMapperTest {
 
         SpiAccountReference spiDebtor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/debtor-account.json", SpiAccountReference.class);
         SpiAccountReference spiCreditor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/creditor-account.json", SpiAccountReference.class);
-        AccountReference xs2aDebtor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/debtor-account.json", AccountReference.class);
-        AccountReference xs2aCreditor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/creditor-account.json", AccountReference.class);
+        Xs2aAccountReference xs2aDebtor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/debtor-account.json", Xs2aAccountReference.class);
+        Xs2aAccountReference xs2aCreditor = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/creditor-account.json", Xs2aAccountReference.class);
         SpiAddress spiAddress = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/creditor-address.json", SpiAddress.class);
         Xs2aAddress xs2aAddress = jsonReader.getObjectFromFile("json/service/mapper/trusted-beneficiaries-model-mapper/xs2a-address.json", Xs2aAddress.class);
 

@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.domain.consent;
 
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.Value;
 
@@ -26,7 +26,7 @@ public class ConsentStatusResponse {
     private String consentStatus;
     private String psuMessage;
 
-    public ConsentStatusResponse(ConsentStatus consentStatus, String psuMessage) {
+    public ConsentStatusResponse(Xs2aConsentStatus consentStatus, String psuMessage) {
         this.consentStatus = consentStatus.getValue();
         this.psuMessage = psuMessage;
     }

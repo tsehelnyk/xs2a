@@ -37,7 +37,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -143,7 +143,7 @@ public class AuthorisationServiceInternal implements AuthorisationService {
 
     @Transactional
     @Override
-    public CmsResponse<Boolean> updateAuthorisationStatus(String authorisationId, ScaStatus scaStatus) {
+    public CmsResponse<Boolean> updateAuthorisationStatus(String authorisationId, Xs2aScaStatus scaStatus) {
         Optional<AuthorisationEntity> authorisationOptional = getAuthorisation(authorisationId);
 
         if (authorisationOptional.isEmpty()) {
@@ -191,13 +191,13 @@ public class AuthorisationServiceInternal implements AuthorisationService {
 
     @Transactional
     @Override
-    public CmsResponse<ScaStatus> getAuthorisationScaStatus(String authorisationId, AuthorisationParentHolder parentHolder) {
+    public CmsResponse<Xs2aScaStatus> getAuthorisationScaStatus(String authorisationId, AuthorisationParentHolder parentHolder) {
         AuthService authService = authServiceResolver.getAuthService(parentHolder.getAuthorisationType());
         Optional<Authorisable> parentOptional = authService.getAuthorisationParent(parentHolder.getParentId());
         if (parentOptional.isEmpty()) {
             log.info("Parent ID: [{}], Authorisation ID: [{}]. Get authorisation SCA status has failed, because parent couldn't be found",
                      parentHolder.getParentId(), authorisationId);
-            return CmsResponse.<ScaStatus>builder()
+            return CmsResponse.<Xs2aScaStatus>builder()
                        .error(LOGICAL_ERROR)
                        .build();
         }
@@ -207,18 +207,18 @@ public class AuthorisationServiceInternal implements AuthorisationService {
             authService.updateOnConfirmationExpiration(parent);
             log.info("Parent ID: [{}], Authorisation ID: [{}]. Get authorisation SCA status has failed, because parent is expired",
                      parentHolder.getParentId(), authorisationId);
-            return CmsResponse.<ScaStatus>builder()
-                       .payload(ScaStatus.FAILED)
+            return CmsResponse.<Xs2aScaStatus>builder()
+                       .payload(Xs2aScaStatus.FAILED)
                        .build();
         }
 
         Optional<AuthorisationEntity> authorisation = findAuthorisationInParent(authorisationId, parentHolder.getAuthorisationType(), parent);
         if (authorisation.isPresent()) {
-            return CmsResponse.<ScaStatus>builder()
+            return CmsResponse.<Xs2aScaStatus>builder()
                        .payload(authorisation.get().getScaStatus())
                        .build();
         }
-        return CmsResponse.<ScaStatus>builder()
+        return CmsResponse.<Xs2aScaStatus>builder()
                    .error(LOGICAL_ERROR)
                    .build();
     }

@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.service.aspsp;
 
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.service.CommonPaymentDataService;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
 class AspspPaymentServiceInternalTest {
     private static final String DEFAULT_SERVICE_INSTANCE_ID = "UNDEFINED";
     private static final String PAYMENT_ID = "payment id";
-    private static final TransactionStatus TRANSACTION_STATUS = TransactionStatus.RJCT;
+    private static final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.RJCT;
 
     private PisCommonPaymentData pisCommonPaymentData;
 
@@ -81,7 +81,7 @@ class AspspPaymentServiceInternalTest {
 
     private PisCommonPaymentData buildPisCommonPaymentData() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RCVD);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisCommonPaymentData.setPaymentType(PaymentType.SINGLE);
         pisCommonPaymentData.setPaymentId(PAYMENT_ID);
         pisCommonPaymentData.setCreationTimestamp(OffsetDateTime.of(2018, 10, 10, 10, 10, 10, 10, ZoneOffset.UTC));

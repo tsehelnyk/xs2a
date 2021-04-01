@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.web.aspsp.controller;
 
 import de.adorsys.psd2.consent.aspsp.api.pis.AspspPaymentService;
 import de.adorsys.psd2.consent.web.aspsp.config.ObjectMapperTestConfig;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CmsAspspPisTransactionControllerTest {
     private final String PAYMENT_ID = "paymentID";
     private final String INSTANCE_ID = "UNDEFINED";
-    private final TransactionStatus TRANSACTION_STATUS = TransactionStatus.ACCC;
+    private final Xs2aTransactionStatus TRANSACTION_STATUS = Xs2aTransactionStatus.ACCC;
     private final String TRANSACTION_STATUS_NAME = TRANSACTION_STATUS.name();
     private final String UPDATE_PAYMENT_STATUS_URL = "/aspsp-api/v1/pis/transaction-status/paymentID/status/{transaction-status}";
 

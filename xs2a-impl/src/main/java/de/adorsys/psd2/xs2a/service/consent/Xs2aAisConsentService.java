@@ -26,11 +26,11 @@ import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.AisConsentServiceEncrypted;
 import de.adorsys.psd2.consent.api.service.ConsentServiceEncrypted;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aCreateAisConsentResponse;
@@ -115,7 +115,7 @@ public class Xs2aAisConsentService {
      * @param consentId     String representation of identifier of stored consent
      * @param consentStatus ConsentStatus the consent be changed to
      */
-    public void updateConsentStatus(String consentId, ConsentStatus consentStatus) {
+    public void updateConsentStatus(String consentId, Xs2aConsentStatus consentStatus) {
         CmsResponse<Boolean> statusUpdated;
 
         try {
@@ -171,7 +171,7 @@ public class Xs2aAisConsentService {
      * @param accountAccess AIS account access information
      * @return Response containing AIS Consent
      */
-    public CmsResponse<AisConsent> updateAspspAccountAccess(String consentId, AccountAccess accountAccess) {
+    public CmsResponse<AisConsent> updateAspspAccountAccess(String consentId, Xs2aConsentAccountAccess accountAccess) {
         CmsResponse<CmsConsent> response;
 
         CmsResponse.CmsResponseBuilder<AisConsent> builder = CmsResponse.builder();

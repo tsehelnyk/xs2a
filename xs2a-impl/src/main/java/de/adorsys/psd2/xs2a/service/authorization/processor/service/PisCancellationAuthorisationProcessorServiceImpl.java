@@ -23,12 +23,12 @@ import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aCurrencyConversionInfo;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
@@ -129,7 +129,7 @@ public class PisCancellationAuthorisationProcessorServiceImpl extends PaymentBas
     @Override
     Xs2aUpdatePisCommonPaymentPsuDataResponse executePaymentWithoutSca(AuthorisationProcessorRequest authorisationProcessorRequest,
                                                                        PsuIdData psuData, PaymentType paymentType, SpiPayment payment,
-                                                                       SpiContextData contextData, ScaStatus resultScaStatus, Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo) {
+                                                                       SpiContextData contextData, Xs2aScaStatus resultScaStatus, Xs2aCurrencyConversionInfo xs2aCurrencyConversionInfo) {
         Xs2aUpdatePisCommonPaymentPsuDataRequest request = (Xs2aUpdatePisCommonPaymentPsuDataRequest) authorisationProcessorRequest.getUpdateAuthorisationRequest();
         String authorisationId = request.getAuthorisationId();
         String paymentId = request.getPaymentId();
@@ -145,10 +145,10 @@ public class PisCancellationAuthorisationProcessorServiceImpl extends PaymentBas
             return new Xs2aUpdatePisCommonPaymentPsuDataResponse(errorHolder, paymentId, authorisationId, psuData);
         }
 
-        updatePaymentAfterSpiService.updatePaymentStatus(paymentId, TransactionStatus.CANC);
+        updatePaymentAfterSpiService.updatePaymentStatus(paymentId, Xs2aTransactionStatus.CANC);
         updatePaymentAfterSpiService.updateInternalPaymentStatus(paymentId, InternalPaymentStatus.CANCELLED_FINALISED);
 
-        return new Xs2aUpdatePisCommonPaymentPsuDataResponse(ScaStatus.FINALISED, paymentId, authorisationId, psuData);
+        return new Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus.FINALISED, paymentId, authorisationId, psuData);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class PisCancellationAuthorisationProcessorServiceImpl extends PaymentBas
 
     @Override
     void updatePaymentDataByPaymentResponse(String paymentId, SpiResponse<SpiPaymentExecutionResponse> spiResponse) {
-        updatePaymentAfterSpiService.updatePaymentStatus(paymentId, TransactionStatus.CANC);
+        updatePaymentAfterSpiService.updatePaymentStatus(paymentId, Xs2aTransactionStatus.CANC);
         updatePaymentAfterSpiService.updateInternalPaymentStatus(paymentId, InternalPaymentStatus.CANCELLED_FINALISED);
     }
 

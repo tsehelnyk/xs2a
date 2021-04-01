@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.psu.api;
 
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.Data;
 
 import java.time.OffsetDateTime;
@@ -27,7 +27,7 @@ import java.time.OffsetDateTime;
 public class CmsPsuAuthorisation {
     private String psuId;
     private String authorisationId;
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     private AuthorisationType type;
     private OffsetDateTime redirectUrlExpirationTimestamp;
     private OffsetDateTime authorisationExpirationTimestamp;

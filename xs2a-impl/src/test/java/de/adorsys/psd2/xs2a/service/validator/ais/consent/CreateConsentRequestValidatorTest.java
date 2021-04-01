@@ -16,12 +16,12 @@
 
 package de.adorsys.psd2.xs2a.service.validator.ais.consent;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.xs2a.core.ais.AccountAccessType;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -95,8 +95,8 @@ class CreateConsentRequestValidatorTest {
         when(supportedAccountReferenceValidator.validate(anyCollection()))
             .thenReturn(ValidationResult.invalid(SUPPORTED_ACCOUNT_REFERENCE_VALIDATION_ERROR));
 
-        AccountReference accountReference = buildAccountReference();
-        AccountAccess accountAccess = new AccountAccess(Collections.singletonList(accountReference), Collections.emptyList(), Collections.emptyList(), null);
+        Xs2aAccountReference accountReference = buildAccountReference();
+        Xs2aConsentAccountAccess accountAccess = new Xs2aConsentAccountAccess(Collections.singletonList(accountReference), Collections.emptyList(), Collections.emptyList(), null);
         CreateConsentReq createConsentReq = buildCreateConsentReqWithAccess(accountAccess, AccountAccessType.ALL_ACCOUNTS, null, null);
 
         //When
@@ -342,11 +342,11 @@ class CreateConsentRequestValidatorTest {
         assertThat(validationResult).isEqualTo(ValidationResult.invalid(ErrorType.AIS_400, SERVICE_INVALID_400));
     }
 
-    private AccountReference buildAccountReference() {
-        return new AccountReference(AccountReferenceType.IBAN, "some iban", Currency.getInstance("EUR"));
+    private Xs2aAccountReference buildAccountReference() {
+        return new Xs2aAccountReference(AccountReferenceType.IBAN, "some iban", Currency.getInstance("EUR"));
     }
 
-    private CreateConsentReq buildCreateConsentReqWithAccess(AccountAccess accountAccess, AccountAccessType availableAccounts, AccountAccessType allPsd2, AccountAccessType availableAccountsWithBalance) {
+    private CreateConsentReq buildCreateConsentReqWithAccess(Xs2aConsentAccountAccess accountAccess, AccountAccessType availableAccounts, AccountAccessType allPsd2, AccountAccessType availableAccountsWithBalance) {
         CreateConsentReq createConsentReq = buildCreateConsentReqWithCombinedServiceIndicator(false, availableAccounts, allPsd2, availableAccountsWithBalance);
         createConsentReq.setAccess(accountAccess);
         return createConsentReq;
@@ -368,7 +368,7 @@ class CreateConsentRequestValidatorTest {
         createConsentReq.setValidUntil(validUntil);
         createConsentReq.setRecurringIndicator(recurringIndicator);
         createConsentReq.setFrequencyPerDay(frequencyPerDay);
-        AccountAccess accountAccess = new AccountAccess(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), null);
+        Xs2aConsentAccountAccess accountAccess = new Xs2aConsentAccountAccess(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), null);
         createConsentReq.setAccess(accountAccess);
         createConsentReq.setAvailableAccounts(availableAccounts);
         createConsentReq.setAllPsd2(allPsd2);
@@ -378,7 +378,7 @@ class CreateConsentRequestValidatorTest {
 
     private CreateConsentReq buildCreateConsentReqWithoutFlagsAndAccesses(boolean recurringIndicator, int frequencyPerDay, AccountAccessType availableAccounts, AccountAccessType allPsd2, AccountAccessType availableAccountsWithBalance) {
         CreateConsentReq createConsentReq = buildCreateConsentReq(recurringIndicator, frequencyPerDay, availableAccounts, allPsd2, availableAccountsWithBalance);
-        AccountAccess accountAccess = new AccountAccess(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), null);
+        Xs2aConsentAccountAccess accountAccess = new Xs2aConsentAccountAccess(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), null);
         createConsentReq.setAccess(accountAccess);
         return createConsentReq;
     }

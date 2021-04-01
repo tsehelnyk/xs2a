@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.spi.domain.payment.response;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +35,7 @@ public class SpiGetPaymentStatusResponse {
      * The current transaction status of the requested payment.
      */
     @NotNull
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
 
     /**
      * The funds available check indicates, whether funds are available for said customer. The data element is contained

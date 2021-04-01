@@ -24,7 +24,7 @@ import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.integration.config.IntegrationTestConfiguration;
 import de.adorsys.psd2.consent.repository.PisCommonPaymentDataRepository;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
@@ -94,14 +94,14 @@ class PisCommonPaymentIT {
         assertEquals(savedEntity.getStatusChangeTimestamp(), savedEntity.getCreationTimestamp());
 
         // When
-        pisCommonPaymentService.updateCommonPaymentStatusById(savedEntity.getPaymentId(), TransactionStatus.RJCT);
+        pisCommonPaymentService.updateCommonPaymentStatusById(savedEntity.getPaymentId(), Xs2aTransactionStatus.RJCT);
         flushAndClearPersistenceContext();
 
         // Then
         // Second, we update the status and check it and the updated timestamp
         entities = pisCommonPaymentDataRepository.findAll();
         PisCommonPaymentData updatedEntity = entities.iterator().next();
-        assertEquals(TransactionStatus.RJCT, updatedEntity.getTransactionStatus());
+        assertEquals(Xs2aTransactionStatus.RJCT, updatedEntity.getTransactionStatus());
         assertTrue(updatedEntity.getStatusChangeTimestamp().isAfter(updatedEntity.getCreationTimestamp()));
     }
 
@@ -121,14 +121,14 @@ class PisCommonPaymentIT {
         assertEquals(savedEntity.getStatusChangeTimestamp(), savedEntity.getCreationTimestamp());
 
         // When
-        pisCommonPaymentService.updateCommonPaymentStatusById(savedEntity.getPaymentId(), TransactionStatus.RCVD);
+        pisCommonPaymentService.updateCommonPaymentStatusById(savedEntity.getPaymentId(), Xs2aTransactionStatus.RCVD);
         flushAndClearPersistenceContext();
 
         // Then
         // Second, we update the status and check it and the updated timestamp
         entities = pisCommonPaymentDataRepository.findAll();
         PisCommonPaymentData updatedEntity = entities.iterator().next();
-        assertEquals(TransactionStatus.RCVD, updatedEntity.getTransactionStatus());
+        assertEquals(Xs2aTransactionStatus.RCVD, updatedEntity.getTransactionStatus());
         assertEquals(updatedEntity.getStatusChangeTimestamp(), updatedEntity.getCreationTimestamp());
     }
 
@@ -163,7 +163,7 @@ class PisCommonPaymentIT {
         pisPaymentInfo.setTppInfo(buildTppInfo());
         pisPaymentInfo.setPsuDataList(buildPsuIdDataList());
         pisPaymentInfo.setPaymentId(PAYMENT_ID);
-        pisPaymentInfo.setTransactionStatus(TransactionStatus.RCVD);
+        pisPaymentInfo.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisPaymentInfo.setInternalPaymentStatus(InternalPaymentStatus.INITIATED);
         pisPaymentInfo.setInstanceId(DEFAULT_SERVICE_INSTANCE_ID);
         return pisPaymentInfo;

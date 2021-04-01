@@ -16,11 +16,11 @@
 
 package de.adorsys.psd2.xs2a.web.link;
 
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.profile.ScaRedirectFlow;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aConfirmationOfFundsResponse;
 import de.adorsys.psd2.xs2a.service.RedirectIdService;
@@ -44,10 +44,10 @@ class CreatePiisConsentLinksTest {
     private static final String CONFIRMATION_LINK = "confirmation_link";
     private static final String INTERNAL_REQUEST_ID = "5c2d5564-367f-4e03-a621-6bef76fa4208";
 
-    private static final HrefType SELF = new HrefType("http://url/v2/consents/confirmation-of-funds/9mp1PaotpXSToNCi");
-    private static final HrefType STATUS = new HrefType("http://url/v2/consents/confirmation-of-funds/9mp1PaotpXSToNCi/status");
-    private static final HrefType START_AUTHORISATION_WITH_PSU_AUTHENTICATION = new HrefType("http://url/v2/consents/confirmation-of-funds/9mp1PaotpXSToNCi/authorisations");
-    private static final HrefType SCA_STATUS = new HrefType("http://url/v2/consents/confirmation-of-funds/9mp1PaotpXSToNCi/authorisations/463318a0-1e33-45d8-8209-e16444b18dda");
+    private static final Xs2aHrefType SELF = new Xs2aHrefType("http://url/v2/consents/confirmation-of-funds/9mp1PaotpXSToNCi");
+    private static final Xs2aHrefType STATUS = new Xs2aHrefType("http://url/v2/consents/confirmation-of-funds/9mp1PaotpXSToNCi/status");
+    private static final Xs2aHrefType START_AUTHORISATION_WITH_PSU_AUTHENTICATION = new Xs2aHrefType("http://url/v2/consents/confirmation-of-funds/9mp1PaotpXSToNCi/authorisations");
+    private static final Xs2aHrefType SCA_STATUS = new Xs2aHrefType("http://url/v2/consents/confirmation-of-funds/9mp1PaotpXSToNCi/authorisations/463318a0-1e33-45d8-8209-e16444b18dda");
 
     @Mock
     private ScaApproachResolver scaApproachResolver;
@@ -65,7 +65,7 @@ class CreatePiisConsentLinksTest {
     void setUp() {
         expectedLinks = new Links();
 
-        response = new Xs2aConfirmationOfFundsResponse(ConsentStatus.RECEIVED.getValue(), CONSENT_ID, false, INTERNAL_REQUEST_ID, null);
+        response = new Xs2aConfirmationOfFundsResponse(Xs2aConsentStatus.RECEIVED.getValue(), CONSENT_ID, false, INTERNAL_REQUEST_ID, null);
         response.setAuthorizationId(AUTHORISATION_ID);
     }
 
@@ -247,7 +247,7 @@ class CreatePiisConsentLinksTest {
 
         expectedLinks.setSelf(SELF);
         expectedLinks.setStatus(STATUS);
-        expectedLinks.setScaRedirect(new HrefType(REDIRECT_LINK));
+        expectedLinks.setScaRedirect(new Xs2aHrefType(REDIRECT_LINK));
         expectedLinks.setScaStatus(SCA_STATUS);
         assertEquals(expectedLinks, links);
     }
@@ -265,9 +265,9 @@ class CreatePiisConsentLinksTest {
 
         expectedLinks.setSelf(SELF);
         expectedLinks.setStatus(STATUS);
-        expectedLinks.setScaRedirect(new HrefType(REDIRECT_LINK));
+        expectedLinks.setScaRedirect(new Xs2aHrefType(REDIRECT_LINK));
         expectedLinks.setScaStatus(SCA_STATUS);
-        expectedLinks.setConfirmation(new HrefType("http://url/confirmation_link"));
+        expectedLinks.setConfirmation(new Xs2aHrefType("http://url/confirmation_link"));
 
         // Then
         assertEquals(expectedLinks, links);

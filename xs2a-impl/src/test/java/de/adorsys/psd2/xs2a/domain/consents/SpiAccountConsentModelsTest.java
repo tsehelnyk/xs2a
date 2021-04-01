@@ -17,9 +17,9 @@
 package de.adorsys.psd2.xs2a.domain.consents;
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentReq;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
@@ -126,7 +126,7 @@ class SpiAccountConsentModelsTest {
 
     private CreateConsentReq getAicNoDedicatedAccountRequest() {
 
-        AccountAccess accountAccess = new AccountAccess(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), null);
+        Xs2aConsentAccountAccess accountAccess = new Xs2aConsentAccountAccess(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), null);
 
         CreateConsentReq aicRequestObj = new CreateConsentReq();
         aicRequestObj.setAccess(accountAccess);
@@ -139,26 +139,26 @@ class SpiAccountConsentModelsTest {
 
     private CreateConsentReq getCreateConsentsRequestTest() {
 
-        AccountReference iban1 = new AccountReference();
+        Xs2aAccountReference iban1 = new Xs2aAccountReference();
         iban1.setIban("DE2310010010123456789");
 
-        AccountReference iban2 = new AccountReference();
+        Xs2aAccountReference iban2 = new Xs2aAccountReference();
         iban2.setIban("DE2310010010123456790");
         iban2.setCurrency(Currency.getInstance("USD"));
 
-        AccountReference iban3 = new AccountReference();
+        Xs2aAccountReference iban3 = new Xs2aAccountReference();
         iban3.setIban("DE2310010010123456788");
 
-        AccountReference iban4 = new AccountReference();
+        Xs2aAccountReference iban4 = new Xs2aAccountReference();
         iban4.setIban("DE2310010010123456789");
 
-        AccountReference maskedPan = new AccountReference();
+        Xs2aAccountReference maskedPan = new Xs2aAccountReference();
         maskedPan.setMaskedPan("123456xxxxxx1234");
 
-        List<AccountReference> balances = Arrays.asList(iban1, iban2, iban3);
-        List<AccountReference> transactions = Arrays.asList(iban4, maskedPan);
+        List<Xs2aAccountReference> balances = Arrays.asList(iban1, iban2, iban3);
+        List<Xs2aAccountReference> transactions = Arrays.asList(iban4, maskedPan);
 
-        AccountAccess accountAccess = new AccountAccess(Collections.emptyList(), balances, transactions, null);
+        Xs2aConsentAccountAccess accountAccess = new Xs2aConsentAccountAccess(Collections.emptyList(), balances, transactions, null);
 
         CreateConsentReq aicRequestObj = new CreateConsentReq();
         aicRequestObj.setAccess(accountAccess);

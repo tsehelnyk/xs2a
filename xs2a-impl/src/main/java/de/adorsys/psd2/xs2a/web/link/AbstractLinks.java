@@ -16,9 +16,9 @@
 
 package de.adorsys.psd2.xs2a.web.link;
 
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -36,27 +36,27 @@ class AbstractLinks extends Links {
         this.httpUrl = httpUrl;
     }
 
-    HrefType buildPath(String path, Object... params) {
+    Xs2aHrefType buildPath(String path, Object... params) {
         UriComponentsBuilder uriComponentsBuilder = StringUtils.startsWith(httpUrl, "/")
                                                         ? fromPath(httpUrl)
                                                         : fromHttpUrl(httpUrl);
-        return new HrefType(uriComponentsBuilder
+        return new Xs2aHrefType(uriComponentsBuilder
                                 .path(path)
                                 .buildAndExpand(params)
                                 .toUriString());
     }
 
-    protected boolean isScaStatusMethodSelected(AuthenticationObject chosenScaMethod, ScaStatus scaStatus) {
+    protected boolean isScaStatusMethodSelected(Xs2aAuthenticationObject chosenScaMethod, Xs2aScaStatus scaStatus) {
         return chosenScaMethod != null
-                   && scaStatus == ScaStatus.SCAMETHODSELECTED;
+                   && scaStatus == Xs2aScaStatus.SCAMETHODSELECTED;
     }
 
-    protected boolean isScaStatusMethodAuthenticated(ScaStatus scaStatus) {
-        return scaStatus == ScaStatus.PSUAUTHENTICATED;
+    protected boolean isScaStatusMethodAuthenticated(Xs2aScaStatus scaStatus) {
+        return scaStatus == Xs2aScaStatus.PSUAUTHENTICATED;
     }
 
-    protected boolean isScaStatusMethodIdentified(ScaStatus scaStatus) {
-        return scaStatus == ScaStatus.PSUIDENTIFIED;
+    protected boolean isScaStatusMethodIdentified(Xs2aScaStatus scaStatus) {
+        return scaStatus == Xs2aScaStatus.PSUIDENTIFIED;
     }
 
     @Override

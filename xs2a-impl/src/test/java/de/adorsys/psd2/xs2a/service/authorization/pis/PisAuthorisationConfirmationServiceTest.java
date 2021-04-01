@@ -28,10 +28,10 @@ import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.error.TppMessage;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
@@ -111,9 +111,9 @@ class PisAuthorisationConfirmationServiceTest {
         // given
         PsuIdData psuIdData = buildPsuIdData();
         Xs2aUpdatePisCommonPaymentPsuDataRequest request = buildUpdatePisCommonPaymentPsuDataRequest();
-        TransactionStatus transactionStatus = TransactionStatus.ACSP;
+        Xs2aTransactionStatus transactionStatus = Xs2aTransactionStatus.ACSP;
         Xs2aUpdatePisCommonPaymentPsuDataResponse expectedResult = new Xs2aUpdatePisCommonPaymentPsuDataResponse(
-            ScaStatus.FINALISED, PAYMENT_ID, AUTHORISATION_ID, psuIdData, null);
+            Xs2aScaStatus.FINALISED, PAYMENT_ID, AUTHORISATION_ID, psuIdData, null);
         Authorisation authorisationResponse = buildGetPisAuthorisationResponse();
 
         SpiCheckConfirmationCodeRequest spiCheckConfirmationCodeRequest = new SpiCheckConfirmationCodeRequest(request.getConfirmationCode(), AUTHORISATION_ID);
@@ -138,7 +138,7 @@ class PisAuthorisationConfirmationServiceTest {
             .thenReturn(aspspConsentDataProvider);
         when(pisCheckAuthorisationConfirmationService.checkConfirmationCode(contextData, spiCheckConfirmationCodeRequest, SPI_SINGLE_PAYMENT, aspspConsentDataProvider))
             .thenReturn(SpiResponse.<SpiPaymentConfirmationCodeValidationResponse>builder()
-                            .payload(new SpiPaymentConfirmationCodeValidationResponse(ScaStatus.FINALISED, transactionStatus))
+                            .payload(new SpiPaymentConfirmationCodeValidationResponse(Xs2aScaStatus.FINALISED, transactionStatus))
                             .build());
 
         SpiAmount spiAmount = new SpiAmount(Currency.getInstance("EUR"), BigDecimal.valueOf(34));
@@ -162,7 +162,7 @@ class PisAuthorisationConfirmationServiceTest {
         PsuIdData psuIdData = buildPsuIdData();
         Xs2aUpdatePisCommonPaymentPsuDataRequest request = buildUpdatePisCommonPaymentPsuDataRequest();
         Xs2aUpdatePisCommonPaymentPsuDataResponse expectedResult = new Xs2aUpdatePisCommonPaymentPsuDataResponse(
-            ScaStatus.FINALISED, PAYMENT_ID, AUTHORISATION_ID, psuIdData, null);
+            Xs2aScaStatus.FINALISED, PAYMENT_ID, AUTHORISATION_ID, psuIdData, null);
         Authorisation authorisationResponse = buildGetPisAuthorisationResponse();
 
         when(aspspProfileServiceWrapper.isAuthorisationConfirmationCheckByXs2a()).thenReturn(true);
@@ -179,7 +179,7 @@ class PisAuthorisationConfirmationServiceTest {
             .thenReturn(SPI_SINGLE_PAYMENT);
 
         SpiContextData contextData = getSpiContextData();
-        SpiPaymentConfirmationCodeValidationResponse response = new SpiPaymentConfirmationCodeValidationResponse(ScaStatus.FINALISED, TransactionStatus.ACSP);
+        SpiPaymentConfirmationCodeValidationResponse response = new SpiPaymentConfirmationCodeValidationResponse(Xs2aScaStatus.FINALISED, Xs2aTransactionStatus.ACSP);
         SpiResponse<SpiPaymentConfirmationCodeValidationResponse> spiResponse = SpiResponse.<SpiPaymentConfirmationCodeValidationResponse>builder().payload(response).build();
         when(aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(PAYMENT_ID)).thenReturn(aspspConsentDataProvider);
         when(spiContextDataProvider.provideWithPsuIdData(psuIdData)).thenReturn(contextData);
@@ -236,7 +236,7 @@ class PisAuthorisationConfirmationServiceTest {
 
 
         Authorisation authorisationResponse = buildGetPisAuthorisationResponse();
-        authorisationResponse.setScaStatus(ScaStatus.FAILED);
+        authorisationResponse.setScaStatus(Xs2aScaStatus.FAILED);
 
         when(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID)).thenReturn(CmsResponse.<Authorisation>builder()
                                                                                                   .payload(authorisationResponse)
@@ -277,7 +277,7 @@ class PisAuthorisationConfirmationServiceTest {
             .thenReturn(SPI_SINGLE_PAYMENT);
 
         SpiContextData contextData = getSpiContextData();
-        SpiPaymentConfirmationCodeValidationResponse response = new SpiPaymentConfirmationCodeValidationResponse(ScaStatus.FAILED, TransactionStatus.RJCT);
+        SpiPaymentConfirmationCodeValidationResponse response = new SpiPaymentConfirmationCodeValidationResponse(Xs2aScaStatus.FAILED, Xs2aTransactionStatus.RJCT);
         SpiResponse<SpiPaymentConfirmationCodeValidationResponse> spiResponse = SpiResponse.<SpiPaymentConfirmationCodeValidationResponse>builder().payload(response).build();
         when(aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(PAYMENT_ID)).thenReturn(aspspConsentDataProvider);
         when(spiContextDataProvider.provideWithPsuIdData(psuIdData)).thenReturn(contextData);
@@ -394,7 +394,7 @@ class PisAuthorisationConfirmationServiceTest {
         Authorisation response = new Authorisation();
         response.setAuthorisationId(AUTHORISATION_ID);
         response.setParentId(PAYMENT_ID);
-        response.setScaStatus(ScaStatus.UNCONFIRMED);
+        response.setScaStatus(Xs2aScaStatus.UNCONFIRMED);
         response.setScaAuthenticationData(CONFIRMATION_CODE);
         response.setAuthorisationType(AuthorisationType.PIS_CREATION);
         response.setScaAuthenticationData(SCA_AUTHENTICATION_DATA);
@@ -409,7 +409,7 @@ class PisAuthorisationConfirmationServiceTest {
         request.setConfirmationCode(CONFIRMATION_CODE);
         request.setPaymentId(PAYMENT_ID);
         request.setAuthorisationId(AUTHORISATION_ID);
-        request.setScaStatus(ScaStatus.UNCONFIRMED);
+        request.setScaStatus(Xs2aScaStatus.UNCONFIRMED);
         request.setPsuData(buildPsuIdData());
         request.setPaymentProduct(PAYMENT_PRODUCT);
         request.setPaymentService(PaymentType.SINGLE);

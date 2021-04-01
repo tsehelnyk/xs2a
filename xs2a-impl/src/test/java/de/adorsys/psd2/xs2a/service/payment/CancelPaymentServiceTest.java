@@ -22,9 +22,9 @@ import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.error.TppMessage;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.CancellationAuthorisationResponse;
@@ -58,7 +58,7 @@ import java.util.UUID;
 import static de.adorsys.psd2.xs2a.core.domain.TppMessageInformation.of;
 import static de.adorsys.psd2.xs2a.core.error.ErrorType.*;
 import static de.adorsys.psd2.xs2a.core.error.MessageErrorCode.RESOURCE_UNKNOWN_404_NO_PAYMENT;
-import static de.adorsys.psd2.xs2a.core.pis.TransactionStatus.*;
+import static de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -109,9 +109,9 @@ class CancelPaymentServiceTest {
         SpiPayment spiPayment = getSpiPayment(ACTC);
         when(paymentCancellationSpi.initiatePaymentCancellation(any(), eq(spiPayment), any()))
             .thenReturn(SpiResponse.<SpiPaymentCancellationResponse>builder()
-                            .payload(getSpiCancelPaymentResponse(false, TransactionStatus.ACTC))
+                            .payload(getSpiCancelPaymentResponse(false, Xs2aTransactionStatus.ACTC))
                             .build());
-        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(false, TransactionStatus.ACTC), getSpiPayment(ACTC), ENCRYPTED_PAYMENT_ID))
+        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(false, Xs2aTransactionStatus.ACTC), getSpiPayment(ACTC), ENCRYPTED_PAYMENT_ID))
             .thenReturn(getCancelPaymentResponse(false, ACTC));
         when(paymentCancellationAuthorisationNeededDecider.isNoScaRequired(false))
             .thenReturn(true);
@@ -156,10 +156,10 @@ class CancelPaymentServiceTest {
 
         when(paymentCancellationSpi.initiatePaymentCancellation(any(), eq(spiPayment), any()))
             .thenReturn(SpiResponse.<SpiPaymentCancellationResponse>builder()
-                            .payload(getSpiCancelPaymentResponse(false, TransactionStatus.ACTC))
+                            .payload(getSpiCancelPaymentResponse(false, Xs2aTransactionStatus.ACTC))
                             .build());
 
-        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(false, TransactionStatus.ACTC), getSpiPayment(ACTC), ENCRYPTED_PAYMENT_ID))
+        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(false, Xs2aTransactionStatus.ACTC), getSpiPayment(ACTC), ENCRYPTED_PAYMENT_ID))
             .thenReturn(getCancelPaymentResponse(false, ACTC));
 
         when(paymentCancellationAuthorisationNeededDecider.isNoScaRequired(false))
@@ -186,7 +186,7 @@ class CancelPaymentServiceTest {
             .thenReturn(SpiResponse.<SpiPaymentCancellationResponse>builder()
                             .payload(getSpiCancelPaymentResponse(false, CANC))
                             .build());
-        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(false, TransactionStatus.CANC), getSpiPayment(CANC), ENCRYPTED_PAYMENT_ID))
+        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(false, Xs2aTransactionStatus.CANC), getSpiPayment(CANC), ENCRYPTED_PAYMENT_ID))
             .thenReturn(getCancelPaymentResponse(false, CANC));
 
         // When
@@ -241,9 +241,9 @@ class CancelPaymentServiceTest {
         SpiPayment spiPayment = getSpiPayment(ACTC);
         when(paymentCancellationSpi.initiatePaymentCancellation(any(), eq(spiPayment), any()))
             .thenReturn(SpiResponse.<SpiPaymentCancellationResponse>builder()
-                            .payload(getSpiCancelPaymentResponse(true, TransactionStatus.ACTC))
+                            .payload(getSpiCancelPaymentResponse(true, Xs2aTransactionStatus.ACTC))
                             .build());
-        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(true, TransactionStatus.ACTC), getSpiPayment(ACTC), ENCRYPTED_PAYMENT_ID))
+        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(true, Xs2aTransactionStatus.ACTC), getSpiPayment(ACTC), ENCRYPTED_PAYMENT_ID))
             .thenReturn(getCancelPaymentResponse(true, ACTC));
 
         when(paymentCancellationAuthorisationNeededDecider.isNoScaRequired(true))
@@ -340,10 +340,10 @@ class CancelPaymentServiceTest {
     @Test
     void initiatePaymentCancellation_authorisationRequired_implicit_shouldReturnResponseFromSpi() {
         SpiPayment spiPayment = getSpiPayment(ACTC);
-        Xs2aCreatePisCancellationAuthorisationResponse cancellationResponse = new Xs2aCreatePisCancellationAuthorisationResponse(AUTHORISATION_ID, ScaStatus.RECEIVED, spiPayment.getPaymentType(), INTERNAL_REQUEST_ID);
+        Xs2aCreatePisCancellationAuthorisationResponse cancellationResponse = new Xs2aCreatePisCancellationAuthorisationResponse(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, spiPayment.getPaymentType(), INTERNAL_REQUEST_ID);
         CancelPaymentResponse cancelPaymentResponseExpected = getCancelPaymentResponse(true, ACTC);
         cancelPaymentResponseExpected.setAuthorizationId(AUTHORISATION_ID);
-        cancelPaymentResponseExpected.setScaStatus(ScaStatus.RECEIVED);
+        cancelPaymentResponseExpected.setScaStatus(Xs2aScaStatus.RECEIVED);
 
         when(spiContextDataProvider.provide()).thenReturn(SPI_CONTEXT_DATA);
         when(requestProviderService.getInternalRequestId()).thenReturn(UUID.fromString(INTERNAL_REQUEST_ID));
@@ -352,12 +352,12 @@ class CancelPaymentServiceTest {
             .thenReturn(ResponseObject.<CancellationAuthorisationResponse>builder()
                             .body(cancellationResponse)
                             .build());
-        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(true, TransactionStatus.ACTC), getSpiPayment(ACTC), ENCRYPTED_PAYMENT_ID))
+        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(true, Xs2aTransactionStatus.ACTC), getSpiPayment(ACTC), ENCRYPTED_PAYMENT_ID))
             .thenReturn(getCancelPaymentResponse(true, ACTC));
 
         when(paymentCancellationSpi.initiatePaymentCancellation(any(), eq(spiPayment), any()))
             .thenReturn(SpiResponse.<SpiPaymentCancellationResponse>builder()
-                            .payload(getSpiCancelPaymentResponse(true, TransactionStatus.ACTC))
+                            .payload(getSpiCancelPaymentResponse(true, Xs2aTransactionStatus.ACTC))
                             .build());
 
         when(paymentCancellationAuthorisationNeededDecider.isNoScaRequired(true))
@@ -389,9 +389,9 @@ class CancelPaymentServiceTest {
 
         when(paymentCancellationSpi.initiatePaymentCancellation(any(), eq(spiPayment), any()))
             .thenReturn(SpiResponse.<SpiPaymentCancellationResponse>builder()
-                            .payload(getSpiCancelPaymentResponse(true, TransactionStatus.ACTC))
+                            .payload(getSpiCancelPaymentResponse(true, Xs2aTransactionStatus.ACTC))
                             .build());
-        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(true, TransactionStatus.ACTC), getSpiPayment(ACTC), ENCRYPTED_PAYMENT_ID))
+        when(spiToXs2aCancelPaymentMapper.mapToCancelPaymentResponse(getSpiCancelPaymentResponse(true, Xs2aTransactionStatus.ACTC), getSpiPayment(ACTC), ENCRYPTED_PAYMENT_ID))
             .thenReturn(getCancelPaymentResponse(true, ACTC));
 
         when(paymentCancellationAuthorisationNeededDecider.isNoScaRequired(true))
@@ -409,14 +409,14 @@ class CancelPaymentServiceTest {
         assertThat(response.getError().getErrorType()).isEqualTo(PIS_CANC_405);
     }
 
-    private SpiPaymentCancellationResponse getSpiCancelPaymentResponse(boolean authorisationRequired, TransactionStatus transactionStatus) {
+    private SpiPaymentCancellationResponse getSpiCancelPaymentResponse(boolean authorisationRequired, Xs2aTransactionStatus transactionStatus) {
         SpiPaymentCancellationResponse response = new SpiPaymentCancellationResponse();
         response.setCancellationAuthorisationMandated(authorisationRequired);
         response.setTransactionStatus(transactionStatus);
         return response;
     }
 
-    private CancelPaymentResponse getCancelPaymentResponse(boolean authorisationRequired, TransactionStatus transactionStatus) {
+    private CancelPaymentResponse getCancelPaymentResponse(boolean authorisationRequired, Xs2aTransactionStatus transactionStatus) {
         CancelPaymentResponse response = new CancelPaymentResponse();
         response.setStartAuthorisationRequired(authorisationRequired);
         response.setTransactionStatus(transactionStatus);
@@ -428,7 +428,7 @@ class CancelPaymentServiceTest {
         return response;
     }
 
-    private SpiPayment getSpiPayment(TransactionStatus transactionStatus) {
+    private SpiPayment getSpiPayment(Xs2aTransactionStatus transactionStatus) {
         SpiSinglePayment spiSinglePayment = new SpiSinglePayment("sepa-credit-transfers");
         spiSinglePayment.setPaymentId(PAYMENT_ID);
         spiSinglePayment.setPaymentStatus(transactionStatus);

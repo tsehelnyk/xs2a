@@ -21,6 +21,7 @@ import de.adorsys.psd2.consent.api.pis.*;
 import de.adorsys.psd2.core.payment.model.*;
 import de.adorsys.psd2.xs2a.core.pis.PisDayOfExecution;
 import de.adorsys.psd2.xs2a.core.pis.PisExecutionRule;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -42,7 +43,7 @@ public class CmsCommonPaymentMapperSupportImpl implements CmsCommonPaymentMapper
 
     @Override
     public CmsBasePaymentResponse mapToCmsSinglePayment(CmsCommonPayment cmsCommonPayment) {
-        PaymentInitiationJson payment = convert(cmsCommonPayment.getPaymentData(), PaymentInitiationJson.class);
+        Xs2aPisPaymentInitiationJson payment = convert(cmsCommonPayment.getPaymentData(), Xs2aPisPaymentInitiationJson.class);
         if (payment == null) {
             return null;
         }
@@ -51,7 +52,7 @@ public class CmsCommonPaymentMapperSupportImpl implements CmsCommonPaymentMapper
 
     @Override
     public CmsBasePaymentResponse mapToCmsBulkPayment(CmsCommonPayment cmsCommonPayment) {
-        BulkPaymentInitiationJson payment = convert(cmsCommonPayment.getPaymentData(), BulkPaymentInitiationJson.class);
+        Xs2aPisBulkPaymentInitiationJson payment = convert(cmsCommonPayment.getPaymentData(), Xs2aPisBulkPaymentInitiationJson.class);
         if (payment == null) {
             return null;
         }
@@ -60,7 +61,7 @@ public class CmsCommonPaymentMapperSupportImpl implements CmsCommonPaymentMapper
 
     @Override
     public CmsBasePaymentResponse mapToCmsPeriodicPayment(CmsCommonPayment cmsCommonPayment) {
-        PeriodicPaymentInitiationJson payment = convert(cmsCommonPayment.getPaymentData(), PeriodicPaymentInitiationJson.class);
+        Xs2aPisPeriodicPaymentInitiationJson payment = convert(cmsCommonPayment.getPaymentData(), Xs2aPisPeriodicPaymentInitiationJson.class);
         if (payment == null) {
             return null;
         }
@@ -68,7 +69,7 @@ public class CmsCommonPaymentMapperSupportImpl implements CmsCommonPaymentMapper
         return mapToCmsPeriodicPayment(payment, cmsCommonPayment);
     }
 
-    private CmsPeriodicPayment mapToCmsPeriodicPayment(PeriodicPaymentInitiationJson periodicPaymentInitiationJson, CmsCommonPayment cmsCommonPayment) {
+    private CmsPeriodicPayment mapToCmsPeriodicPayment(Xs2aPisPeriodicPaymentInitiationJson periodicPaymentInitiationJson, CmsCommonPayment cmsCommonPayment) {
 
         CmsPeriodicPayment periodicPayment = new CmsPeriodicPayment(cmsCommonPayment.getPaymentProduct());
         fillBasePaymentFields(periodicPayment, cmsCommonPayment);
@@ -98,7 +99,7 @@ public class CmsCommonPaymentMapperSupportImpl implements CmsCommonPaymentMapper
         return periodicPayment;
     }
 
-    private CmsBulkPayment mapToCmsBulkPayment(BulkPaymentInitiationJson bulkPaymentInitiationJson, CmsCommonPayment cmsCommonPayment) {
+    private CmsBulkPayment mapToCmsBulkPayment(Xs2aPisBulkPaymentInitiationJson bulkPaymentInitiationJson, CmsCommonPayment cmsCommonPayment) {
 
         CmsBulkPayment bulkPayment = new CmsBulkPayment();
         fillBasePaymentFields(bulkPayment, cmsCommonPayment);
@@ -117,7 +118,7 @@ public class CmsCommonPaymentMapperSupportImpl implements CmsCommonPaymentMapper
         return bulkPayment;
     }
 
-    private CmsSinglePayment mapToCmsSinglePayment(PaymentInitiationJson paymentInitiationJson, CmsCommonPayment cmsCommonPayment) {
+    private CmsSinglePayment mapToCmsSinglePayment(Xs2aPisPaymentInitiationJson paymentInitiationJson, CmsCommonPayment cmsCommonPayment) {
         CmsSinglePayment singlePayment = new CmsSinglePayment(cmsCommonPayment.getPaymentProduct());
         fillBasePaymentFields(singlePayment, cmsCommonPayment);
         singlePayment.setEndToEndIdentification(paymentInitiationJson.getEndToEndIdentification());
@@ -139,7 +140,7 @@ public class CmsCommonPaymentMapperSupportImpl implements CmsCommonPaymentMapper
         singlePayment.setTppBrandLoggingInformation(cmsCommonPayment.getTppBrandLoggingInformation());
         singlePayment.setRemittanceInformationStructuredArray(mapToCmsRemittanceList(paymentInitiationJson.getRemittanceInformationStructuredArray()));
         singlePayment.setChargeBearer(Optional.ofNullable(paymentInitiationJson.getChargeBearer())
-                                          .map(ChargeBearer::toString)
+                                          .map(Xs2aPisChargeBearer::toString)
                                           .orElse(null));
         return singlePayment;
     }
@@ -185,7 +186,7 @@ public class CmsCommonPaymentMapperSupportImpl implements CmsCommonPaymentMapper
                    .collect(Collectors.toList());
     }
 
-    private CmsAddress mapToCmsAddress(Address pisAddress) {
+    private CmsAddress mapToCmsAddress(Xs2aPisAddress pisAddress) {
         return Optional.ofNullable(pisAddress)
                    .map(adr -> {
                        CmsAddress cmsAddress = new CmsAddress();
@@ -198,9 +199,9 @@ public class CmsCommonPaymentMapperSupportImpl implements CmsCommonPaymentMapper
                    }).orElse(null);
     }
 
-    private de.adorsys.psd2.xs2a.core.profile.AccountReference mapToAccountReference(AccountReference pisAccountReference) {
+    private Xs2aAccountReference mapToAccountReference(Xs2aPisAccountReference pisAccountReference) {
         return Optional.ofNullable(pisAccountReference)
-                   .map(ref -> new de.adorsys.psd2.xs2a.core.profile.AccountReference(null,
+                   .map(ref -> new Xs2aAccountReference(null,
                                                                                       null,
                                                                                       ref.getIban(),
                                                                                       ref.getBban(),
@@ -212,22 +213,22 @@ public class CmsCommonPaymentMapperSupportImpl implements CmsCommonPaymentMapper
                    ).orElse(null);
     }
 
-    private de.adorsys.psd2.xs2a.core.pis.FrequencyCode mapToFrequencyCode(FrequencyCode frequency) {
+    private de.adorsys.psd2.xs2a.core.pis.FrequencyCode mapToFrequencyCode(de.adorsys.psd2.core.payment.model.FrequencyCode frequency) {
         return de.adorsys.psd2.xs2a.core.pis.FrequencyCode.valueOf(frequency.name());
     }
 
-    private PisDayOfExecution mapToPisDayOfExecution(DayOfExecution dayOfExecution) {
-        return Optional.ofNullable(dayOfExecution).map(DayOfExecution::toString).map(PisDayOfExecution::fromValue).orElse(null);
+    private PisDayOfExecution mapToPisDayOfExecution(Xs2aPisDayOfExecution dayOfExecution) {
+        return Optional.ofNullable(dayOfExecution).map(Xs2aPisDayOfExecution::toString).map(PisDayOfExecution::fromValue).orElse(null);
     }
 
-    private Optional<PisExecutionRule> mapToPisExecutionRule(ExecutionRule executionRule) {
+    private Optional<PisExecutionRule> mapToPisExecutionRule(Xs2aPisExecutionRule executionRule) {
         return Optional.ofNullable(executionRule)
-                   .map(ExecutionRule::toString)
+                   .map(Xs2aPisExecutionRule::toString)
                    .flatMap(PisExecutionRule::getByValue);
     }
 
-    private String mapToPurposeCode(PurposeCode purposeCode) {
-        return Optional.ofNullable(purposeCode).map(PurposeCode::toString).orElse(null);
+    private String mapToPurposeCode(Xs2aPisPurposeCode purposeCode) {
+        return Optional.ofNullable(purposeCode).map(Xs2aPisPurposeCode::toString).orElse(null);
     }
 
     private Currency mapToCurrency(String currency) {

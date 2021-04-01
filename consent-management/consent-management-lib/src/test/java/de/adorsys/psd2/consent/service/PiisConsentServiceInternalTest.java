@@ -18,13 +18,13 @@ package de.adorsys.psd2.consent.service;
 
 import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.consent.api.ais.CmsConsent;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.repository.specification.PiisConsentEntitySpecification;
 import de.adorsys.psd2.consent.service.mapper.CmsConsentMapper;
 import de.adorsys.psd2.consent.service.migration.PiisConsentLazyMigrationService;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceSelector;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -133,14 +133,14 @@ class PiisConsentServiceInternalTest {
 
     private ConsentEntity buildConsentEntity() {
         ConsentEntity piisConsentEntity = new ConsentEntity();
-        piisConsentEntity.setConsentStatus(ConsentStatus.VALID);
+        piisConsentEntity.setConsentStatus(Xs2aConsentStatus.VALID);
         piisConsentEntity.setPsuDataList(Collections.singletonList(buildPsuData()));
         piisConsentEntity.setCreationTimestamp(CREATION_TIMESTAMP);
         return piisConsentEntity;
     }
 
-    private PsuData buildPsuData() {
-        return new PsuData(PSU_ID, PSU_ID_TYPE, PSU_CORPORATE_ID, PSU_CORPORATE_ID_TYPE, PSU_IP_ADDRESS);
+    private CmsPsuData buildPsuData() {
+        return new CmsPsuData(PSU_ID, PSU_ID_TYPE, PSU_CORPORATE_ID, PSU_CORPORATE_ID_TYPE, PSU_IP_ADDRESS);
     }
 
     private PsuIdData buildPsuIdData() {
@@ -150,7 +150,7 @@ class PiisConsentServiceInternalTest {
     private CmsConsent buildCmsConsent() {
         CmsConsent piisConsent = new CmsConsent();
         piisConsent.setPsuIdDataList(Collections.singletonList(buildPsuIdData()));
-        piisConsent.setConsentStatus(ConsentStatus.VALID);
+        piisConsent.setConsentStatus(Xs2aConsentStatus.VALID);
         piisConsent.setCreationTimestamp(CREATION_TIMESTAMP);
         return piisConsent;
     }

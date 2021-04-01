@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.domain.consent;
 
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,17 +30,17 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class UpdateConsentPsuDataResponse extends AuthorisationProcessorResponse {
 
-    public UpdateConsentPsuDataResponse(ScaStatus scaStatus, ErrorHolder errorHolder, String consentId, String authorisationId, PsuIdData psuIdData) {
+    public UpdateConsentPsuDataResponse(Xs2aScaStatus scaStatus, ErrorHolder errorHolder, String consentId, String authorisationId, PsuIdData psuIdData) {
         this(scaStatus, consentId, authorisationId, psuIdData);
         this.errorHolder = errorHolder;
     }
 
     public UpdateConsentPsuDataResponse(ErrorHolder errorHolder, String consentId, String authorisationId, PsuIdData psuIdData) {
-        this(ScaStatus.FAILED, consentId, authorisationId, psuIdData);
+        this(Xs2aScaStatus.FAILED, consentId, authorisationId, psuIdData);
         this.errorHolder = errorHolder;
     }
 
-    public UpdateConsentPsuDataResponse(ScaStatus scaStatus, String consentId, String authorisationId, PsuIdData psuIdData) {
+    public UpdateConsentPsuDataResponse(Xs2aScaStatus scaStatus, String consentId, String authorisationId, PsuIdData psuIdData) {
         this.scaStatus = scaStatus;
         this.consentId = consentId;
         this.authorisationId = authorisationId;

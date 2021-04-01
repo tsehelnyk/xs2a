@@ -16,8 +16,8 @@
 
 package de.adorsys.psd2.consent.api.piis.v1;
 
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,8 +36,8 @@ public class CmsPiisConsent {
     private LocalDate lastActionDate;
     private LocalDate expireDate;
     private PsuIdData psuData;
-    private ConsentStatus consentStatus;
-    private AccountReference account;
+    private Xs2aConsentStatus consentStatus;
+    private Xs2aAccountReference account;
     private OffsetDateTime creationTimestamp;
     private String instanceId;
     private String cardNumber;

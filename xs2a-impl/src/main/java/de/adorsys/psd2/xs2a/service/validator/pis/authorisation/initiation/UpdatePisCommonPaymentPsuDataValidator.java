@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.validator.pis.authorisation.initiation;
 
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationServiceType;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
@@ -62,7 +62,7 @@ public class UpdatePisCommonPaymentPsuDataValidator extends AbstractUpdatePisPsu
 
     @Override
     protected ValidationResult validateTransactionStatus(UpdatePisPsuDataPO paymentObject) {
-        if (paymentObject.getPisCommonPaymentResponse().getTransactionStatus() != TransactionStatus.RJCT) {
+        if (paymentObject.getPisCommonPaymentResponse().getTransactionStatus() != Xs2aTransactionStatus.RJCT) {
             return ValidationResult.valid();
         }
 

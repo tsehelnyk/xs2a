@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.domain.pis;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.domain.AccountReferenceCollector;
 import lombok.Data;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class BulkPayment extends CommonPayment implements AccountReferenceCollector {
 
     @NotNull
-    private AccountReference debtorAccount;
+    private Xs2aAccountReference debtorAccount;
     private String debtorName;
     private LocalDate requestedExecutionDate;
     private OffsetDateTime requestedExecutionTime;
@@ -42,8 +42,8 @@ public class BulkPayment extends CommonPayment implements AccountReferenceCollec
     private Boolean batchBookingPreferred;
 
     @Override
-    public Set<AccountReference> getAccountReferences() {
-        Set<AccountReference> accountReferences = payments.stream()
+    public Set<Xs2aAccountReference> getAccountReferences() {
+        Set<Xs2aAccountReference> accountReferences = payments.stream()
                                                       .map(SinglePayment::getAccountReferences)
                                                       .flatMap(Set::stream)
                                                       .collect(Collectors.toSet());

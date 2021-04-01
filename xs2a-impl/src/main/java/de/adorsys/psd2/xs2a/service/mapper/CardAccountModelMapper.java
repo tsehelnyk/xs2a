@@ -19,6 +19,8 @@ package de.adorsys.psd2.xs2a.service.mapper;
 import de.adorsys.psd2.aspsp.profile.domain.MulticurrencyAccountLevel;
 import de.adorsys.psd2.model.*;
 import de.adorsys.psd2.xs2a.domain.Xs2aBalance;
+import de.adorsys.psd2.xs2a.domain.Xs2aBalanceType;
+import de.adorsys.psd2.xs2a.domain.Xs2aCardTransaction;
 import de.adorsys.psd2.xs2a.domain.Xs2aExchangeRate;
 import de.adorsys.psd2.xs2a.domain.account.*;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
@@ -94,7 +96,7 @@ public abstract class CardAccountModelMapper {
     }
 
     @Mapping(target = "currencyExchange", expression = "java(mapToReportExchanges(transactions.getCurrencyExchange()))")
-    public abstract CardTransaction mapToCardTransaction(de.adorsys.psd2.xs2a.domain.CardTransaction transactions);
+    public abstract CardTransaction mapToCardTransaction(Xs2aCardTransaction transactions);
 
     protected OffsetDateTime mapToOffsetDateTime(LocalDateTime localDateTime) {
         if (localDateTime == null) {
@@ -104,7 +106,7 @@ public abstract class CardAccountModelMapper {
         return localDateTime.atOffset(validOffsets.get(0));
     }
 
-    protected BalanceType mapToBalanceType(de.adorsys.psd2.xs2a.domain.BalanceType balanceType) {
+    protected BalanceType mapToBalanceType(Xs2aBalanceType balanceType) {
         if (balanceType == null) {
             return null;
         }
@@ -125,7 +127,7 @@ public abstract class CardAccountModelMapper {
         return balanceList;
     }
 
-    protected @Nullable CardTransactionList mapToCardTransactionList(@Nullable List<de.adorsys.psd2.xs2a.domain.CardTransaction> transactions) {
+    protected @Nullable CardTransactionList mapToCardTransactionList(@Nullable List<Xs2aCardTransaction> transactions) {
         if (CollectionUtils.isEmpty(transactions)) {
             return null;
         }

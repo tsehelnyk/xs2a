@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.integration.builder.ais;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 
 public class AisConsentAuthorizationResponseBuilder {
     private static final String ENCRYPT_CONSENT_ID = "DfLtDOgo1tTK6WQlHlb-TMPL2pkxRlhZ4feMa5F4tOWwNN45XLNAVfWwoZUKlQwb_=_bS6p6XvTWI";
@@ -29,7 +29,7 @@ public class AisConsentAuthorizationResponseBuilder {
         Authorisation authorisationResponse = new Authorisation();
         authorisationResponse.setAuthorisationId(AUTHORISATION_ID);
         authorisationResponse.setParentId(ENCRYPT_CONSENT_ID);
-        authorisationResponse.setScaStatus(ScaStatus.RECEIVED);
+        authorisationResponse.setScaStatus(Xs2aScaStatus.RECEIVED);
         authorisationResponse.setChosenScaApproach(scaApproach);
         return authorisationResponse;
     }

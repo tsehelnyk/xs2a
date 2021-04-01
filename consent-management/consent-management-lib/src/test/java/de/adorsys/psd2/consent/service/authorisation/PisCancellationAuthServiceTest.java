@@ -21,14 +21,9 @@ import de.adorsys.psd2.consent.api.pis.PisPayment;
 import de.adorsys.psd2.consent.domain.Authorisable;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.domain.payment.PisPaymentData;
-import de.adorsys.psd2.consent.repository.PisCommonPaymentDataRepository;
-import de.adorsys.psd2.consent.repository.PisPaymentDataRepository;
 import de.adorsys.psd2.consent.service.ConfirmationExpirationService;
-import de.adorsys.psd2.consent.service.CorePaymentsConvertService;
-import de.adorsys.psd2.consent.service.PisCommonPaymentConfirmationExpirationService;
-import de.adorsys.psd2.consent.service.mapper.PisCommonPaymentMapper;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.Optional;
 
-import static de.adorsys.psd2.xs2a.core.pis.TransactionStatus.PATC;
+import static de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus.PATC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -93,7 +88,7 @@ class PisCancellationAuthServiceTest {
     void getInteractableAuthorisationParent_paymentCommonDataOutOfTransactionStatus() {
         PisPaymentData pisPaymentData = new PisPaymentData();
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.CANC);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.CANC);
         pisCommonPaymentData.setPaymentType(PaymentType.SINGLE);
         PisPaymentData paymentData = new PisPaymentData();
         pisCommonPaymentData.setPayments(Collections.singletonList(paymentData));

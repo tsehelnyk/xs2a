@@ -33,7 +33,7 @@ import de.adorsys.psd2.consent.repository.TppInfoRepository;
 import de.adorsys.psd2.consent.service.mapper.PisCommonPaymentMapper;
 import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.core.tpp.TppRole;
@@ -145,11 +145,11 @@ class PisCommonPaymentServiceInternalTest {
             .thenReturn(pisCommonPaymentData);
 
         // When
-        CmsResponse<TransactionStatus> actual = pisCommonPaymentService.getPisCommonPaymentStatusById(PAYMENT_ID);
+        CmsResponse<Xs2aTransactionStatus> actual = pisCommonPaymentService.getPisCommonPaymentStatusById(PAYMENT_ID);
 
         // Then
         assertTrue(actual.isSuccessful());
-        assertEquals(TransactionStatus.RCVD, actual.getPayload());
+        assertEquals(Xs2aTransactionStatus.RCVD, actual.getPayload());
     }
 
     @Test
@@ -160,7 +160,7 @@ class PisCommonPaymentServiceInternalTest {
             .thenReturn(null);
 
         // When
-        CmsResponse<TransactionStatus> actual = pisCommonPaymentService.getPisCommonPaymentStatusById(PAYMENT_ID);
+        CmsResponse<Xs2aTransactionStatus> actual = pisCommonPaymentService.getPisCommonPaymentStatusById(PAYMENT_ID);
 
         // Then
         assertTrue(actual.hasError());
@@ -213,11 +213,11 @@ class PisCommonPaymentServiceInternalTest {
             .thenReturn(pisCommonPaymentData);
 
         // When
-        CmsResponse<Boolean> actual = pisCommonPaymentService.updateCommonPaymentStatusById(PAYMENT_ID, TransactionStatus.RCVD);
+        CmsResponse<Boolean> actual = pisCommonPaymentService.updateCommonPaymentStatusById(PAYMENT_ID, Xs2aTransactionStatus.RCVD);
 
         // Then
         assertTrue(actual.isSuccessful());
-        assertEquals(TransactionStatus.RCVD, pisCommonPaymentData.getTransactionStatus());
+        assertEquals(Xs2aTransactionStatus.RCVD, pisCommonPaymentData.getTransactionStatus());
 
         verify(pisCommonPaymentDataRepository).save(pisCommonPaymentData);
     }
@@ -225,18 +225,18 @@ class PisCommonPaymentServiceInternalTest {
     @Test
     void updateCommonPaymentStatusById_transactionStatusIsFinalised() {
         // Given
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.ACCC);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.ACCC);
         when(pisCommonPaymentDataRepository.findByPaymentId(PAYMENT_ID)).thenReturn(Optional.of(pisCommonPaymentData));
         when(pisCommonPaymentConfirmationExpirationService.checkAndUpdateOnConfirmationExpiration(pisCommonPaymentData))
             .thenReturn(pisCommonPaymentData);
 
         // When
-        CmsResponse<Boolean> actual = pisCommonPaymentService.updateCommonPaymentStatusById(PAYMENT_ID, TransactionStatus.RCVD);
+        CmsResponse<Boolean> actual = pisCommonPaymentService.updateCommonPaymentStatusById(PAYMENT_ID, Xs2aTransactionStatus.RCVD);
 
         // Then
         assertTrue(actual.isSuccessful());
         assertFalse(actual.getPayload());
-        assertEquals(TransactionStatus.ACCC, pisCommonPaymentData.getTransactionStatus());
+        assertEquals(Xs2aTransactionStatus.ACCC, pisCommonPaymentData.getTransactionStatus());
 
         verify(pisCommonPaymentDataRepository, never()).save(any());
     }

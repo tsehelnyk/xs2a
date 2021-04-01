@@ -43,7 +43,7 @@ import de.adorsys.psd2.xs2a.core.consent.AspspConsentData;
 import de.adorsys.psd2.xs2a.core.profile.NotificationSupportedMode;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.exception.GlobalExceptionHandlerController;
@@ -416,7 +416,7 @@ class ServiceUnavailableIT {
     }
 
     private CreateAuthorisationResponse buildCreateAuthorisationResponse() {
-        return new CreateAuthorisationResponse(AUTHORISATION_ID, ScaStatus.RECEIVED, INTERNAL_REQUEST_ID, null);
+        return new CreateAuthorisationResponse(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INTERNAL_REQUEST_ID, null);
     }
 
     private <T> CmsResponse<T> buildCmsResponse(T payload) {

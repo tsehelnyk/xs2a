@@ -22,12 +22,12 @@ import de.adorsys.psd2.consent.psu.api.CmsPsuConfirmationOfFundsAuthorisation;
 import de.adorsys.psd2.consent.psu.api.CmsPsuConfirmationOfFundsService;
 import de.adorsys.psd2.mapper.Xs2aObjectMapper;
 import de.adorsys.psd2.mapper.config.ObjectMapperConfig;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -99,7 +99,7 @@ class CmsPsuConfirmationOfFundsControllerTest {
     @Test
     void updateAuthorisationStatus_withValidRequest_shouldReturnOk() throws Exception {
         // Given
-        when(cmsPsuConfirmationOfFundsService.updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder))
+        when(cmsPsuConfirmationOfFundsService.updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder))
             .thenReturn(true);
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/authentication-data-holder.json");
 
@@ -113,13 +113,13 @@ class CmsPsuConfirmationOfFundsControllerTest {
             .andExpect(content().bytes(EMPTY_BODY));
 
         // Then
-        verify(cmsPsuConfirmationOfFundsService).updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder);
+        verify(cmsPsuConfirmationOfFundsService).updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder);
     }
 
     @Test
     void updateAuthorisationStatus_withFalseServiceResponse_shouldReturnBadRequest() throws Exception {
         // Given
-        when(cmsPsuConfirmationOfFundsService.updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder))
+        when(cmsPsuConfirmationOfFundsService.updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder))
             .thenReturn(false);
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/authentication-data-holder.json");
 
@@ -133,7 +133,7 @@ class CmsPsuConfirmationOfFundsControllerTest {
             .andExpect(content().bytes(EMPTY_BODY));
 
         // Then
-        verify(cmsPsuConfirmationOfFundsService).updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder);
+        verify(cmsPsuConfirmationOfFundsService).updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder);
     }
 
     @Test
@@ -158,7 +158,7 @@ class CmsPsuConfirmationOfFundsControllerTest {
     @Test
     void updateAuthorisationStatus_onExpiredAuthorisationException_shouldReturnNokLink() throws Exception {
         // Given
-        when(cmsPsuConfirmationOfFundsService.updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder))
+        when(cmsPsuConfirmationOfFundsService.updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder))
             .thenThrow(new AuthorisationIsExpiredException(NOK_REDIRECT_URI));
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/authentication-data-holder.json");
         String timeoutResponse = jsonReader.getStringFromFile("json/ais/response/ais-consent-timeout.json");
@@ -173,7 +173,7 @@ class CmsPsuConfirmationOfFundsControllerTest {
             .andExpect(content().json(timeoutResponse));
 
         // Then
-        verify(cmsPsuConfirmationOfFundsService).updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder);
+        verify(cmsPsuConfirmationOfFundsService).updateAuthorisationStatus(psuIdData, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, authenticationDataHolder);
     }
 
     @Test
@@ -281,8 +281,8 @@ class CmsPsuConfirmationOfFundsControllerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(ConsentStatus.class)
-    void updateConsentStatus_shouldReturnOk(ConsentStatus consentStatus) throws Exception {
+    @EnumSource(Xs2aConsentStatus.class)
+    void updateConsentStatus_shouldReturnOk(Xs2aConsentStatus consentStatus) throws Exception {
         //Given
         when(cmsPsuConfirmationOfFundsService.updateConsentStatus(CONSENT_ID, consentStatus, INSTANCE_ID))
             .thenReturn(true);
@@ -307,13 +307,13 @@ class CmsPsuConfirmationOfFundsControllerTest {
                             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isBadRequest());
         // Then
-        verify(cmsPsuConfirmationOfFundsService, never()).updateConsentStatus(anyString(), any(ConsentStatus.class), anyString());
+        verify(cmsPsuConfirmationOfFundsService, never()).updateConsentStatus(anyString(), any(Xs2aConsentStatus.class), anyString());
     }
 
     @Test
     void updateConsentStatus_consentNotFound_shouldReturnOk() throws Exception {
         //Given
-        ConsentStatus consentStatus = ConsentStatus.VALID;
+        Xs2aConsentStatus consentStatus = Xs2aConsentStatus.VALID;
         when(cmsPsuConfirmationOfFundsService.updateConsentStatus(CONSENT_ID, consentStatus, INSTANCE_ID))
             .thenReturn(false);
         //When

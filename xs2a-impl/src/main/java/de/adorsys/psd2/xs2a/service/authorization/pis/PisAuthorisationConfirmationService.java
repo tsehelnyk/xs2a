@@ -28,10 +28,10 @@ import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aCurrencyConversionInfo;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
@@ -98,9 +98,9 @@ public class PisAuthorisationConfirmationService {
 
         Authorisation authorisationResponse = pisAuthorisationResponse.getPayload();
 
-        ScaStatus status = authorisationResponse.getScaStatus();
+        Xs2aScaStatus status = authorisationResponse.getScaStatus();
 
-        boolean processIsAllowed = status == ScaStatus.UNCONFIRMED;
+        boolean processIsAllowed = status == Xs2aScaStatus.UNCONFIRMED;
 
         return processIsAllowed
                    ? processAuthorisationConfirmationInternal(request, authorisationResponse)
@@ -180,7 +180,7 @@ public class PisAuthorisationConfirmationService {
 
         Xs2aUpdatePisCommonPaymentPsuDataResponse xs2aUpdatePisCommonPaymentPsuDataResponse;
         if (spiResponse.hasError()) {
-            xs2aUpdatePaymentAfterSpiService.updatePaymentStatus(request.getPaymentId(), TransactionStatus.RJCT);
+            xs2aUpdatePaymentAfterSpiService.updatePaymentStatus(request.getPaymentId(), Xs2aTransactionStatus.RJCT);
             xs2aUpdatePisCommonPaymentPsuDataResponse = buildConfirmationCodeSpiErrorResponse(spiResponse, request.getPaymentId(), request.getAuthorisationId(), request.getPsuData());
         } else {
             SpiPaymentConfirmationCodeValidationResponse codeValidationResponse = spiResponse.getPayload();

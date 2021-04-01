@@ -20,9 +20,9 @@ import de.adorsys.psd2.consent.api.ais.AdditionalAccountInformationType;
 import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -99,12 +99,12 @@ public class CmsConsentMapper {
         entity.setLastActionDate(LocalDate.now());
         entity.setInternalRequestId(cmsConsent.getInternalRequestId());
         entity.setTppInformation(consentTppInformationMapper.mapToConsentTppInformationEntity(cmsConsent.getTppInformation()));
-        AccountAccess tppAccountAccesses = cmsConsent.getTppAccountAccesses();
+        Xs2aConsentAccountAccess tppAccountAccesses = cmsConsent.getTppAccountAccesses();
         entity.setTppAccountAccesses(accessMapper.mapToTppAccountAccess(tppAccountAccesses));
         entity.setAspspAccountAccesses(accessMapper.mapToAspspAccountAccess(cmsConsent.getAspspAccountAccesses()));
         entity.setInstanceId(cmsConsent.getInstanceId());
 
-        AdditionalInformationAccess additionalInformationAccess = tppAccountAccesses.getAdditionalInformationAccess();
+        Xs2aAdditionalInformationAccess additionalInformationAccess = tppAccountAccesses.getAdditionalInformationAccess();
         if (additionalInformationAccess != null) {
             entity.setOwnerNameType(AdditionalAccountInformationType.findTypeByList(additionalInformationAccess.getOwnerName()));
             entity.setTrustedBeneficiariesType(AdditionalAccountInformationType.findTypeByList(additionalInformationAccess.getTrustedBeneficiaries()));

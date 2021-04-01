@@ -21,7 +21,7 @@ import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.ais.BookingStatus;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
@@ -30,11 +30,11 @@ import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.error.TppMessage;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
-import de.adorsys.psd2.xs2a.domain.Transactions;
+import de.adorsys.psd2.xs2a.domain.Xs2aTransactions;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountReport;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aTransactionsDownloadResponse;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aTransactionsReport;
@@ -107,7 +107,7 @@ class TransactionServiceTest {
     private static final LocalDate DATE_TO = LocalDate.now();
     private static final SpiAccountConsent SPI_ACCOUNT_CONSENT = new SpiAccountConsent();
     private static final SpiAccountReference SPI_ACCOUNT_REFERENCE_GLOBAL = buildSpiAccountReferenceGlobal();
-    private static final AccountReference XS2A_ACCOUNT_REFERENCE = buildXs2aAccountReference();
+    private static final Xs2aAccountReference XS2A_ACCOUNT_REFERENCE = buildXs2aAccountReference();
     private static final SpiTransactionReport SPI_TRANSACTION_REPORT = buildSpiTransactionReport();
     private static final SpiContextData SPI_CONTEXT_DATA = TestSpiDataProvider.getSpiContextData();
     private static final BookingStatus BOOKING_STATUS = BookingStatus.BOTH;
@@ -154,7 +154,7 @@ class TransactionServiceTest {
     @Mock
     private SpiToXs2aTransactionMapper spiToXs2aTransactionMapper;
     @Mock
-    private Transactions transactions;
+    private Xs2aTransactions transactions;
     @Mock
     private SpiErrorMapper spiErrorMapper;
     @Mock
@@ -531,14 +531,14 @@ class TransactionServiceTest {
         when(consentMapper.mapToSpiAccountConsent(any()))
             .thenReturn(SPI_ACCOUNT_CONSENT);
 
-        ArgumentCaptor<ConsentStatus> argumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> argumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
 
         // When
         transactionService.getTransactionsReportByPeriod(XS2A_TRANSACTIONS_REPORT_BY_PERIOD_REQUEST);
 
         // Then
         verify(loggingContextService).storeConsentStatus(argumentCaptor.capture());
-        assertThat(argumentCaptor.getValue()).isEqualTo(ConsentStatus.VALID);
+        assertThat(argumentCaptor.getValue()).isEqualTo(Xs2aConsentStatus.VALID);
     }
 
     @Test
@@ -635,7 +635,7 @@ class TransactionServiceTest {
     @Test
     void downloadTransactions_shouldRecordStatusInLoggingContext() {
         // Given
-        ArgumentCaptor<ConsentStatus> argumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> argumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
 
         when(aisConsentService.getAccountConsentById(CONSENT_ID))
             .thenReturn(Optional.of(aisConsent));
@@ -655,7 +655,7 @@ class TransactionServiceTest {
 
         // Then
         verify(loggingContextService).storeConsentStatus(argumentCaptor.capture());
-        assertThat(argumentCaptor.getValue()).isEqualTo(ConsentStatus.VALID);
+        assertThat(argumentCaptor.getValue()).isEqualTo(Xs2aConsentStatus.VALID);
     }
 
     @Test
@@ -664,7 +664,7 @@ class TransactionServiceTest {
         when(aisConsentService.getAccountConsentById(CONSENT_ID))
             .thenReturn(Optional.empty());
         // When
-        ResponseObject<Transactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
+        ResponseObject<Xs2aTransactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
         // Then
         assertThatErrorIs(actualResponse, CONSENT_UNKNOWN_400);
     }
@@ -680,7 +680,7 @@ class TransactionServiceTest {
             .thenReturn(ValidationResult.invalid(VALIDATION_ERROR));
 
         // When
-        ResponseObject<Transactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
+        ResponseObject<Xs2aTransactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
 
         // Then
         assertThatErrorIs(actualResponse, CONSENT_INVALID);
@@ -710,7 +710,7 @@ class TransactionServiceTest {
                             .build());
 
         // When
-        ResponseObject<Transactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
+        ResponseObject<Xs2aTransactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
 
         // Then
         assertThatErrorIs(actualResponse, FORMAT_ERROR);
@@ -727,7 +727,7 @@ class TransactionServiceTest {
             .thenReturn(ValidationResult.invalid(VALIDATION_ERROR));
 
         // When
-        ResponseObject<Transactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
+        ResponseObject<Xs2aTransactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
 
         // Then
         assertThatErrorIs(actualResponse, CONSENT_INVALID);
@@ -755,11 +755,11 @@ class TransactionServiceTest {
             .thenReturn(transactions);
 
         // When
-        ResponseObject<Transactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
+        ResponseObject<Xs2aTransactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
 
         // Then
         assertResponseHasNoErrors(actualResponse);
-        Transactions body = actualResponse.getBody();
+        Xs2aTransactions body = actualResponse.getBody();
         assertThat(body).isEqualTo(transactions);
     }
 
@@ -801,7 +801,7 @@ class TransactionServiceTest {
             .thenReturn(ValidationResult.invalid(VALIDATION_ERROR));
 
         // When
-        ResponseObject<Transactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
+        ResponseObject<Xs2aTransactions> actualResponse = transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
 
         // Then
         verify(getTransactionDetailsValidator).validate(new CommonAccountTransactionsRequestObject(aisConsent, ACCOUNT_ID, REQUEST_URI));
@@ -828,14 +828,14 @@ class TransactionServiceTest {
         when(spiToXs2aTransactionMapper.mapToXs2aTransaction(spiTransaction))
             .thenReturn(transactions);
 
-        ArgumentCaptor<ConsentStatus> argumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> argumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
 
         // When
         transactionService.getTransactionDetails(CONSENT_ID, ACCOUNT_ID, TRANSACTION_ID, REQUEST_URI);
 
         // Then
         verify(loggingContextService).storeConsentStatus(argumentCaptor.capture());
-        assertThat(argumentCaptor.getValue()).isEqualTo(ConsentStatus.VALID);
+        assertThat(argumentCaptor.getValue()).isEqualTo(Xs2aConsentStatus.VALID);
     }
 
     private void checkPassingParametersWithoutAnyChanges(SpiTransactionReportParameters parameters) {
@@ -888,7 +888,7 @@ class TransactionServiceTest {
         aisConsent.setId(CONSENT_ID);
         aisConsent.setValidUntil(LocalDate.now());
         aisConsent.setFrequencyPerDay(4);
-        aisConsent.setConsentStatus(ConsentStatus.VALID);
+        aisConsent.setConsentStatus(Xs2aConsentStatus.VALID);
         aisConsent.setAuthorisations(Collections.emptyList());
         aisConsent.setConsentTppInformation(buildConsentTppInformation());
         aisConsent.setStatusChangeTimestamp(OffsetDateTime.now());
@@ -917,8 +917,8 @@ class TransactionServiceTest {
         return SpiAccountReference.builder().resourceId(ACCOUNT_ID).build();
     }
 
-    private static AccountReference buildXs2aAccountReference() {
-        return new AccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
+    private static Xs2aAccountReference buildXs2aAccountReference() {
+        return new Xs2aAccountReference(ASPSP_ACCOUNT_ID, ACCOUNT_ID, IBAN, BBAN, PAN, MASKED_PAN, MSISDN, EUR_CURRENCY, null);
     }
 
     // Needed because SpiTransactionReport is final, so it's impossible to mock it

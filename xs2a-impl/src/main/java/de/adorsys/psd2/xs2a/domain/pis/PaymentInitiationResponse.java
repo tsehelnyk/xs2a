@@ -18,15 +18,15 @@ package de.adorsys.psd2.xs2a.domain.pis;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
 import de.adorsys.psd2.xs2a.core.profile.NotificationSupportedMode;
-import de.adorsys.psd2.xs2a.core.sca.ChallengeData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.service.spi.InitialSpiAspspConsentDataProvider;
 import lombok.Data;
@@ -38,15 +38,15 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 public abstract class PaymentInitiationResponse {
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     @JsonUnwrapped
-    private TransactionStatus transactionStatus;
+    private Xs2aTransactionStatus transactionStatus;
     private Xs2aAmount transactionFees;
     private Boolean transactionFeeIndicator;
     private boolean multilevelScaRequired;
     private String paymentId;
-    private List<AuthenticationObject> scaMethods;
-    private ChallengeData challengeData;
+    private List<Xs2aAuthenticationObject> scaMethods;
+    private Xs2aChallengeData challengeData;
     private String psuMessage;
     private MessageErrorCode[] tppMessages;
     @JsonProperty("_links")

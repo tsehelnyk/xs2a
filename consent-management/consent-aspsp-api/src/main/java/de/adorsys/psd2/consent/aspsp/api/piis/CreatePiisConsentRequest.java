@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.aspsp.api.piis;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class CreatePiisConsentRequest {
     private String tppAuthorisationNumber;
 
     @ApiModelProperty(value = "Account, where the confirmation of funds service is aimed to be submitted to.")
-    private AccountReference account;
+    private Xs2aAccountReference account;
 
     @ApiModelProperty(value = "Consent`s expiration date. The content is the local ASPSP date in ISODate Format", example = "2020-10-10")
     private LocalDate validUntil;

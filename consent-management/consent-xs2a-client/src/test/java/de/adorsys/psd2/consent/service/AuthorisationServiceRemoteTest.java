@@ -30,7 +30,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -72,7 +72,7 @@ class AuthorisationServiceRemoteTest {
 
         AuthorisationParentHolder authorisationParentHolder = new AuthorisationParentHolder(AUTHORISATION_TYPE, PARENT_ID);
         CreateAuthorisationRequest createAuthorisationRequest = new CreateAuthorisationRequest();
-        CreateAuthorisationResponse controllerResponse = new CreateAuthorisationResponse(AUTHORISATION_ID, ScaStatus.RECEIVED, "internal request id", new PsuIdData());
+        CreateAuthorisationResponse controllerResponse = new CreateAuthorisationResponse(AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, "internal request id", new PsuIdData());
 
         when(consentRestTemplate.postForEntity(URL, createAuthorisationRequest, CreateAuthorisationResponse.class, AUTHORISATION_TYPE, PARENT_ID))
             .thenReturn(new ResponseEntity<>(controllerResponse, HttpStatus.CREATED));
@@ -182,7 +182,7 @@ class AuthorisationServiceRemoteTest {
         // Given
         when(authorisationRemoteUrls.updateAuthorisationStatus()).thenReturn(URL);
 
-        ScaStatus scaStatus = ScaStatus.RECEIVED;
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.RECEIVED;
 
         // When
         CmsResponse<Boolean> actualResponse = authorisationServiceRemote.updateAuthorisationStatus(AUTHORISATION_ID, scaStatus);
@@ -198,7 +198,7 @@ class AuthorisationServiceRemoteTest {
         // Given
         when(authorisationRemoteUrls.updateAuthorisationStatus()).thenReturn(URL);
 
-        ScaStatus scaStatus = ScaStatus.RECEIVED;
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.RECEIVED;
 
         doThrow(CmsRestException.class).when(consentRestTemplate).put(URL, null, AUTHORISATION_ID, scaStatus);
 
@@ -256,13 +256,13 @@ class AuthorisationServiceRemoteTest {
         when(authorisationRemoteUrls.getAuthorisationScaStatus()).thenReturn(URL);
 
         AuthorisationParentHolder authorisationParentHolder = new AuthorisationParentHolder(AUTHORISATION_TYPE, PARENT_ID);
-        ScaStatus controllerResponse = ScaStatus.RECEIVED;
+        Xs2aScaStatus controllerResponse = Xs2aScaStatus.RECEIVED;
 
-        when(consentRestTemplate.getForEntity(URL, ScaStatus.class, AUTHORISATION_TYPE, PARENT_ID, AUTHORISATION_ID))
+        when(consentRestTemplate.getForEntity(URL, Xs2aScaStatus.class, AUTHORISATION_TYPE, PARENT_ID, AUTHORISATION_ID))
             .thenReturn(new ResponseEntity<>(controllerResponse, HttpStatus.OK));
 
         // When
-        CmsResponse<ScaStatus> actualResponse = authorisationServiceRemote.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
+        CmsResponse<Xs2aScaStatus> actualResponse = authorisationServiceRemote.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
 
         // Then
         assertTrue(actualResponse.isSuccessful());
@@ -276,11 +276,11 @@ class AuthorisationServiceRemoteTest {
 
         AuthorisationParentHolder authorisationParentHolder = new AuthorisationParentHolder(AUTHORISATION_TYPE, PARENT_ID);
 
-        when(consentRestTemplate.getForEntity(URL, ScaStatus.class, AUTHORISATION_TYPE, PARENT_ID, AUTHORISATION_ID))
+        when(consentRestTemplate.getForEntity(URL, Xs2aScaStatus.class, AUTHORISATION_TYPE, PARENT_ID, AUTHORISATION_ID))
             .thenThrow(CmsRestException.class);
 
         // When
-        CmsResponse<ScaStatus> actualResponse = authorisationServiceRemote.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
+        CmsResponse<Xs2aScaStatus> actualResponse = authorisationServiceRemote.getAuthorisationScaStatus(AUTHORISATION_ID, authorisationParentHolder);
 
         // Then
         assertTrue(actualResponse.hasError());

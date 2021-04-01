@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.mapper;
 
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
@@ -36,7 +36,7 @@ public class ConsentPsuDataMapper {
                        req.setConsentId(request.getBusinessObjectId());
                        req.setAuthorizationId(request.getAuthorisationId());
                        req.setAuthenticationMethodId(Optional.ofNullable(data.getChosenScaMethod())
-                                                         .map(AuthenticationObject::getAuthenticationMethodId)
+                                                         .map(Xs2aAuthenticationObject::getAuthenticationMethodId)
                                                          .orElse(null));
                        req.setScaAuthenticationData(request.getScaAuthenticationData());
                        req.setScaStatus(data.getScaStatus());

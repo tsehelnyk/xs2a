@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 adorsys GmbH & Co KG
+ * Copyright 2018-2019 adorsys GmbH & Co KG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,13 @@ package de.adorsys.psd2.core.payment.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ChargeBearer {
-    DEBT("DEBT"),
-    CRED("CRED"),
-    SHAR("SHAR"),
-    SLEV("SLEV");
+public enum Xs2aPisExecutionRule {
+    FOLLOWING("following"),
+    PRECEDING("preceding");
 
     private final String value;
 
-    ChargeBearer(String value) {
+    Xs2aPisExecutionRule(String value) {
         this.value = value;
     }
 
@@ -38,8 +36,8 @@ public enum ChargeBearer {
     }
 
     @JsonCreator
-    public static ChargeBearer fromValue(String text) {
-        for (ChargeBearer b : ChargeBearer.values()) {
+    public static Xs2aPisExecutionRule fromValue(String text) {
+        for (Xs2aPisExecutionRule b : Xs2aPisExecutionRule.values()) {
             if (String.valueOf(b.value).equals(text)) {
                 return b;
             }

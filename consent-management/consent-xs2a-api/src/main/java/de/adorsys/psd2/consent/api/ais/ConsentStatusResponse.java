@@ -16,12 +16,12 @@
 
 package de.adorsys.psd2.consent.api.ais;
 
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import lombok.Value;
 import org.jetbrains.annotations.NotNull;
 
 @Value
 public class ConsentStatusResponse {
     @NotNull
-    private ConsentStatus consentStatus;
+    private Xs2aConsentStatus consentStatus;
 }

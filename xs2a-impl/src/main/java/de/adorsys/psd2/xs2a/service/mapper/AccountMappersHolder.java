@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.mapper;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aBalancesReport;
 import de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers.Xs2aAisConsentMapper;
 import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
@@ -53,7 +53,7 @@ public class AccountMappersHolder {
         return balanceReportMapper.mapToXs2aBalancesReportSpi(spiAccountReference, spiAccountBalances);
     }
 
-    public Xs2aBalancesReport mapToXs2aBalancesReport(AccountReference accountReference, List<SpiAccountBalance> spiAccountBalances) {
+    public Xs2aBalancesReport mapToXs2aBalancesReport(Xs2aAccountReference accountReference, List<SpiAccountBalance> spiAccountBalances) {
         return balanceReportMapper.mapToXs2aBalancesReport(accountReference, spiAccountBalances);
     }
 }

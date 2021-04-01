@@ -17,8 +17,8 @@
 package de.adorsys.psd2.consent.api.ais;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import lombok.Value;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.Nullable;
@@ -27,15 +27,15 @@ import java.util.List;
 
 @Value
 public class AisAccountAccess {
-    private List<AccountReference> accounts;
-    private List<AccountReference> balances;
-    private List<AccountReference> transactions;
+    private List<Xs2aAccountReference> accounts;
+    private List<Xs2aAccountReference> balances;
+    private List<Xs2aAccountReference> transactions;
 
     private String availableAccounts;
     private String allPsd2;
     private String availableAccountsWithBalance;
     @Nullable
-    private AdditionalInformationAccess accountAdditionalInformationAccess;
+    private Xs2aAdditionalInformationAccess accountAdditionalInformationAccess;
 
     @JsonIgnore
     public boolean isNotEmpty() {

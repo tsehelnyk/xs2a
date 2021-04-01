@@ -24,8 +24,8 @@ import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.repository.AuthorisationRepository;
 import de.adorsys.psd2.consent.repository.PisCommonPaymentDataRepository;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,12 +61,12 @@ class PisCommonPaymentConfirmationExpirationServiceTest {
     @Test
     void checkAndUpdateOnConfirmationExpiration_confirmationIsExpired() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RCVD);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisCommonPaymentData.setCreationTimestamp(OffsetDateTime.now().minusSeconds(100));
         pisCommonPaymentData.setPaymentId(PAYMENT_ID);
 
         AuthorisationEntity pisAuthorisation = new AuthorisationEntity();
-        pisAuthorisation.setScaStatus(ScaStatus.RECEIVED);
+        pisAuthorisation.setScaStatus(Xs2aScaStatus.RECEIVED);
         when(authorisationRepository.findAllByParentExternalIdAndTypeIn(PAYMENT_ID, EnumSet.of(AuthorisationType.PIS_CREATION, AuthorisationType.PIS_CANCELLATION)))
             .thenReturn(Collections.singletonList(pisAuthorisation));
 
@@ -75,8 +75,8 @@ class PisCommonPaymentConfirmationExpirationServiceTest {
 
         service.checkAndUpdateOnConfirmationExpiration(pisCommonPaymentData);
 
-        assertEquals(TransactionStatus.RJCT, pisCommonPaymentData.getTransactionStatus());
-        assertEquals(ScaStatus.FAILED, pisAuthorisation.getScaStatus());
+        assertEquals(Xs2aTransactionStatus.RJCT, pisCommonPaymentData.getTransactionStatus());
+        assertEquals(Xs2aScaStatus.FAILED, pisAuthorisation.getScaStatus());
 
         verify(pisCommonPaymentDataRepository).save(pisCommonPaymentData);
     }
@@ -84,25 +84,25 @@ class PisCommonPaymentConfirmationExpirationServiceTest {
     @Test
     void checkAndUpdateOnConfirmationExpiration_confirmationIsNotExpired() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RCVD);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisCommonPaymentData.setCreationTimestamp(OffsetDateTime.now().plusHours(1));
 
         AuthorisationEntity pisAuthorisation = new AuthorisationEntity();
-        pisAuthorisation.setScaStatus(ScaStatus.RECEIVED);
+        pisAuthorisation.setScaStatus(Xs2aScaStatus.RECEIVED);
 
         when(aspspProfileService.getAspspSettings(pisAuthorisation.getInstanceId())).thenReturn(aspspSettings);
         when(aspspSettings.getPis()).thenReturn(getPisAspspProfileSetting(10L));
 
         service.checkAndUpdateOnConfirmationExpiration(pisCommonPaymentData);
 
-        assertEquals(TransactionStatus.RCVD, pisCommonPaymentData.getTransactionStatus());
-        assertEquals(ScaStatus.RECEIVED, pisAuthorisation.getScaStatus());
+        assertEquals(Xs2aTransactionStatus.RCVD, pisCommonPaymentData.getTransactionStatus());
+        assertEquals(Xs2aScaStatus.RECEIVED, pisAuthorisation.getScaStatus());
     }
 
     @Test
     void isPaymentDataOnConfirmationExpired() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RCVD);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisCommonPaymentData.setCreationTimestamp(OffsetDateTime.now().minusHours(1));
 
         when(aspspProfileService.getAspspSettings(pisCommonPaymentData.getInstanceId())).thenReturn(aspspSettings);
@@ -116,7 +116,7 @@ class PisCommonPaymentConfirmationExpirationServiceTest {
     @Test
     void isPaymentDataOnConfirmationNotExpired() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RCVD);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisCommonPaymentData.setCreationTimestamp(OffsetDateTime.now().plusHours(1));
 
         when(aspspProfileService.getAspspSettings(pisCommonPaymentData.getInstanceId())).thenReturn(aspspSettings);
@@ -135,19 +135,19 @@ class PisCommonPaymentConfirmationExpirationServiceTest {
     @Test
     void updateOnConfirmationExpiration() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RCVD);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisCommonPaymentData.setPaymentId(PAYMENT_ID);
 
         AuthorisationEntity pisAuthorization = new AuthorisationEntity();
-        pisAuthorization.setScaStatus(ScaStatus.RECEIVED);
+        pisAuthorization.setScaStatus(Xs2aScaStatus.RECEIVED);
 
         when(authorisationRepository.findAllByParentExternalIdAndTypeIn(PAYMENT_ID, EnumSet.of(AuthorisationType.PIS_CREATION, AuthorisationType.PIS_CANCELLATION)))
             .thenReturn(Collections.singletonList(pisAuthorization));
 
         service.updateOnConfirmationExpiration(pisCommonPaymentData);
 
-        assertEquals(TransactionStatus.RJCT, pisCommonPaymentData.getTransactionStatus());
-        assertEquals(ScaStatus.FAILED, pisAuthorization.getScaStatus());
+        assertEquals(Xs2aTransactionStatus.RJCT, pisCommonPaymentData.getTransactionStatus());
+        assertEquals(Xs2aScaStatus.FAILED, pisAuthorization.getScaStatus());
 
         verify(pisCommonPaymentDataRepository).save(pisCommonPaymentData);
     }
@@ -155,19 +155,19 @@ class PisCommonPaymentConfirmationExpirationServiceTest {
     @Test
     void updatePaymentDataListOnConfirmationExpiration() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RCVD);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisCommonPaymentData.setPaymentId(PAYMENT_ID);
 
         AuthorisationEntity pisAuthorization = new AuthorisationEntity();
-        pisAuthorization.setScaStatus(ScaStatus.RECEIVED);
+        pisAuthorization.setScaStatus(Xs2aScaStatus.RECEIVED);
 
         when(authorisationRepository.findAllByParentExternalIdAndTypeIn(PAYMENT_ID, EnumSet.of(AuthorisationType.PIS_CREATION, AuthorisationType.PIS_CANCELLATION)))
             .thenReturn(Collections.singletonList(pisAuthorization));
 
         service.updatePaymentDataListOnConfirmationExpiration(Collections.singletonList(pisCommonPaymentData));
 
-        assertEquals(TransactionStatus.RJCT, pisCommonPaymentData.getTransactionStatus());
-        assertEquals(ScaStatus.FAILED, pisAuthorization.getScaStatus());
+        assertEquals(Xs2aTransactionStatus.RJCT, pisCommonPaymentData.getTransactionStatus());
+        assertEquals(Xs2aScaStatus.FAILED, pisAuthorization.getScaStatus());
 
         verify(pisCommonPaymentDataRepository).saveAll(Collections.singletonList(pisCommonPaymentData));
     }

@@ -16,9 +16,9 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.core.data.AccountAccess;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentReq;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAdditionalInformationAccess;
 import de.adorsys.psd2.xs2a.spi.domain.consent.SpiAccountAccess;
@@ -36,18 +36,18 @@ import java.util.function.UnaryOperator;
 public class SpiToXs2aAccountAccessMapper {
     private final SpiToXs2aAccountReferenceMapper spiToXs2aAccountReferenceMapper;
 
-    public Optional<AccountAccess> mapToAccountAccess(SpiAccountAccess access) {
+    public Optional<Xs2aConsentAccountAccess> mapToAccountAccess(SpiAccountAccess access) {
         return Optional.ofNullable(access)
                    .map(aa ->
-                            new AccountAccess(
+                            new Xs2aConsentAccountAccess(
                                 spiToXs2aAccountReferenceMapper.mapToXs2aAccountReferences(aa.getAccounts()),
                                 spiToXs2aAccountReferenceMapper.mapToXs2aAccountReferences(aa.getBalances()),
                                 spiToXs2aAccountReferenceMapper.mapToXs2aAccountReferences(aa.getTransactions()),
                                 mapToAdditionalInformationAccess(aa.getSpiAdditionalInformationAccess())));
     }
 
-    public AccountAccess getAccessForGlobalOrAllAvailableAccountsConsent(CreateConsentReq request) {
-        return new AccountAccess(
+    public Xs2aConsentAccountAccess getAccessForGlobalOrAllAvailableAccountsConsent(CreateConsentReq request) {
+        return new Xs2aConsentAccountAccess(
             new ArrayList<>(),
             new ArrayList<>(),
             new ArrayList<>(),
@@ -55,19 +55,19 @@ public class SpiToXs2aAccountAccessMapper {
         );
     }
 
-    private AdditionalInformationAccess modifyAdditionalInformationAccessOnGlobalOrAllAvailableAccountsConsent(AdditionalInformationAccess info) {
+    private Xs2aAdditionalInformationAccess modifyAdditionalInformationAccessOnGlobalOrAllAvailableAccountsConsent(Xs2aAdditionalInformationAccess info) {
         if (info == null || info.noAdditionalInformationAccess()) {
             return null;
         }
 
-        UnaryOperator<List<AccountReference>> modifier = list -> list == null ? null : Collections.emptyList();
+        UnaryOperator<List<Xs2aAccountReference>> modifier = list -> list == null ? null : Collections.emptyList();
 
-        return new AdditionalInformationAccess(modifier.apply(info.getOwnerName()), modifier.apply(info.getTrustedBeneficiaries()));
+        return new Xs2aAdditionalInformationAccess(modifier.apply(info.getOwnerName()), modifier.apply(info.getTrustedBeneficiaries()));
     }
 
-    private AdditionalInformationAccess mapToAdditionalInformationAccess(SpiAdditionalInformationAccess spiAdditionalInformationAccess) {
+    private Xs2aAdditionalInformationAccess mapToAdditionalInformationAccess(SpiAdditionalInformationAccess spiAdditionalInformationAccess) {
         return Optional.ofNullable(spiAdditionalInformationAccess)
-                   .map(info -> new AdditionalInformationAccess(spiToXs2aAccountReferenceMapper.mapToXs2aAccountReferences(info.getOwnerName()),
+                   .map(info -> new Xs2aAdditionalInformationAccess(spiToXs2aAccountReferenceMapper.mapToXs2aAccountReferences(info.getOwnerName()),
                                                                 spiToXs2aAccountReferenceMapper.mapToXs2aAccountReferences(info.getTrustedBeneficiaries())))
                    .orElse(null);
     }

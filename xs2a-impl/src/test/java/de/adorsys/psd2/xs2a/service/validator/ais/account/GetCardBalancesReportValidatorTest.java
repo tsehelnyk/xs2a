@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.validator.ais.account;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType;
@@ -69,11 +69,11 @@ class GetCardBalancesReportValidatorTest {
     private GetCardBalancesReportValidator getCardBalancesReportValidator;
 
     private JsonReader jsonReader = new JsonReader();
-    private AccountAccess accountAccess;
+    private Xs2aConsentAccountAccess accountAccess;
 
     @BeforeEach
     void setUp() {
-        accountAccess = jsonReader.getObjectFromFile("json/service/validator/ais/account/xs2a-account-access.json", AccountAccess.class);
+        accountAccess = jsonReader.getObjectFromFile("json/service/validator/ais/account/xs2a-account-access.json", Xs2aConsentAccountAccess.class);
 
         // Inject pisTppInfoValidator via setter
         getCardBalancesReportValidator.setAisAccountTppInfoValidator(aisAccountTppInfoValidator);

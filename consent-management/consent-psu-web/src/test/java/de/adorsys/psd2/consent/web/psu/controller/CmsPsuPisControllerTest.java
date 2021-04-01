@@ -27,10 +27,10 @@ import de.adorsys.psd2.mapper.config.ObjectMapperConfig;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -298,7 +298,7 @@ class CmsPsuPisControllerTest {
 
     @Test
     void updateAuthorisationStatus_withValidRequest_shouldReturnOk() throws Exception {
-        when(cmsPsuPisService.updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
+        when(cmsPsuPisService.updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
             .thenReturn(true);
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/pis/request/authentication-data-holder.json");
 
@@ -310,12 +310,12 @@ class CmsPsuPisControllerTest {
             .andExpect(status().isOk())
             .andExpect(content().bytes(EMPTY_BODY));
 
-        verify(cmsPsuPisService).updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
+        verify(cmsPsuPisService).updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
     }
 
     @Test
     void updateAuthorisationStatus_withValidRequestAndLowercaseScaStatus_shouldReturnOk() throws Exception {
-        when(cmsPsuPisService.updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
+        when(cmsPsuPisService.updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
             .thenReturn(true);
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/pis/request/authentication-data-holder.json");
         String lowercaseScaStatus = SCA_STATUS_RECEIVED.toLowerCase();
@@ -328,12 +328,12 @@ class CmsPsuPisControllerTest {
             .andExpect(status().isOk())
             .andExpect(content().bytes(EMPTY_BODY));
 
-        verify(cmsPsuPisService).updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
+        verify(cmsPsuPisService).updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
     }
 
     @Test
     void updateAuthorisationStatus_withFalseServiceResponse_shouldReturnBadRequest() throws Exception {
-        when(cmsPsuPisService.updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
+        when(cmsPsuPisService.updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
             .thenReturn(false);
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/pis/request/authentication-data-holder.json");
 
@@ -345,7 +345,7 @@ class CmsPsuPisControllerTest {
             .andExpect(status().isBadRequest())
             .andExpect(content().bytes(EMPTY_BODY));
 
-        verify(cmsPsuPisService).updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
+        verify(cmsPsuPisService).updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
     }
 
     @Test
@@ -366,7 +366,7 @@ class CmsPsuPisControllerTest {
 
     @Test
     void updateAuthorisationStatus_onExpiredAuthorisationException_shouldReturnNokLink() throws Exception {
-        when(cmsPsuPisService.updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
+        when(cmsPsuPisService.updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
             .thenThrow(new AuthorisationIsExpiredException(TPP_NOK_REDIRECT_URI));
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/pis/request/authentication-data-holder.json");
         String cmsPaymentTimeoutResponse = jsonReader.getStringFromFile("json/pis/response/cms-payment-response-timeout.json");
@@ -379,12 +379,12 @@ class CmsPsuPisControllerTest {
             .andExpect(status().isRequestTimeout())
             .andExpect(content().json(cmsPaymentTimeoutResponse));
 
-        verify(cmsPsuPisService).updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
+        verify(cmsPsuPisService).updateAuthorisationStatus(psuIdData, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
     }
 
     @Test
     void updatePaymentStatus_withValidRequest_shouldReturnOk() throws Exception {
-        TransactionStatus transactionStatus = TransactionStatus.ACCP;
+        Xs2aTransactionStatus transactionStatus = Xs2aTransactionStatus.ACCP;
         when(cmsPsuPisService.updatePaymentStatus(PAYMENT_ID, transactionStatus, INSTANCE_ID))
             .thenReturn(true);
         String transactionStatusString = transactionStatus.name();
@@ -399,7 +399,7 @@ class CmsPsuPisControllerTest {
 
     @Test
     void updatePaymentStatus_withFalseServiceResponse_shouldReturnBadRequest() throws Exception {
-        TransactionStatus transactionStatus = TransactionStatus.ACCP;
+        Xs2aTransactionStatus transactionStatus = Xs2aTransactionStatus.ACCP;
         when(cmsPsuPisService.updatePaymentStatus(PAYMENT_ID, transactionStatus, INSTANCE_ID))
             .thenReturn(false);
         String transactionStatusString = transactionStatus.name();
@@ -415,7 +415,7 @@ class CmsPsuPisControllerTest {
     @Test
     void psuAuthorisationStatuses_withValidRequest_shouldReturnOk() throws Exception {
         String cmsPisPsuDataAuthorisationListJson = jsonReader.getStringFromFile("json/pis/response/cms-pis-psu-data-authorisation-list.json");
-        CmsPisPsuDataAuthorisation cmsPisPsuDataAuthorisation = new CmsPisPsuDataAuthorisation(psuIdData, AUTHORISATION_ID, ScaStatus.RECEIVED, AuthorisationType.PIS_CREATION);
+        CmsPisPsuDataAuthorisation cmsPisPsuDataAuthorisation = new CmsPisPsuDataAuthorisation(psuIdData, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, AuthorisationType.PIS_CREATION);
         when(cmsPsuPisService.getPsuDataAuthorisations(PAYMENT_ID, INSTANCE_ID, null, null))
             .thenReturn(Optional.of(Collections.singletonList(cmsPisPsuDataAuthorisation)));
 

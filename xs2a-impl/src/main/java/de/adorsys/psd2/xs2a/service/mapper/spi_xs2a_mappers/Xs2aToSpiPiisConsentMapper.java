@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountReference;
@@ -49,7 +49,7 @@ public abstract class Xs2aToSpiPiisConsentMapper {
         return accountConfirmation;
     }
 
-    SpiAccountReference toSpiAccountReference(AccountReference account) {
+    SpiAccountReference toSpiAccountReference(Xs2aAccountReference account) {
         return new SpiAccountReference(
             account.getAspspAccountId(),
             account.getResourceId(),

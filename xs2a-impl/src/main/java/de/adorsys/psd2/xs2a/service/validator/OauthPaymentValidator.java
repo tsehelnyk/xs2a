@@ -21,7 +21,7 @@ import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.service.RequestProviderService;
 import de.adorsys.psd2.xs2a.service.ScaApproachResolver;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
@@ -34,8 +34,8 @@ import java.util.Set;
 public class OauthPaymentValidator extends OauthValidator<PisCommonPaymentResponse> {
     private static final MessageError MESSAGE_ERROR = new MessageError(ErrorType.PIS_403, TppMessageInformation.of(MessageErrorCode.FORBIDDEN));
 
-    private static final Set<TransactionStatus> NOT_ALLOWED_STATUSES_FOR_GET_REQUESTS =
-        EnumSet.of(TransactionStatus.RCVD, TransactionStatus.PDNG, TransactionStatus.PATC);
+    private static final Set<Xs2aTransactionStatus> NOT_ALLOWED_STATUSES_FOR_GET_REQUESTS =
+        EnumSet.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PDNG, Xs2aTransactionStatus.PATC);
 
     public OauthPaymentValidator(RequestProviderService requestProviderService,
                                  AspspProfileServiceWrapper aspspProfileServiceWrapper,

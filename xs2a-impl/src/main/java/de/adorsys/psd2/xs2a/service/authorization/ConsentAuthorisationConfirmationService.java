@@ -20,12 +20,12 @@ import de.adorsys.psd2.consent.api.CmsResponse;
 import de.adorsys.psd2.consent.api.service.AuthorisationServiceEncrypted;
 import de.adorsys.psd2.core.data.Consent;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
@@ -80,8 +80,8 @@ public abstract class ConsentAuthorisationConfirmationService<T extends Consent>
 
         Authorisation authorisation = authorisationCmsResponse.getPayload();
 
-        ScaStatus currentStatus = authorisation.getScaStatus();
-        boolean processIsAllowed = currentStatus == ScaStatus.UNCONFIRMED;
+        Xs2aScaStatus currentStatus = authorisation.getScaStatus();
+        boolean processIsAllowed = currentStatus == Xs2aScaStatus.UNCONFIRMED;
 
         UpdateConsentPsuDataResponse response = processIsAllowed
                                                     ? processAuthorisationConfirmationInternal(request, authorisation.getScaAuthenticationData())
@@ -133,7 +133,7 @@ public abstract class ConsentAuthorisationConfirmationService<T extends Consent>
         if (spiResponse.isSuccessful()) {
             authorisationService.updateAuthorisationStatus(authorisationId, confirmationCodeValidationResponse.getScaStatus());
             updateConsentStatus(consentId, confirmationCodeValidationResponse.getConsentStatus());
-            if (ConsentStatus.VALID == confirmationCodeValidationResponse.getConsentStatus()) {
+            if (Xs2aConsentStatus.VALID == confirmationCodeValidationResponse.getConsentStatus()) {
                 findAndTerminateOldConsentsByNewConsentId(consentId);
             }
         }
@@ -159,7 +159,7 @@ public abstract class ConsentAuthorisationConfirmationService<T extends Consent>
 
         UpdateConsentPsuDataResponse updateConsentPsuDataResponse;
         if (spiResponse.hasError()) {
-            updateConsentStatus(consentId, ConsentStatus.REJECTED);
+            updateConsentStatus(consentId, Xs2aConsentStatus.REJECTED);
             updateConsentPsuDataResponse = buildConfirmationCodeSpiErrorResponse(spiResponse, consentId, authorisationId, request.getPsuData());
         } else {
             SpiConsentConfirmationCodeValidationResponse confirmationCodeValidationResponse = spiResponse.getPayload();
@@ -168,7 +168,7 @@ public abstract class ConsentAuthorisationConfirmationService<T extends Consent>
                                                                             consentId,
                                                                             authorisationId,
                                                                             request.getPsuData());
-            if (ConsentStatus.VALID == confirmationCodeValidationResponse.getConsentStatus()) {
+            if (Xs2aConsentStatus.VALID == confirmationCodeValidationResponse.getConsentStatus()) {
                 findAndTerminateOldConsentsByNewConsentId(consentId);
             }
         }
@@ -206,7 +206,7 @@ public abstract class ConsentAuthorisationConfirmationService<T extends Consent>
         return new UpdateConsentPsuDataResponse(errorHolder, consentId, authorisationId, psuIdData);
     }
 
-    protected abstract void updateConsentStatus(String consentId, ConsentStatus consentStatus);
+    protected abstract void updateConsentStatus(String consentId, Xs2aConsentStatus consentStatus);
 
     protected abstract void findAndTerminateOldConsentsByNewConsentId(String consentId);
 

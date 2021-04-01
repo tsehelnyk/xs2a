@@ -31,7 +31,7 @@ import java.util.Currency;
 @Data
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class AccountAccess {
+public abstract class CmsAccountAccess {
     @Column(name = "account_identifier", length = 34, nullable = false)
     @ApiModelProperty(value = "Account-Identifier: This data element can be used in the body of the CreateConsentReq Request Message for retrieving account access consent from this payment account", example = "DE2310010010123456789", required = true)
     private String accountIdentifier;
@@ -50,7 +50,7 @@ public abstract class AccountAccess {
     @ApiModelProperty(value = "Type of the account: IBAN, BBAN, IBAN, BBAN, PAN, MASKED_PAN, MSISDN", required = true, example = "IBAN")
     private AccountReferenceType accountReferenceType;
 
-    protected AccountAccess(String accountIdentifier, TypeAccess typeAccess, AccountReferenceType accountReferenceType, Currency currency) {
+    protected CmsAccountAccess(String accountIdentifier, TypeAccess typeAccess, AccountReferenceType accountReferenceType, Currency currency) {
         this.accountIdentifier = accountIdentifier;
         this.typeAccess = typeAccess;
         this.accountReferenceType = accountReferenceType;

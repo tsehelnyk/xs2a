@@ -24,10 +24,10 @@ import de.adorsys.psd2.consent.psu.api.CmsPsuPisService;
 import de.adorsys.psd2.consent.psu.api.pis.CmsPisPsuDataAuthorisation;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -111,7 +111,7 @@ public class CmsPsuPisController implements CmsPsuPisApi {
 
     @Override
     public ResponseEntity<Object> updateAuthorisationStatus(String psuId, String psuIdType, String psuCorporateId, String psuCorporateIdType, String paymentId, String authorisationId, String status, String instanceId, AuthenticationDataHolder authenticationDataHolder) {
-        ScaStatus scaStatus = ScaStatus.fromValue(status);
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.fromValue(status);
 
         if (scaStatus == null) {
             log.info("Payment ID [{}], Authorisation ID [{}], Instance ID: [{}]. Bad request: SCA status [{}] incorrect.", paymentId, authorisationId, instanceId, status);
@@ -130,7 +130,7 @@ public class CmsPsuPisController implements CmsPsuPisApi {
 
     @Override
     public ResponseEntity<Void> updatePaymentStatus(String paymentId, String status, String instanceId) {
-        return cmsPsuPisService.updatePaymentStatus(paymentId, TransactionStatus.valueOf(status), instanceId)
+        return cmsPsuPisService.updatePaymentStatus(paymentId, Xs2aTransactionStatus.valueOf(status), instanceId)
                    ? ResponseEntity.ok().build()
                    : ResponseEntity.badRequest().build();
     }

@@ -17,12 +17,12 @@
 
 package de.adorsys.psd2.xs2a.web.link;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.profile.ScaRedirectFlow;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.pis.CancelPaymentResponse;
 import de.adorsys.psd2.xs2a.service.RedirectIdService;
@@ -47,12 +47,12 @@ class PaymentCancellationLinksTest {
     private static final String PAYMENT_ID = "1111111111111";
     private static final String PAYMENT_SERVICE = "payments";
     private static final String AUTHORISATION_ID = "463318a0-1e33-45d8-8209-e16444b18dda";
-    private static final HrefType REDIRECT_LINK = new HrefType("built_redirect_link");
-    private static final HrefType CANCEL_AUTH_LINK = new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/cancellation-authorisations");
-    private static final HrefType PIS_CANCELLATION_AUTH_LINK_URL = new HrefType(CANCEL_AUTH_LINK.getHref() + "/" + AUTHORISATION_ID);
-    public static final HrefType START_AUTHORISATION_LINK = new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/cancellation-authorisations");
-    private static final HrefType SELF_LINK = new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111");
-    private static final HrefType STATUS_LINK = new HrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/status");
+    private static final Xs2aHrefType REDIRECT_LINK = new Xs2aHrefType("built_redirect_link");
+    private static final Xs2aHrefType CANCEL_AUTH_LINK = new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/cancellation-authorisations");
+    private static final Xs2aHrefType PIS_CANCELLATION_AUTH_LINK_URL = new Xs2aHrefType(CANCEL_AUTH_LINK.getHref() + "/" + AUTHORISATION_ID);
+    public static final Xs2aHrefType START_AUTHORISATION_LINK = new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/cancellation-authorisations");
+    private static final Xs2aHrefType SELF_LINK = new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111");
+    private static final Xs2aHrefType STATUS_LINK = new Xs2aHrefType("http://url/v1/payments/sepa-credit-transfers/1111111111111/status");
     private static final String CONFIRMATION_LINK = "confirmation_link";
     private static final PsuIdData PSU_DATA = new PsuIdData("psuId", "psuIdType", "psuCorporateId", "psuCorporateIdType", "psuIpAddress");
     private static final PsuIdData PSU_DATA_EMPTY = new PsuIdData(null, null, null, null, null);
@@ -78,7 +78,7 @@ class PaymentCancellationLinksTest {
         response.setPaymentProduct(PAYMENT_PRODUCT);
         response.setPaymentType(PaymentType.SINGLE);
         response.setPsuData(PSU_DATA);
-        response.setTransactionStatus(TransactionStatus.ACCP);
+        response.setTransactionStatus(Xs2aTransactionStatus.ACCP);
         response.setInternalRequestId(INTERNAL_REQUEST_ID);
     }
 
@@ -116,7 +116,7 @@ class PaymentCancellationLinksTest {
         expectedLinks.setStatus(STATUS_LINK);
         expectedLinks.setScaRedirect(REDIRECT_LINK);
         expectedLinks.setScaStatus(PIS_CANCELLATION_AUTH_LINK_URL);
-        expectedLinks.setConfirmation(new HrefType("http://url/confirmation_link"));
+        expectedLinks.setConfirmation(new Xs2aHrefType("http://url/confirmation_link"));
 
         // Then
         assertEquals(expectedLinks, links);
@@ -264,7 +264,7 @@ class PaymentCancellationLinksTest {
     @Test
     void buildCancellationLinks_status_RJCT() {
         boolean isExplicitMethod = true;
-        response.setTransactionStatus(TransactionStatus.RJCT);
+        response.setTransactionStatus(Xs2aTransactionStatus.RJCT);
 
         links = new PaymentCancellationLinks(HTTP_URL, scaApproachResolver, redirectLinkBuilder, redirectIdService, response, isExplicitMethod, ScaRedirectFlow.REDIRECT, false, "");
 

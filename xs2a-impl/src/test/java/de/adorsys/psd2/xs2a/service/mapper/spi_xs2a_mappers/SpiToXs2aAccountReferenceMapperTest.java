@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountReference;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,17 +41,17 @@ class SpiToXs2aAccountReferenceMapperTest {
 
     private JsonReader jsonReader = new JsonReader();
     private SpiAccountReference spiAccountReference;
-    private AccountReference expectedAccountReference;
+    private Xs2aAccountReference expectedAccountReference;
 
     @BeforeEach
     void setUp() {
         spiAccountReference = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/spi-account-reference.json", SpiAccountReference.class);
-        expectedAccountReference = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/account-reference.json", AccountReference.class);
+        expectedAccountReference = jsonReader.getObjectFromFile("json/service/mapper/spi_xs2a_mappers/account-reference.json", Xs2aAccountReference.class);
     }
 
     @Test
     void mapToXs2aAccountReference() {
-        AccountReference accountReference = mapper.mapToXs2aAccountReference(spiAccountReference);
+        Xs2aAccountReference accountReference = mapper.mapToXs2aAccountReference(spiAccountReference);
         assertEquals(expectedAccountReference, accountReference);
     }
 
@@ -62,7 +62,7 @@ class SpiToXs2aAccountReferenceMapperTest {
 
     @Test
     void mapToXs2aAccountReferenceList() {
-        List<AccountReference> accountReference = mapper.mapToXs2aAccountReferences(Collections.singletonList(spiAccountReference));
+        List<Xs2aAccountReference> accountReference = mapper.mapToXs2aAccountReferences(Collections.singletonList(spiAccountReference));
         assertEquals(expectedAccountReference, accountReference.get(0));
     }
 }

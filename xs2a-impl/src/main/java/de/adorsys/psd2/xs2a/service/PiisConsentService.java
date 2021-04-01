@@ -16,10 +16,10 @@
 
 package de.adorsys.psd2.xs2a.service;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.event.core.model.EventType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
@@ -27,7 +27,7 @@ import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
@@ -121,7 +121,7 @@ public class PiisConsentService {
         aspspConsentDataProvider.saveWith(encryptedConsentId);
 
         if (spiInitiatePiisConsentResponseSpiResponse.hasError()) {
-            xs2aPiisConsentService.updateConsentStatus(encryptedConsentId, ConsentStatus.REJECTED);
+            xs2aPiisConsentService.updateConsentStatus(encryptedConsentId, Xs2aConsentStatus.REJECTED);
             ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(spiInitiatePiisConsentResponseSpiResponse, ServiceType.PIIS);
             log.info("Consent-ID: [{}]. Create piis consent  with response failed. Consent rejected. Couldn't initiate PIIS consent at SPI level: {}",
                      encryptedConsentId, errorHolder);
@@ -133,10 +133,10 @@ public class PiisConsentService {
         SpiInitiatePiisConsentResponse spiInitiatePiisConsentResponse = spiInitiatePiisConsentResponseSpiResponse.getPayload();
 
         SpiAccountReference spiAccountReference = spiInitiatePiisConsentResponse.getSpiAccountReference();
-        AccountAccess accountAccess = new AccountAccess(Collections.singletonList(spiToXs2aAccountReferenceMapper.mapToXs2aAccountReference(spiAccountReference)), Collections.emptyList(), Collections.emptyList(), null);
+        Xs2aConsentAccountAccess accountAccess = new Xs2aConsentAccountAccess(Collections.singletonList(spiToXs2aAccountReferenceMapper.mapToXs2aAccountReference(spiAccountReference)), Collections.emptyList(), Collections.emptyList(), null);
         accountReferenceUpdater.rewriteAccountAccess(encryptedConsentId, accountAccess, ConsentType.PIIS_TPP);
 
-        ConsentStatus consentStatus = piisConsent.getConsentStatus();
+        Xs2aConsentStatus consentStatus = piisConsent.getConsentStatus();
         boolean multilevelScaRequired = spiInitiatePiisConsentResponse.isMultilevelScaRequired();
 
         updateMultilevelSca(encryptedConsentId, multilevelScaRequired);
@@ -175,7 +175,7 @@ public class PiisConsentService {
                        .build();
         }
 
-        ConsentStatus consentStatus = spiResponse.getPayload().getConsentStatus();
+        Xs2aConsentStatus consentStatus = spiResponse.getPayload().getConsentStatus();
         piisConsent.setConsentStatus(consentStatus);
         xs2aPiisConsentService.updateConsentStatus(consentId, consentStatus);
         return ResponseObject.<PiisConsent>builder().body(piisConsent).build();
@@ -206,7 +206,7 @@ public class PiisConsentService {
         }
 
         SpiConsentStatusResponse spiPayload = spiResponse.getPayload();
-        ConsentStatus consentStatus = spiPayload.getConsentStatus();
+        Xs2aConsentStatus consentStatus = spiPayload.getConsentStatus();
         xs2aPiisConsentService.updateConsentStatus(consentId, consentStatus);
 
         return responseBuilder
@@ -228,7 +228,7 @@ public class PiisConsentService {
 
         SpiContextData contextData = getSpiContextData();
         SpiAspspConsentDataProvider spiAspspConsentDataProvider = aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(consentId);
-        ScaStatus scaStatus = cmsConsentScaStatusResponse.getBody().getScaStatus();
+        Xs2aScaStatus scaStatus = cmsConsentScaStatusResponse.getBody().getScaStatus();
         SpiPiisConsent spiPiisConsent = xs2aToSpiPiisConsentMapper.mapToSpiPiisConsent(cmsConsentScaStatusResponse.getBody().getPiisConsent());
 
         SpiResponse<SpiScaStatusResponse> spiScaStatusResponse = piisConsentSpi.getScaStatus(scaStatus, contextData, authorisationId, spiPiisConsent, spiAspspConsentDataProvider);
@@ -289,9 +289,9 @@ public class PiisConsentService {
                        .build();
         }
 
-        ConsentStatus newConsentStatus = piisConsent.getConsentStatus() == ConsentStatus.RECEIVED
-                                             ? ConsentStatus.REJECTED
-                                             : ConsentStatus.TERMINATED_BY_TPP;
+        Xs2aConsentStatus newConsentStatus = piisConsent.getConsentStatus() == Xs2aConsentStatus.RECEIVED
+                                             ? Xs2aConsentStatus.REJECTED
+                                             : Xs2aConsentStatus.TERMINATED_BY_TPP;
 
         xs2aPiisConsentService.updateConsentStatus(consentId, newConsentStatus);
         return ResponseObject.<Void>builder().build();

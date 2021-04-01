@@ -16,10 +16,10 @@
 
 package de.adorsys.psd2.core.data.piis.v1;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.xs2a.core.authorisation.ConsentAuthorization;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class PiisConsentTest {
     @Test
     void getAccountReference() {
         PiisConsent piisConsent = jsonReader.getObjectFromFile("json/data/piis/piis-consent.json", PiisConsent.class);
-        AccountReference accountReference = jsonReader.getObjectFromFile("json/data/piis/account-reference.json", AccountReference.class);
+        Xs2aAccountReference accountReference = jsonReader.getObjectFromFile("json/data/piis/account-reference.json", Xs2aAccountReference.class);
 
         assertEquals(accountReference, piisConsent.getAccountReference());
     }
@@ -53,10 +53,10 @@ class PiisConsentTest {
         //Given
         PiisConsent piisConsent = jsonReader.getObjectFromFile("json/data/piis/piis-consent.json", PiisConsent.class);
         piisConsent.setTppAccountAccesses(piisConsent.getAspspAccountAccesses());
-        piisConsent.setAspspAccountAccesses(AccountAccess.EMPTY_ACCESS);
-        AccountReference expectedAccountReference = jsonReader.getObjectFromFile("json/data/piis/account-reference.json", AccountReference.class);
+        piisConsent.setAspspAccountAccesses(Xs2aConsentAccountAccess.EMPTY_ACCESS);
+        Xs2aAccountReference expectedAccountReference = jsonReader.getObjectFromFile("json/data/piis/account-reference.json", Xs2aAccountReference.class);
         //When
-        AccountReference actualAccountReference = piisConsent.getAccountReference();
+        Xs2aAccountReference actualAccountReference = piisConsent.getAccountReference();
         //Then
         assertEquals(expectedAccountReference, actualAccountReference);
     }

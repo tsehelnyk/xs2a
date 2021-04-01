@@ -17,6 +17,7 @@
 package de.adorsys.psd2.xs2a.web.mapper;
 
 import de.adorsys.psd2.model.BalanceType;
+import de.adorsys.psd2.xs2a.domain.Xs2aBalanceType;
 import de.adorsys.psd2.xs2a.service.mapper.AmountModelMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -45,7 +46,7 @@ class BalanceMapperTest {
 
     @Test
     void mapToBalanceType() {
-        Stream.of(de.adorsys.psd2.xs2a.domain.BalanceType.values()) //Given
+        Stream.of(Xs2aBalanceType.values()) //Given
             .map(mapper::mapToBalanceType) //When
             .forEach(Assertions::assertNotNull); //Then
     }

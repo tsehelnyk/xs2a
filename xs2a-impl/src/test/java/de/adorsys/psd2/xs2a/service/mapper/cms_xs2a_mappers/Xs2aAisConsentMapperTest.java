@@ -22,14 +22,13 @@ import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.core.mapper.ConsentDataMapper;
 import de.adorsys.psd2.xs2a.core.authorisation.ConsentAuthorization;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentReq;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.service.RequestProviderService;
-import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
 import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiAccountAccessMapper;
 import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiAccountReferenceMapper;
 import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPsuDataMapper;
@@ -130,7 +129,7 @@ class Xs2aAisConsentMapperTest {
         assertEquals(createConsentReq.isRecurringIndicator(), cmsConsent.isRecurringIndicator());
         assertEquals(Collections.singletonList(PSU_ID_DATA), cmsConsent.getPsuIdDataList());
         assertEquals(ConsentType.AIS, cmsConsent.getConsentType());
-        assertEquals(ConsentStatus.RECEIVED, cmsConsent.getConsentStatus());
+        assertEquals(Xs2aConsentStatus.RECEIVED, cmsConsent.getConsentStatus());
         assertEquals(TPP_BRAND_LOGGING_INFORMATION, cmsConsent.getTppInformation().getTppBrandLoggingInformation());
     }
 

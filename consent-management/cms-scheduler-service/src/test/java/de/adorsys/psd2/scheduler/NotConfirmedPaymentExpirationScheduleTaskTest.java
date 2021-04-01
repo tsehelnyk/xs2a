@@ -19,7 +19,7 @@ package de.adorsys.psd2.scheduler;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.repository.PisCommonPaymentDataRepository;
 import de.adorsys.psd2.consent.service.PisCommonPaymentConfirmationExpirationService;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,9 +68,9 @@ class NotConfirmedPaymentExpirationScheduleTaskTest {
         pisCommonPaymentDataList.add(new PisCommonPaymentData());
         pisCommonPaymentDataList.add(new PisCommonPaymentData());
 
-        when(paymentDataRepository.countByTransactionStatusIn(EnumSet.of(TransactionStatus.RCVD, TransactionStatus.PATC)))
+        when(paymentDataRepository.countByTransactionStatusIn(EnumSet.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PATC)))
             .thenReturn(10L);
-        when(paymentDataRepository.findByTransactionStatusIn(EnumSet.of(TransactionStatus.RCVD, TransactionStatus.PATC), PageRequest.of(0, 100)))
+        when(paymentDataRepository.findByTransactionStatusIn(EnumSet.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PATC), PageRequest.of(0, 100)))
             .thenReturn(pisCommonPaymentDataList);
         when(pisCommonPaymentConfirmationExpirationService.isConfirmationExpired(any(PisCommonPaymentData.class)))
             .thenReturn(true, false);
@@ -82,9 +82,9 @@ class NotConfirmedPaymentExpirationScheduleTaskTest {
 
         // Then
         verify(paymentDataRepository, times(1))
-            .countByTransactionStatusIn(EnumSet.of(TransactionStatus.RCVD, TransactionStatus.PATC));
+            .countByTransactionStatusIn(EnumSet.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PATC));
         verify(paymentDataRepository, times(1))
-            .findByTransactionStatusIn(EnumSet.of(TransactionStatus.RCVD, TransactionStatus.PATC), PageRequest.of(0, 100));
+            .findByTransactionStatusIn(EnumSet.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PATC), PageRequest.of(0, 100));
         verify(pisCommonPaymentConfirmationExpirationService, times(2)).isConfirmationExpired(any(PisCommonPaymentData.class));
         verify(pisCommonPaymentConfirmationExpirationService, times(1)).updatePaymentDataListOnConfirmationExpiration(anyList());
 
@@ -94,14 +94,14 @@ class NotConfirmedPaymentExpirationScheduleTaskTest {
     @Test
     void obsoleteNotConfirmedPaymentIfExpired_emptyList() {
         // Given
-        when(paymentDataRepository.countByTransactionStatusIn(EnumSet.of(TransactionStatus.RCVD, TransactionStatus.PATC)))
+        when(paymentDataRepository.countByTransactionStatusIn(EnumSet.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PATC)))
             .thenReturn(0L);
 
         // When
         scheduleTask.obsoleteNotConfirmedPaymentIfExpired();
 
         // Then
-        verify(paymentDataRepository, times(1)).countByTransactionStatusIn(EnumSet.of(TransactionStatus.RCVD, TransactionStatus.PATC));
+        verify(paymentDataRepository, times(1)).countByTransactionStatusIn(EnumSet.of(Xs2aTransactionStatus.RCVD, Xs2aTransactionStatus.PATC));
         verify(paymentDataRepository, never()).findByTransactionStatusIn(anySet(), any(Pageable.class));
         verify(pisCommonPaymentConfirmationExpirationService, never()).isConfirmationExpired(any(PisCommonPaymentData.class));
         verify(pisCommonPaymentConfirmationExpirationService, never()).updatePaymentDataListOnConfirmationExpiration(anyList());

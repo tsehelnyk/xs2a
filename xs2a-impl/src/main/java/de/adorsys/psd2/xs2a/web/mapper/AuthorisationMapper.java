@@ -17,10 +17,12 @@
 package de.adorsys.psd2.xs2a.web.mapper;
 
 import de.adorsys.psd2.model.*;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aCurrencyConversionInfo;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -155,9 +157,9 @@ public class AuthorisationMapper {
         return psuResponse;
     }
 
-    private UpdatePsuAuthenticationResponse buildUpdatePsuAuthenticationResponse(Links links, List<de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject> availableScaMethods,
-                                                                                 de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject chosenScaMethod, String psuMessage,
-                                                                                 de.adorsys.psd2.xs2a.core.sca.ChallengeData challengeData, ScaStatus scaStatus) {
+    private UpdatePsuAuthenticationResponse buildUpdatePsuAuthenticationResponse(Links links, List<Xs2aAuthenticationObject> availableScaMethods,
+                                                                                 Xs2aAuthenticationObject chosenScaMethod, String psuMessage,
+                                                                                 Xs2aChallengeData challengeData, Xs2aScaStatus scaStatus) {
         return new UpdatePsuAuthenticationResponse()
                    ._links(hrefLinkMapper.mapToLinksMap(links))
                    .scaMethods(scaMethodsMapper.mapToScaMethods(availableScaMethods))
@@ -171,7 +173,7 @@ public class AuthorisationMapper {
                    );
     }
 
-    private ChosenScaMethod mapToChosenScaMethod(de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject authenticationObject) {
+    private ChosenScaMethod mapToChosenScaMethod(Xs2aAuthenticationObject authenticationObject) {
         return Optional.ofNullable(authenticationObject)
                    .map(ch -> {
                        ChosenScaMethod method = new ChosenScaMethod();

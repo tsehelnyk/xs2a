@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Data
 public class Xs2aBalance {
     private Xs2aAmount balanceAmount;
-    private BalanceType balanceType;
+    private Xs2aBalanceType balanceType;
     private LocalDateTime lastChangeDateTime;
     private LocalDate referenceDate;
     private String lastCommittedTransaction;

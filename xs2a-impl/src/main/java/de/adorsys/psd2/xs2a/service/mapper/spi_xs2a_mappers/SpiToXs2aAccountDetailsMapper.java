@@ -16,8 +16,8 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.xs2a.domain.CashAccountType;
-import de.adorsys.psd2.xs2a.domain.account.AccountStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aCashAccountType;
+import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountStatus;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountDetails;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aCardAccountDetails;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aUsageType;
@@ -110,15 +110,15 @@ public class SpiToXs2aAccountDetailsMapper {
                    .collect(Collectors.toList());
     }
 
-    private CashAccountType mapToAccountType(SpiAccountType spiAccountType) {
+    private Xs2aCashAccountType mapToAccountType(SpiAccountType spiAccountType) {
         return Optional.ofNullable(spiAccountType)
-                   .map(type -> CashAccountType.valueOf(type.name()))
+                   .map(type -> Xs2aCashAccountType.valueOf(type.name()))
                    .orElse(null);
     }
 
-    private AccountStatus mapToAccountStatus(SpiAccountStatus spiAccountStatus) {
+    private Xs2aAccountStatus mapToAccountStatus(SpiAccountStatus spiAccountStatus) {
         return Optional.ofNullable(spiAccountStatus)
-                   .map(status -> AccountStatus.valueOf(status.name()))
+                   .map(status -> Xs2aAccountStatus.valueOf(status.name()))
                    .orElse(null);
     }
 

@@ -30,7 +30,7 @@ import java.util.Optional;
  * codes. These codes then shall be contained in the ASPSP's documentation of the XS2A interface and has to be added to
  * this API definition as well.
  */
-public enum ConsentStatus {
+public enum Xs2aConsentStatus {
     RECEIVED("received", false),
     REJECTED("rejected", true),
     VALID("valid", false),
@@ -40,10 +40,10 @@ public enum ConsentStatus {
     TERMINATED_BY_ASPSP("terminatedByAspsp", true),
     PARTIALLY_AUTHORISED("partiallyAuthorised", false);
 
-    private static final Map<String, ConsentStatus> CONTAINER = new HashMap<>();
+    private static final Map<String, Xs2aConsentStatus> CONTAINER = new HashMap<>();
 
     static {
-        for (ConsentStatus status : values()) {
+        for (Xs2aConsentStatus status : values()) {
             CONTAINER.put(status.getValue(), status);
         }
     }
@@ -55,12 +55,12 @@ public enum ConsentStatus {
         return finalisedStatus;
     }
 
-    ConsentStatus(String value, boolean finalisedStatus) {
+    Xs2aConsentStatus(String value, boolean finalisedStatus) {
         this.value = value;
         this.finalisedStatus = finalisedStatus;
     }
 
-    public static Optional<ConsentStatus> fromValue(String text) {
+    public static Optional<Xs2aConsentStatus> fromValue(String text) {
         if (text != null) {
             return Optional.ofNullable(CONTAINER.get(text.trim()));
         }

@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(description = "Account Reference", value = "AccountReference")
-public class AccountReference {
+public class Xs2aAccountReference {
     @ApiModelProperty(example = "123-DEDE89370400440532013000-EUR")
     private String aspspAccountId;
 
@@ -68,7 +68,7 @@ public class AccountReference {
      * @param accountReferenceValue Account identifier value
      * @param currency              Currency Type
      */
-    public AccountReference(AccountReferenceType accountReferenceType, String accountReferenceValue, Currency currency) {
+    public Xs2aAccountReference(AccountReferenceType accountReferenceType, String accountReferenceValue, Currency currency) {
         this(accountReferenceType, accountReferenceValue, currency, null, null);
     }
 
@@ -81,7 +81,7 @@ public class AccountReference {
      * @param resourceId            The identification that denotes the addressed account
      * @param aspspAccountId        Bank specific account ID
      */
-    public AccountReference(AccountReferenceType accountReferenceType, String accountReferenceValue, Currency currency, String resourceId, String aspspAccountId) {
+    public Xs2aAccountReference(AccountReferenceType accountReferenceType, String accountReferenceValue, Currency currency, String resourceId, String aspspAccountId) {
         if (accountReferenceType != null) {
             accountReferenceType.setFieldValue(this, accountReferenceValue);
         }

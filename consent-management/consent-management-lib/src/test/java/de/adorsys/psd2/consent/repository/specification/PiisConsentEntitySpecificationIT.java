@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.repository.TppInfoRepository;
 import de.adorsys.psd2.integration.test.BaseTest;
 import de.adorsys.psd2.integration.test.TestDBConfiguration;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import org.apache.commons.collections4.CollectionUtils;
@@ -60,7 +60,7 @@ class PiisConsentEntitySpecificationIT extends BaseTest {
     @Autowired
     private TppInfoRepository tppInfoRepository;
 
-    private AccountReference accountReference;
+    private Xs2aAccountReference accountReference;
 
     @BeforeEach
     void setUp() {
@@ -74,7 +74,7 @@ class PiisConsentEntitySpecificationIT extends BaseTest {
         consentEntity.getTppInformation().setTppInfo(tppInfo);
         consentJpaRepository.save(consentEntity);
 
-        accountReference = new AccountReference();
+        accountReference = new Xs2aAccountReference();
         accountReference.setIban("DE15500105172295759744");
         accountReference.setCurrency(Currency.getInstance("EUR"));
     }

@@ -23,7 +23,7 @@ import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.domain.pis.PeriodicPayment;
 import de.adorsys.psd2.xs2a.web.mapper.PurposeCodeMapper;
@@ -55,7 +55,7 @@ class PeriodicPaymentTypeValidatorImplTest {
     private MessageError messageError;
 
     private PeriodicPayment periodicPayment;
-    private AccountReference accountReference;
+    private Xs2aAccountReference accountReference;
     private Xs2aAddress address;
     private PaymentValidationConfig validationConfig;
 
@@ -67,7 +67,7 @@ class PeriodicPaymentTypeValidatorImplTest {
         periodicPayment.setStartDate(LocalDate.now().plusDays(1));
         periodicPayment.setEndDate(LocalDate.now().plusDays(5));
 
-        accountReference = jsonReader.getObjectFromFile("json/validation/account_reference.json", AccountReference.class);
+        accountReference = jsonReader.getObjectFromFile("json/validation/account_reference.json", Xs2aAccountReference.class);
         address = jsonReader.getObjectFromFile("json/validation/address.json", Xs2aAddress.class);
 
         Xs2aObjectMapper xs2aObjectMapper = new ObjectMapperConfig().xs2aObjectMapper();

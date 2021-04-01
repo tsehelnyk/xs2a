@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.validator;
 
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.discovery.ServiceTypeDiscoveryService;
@@ -41,19 +41,19 @@ import static de.adorsys.psd2.xs2a.core.error.MessageErrorCode.*;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SupportedAccountReferenceValidator implements BusinessValidator<Collection<AccountReference>> {
+public class SupportedAccountReferenceValidator implements BusinessValidator<Collection<Xs2aAccountReference>> {
 
     private final AspspProfileServiceWrapper aspspProfileService;
     private final ServiceTypeDiscoveryService serviceTypeDiscoveryService;
     private final ServiceTypeToErrorTypeMapper errorTypeMapper;
 
     @Override
-    public @NotNull ValidationResult validate(@NotNull Collection<AccountReference> accountReferences) {
+    public @NotNull ValidationResult validate(@NotNull Collection<Xs2aAccountReference> accountReferences) {
         if (accountReferences.isEmpty()) {
             return ValidationResult.valid();
         }
 
-        Optional<AccountReference> accountWithSeveralUsedTypes = accountReferences.stream()
+        Optional<Xs2aAccountReference> accountWithSeveralUsedTypes = accountReferences.stream()
                                                                      .filter(ar -> ar.getUsedAccountReferenceFields().size() > 1)
                                                                      .findFirst();
 
@@ -66,7 +66,7 @@ public class SupportedAccountReferenceValidator implements BusinessValidator<Col
         return validateAccountReference(accountReferences);
     }
 
-    private ValidationResult validateAccountReference(Collection<AccountReference> accountReferences) {
+    private ValidationResult validateAccountReference(Collection<Xs2aAccountReference> accountReferences) {
 
         Set<AccountReferenceType> actualAccountReferenceType = accountReferences.stream()
                                                                    .flatMap(ar -> ar.getUsedAccountReferenceFields().stream())

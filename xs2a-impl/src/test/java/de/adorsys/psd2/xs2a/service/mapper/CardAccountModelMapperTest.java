@@ -18,11 +18,13 @@ package de.adorsys.psd2.xs2a.service.mapper;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import de.adorsys.psd2.aspsp.profile.domain.MulticurrencyAccountLevel;
+import de.adorsys.psd2.core.payment.model.Xs2aPisPurposeCode;
 import de.adorsys.psd2.model.*;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
-import de.adorsys.psd2.xs2a.domain.account.AccountStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aCardTransaction;
+import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountStatus;
 import de.adorsys.psd2.xs2a.domain.account.*;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
 import de.adorsys.psd2.xs2a.web.mapper.HrefLinkMapper;
@@ -86,7 +88,7 @@ class CardAccountModelMapperTest {
     @Test
     void mapToCardAccountList() {
         // Given
-        Map<String, HrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, HrefType>>() {
+        Map<String, Xs2aHrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, Xs2aHrefType>>() {
         });
         Links xs2aLinks = jsonReader.getObjectFromFile(XS2A_LINKS_JSON_PATH, Links.class);
         when(mockedHrefLinkMapper.mapToLinksMap(xs2aLinks)).thenReturn(links);
@@ -114,7 +116,7 @@ class CardAccountModelMapperTest {
     @Test
     void mapToCardAccountDetails() {
         // Given
-        Map<String, HrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, HrefType>>() {
+        Map<String, Xs2aHrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, Xs2aHrefType>>() {
         });
         Links xs2aLinks = jsonReader.getObjectFromFile(XS2A_LINKS_JSON_PATH, Links.class);
         when(mockedHrefLinkMapper.mapToLinksMap(xs2aLinks)).thenReturn(links);
@@ -168,9 +170,9 @@ class CardAccountModelMapperTest {
         Xs2aAmount xs2aAmount = jsonReader.getObjectFromFile(XS2A_AMOUNT_JSON_PATH, Xs2aAmount.class);
         Amount amount = jsonReader.getObjectFromFile(AMOUNT_JSON_PATH, Amount.class);
         when(mockedAmountModelMapper.mapToAmount(xs2aAmount)).thenReturn(amount);
-        when(mockedPurposeCodeMapper.mapToPurposeCode(PurposeCode.BKDF)).thenReturn(de.adorsys.psd2.core.payment.model.PurposeCode.BKDF);
+        when(mockedPurposeCodeMapper.mapToPurposeCode(PurposeCode.BKDF)).thenReturn(Xs2aPisPurposeCode.BKDF);
 
-        de.adorsys.psd2.xs2a.domain.CardTransaction transaction = jsonReader.getObjectFromFile("json/service/mapper/card-account-model-mapper/CardAccountModelMapper-card-transaction.json", de.adorsys.psd2.xs2a.domain.CardTransaction.class);
+        Xs2aCardTransaction transaction = jsonReader.getObjectFromFile("json/service/mapper/card-account-model-mapper/CardAccountModelMapper-card-transaction.json", Xs2aCardTransaction.class);
 
         // When
         CardTransaction actualCardTransaction = mapper.mapToCardTransaction(transaction);
@@ -184,7 +186,7 @@ class CardAccountModelMapperTest {
     @Test
     void mapToCardTransactionsResponse200Json_success() {
         // Given
-        Map<String, HrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, HrefType>>() {
+        Map<String, Xs2aHrefType> links = jsonReader.getObjectFromFile(LINKS_JSON_PATH, new TypeReference<Map<String, Xs2aHrefType>>() {
         });
         Links xs2aLinks = jsonReader.getObjectFromFile(XS2A_LINKS_JSON_PATH, Links.class);
         when(mockedHrefLinkMapper.mapToLinksMap(xs2aLinks)).thenReturn(links);
@@ -286,7 +288,7 @@ class CardAccountModelMapperTest {
 
     private Xs2aCardAccountDetails buildXs2aCardAccountDetails(Currency currency) {
         return new Xs2aCardAccountDetails(null, null, null, currency,
-                                          null, null, null, null, AccountStatus.ENABLED,
+                                          null, null, null, null, Xs2aAccountStatus.ENABLED,
                                           null, null, null, null, null, null);
     }
 
@@ -295,7 +297,7 @@ class CardAccountModelMapperTest {
         assertFalse(actualLinks.isEmpty());
         assertEquals(expectedLinks.size(), actualLinks.size());
         for (Object linkKey : actualLinks.keySet()) {
-            HrefType actualHrefType = (HrefType) actualLinks.get(linkKey);
+            Xs2aHrefType actualHrefType = (Xs2aHrefType) actualLinks.get(linkKey);
             assertEquals(String.valueOf(((Map<?, ?>) expectedLinks.get(linkKey)).get("href")), actualHrefType.getHref());
         }
     }

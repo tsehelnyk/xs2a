@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.authorization.processor.model;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class AuthorisationProcessorRequest {
 
     private ServiceType serviceType;
     private ScaApproach scaApproach;
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     private UpdateAuthorisationRequest updateAuthorisationRequest;
     private Authorisation authorisation;
 }

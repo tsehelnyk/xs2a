@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers;
 
 import de.adorsys.psd2.consent.api.CmsScaMethod;
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class Xs2aAuthenticationObjectToCmsScaMethodMapperTest {
 
     private Xs2aAuthenticationObjectToCmsScaMethodMapper mapper;
-    private AuthenticationObject authenticationObject;
+    private Xs2aAuthenticationObject authenticationObject;
     private CmsScaMethod cmsScaMethod;
 
     private JsonReader jsonReader = new JsonReader();
@@ -38,7 +38,7 @@ class Xs2aAuthenticationObjectToCmsScaMethodMapperTest {
     @BeforeEach
     void setUp() {
         mapper = new Xs2aAuthenticationObjectToCmsScaMethodMapper();
-        authenticationObject = jsonReader.getObjectFromFile("json/service/mapper/consent/authentication-object.json", AuthenticationObject.class);
+        authenticationObject = jsonReader.getObjectFromFile("json/service/mapper/consent/authentication-object.json", Xs2aAuthenticationObject.class);
         cmsScaMethod = jsonReader.getObjectFromFile("json/service/mapper/consent/cms-sca-method.json", CmsScaMethod.class);
     }
 

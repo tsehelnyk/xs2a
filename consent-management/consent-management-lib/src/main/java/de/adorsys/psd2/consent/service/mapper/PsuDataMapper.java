@@ -17,7 +17,7 @@
 package de.adorsys.psd2.consent.service.mapper;
 
 import de.adorsys.psd2.consent.domain.AdditionalPsuData;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.xs2a.core.psu.AdditionalPsuIdData;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import org.springframework.stereotype.Component;
@@ -30,23 +30,23 @@ import java.util.stream.Collectors;
 
 @Component
 public class PsuDataMapper {
-    public List<PsuData> mapToPsuDataList(List<PsuIdData> psuIdDataList, String instanceId) {
+    public List<CmsPsuData> mapToPsuDataList(List<PsuIdData> psuIdDataList, String instanceId) {
         return psuIdDataList.stream()
                    .map(psu -> mapToPsuData(psu, instanceId))
                    .filter(Objects::nonNull)
                    .collect(Collectors.toList());
     }
 
-    public List<PsuIdData> mapToPsuIdDataList(List<PsuData> psuIdDataList) {
+    public List<PsuIdData> mapToPsuIdDataList(List<CmsPsuData> psuIdDataList) {
         return psuIdDataList.stream()
                    .map(this::mapToPsuIdData)
                    .collect(Collectors.toList());
     }
 
-    public PsuData mapToPsuData(PsuIdData psuIdData, String instanceId) {
+    public CmsPsuData mapToPsuData(PsuIdData psuIdData, String instanceId) {
         return Optional.ofNullable(psuIdData)
                    .filter(PsuIdData::isNotEmpty)
-                   .map(psu -> new PsuData(
+                   .map(psu -> new CmsPsuData(
                        psu.getPsuId(),
                        psu.getPsuIdType(),
                        psu.getPsuCorporateId(),
@@ -58,16 +58,16 @@ public class PsuDataMapper {
                    .orElse(null);
     }
 
-    private PsuData setInstanceId(PsuData psuData, String instanceId) {
+    private CmsPsuData setInstanceId(CmsPsuData psuData, String instanceId) {
         if (psuData != null && instanceId != null) {
             psuData.setInstanceId(instanceId);
         }
         return psuData;
     }
 
-    public PsuIdData mapToPsuIdData(PsuData psuData) {
+    public PsuIdData mapToPsuIdData(CmsPsuData psuData) {
         return Optional.ofNullable(psuData)
-                   .filter(PsuData::isNotEmpty)
+                   .filter(CmsPsuData::isNotEmpty)
                    .map(psu -> new PsuIdData(
                        psu.getPsuId(),
                        psu.getPsuIdType(),

@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.domain.pis;
 
 import de.adorsys.psd2.xs2a.core.pis.CoreCommonPayment;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.domain.CustomContentTypeProvider;
@@ -32,7 +32,7 @@ import java.util.List;
 public class CommonPayment implements CustomContentTypeProvider, CoreCommonPayment {
     protected String paymentId;
     protected String paymentProduct;
-    protected TransactionStatus transactionStatus;
+    protected Xs2aTransactionStatus transactionStatus;
     protected PaymentType paymentType;
     protected byte[] paymentData;
     protected List<PsuIdData> psuDataList;

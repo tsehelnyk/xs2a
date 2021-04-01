@@ -28,7 +28,7 @@ import de.adorsys.psd2.event.service.Xs2aEventServiceEncrypted;
 import de.adorsys.psd2.event.service.model.EventBO;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
 import de.adorsys.psd2.xs2a.integration.builder.AspspSettingsBuilder;
@@ -61,7 +61,7 @@ public abstract class CustomPaymentTestParent {
     static final String TPP_NOK_REDIRECT_URI = "request/nok_redirect_uri";
     static final String ENCRYPT_PAYMENT_ID = "DfLtDOgo1tTK6WQlHlb-TMPL2pkxRlhZ4feMa5F4tOWwNN45XLNAVfWwoZUKlQwb_=_bS6p6XvTWI";
     static final String CUSTOM_PAYMENT_PRODUCT = "custom-payment";
-    static final ScaStatus SCA_STATUS = ScaStatus.RECEIVED;
+    static final Xs2aScaStatus SCA_STATUS = Xs2aScaStatus.RECEIVED;
     static final TppRedirectUri TPP_REDIRECT_URIs = new TppRedirectUri(TPP_REDIRECT_URI, TPP_NOK_REDIRECT_URI);
     static final String SINGLE_PAYMENT_CUSTOM_REQUEST_JSON_PATH = "/json/payment/req/SinglePaymentCustomInitiate_request.json";
     static final String SINGLE_PAYMENT_CUSTOM_REQUEST_XML_PATH = "/xml/payment/spi/res/SinglePaymentCustomInitiate_request.xml";

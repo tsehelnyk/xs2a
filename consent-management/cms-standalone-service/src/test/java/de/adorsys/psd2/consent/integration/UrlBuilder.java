@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.consent.integration;
 
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class UrlBuilder {
@@ -248,7 +248,7 @@ public class UrlBuilder {
                    .toUriString();
     }
 
-    public static String updatePisAuthorisationStatusUrl(String paymentId, String authorisationId, ScaStatus status) {
+    public static String updatePisAuthorisationStatusUrl(String paymentId, String authorisationId, Xs2aScaStatus status) {
         return UriComponentsBuilder.fromPath("/psu-api/v1/payment/{payment-id}/authorisation/{authorisation-id}/status/{status}")
                    .buildAndExpand(paymentId, authorisationId, status)
                    .toUriString();

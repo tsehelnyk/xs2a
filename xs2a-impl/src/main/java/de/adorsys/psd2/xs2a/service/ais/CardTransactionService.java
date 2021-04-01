@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.ais;
 
 import de.adorsys.psd2.consent.api.TypeAccess;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
@@ -25,7 +25,7 @@ import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aCardAccountReport;
@@ -164,7 +164,7 @@ public class CardTransactionService {
     }
 
     private SpiAccountReference getRequestedAccountReference(AisConsent aisConsent, String accountId) {
-        AccountAccess access = aisConsent.getAspspAccountAccesses();
+        Xs2aConsentAccountAccess access = aisConsent.getAspspAccountAccesses();
         return accountHelperService.findAccountReference(access.getTransactions(), accountId);
     }
 
@@ -196,7 +196,7 @@ public class CardTransactionService {
                                                                   .body(transactionsReport)
                                                                   .build();
 
-        AccountReference accountReference = transactionsReport.getAccountReference();
+        Xs2aAccountReference accountReference = transactionsReport.getAccountReference();
         aisConsentService.consentActionLog(tppService.getTppId(),
                                            request.getConsentId(),
                                            accountHelperService.createActionStatus(request.isWithBalance(), TypeAccess.TRANSACTION, response),
@@ -226,7 +226,7 @@ public class CardTransactionService {
         return cardTransactionsReport;
     }
 
-    private Xs2aCardTransactionsReport getXs2aCardTransactionsReport(Xs2aCardAccountReport report, AccountReference requestedAccountReference,
+    private Xs2aCardTransactionsReport getXs2aCardTransactionsReport(Xs2aCardAccountReport report, Xs2aAccountReference requestedAccountReference,
                                                                      SpiCardTransactionReport spiCardTransactionReport) {
         Xs2aCardTransactionsReport transactionsReport = new Xs2aCardTransactionsReport();
         transactionsReport.setCardAccountReport(report);
@@ -236,7 +236,7 @@ public class CardTransactionService {
         return transactionsReport;
     }
 
-    private AccountReference getMaskedAccountReference(AccountReference filteredAccountReference) {
+    private Xs2aAccountReference getMaskedAccountReference(Xs2aAccountReference filteredAccountReference) {
         if (filteredAccountReference != null && StringUtils.isNotBlank(filteredAccountReference.getPan())) {
             String maskedPan = cardAccountHandler.hidePanInAccountReference(filteredAccountReference.getPan());
 
@@ -247,7 +247,7 @@ public class CardTransactionService {
         return filteredAccountReference;
     }
 
-    private AccountReference filterAccountReference(List<AccountReference> references, String resourceId) {
+    private Xs2aAccountReference filterAccountReference(List<Xs2aAccountReference> references, String resourceId) {
 
         if (references == null) {
             return null;

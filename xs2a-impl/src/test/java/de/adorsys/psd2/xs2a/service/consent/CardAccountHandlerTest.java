@@ -17,9 +17,9 @@
 package de.adorsys.psd2.xs2a.service.consent;
 
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
-import de.adorsys.psd2.xs2a.domain.account.AccountStatus;
+import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountStatus;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aCardAccountDetails;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aUsageType;
 import org.junit.jupiter.api.BeforeEach;
@@ -95,12 +95,12 @@ class CardAccountHandlerTest {
         creditLimit.setAmount("10000");
 
         return new Xs2aCardAccountDetails(null, null, CardAccountHandlerTest.MASKED_PAN, Currency.getInstance("EUR"), null, null, null,
-                                          null, AccountStatus.ENABLED, Xs2aUsageType.PRIV, "details",
+                                          null, Xs2aAccountStatus.ENABLED, Xs2aUsageType.PRIV, "details",
                                           null, creditLimit, null, null);
     }
 
-    private AccountReference getAccountReference(AccountReferenceType accountReferenceType, String accountReferenceValue) {
-        return new AccountReference(accountReferenceType, accountReferenceValue, Currency.getInstance("EUR"));
+    private Xs2aAccountReference getAccountReference(AccountReferenceType accountReferenceType, String accountReferenceValue) {
+        return new Xs2aAccountReference(accountReferenceType, accountReferenceValue, Currency.getInstance("EUR"));
 
     }
 }

@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers;
 import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationResponse;
 import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.pis.CreatePisCommonPaymentResponse;
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -62,7 +62,7 @@ public class Xs2aPisCommonPaymentMapper {
                        UpdateAuthorisationRequest req = new UpdateAuthorisationRequest();
                        req.setPsuData(response.getPsuData());
                        req.setAuthenticationMethodId(Optional.ofNullable(data.getChosenScaMethod())
-                                                         .map(AuthenticationObject::getAuthenticationMethodId)
+                                                         .map(Xs2aAuthenticationObject::getAuthenticationMethodId)
                                                          .orElse(null));
                        req.setScaStatus(data.getScaStatus());
                        req.setAuthorisationType(authorisationType);

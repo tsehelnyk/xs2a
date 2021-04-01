@@ -25,20 +25,20 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public enum AccountReferenceType {
-    IBAN(1, "iban", AccountReference::getIban, AccountReference::setIban),
-    BBAN(2, "bban", AccountReference::getBban, AccountReference::setBban),
-    PAN(3, "pan", AccountReference::getPan, AccountReference::setPan),
-    MSISDN(4, "msisdn", AccountReference::getMsisdn, AccountReference::setMsisdn),
-    MASKED_PAN(5, "maskedPan", AccountReference::getMaskedPan, AccountReference::setMaskedPan);
+    IBAN(1, "iban", Xs2aAccountReference::getIban, Xs2aAccountReference::setIban),
+    BBAN(2, "bban", Xs2aAccountReference::getBban, Xs2aAccountReference::setBban),
+    PAN(3, "pan", Xs2aAccountReference::getPan, Xs2aAccountReference::setPan),
+    MSISDN(4, "msisdn", Xs2aAccountReference::getMsisdn, Xs2aAccountReference::setMsisdn),
+    MASKED_PAN(5, "maskedPan", Xs2aAccountReference::getMaskedPan, Xs2aAccountReference::setMaskedPan);
 
     private String value;
     private int order;
-    private Function<AccountReference, String> getter;
-    private BiConsumer<AccountReference, String> setter;
+    private Function<Xs2aAccountReference, String> getter;
+    private BiConsumer<Xs2aAccountReference, String> setter;
 
     @JsonCreator
-    AccountReferenceType(int order, String value, Function<AccountReference, String> getter,
-                         BiConsumer<AccountReference, String> setter) {
+    AccountReferenceType(int order, String value, Function<Xs2aAccountReference, String> getter,
+                         BiConsumer<Xs2aAccountReference, String> setter) {
         this.order = order;
         this.value = value;
         this.getter = getter;
@@ -60,11 +60,11 @@ public enum AccountReferenceType {
                    .findFirst();
     }
 
-    public String getFieldValue(AccountReference accountReference) {
+    public String getFieldValue(Xs2aAccountReference accountReference) {
         return getter.apply(accountReference);
     }
 
-    public void setFieldValue(AccountReference accountReference, String fieldValue) {
+    public void setFieldValue(Xs2aAccountReference accountReference, String fieldValue) {
         setter.accept(accountReference, fieldValue);
     }
 }

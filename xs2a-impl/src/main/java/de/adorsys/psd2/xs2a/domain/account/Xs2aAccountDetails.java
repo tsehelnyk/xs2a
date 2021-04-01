@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.domain.account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.adorsys.psd2.xs2a.core.domain.address.Xs2aAddress;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceSelector;
-import de.adorsys.psd2.xs2a.domain.CashAccountType;
+import de.adorsys.psd2.xs2a.domain.Xs2aCashAccountType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.Xs2aBalance;
 import lombok.Data;
@@ -62,9 +62,9 @@ public class Xs2aAccountDetails {
     @Size(max = 35)
     private final String product;
 
-    private final CashAccountType cashAccountType;
+    private final Xs2aCashAccountType cashAccountType;
 
-    private final AccountStatus accountStatus;
+    private final Xs2aAccountStatus accountStatus;
 
     private final String bic;
 

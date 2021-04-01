@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.validator;
 
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
@@ -56,7 +56,7 @@ class OauthPiisConsentValidatorTest {
         //Given
         when(scaApproachResolver.resolveScaApproach()).thenReturn(ScaApproach.REDIRECT);
         when(aspspProfileServiceWrapper.getScaRedirectFlow()).thenReturn(ScaRedirectFlow.OAUTH);
-        PiisConsent piisConsent = buildPiisConsent(ConsentStatus.VALID);
+        PiisConsent piisConsent = buildPiisConsent(Xs2aConsentStatus.VALID);
         when(requestProviderService.getOAuth2Token()).thenReturn("");
         //When
         ValidationResult validationResult = oauthConsentValidator.validate(piisConsent);
@@ -71,7 +71,7 @@ class OauthPiisConsentValidatorTest {
         //Given
         when(scaApproachResolver.resolveScaApproach()).thenReturn(ScaApproach.REDIRECT);
         when(aspspProfileServiceWrapper.getScaRedirectFlow()).thenReturn(ScaRedirectFlow.OAUTH);
-        PiisConsent piisConsent = buildPiisConsent(ConsentStatus.VALID);
+        PiisConsent piisConsent = buildPiisConsent(Xs2aConsentStatus.VALID);
         when(requestProviderService.getOAuth2Token()).thenReturn(null);
         //When
         ValidationResult validationResult = oauthConsentValidator.validate(piisConsent);
@@ -86,7 +86,7 @@ class OauthPiisConsentValidatorTest {
         //Given
         when(scaApproachResolver.resolveScaApproach()).thenReturn(ScaApproach.REDIRECT);
         when(aspspProfileServiceWrapper.getScaRedirectFlow()).thenReturn(ScaRedirectFlow.OAUTH);
-        PiisConsent piisConsent = buildPiisConsent(ConsentStatus.VALID);
+        PiisConsent piisConsent = buildPiisConsent(Xs2aConsentStatus.VALID);
         when(requestProviderService.getOAuth2Token()).thenReturn(TOKEN);
         //When
         ValidationResult validationResult = oauthConsentValidator.validate(piisConsent);
@@ -100,7 +100,7 @@ class OauthPiisConsentValidatorTest {
         //Given
         when(scaApproachResolver.resolveScaApproach()).thenReturn(ScaApproach.REDIRECT);
         when(aspspProfileServiceWrapper.getScaRedirectFlow()).thenReturn(ScaRedirectFlow.OAUTH_PRE_STEP);
-        PiisConsent piisConsent = buildPiisConsent(ConsentStatus.VALID);
+        PiisConsent piisConsent = buildPiisConsent(Xs2aConsentStatus.VALID);
         //When
         ValidationResult validationResult = oauthConsentValidator.validate(piisConsent);
         //Then
@@ -112,7 +112,7 @@ class OauthPiisConsentValidatorTest {
     void validate_valid_approachEmbedded_flowOauth_statusValid() {
         //Given
         when(scaApproachResolver.resolveScaApproach()).thenReturn(ScaApproach.EMBEDDED);
-        PiisConsent piisConsent = buildPiisConsent(ConsentStatus.VALID);
+        PiisConsent piisConsent = buildPiisConsent(Xs2aConsentStatus.VALID);
         //When
         ValidationResult validationResult = oauthConsentValidator.validate(piisConsent);
         //Then
@@ -125,7 +125,7 @@ class OauthPiisConsentValidatorTest {
         //Given
         when(scaApproachResolver.resolveScaApproach()).thenReturn(ScaApproach.REDIRECT);
         when(aspspProfileServiceWrapper.getScaRedirectFlow()).thenReturn(ScaRedirectFlow.OAUTH);
-        PiisConsent piisConsent = buildPiisConsent(ConsentStatus.RECEIVED);
+        PiisConsent piisConsent = buildPiisConsent(Xs2aConsentStatus.RECEIVED);
         //When
         ValidationResult validationResult = oauthConsentValidator.validate(piisConsent);
         //Then
@@ -133,7 +133,7 @@ class OauthPiisConsentValidatorTest {
         assertTrue(validationResult.isValid());
     }
 
-    private PiisConsent buildPiisConsent(ConsentStatus consentStatus) {
+    private PiisConsent buildPiisConsent(Xs2aConsentStatus consentStatus) {
         PiisConsent piisConsent = new PiisConsent();
         piisConsent.setConsentStatus(consentStatus);
         return piisConsent;

@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.web.link;
 
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class TransactionsReportCardDownloadLinksTest {
     @BeforeEach
     void setUp() {
         expectedLinks = new Links();
-        expectedLinks.setDownload(new HrefType(HTTP_URL + "/v1/card-accounts/" + ACCOUNT_ID + "/transactions/download/encoded-string"));
+        expectedLinks.setDownload(new Xs2aHrefType(HTTP_URL + "/v1/card-accounts/" + ACCOUNT_ID + "/transactions/download/encoded-string"));
     }
 
     @Test
@@ -50,7 +50,7 @@ class TransactionsReportCardDownloadLinksTest {
 
         TransactionsReportCardDownloadLinks links = new TransactionsReportCardDownloadLinks(HTTP_URL, ACCOUNT_ID, withBalance, "encoded-string");
 
-        expectedLinks.setBalances(new HrefType("http://url/v1/card-accounts/33333-999999999/balances"));
+        expectedLinks.setBalances(new Xs2aHrefType("http://url/v1/card-accounts/33333-999999999/balances"));
         assertEquals(expectedLinks, links);
     }
 }

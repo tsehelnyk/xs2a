@@ -20,7 +20,7 @@ import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationResponse;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentAuthorizationResponse;
 import de.adorsys.psd2.xs2a.service.authorization.piis.EmbeddedPiisAuthorizationService;
 import de.adorsys.psd2.xs2a.service.consent.Xs2aConsentService;
@@ -39,8 +39,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmbeddedPiisAuthorizationServiceTest {
-    private static final ScaStatus STARTED_SCA_STATUS = ScaStatus.RECEIVED;
-    private static final ScaStatus STARTED_XS2A_SCA_STATUS = ScaStatus.RECEIVED;
+    private static final Xs2aScaStatus STARTED_SCA_STATUS = Xs2aScaStatus.RECEIVED;
+    private static final Xs2aScaStatus STARTED_XS2A_SCA_STATUS = Xs2aScaStatus.RECEIVED;
     private static final String PSU_ID = "Test psuId";
     private static final PsuIdData PSU_DATA = new PsuIdData(PSU_ID, null, null, null, null);
     private static final String CONSENT_ID = "Test consentId";
@@ -96,11 +96,11 @@ class EmbeddedPiisAuthorizationServiceTest {
     @Test
     void getAuthorisationScaStatus() {
         //Given
-        ScaStatus scaStatus = ScaStatus.RECEIVED;
+        Xs2aScaStatus scaStatus = Xs2aScaStatus.RECEIVED;
         when(consentService.getAuthorisationScaStatus(CONSENT_ID, AUTHORISATION_ID))
             .thenReturn(Optional.of(scaStatus));
         //When
-        Optional<ScaStatus> authorisationScaStatus = authorizationService.getAuthorisationScaStatus(CONSENT_ID, AUTHORISATION_ID);
+        Optional<Xs2aScaStatus> authorisationScaStatus = authorizationService.getAuthorisationScaStatus(CONSENT_ID, AUTHORISATION_ID);
         //Then
         verify(consentService, atLeastOnce()).getAuthorisationScaStatus(CONSENT_ID, AUTHORISATION_ID);
         assert (authorisationScaStatus).isPresent();

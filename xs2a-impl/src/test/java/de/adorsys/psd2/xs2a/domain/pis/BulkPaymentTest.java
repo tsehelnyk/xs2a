@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.domain.pis;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
 import org.junit.jupiter.api.Test;
 
@@ -25,13 +25,13 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BulkPaymentTest {
-    private static final AccountReference DEBTOR_ACCOUNT_1 = new AccountReference(AccountReferenceType.IBAN,
+    private static final Xs2aAccountReference DEBTOR_ACCOUNT_1 = new Xs2aAccountReference(AccountReferenceType.IBAN,
                                                                                   "debtor iban 1",
                                                                                   Currency.getInstance("EUR"));
-    private static final AccountReference DEBTOR_ACCOUNT_2 = new AccountReference(AccountReferenceType.IBAN,
+    private static final Xs2aAccountReference DEBTOR_ACCOUNT_2 = new Xs2aAccountReference(AccountReferenceType.IBAN,
                                                                                   "debtor iban 2",
                                                                                   Currency.getInstance("EUR"));
-    private static final AccountReference CREDITOR_ACCOUNT = new AccountReference(AccountReferenceType.IBAN,
+    private static final Xs2aAccountReference CREDITOR_ACCOUNT = new Xs2aAccountReference(AccountReferenceType.IBAN,
                                                                                   "creditor iban",
                                                                                   Currency.getInstance("EUR"));
 
@@ -41,10 +41,10 @@ class BulkPaymentTest {
         BulkPayment bulkPayment = buildBulkPayment(Collections.singletonList(buildSinglePayment()));
 
         // When
-        Set<AccountReference> actualAccountReferences = bulkPayment.getAccountReferences();
+        Set<Xs2aAccountReference> actualAccountReferences = bulkPayment.getAccountReferences();
 
         // Then
-        Set<AccountReference> expectedAccountReferences = new HashSet<>(Arrays.asList(DEBTOR_ACCOUNT_1, DEBTOR_ACCOUNT_2, CREDITOR_ACCOUNT));
+        Set<Xs2aAccountReference> expectedAccountReferences = new HashSet<>(Arrays.asList(DEBTOR_ACCOUNT_1, DEBTOR_ACCOUNT_2, CREDITOR_ACCOUNT));
         assertEquals(expectedAccountReferences, actualAccountReferences);
     }
 

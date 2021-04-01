@@ -25,7 +25,7 @@ import lombok.Data;
 @Data
 @ApiModel(description = "BankTransactionCode", value = "The Bank transaction code")
 @AllArgsConstructor
-public class BankTransactionCode {
+public class Xs2aBankTransactionCode {
 
     @ApiModelProperty(value = "BankTransactionCode code", example = "123344")
     private String code;

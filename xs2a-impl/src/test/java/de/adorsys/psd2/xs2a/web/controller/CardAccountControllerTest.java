@@ -26,7 +26,7 @@ import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.domain.BalanceType;
+import de.adorsys.psd2.xs2a.domain.Xs2aBalanceType;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.Xs2aBalance;
 import de.adorsys.psd2.xs2a.domain.account.*;
@@ -254,7 +254,7 @@ class CardAccountControllerTest {
 
         List<Xs2aCardAccountDetails> accountDetails = Collections.singletonList(
             new Xs2aCardAccountDetails(ASPSP_ACCOUNT_ID, "33333-999999999", "DE371234599997", null, null, null,
-                                       null, null, AccountStatus.ENABLED, Xs2aUsageType.PRIV, "details",
+                                       null, null, Xs2aAccountStatus.ENABLED, Xs2aUsageType.PRIV, "details",
                                        null, creditLimit, null, null));
         Xs2aCardAccountListHolder xs2aAccountListHolder = new Xs2aCardAccountListHolder(accountDetails, null);
         return ResponseObject.<Xs2aCardAccountListHolder>builder()
@@ -311,7 +311,7 @@ class CardAccountControllerTest {
         amount.setAmount("300.45");
         amount.setCurrency(CURRENCY);
         balance.setBalanceAmount(amount);
-        balance.setBalanceType(BalanceType.INTERIM_AVAILABLE);
+        balance.setBalanceType(Xs2aBalanceType.INTERIM_AVAILABLE);
         balance.setLastChangeDateTime(LocalDateTime.of(2018, 3, 31, 15, 16,
                                                        16, 374));
         balance.setReferenceDate(LocalDate.of(2018, 3, 29));

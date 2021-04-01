@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.validator.ais.account;
 
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.validator.OauthConsentValidator;
@@ -47,7 +47,7 @@ public class GetTransactionDetailsValidator extends AbstractAccountTppValidator<
     @Override
     protected ValidationResult executeBusinessValidation(CommonAccountTransactionsRequestObject consentObject) {
         AisConsent aisConsent = consentObject.getAisConsent();
-        AccountAccess accountAccess = consentObject.getAisConsent().getAccess();
+        Xs2aConsentAccountAccess accountAccess = consentObject.getAisConsent().getAccess();
         ValidationResult accountReferenceValidationResult = accountReferenceAccessValidator.validate(aisConsent,
                                                                                                      accountAccess.getTransactions(), consentObject.getAccountId(), aisConsent.getAisConsentRequestType());
         if (accountReferenceValidationResult.isNotValid()) {

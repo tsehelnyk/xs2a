@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.spi.domain.authorisation;
 
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.Value;
 
 import javax.validation.constraints.NotNull;
@@ -28,6 +28,6 @@ import javax.validation.constraints.NotNull;
 @Value
 public class SpiAuthorisationDecoupledScaResponse {
     @NotNull
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     private String psuMessage;
 }

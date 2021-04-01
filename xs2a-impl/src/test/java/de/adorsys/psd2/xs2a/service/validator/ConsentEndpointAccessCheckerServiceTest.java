@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.validator;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.profile.ScaRedirectFlow;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
 import org.junit.jupiter.api.Test;
@@ -56,7 +56,7 @@ class ConsentEndpointAccessCheckerServiceTest {
             .thenReturn(true);
 
         when(authorisationService.getAuthorisationById(AUTHORISATION_ID))
-            .thenReturn(Optional.of(buildAccountConsentAuthorization(ScaStatus.RECEIVED, ScaApproach.REDIRECT)));
+            .thenReturn(Optional.of(buildAccountConsentAuthorization(Xs2aScaStatus.RECEIVED, ScaApproach.REDIRECT)));
 
         boolean actual = consentEndpointAccessCheckerService.isEndpointAccessible(AUTHORISATION_ID, true);
 
@@ -70,7 +70,7 @@ class ConsentEndpointAccessCheckerServiceTest {
             .thenReturn(true);
 
         when(authorisationService.getAuthorisationById(AUTHORISATION_ID))
-            .thenReturn(Optional.of(buildAccountConsentAuthorization(ScaStatus.UNCONFIRMED, ScaApproach.REDIRECT)));
+            .thenReturn(Optional.of(buildAccountConsentAuthorization(Xs2aScaStatus.UNCONFIRMED, ScaApproach.REDIRECT)));
 
         boolean actual = consentEndpointAccessCheckerService.isEndpointAccessible(AUTHORISATION_ID, true);
 
@@ -84,7 +84,7 @@ class ConsentEndpointAccessCheckerServiceTest {
             .thenReturn(true);
 
         when(authorisationService.getAuthorisationById(AUTHORISATION_ID))
-            .thenReturn(Optional.of(buildAccountConsentAuthorization(ScaStatus.UNCONFIRMED, ScaApproach.DECOUPLED)));
+            .thenReturn(Optional.of(buildAccountConsentAuthorization(Xs2aScaStatus.UNCONFIRMED, ScaApproach.DECOUPLED)));
 
         boolean actual = consentEndpointAccessCheckerService.isEndpointAccessible(AUTHORISATION_ID, true);
 
@@ -97,7 +97,7 @@ class ConsentEndpointAccessCheckerServiceTest {
         when(aspspProfileService.isAuthorisationConfirmationRequestMandated()).thenReturn(true);
 
         when(authorisationService.getAuthorisationById(AUTHORISATION_ID))
-            .thenReturn(Optional.of(buildAccountConsentAuthorization(ScaStatus.UNCONFIRMED, ScaApproach.EMBEDDED)));
+            .thenReturn(Optional.of(buildAccountConsentAuthorization(Xs2aScaStatus.UNCONFIRMED, ScaApproach.EMBEDDED)));
 
         boolean actual = consentEndpointAccessCheckerService.isEndpointAccessible(AUTHORISATION_ID, true);
 
@@ -122,7 +122,7 @@ class ConsentEndpointAccessCheckerServiceTest {
         when(aspspProfileService.isAuthorisationConfirmationRequestMandated()).thenReturn(false);
 
         when(authorisationService.getAuthorisationById(AUTHORISATION_ID))
-            .thenReturn(Optional.of(buildAccountConsentAuthorization(ScaStatus.UNCONFIRMED, ScaApproach.REDIRECT)));
+            .thenReturn(Optional.of(buildAccountConsentAuthorization(Xs2aScaStatus.UNCONFIRMED, ScaApproach.REDIRECT)));
 
         boolean actual = consentEndpointAccessCheckerService.isEndpointAccessible(AUTHORISATION_ID, true);
 
@@ -131,7 +131,7 @@ class ConsentEndpointAccessCheckerServiceTest {
         verify(authorisationService, times(1)).getAuthorisationById(AUTHORISATION_ID);
     }
 
-    private Authorisation buildAccountConsentAuthorization(ScaStatus scaStatus, ScaApproach scaApproach) {
+    private Authorisation buildAccountConsentAuthorization(Xs2aScaStatus scaStatus, ScaApproach scaApproach) {
         Authorisation authorisation = new Authorisation();
         authorisation.setChosenScaApproach(scaApproach);
         authorisation.setScaStatus(scaStatus);

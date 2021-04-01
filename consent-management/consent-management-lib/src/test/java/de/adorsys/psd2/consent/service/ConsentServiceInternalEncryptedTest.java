@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.ConsentService;
 import de.adorsys.psd2.consent.service.security.SecurityDataService;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -106,14 +106,14 @@ class ConsentServiceInternalEncryptedTest {
 
     @Test
     void getConsentStatusById() {
-        ConsentStatus consentStatus = ConsentStatus.VALID;
+        Xs2aConsentStatus consentStatus = Xs2aConsentStatus.VALID;
         when(securityDataService.decryptId(ENCRYPTED_CONSENT_ID)).thenReturn(Optional.of(CONSENT_ID));
         when(consentService.getConsentStatusById(CONSENT_ID))
-            .thenReturn(CmsResponse.<ConsentStatus>builder()
+            .thenReturn(CmsResponse.<Xs2aConsentStatus>builder()
                             .payload(consentStatus)
                             .build());
 
-        CmsResponse<ConsentStatus> response = consentServiceInternalEncrypted.getConsentStatusById(ENCRYPTED_CONSENT_ID);
+        CmsResponse<Xs2aConsentStatus> response = consentServiceInternalEncrypted.getConsentStatusById(ENCRYPTED_CONSENT_ID);
 
         assertTrue(response.isSuccessful());
         assertEquals(consentStatus, response.getPayload());
@@ -124,7 +124,7 @@ class ConsentServiceInternalEncryptedTest {
     void getConsentStatusById_malformedEncryptedId() {
         when(securityDataService.decryptId(MALFORMED_ENCRYPTED_CONSENT_ID)).thenReturn(Optional.empty());
 
-        CmsResponse<ConsentStatus> response = consentServiceInternalEncrypted.getConsentStatusById(MALFORMED_ENCRYPTED_CONSENT_ID);
+        CmsResponse<Xs2aConsentStatus> response = consentServiceInternalEncrypted.getConsentStatusById(MALFORMED_ENCRYPTED_CONSENT_ID);
 
         assertTrue(response.hasError());
         assertEquals(CmsError.TECHNICAL_ERROR, response.getError());
@@ -134,7 +134,7 @@ class ConsentServiceInternalEncryptedTest {
     @Test
     void updateConsentStatusById() throws WrongChecksumException {
         when(securityDataService.decryptId(ENCRYPTED_CONSENT_ID)).thenReturn(Optional.of(CONSENT_ID));
-        ConsentStatus consentStatus = ConsentStatus.VALID;
+        Xs2aConsentStatus consentStatus = Xs2aConsentStatus.VALID;
         when(consentService.updateConsentStatusById(CONSENT_ID, consentStatus))
             .thenReturn(CmsResponse.<Boolean>builder()
                             .payload(true)
@@ -150,7 +150,7 @@ class ConsentServiceInternalEncryptedTest {
     @Test
     void updateConsentStatusById_malformedEncryptedId() throws WrongChecksumException {
         when(securityDataService.decryptId(MALFORMED_ENCRYPTED_CONSENT_ID)).thenReturn(Optional.empty());
-        ConsentStatus consentStatus = ConsentStatus.VALID;
+        Xs2aConsentStatus consentStatus = Xs2aConsentStatus.VALID;
 
         CmsResponse<Boolean> response = consentServiceInternalEncrypted.updateConsentStatusById(MALFORMED_ENCRYPTED_CONSENT_ID, consentStatus);
 

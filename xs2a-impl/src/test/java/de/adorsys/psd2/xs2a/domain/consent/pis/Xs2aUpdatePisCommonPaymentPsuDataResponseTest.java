@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.domain.consent.pis;
 
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponseType;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +28,7 @@ class Xs2aUpdatePisCommonPaymentPsuDataResponseTest {
     void getAuthorisationResponseType_shouldReturnUPDATE() {
         // Given
         PsuIdData psuData = new PsuIdData(null, null, null, null, null);
-        Xs2aUpdatePisCommonPaymentPsuDataResponse response = new Xs2aUpdatePisCommonPaymentPsuDataResponse(ScaStatus.RECEIVED, "some payment id", "some cancellation id", psuData, null);
+        Xs2aUpdatePisCommonPaymentPsuDataResponse response = new Xs2aUpdatePisCommonPaymentPsuDataResponse(Xs2aScaStatus.RECEIVED, "some payment id", "some cancellation id", psuData, null);
 
         // When
         AuthorisationResponseType actual = response.getAuthorisationResponseType();

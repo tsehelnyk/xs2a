@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.validator.pis.authorisation;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
 import org.junit.jupiter.api.Test;
@@ -49,7 +49,7 @@ class PisAuthorisationStatusValidatorTest {
     @Test
     void validate_withValidStatus_shouldReturnValid() {
         // When
-        ValidationResult validationResult = pisAuthorisationValidator.validate(ScaStatus.RECEIVED, false);
+        ValidationResult validationResult = pisAuthorisationValidator.validate(Xs2aScaStatus.RECEIVED, false);
 
         // Then
         assertNotNull(validationResult);
@@ -60,7 +60,7 @@ class PisAuthorisationStatusValidatorTest {
     @Test
     void validate_withFailedStatus_shouldReturnError() {
         // When
-        ValidationResult validationResult = pisAuthorisationValidator.validate(ScaStatus.FAILED, false);
+        ValidationResult validationResult = pisAuthorisationValidator.validate(Xs2aScaStatus.FAILED, false);
 
         // Then
         assertNotNull(validationResult);
@@ -72,7 +72,7 @@ class PisAuthorisationStatusValidatorTest {
     void validate_withFailedStatusAndAuthorisationConfirmationMandated_shouldReturnError() {
         // When
         when(aspspProfileService.isAuthorisationConfirmationRequestMandated()).thenReturn(true);
-        ValidationResult validationResult = pisAuthorisationValidator.validate(ScaStatus.FAILED, true);
+        ValidationResult validationResult = pisAuthorisationValidator.validate(Xs2aScaStatus.FAILED, true);
 
         // Then
         assertNotNull(validationResult);

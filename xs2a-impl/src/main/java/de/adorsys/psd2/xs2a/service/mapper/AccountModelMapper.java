@@ -21,7 +21,7 @@ import de.adorsys.psd2.model.AccountDetails;
 import de.adorsys.psd2.model.AccountList;
 import de.adorsys.psd2.model.InlineResponse200;
 import de.adorsys.psd2.model.ReadAccountBalanceResponse200;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountDetails;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountDetailsHolder;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountListHolder;
@@ -54,9 +54,9 @@ public abstract class AccountModelMapper {
     protected BalanceMapper balanceMapper;
 
     @Mapping(target = "currency", source = "currency.currencyCode")
-    public abstract de.adorsys.psd2.model.AccountReference mapToAccountReference(AccountReference accountReference);
+    public abstract de.adorsys.psd2.model.AccountReference mapToAccountReference(Xs2aAccountReference accountReference);
 
-    public abstract List<de.adorsys.psd2.model.AccountReference> mapToAccountReferences(List<AccountReference> accountReferences);
+    public abstract List<de.adorsys.psd2.model.AccountReference> mapToAccountReferences(List<Xs2aAccountReference> accountReferences);
 
     public AccountList mapToAccountList(Xs2aAccountListHolder xs2aAccountListHolder) {
         List<Xs2aAccountDetails> accountDetailsList = xs2aAccountListHolder.getAccountDetails();

@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.web.link;
 
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,10 +35,10 @@ class AbstractLinksTest {
     void buildPath_absolute_path() {
         //Given
         AbstractLinks links = new AbstractLinks(ABSOLUTE_HTTP_URL);
-        HrefType expected = new HrefType(RESULT_ABSOLUTE_PATH);
+        Xs2aHrefType expected = new Xs2aHrefType(RESULT_ABSOLUTE_PATH);
 
         //When
-        HrefType actual = links.buildPath(PAYMENT_PATH, PAYMENT_SERVICE, PAYMENT_PRODUCT, PAYMENT_ID);
+        Xs2aHrefType actual = links.buildPath(PAYMENT_PATH, PAYMENT_SERVICE, PAYMENT_PRODUCT, PAYMENT_ID);
 
         //Then
         assertEquals(expected.getHref(), actual.getHref());
@@ -48,10 +48,10 @@ class AbstractLinksTest {
     void buildPath_relative_path() {
         //Given
         AbstractLinks links = new AbstractLinks(RELATIVE_HTTP_URL);
-        HrefType expected = new HrefType(RESULT_RELATIVE_PATH);
+        Xs2aHrefType expected = new Xs2aHrefType(RESULT_RELATIVE_PATH);
 
         //When
-        HrefType actual = links.buildPath(PAYMENT_PATH, PAYMENT_SERVICE, PAYMENT_PRODUCT, PAYMENT_ID);
+        Xs2aHrefType actual = links.buildPath(PAYMENT_PATH, PAYMENT_SERVICE, PAYMENT_PRODUCT, PAYMENT_ID);
 
         //Then
         assertEquals(expected.getHref(), actual.getHref());

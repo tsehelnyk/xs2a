@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.authorization.ais;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentAuthorizationResponse;
 import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
@@ -42,7 +42,7 @@ public abstract class AbstractAisAuthorizationService implements AisAuthorizatio
 
     /**
      * Creates consent authorisation using provided psu id and consent id by invoking CMS through AisConsentService
-     * See {@link Xs2aConsentService#createConsentAuthorisation(String, ScaStatus, PsuIdData)} for details
+     * See {@link Xs2aConsentService#createConsentAuthorisation(String, Xs2aScaStatus, PsuIdData)} for details
      *
      * @param psuData   PsuIdData container of authorisation data about PSU
      * @param consentId String identification of consent
@@ -56,7 +56,7 @@ public abstract class AbstractAisAuthorizationService implements AisAuthorizatio
             return Optional.empty();
         }
 
-        return consentService.createConsentAuthorisation(consentId, ScaStatus.RECEIVED, psuData)
+        return consentService.createConsentAuthorisation(consentId, Xs2aScaStatus.RECEIVED, psuData)
                    .map(auth -> {
                        CreateConsentAuthorizationResponse resp = new CreateConsentAuthorizationResponse();
 
@@ -100,7 +100,7 @@ public abstract class AbstractAisAuthorizationService implements AisAuthorizatio
      * @return SCA status of the authorisation
      */
     @Override
-    public Optional<ScaStatus> getAuthorisationScaStatus(String consentId, String authorisationId) {
+    public Optional<Xs2aScaStatus> getAuthorisationScaStatus(String consentId, String authorisationId) {
         return consentService.getAuthorisationScaStatus(consentId, authorisationId);
     }
 }

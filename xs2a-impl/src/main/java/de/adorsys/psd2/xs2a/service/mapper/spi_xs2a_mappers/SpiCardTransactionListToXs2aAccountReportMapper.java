@@ -17,7 +17,7 @@
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
 import de.adorsys.psd2.xs2a.core.ais.BookingStatus;
-import de.adorsys.psd2.xs2a.domain.CardTransaction;
+import de.adorsys.psd2.xs2a.domain.Xs2aCardTransaction;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aCardAccountReport;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiCardTransaction;
 import lombok.RequiredArgsConstructor;
@@ -52,8 +52,8 @@ public class SpiCardTransactionListToXs2aAccountReportMapper {
             return Optional.of(new Xs2aCardAccountReport(null, null, toXs2aCardTransactionMapper.mapToXs2aCardTransactionList(spiCardTransactions), null));
         }
 
-        List<CardTransaction> booked = Collections.emptyList();
-        List<CardTransaction> pending = Collections.emptyList();
+        List<Xs2aCardTransaction> booked = Collections.emptyList();
+        List<Xs2aCardTransaction> pending = Collections.emptyList();
 
 
         if (bookingStatus != BookingStatus.PENDING) {
@@ -68,7 +68,7 @@ public class SpiCardTransactionListToXs2aAccountReportMapper {
     }
 
     @NotNull
-    private List<CardTransaction> filterTransaction(List<SpiCardTransaction> spiTransactions, Predicate<SpiCardTransaction> predicate) {
+    private List<Xs2aCardTransaction> filterTransaction(List<SpiCardTransaction> spiTransactions, Predicate<SpiCardTransaction> predicate) {
         return spiTransactions
                    .stream()
                    .filter(predicate)

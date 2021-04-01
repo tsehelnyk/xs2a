@@ -17,12 +17,12 @@
 package de.adorsys.psd2.xs2a.service.consent;
 
 import de.adorsys.psd2.consent.api.CmsResponse;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceType;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountDetails;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aCardAccountDetails;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +54,7 @@ public class AccountReferenceInConsentUpdater {
      * @param newAccountAccess new object with account accesses
      * @param consentType      type of the consent
      */
-    public void rewriteAccountAccess(@NotNull String consentId, @NotNull AccountAccess newAccountAccess, ConsentType consentType) {
+    public void rewriteAccountAccess(@NotNull String consentId, @NotNull Xs2aConsentAccountAccess newAccountAccess, ConsentType consentType) {
         if (consentType == ConsentType.AIS) {
             aisConsentService.updateAspspAccountAccess(consentId, newAccountAccess);
         } else {
@@ -72,13 +72,13 @@ public class AccountReferenceInConsentUpdater {
      * @return Response containing AIS Consent
      */
     public CmsResponse<AisConsent> updateAccountReferences(@NotNull String consentId, @NotNull AisConsent aisConsent, @NotNull List<Xs2aAccountDetails> accountDetails) {
-        List<AccountReference> accounts = new ArrayList<>();
-        List<AccountReference> transactions = new ArrayList<>();
-        List<AccountReference> balances = new ArrayList<>();
-        List<AccountReference> ownerName = new ArrayList<>();
-        List<AccountReference> trustedBeneficiaries = new ArrayList<>();
-        AccountAccess existingAccess = aisConsent.getAccess();
-        AdditionalInformationAccess additionalInformationAccess = existingAccess.getAdditionalInformationAccess();
+        List<Xs2aAccountReference> accounts = new ArrayList<>();
+        List<Xs2aAccountReference> transactions = new ArrayList<>();
+        List<Xs2aAccountReference> balances = new ArrayList<>();
+        List<Xs2aAccountReference> ownerName = new ArrayList<>();
+        List<Xs2aAccountReference> trustedBeneficiaries = new ArrayList<>();
+        Xs2aConsentAccountAccess existingAccess = aisConsent.getAccess();
+        Xs2aAdditionalInformationAccess additionalInformationAccess = existingAccess.getAdditionalInformationAccess();
 
         if (aisConsent.isGlobalConsent()) {
             accounts.addAll(enrichAccountReferencesGlobal(accountDetails));
@@ -102,7 +102,7 @@ public class AccountReferenceInConsentUpdater {
             }
         }
 
-        AccountAccess accountAccess =
+        Xs2aConsentAccountAccess accountAccess =
             getXs2aAccountAccess(accounts, transactions, balances, ownerName, trustedBeneficiaries, additionalInformationAccess);
 
         return aisConsentService.updateAspspAccountAccess(consentId, accountAccess);
@@ -118,13 +118,13 @@ public class AccountReferenceInConsentUpdater {
      * @return Response containing AIS Consent
      */
     public CmsResponse<AisConsent> updateCardAccountReferences(String consentId, AisConsent aisConsent, List<Xs2aCardAccountDetails> accountDetails) {
-        List<AccountReference> accounts = new ArrayList<>();
-        List<AccountReference> transactions = new ArrayList<>();
-        List<AccountReference> balances = new ArrayList<>();
-        List<AccountReference> ownerName = new ArrayList<>();
-        List<AccountReference> trustedBeneficiaries = new ArrayList<>();
-        AccountAccess existingAccess = aisConsent.getAccess();
-        AdditionalInformationAccess additionalInformationAccess = existingAccess.getAdditionalInformationAccess();
+        List<Xs2aAccountReference> accounts = new ArrayList<>();
+        List<Xs2aAccountReference> transactions = new ArrayList<>();
+        List<Xs2aAccountReference> balances = new ArrayList<>();
+        List<Xs2aAccountReference> ownerName = new ArrayList<>();
+        List<Xs2aAccountReference> trustedBeneficiaries = new ArrayList<>();
+        Xs2aConsentAccountAccess existingAccess = aisConsent.getAccess();
+        Xs2aAdditionalInformationAccess additionalInformationAccess = existingAccess.getAdditionalInformationAccess();
 
         if (aisConsent.isGlobalConsent()) {
             accounts.addAll(enrichCardAccountReferencesGlobal(accountDetails));
@@ -147,20 +147,20 @@ public class AccountReferenceInConsentUpdater {
             }
         }
 
-        AccountAccess accountAccess =
+        Xs2aConsentAccountAccess accountAccess =
             getXs2aAccountAccess(accounts, transactions, balances, ownerName, trustedBeneficiaries, additionalInformationAccess);
 
         return aisConsentService.updateAspspAccountAccess(consentId, accountAccess);
     }
 
-    private AccountAccess getXs2aAccountAccess(List<AccountReference> accounts,
-                                               List<AccountReference> transactions, List<AccountReference> balances,
-                                               List<AccountReference> ownerName, List<AccountReference> trustedBeneficiaries,
-                                               AdditionalInformationAccess additionalInformationAccess) {
+    private Xs2aConsentAccountAccess getXs2aAccountAccess(List<Xs2aAccountReference> accounts,
+                                                          List<Xs2aAccountReference> transactions, List<Xs2aAccountReference> balances,
+                                                          List<Xs2aAccountReference> ownerName, List<Xs2aAccountReference> trustedBeneficiaries,
+                                                          Xs2aAdditionalInformationAccess additionalInformationAccess) {
 
-        return new AccountAccess(accounts, balances, transactions,
+        return new Xs2aConsentAccountAccess(accounts, balances, transactions,
                                  Optional.ofNullable(additionalInformationAccess)
-                                     .map(info -> new AdditionalInformationAccess(ownerName, trustedBeneficiaries))
+                                     .map(info -> new Xs2aAdditionalInformationAccess(ownerName, trustedBeneficiaries))
                                      .orElse(null));
     }
 
@@ -176,10 +176,10 @@ public class AccountReferenceInConsentUpdater {
      * @param accountReferenceList list of account references through which the search will be made
      * @return list of account references with resourceId and aspspAccountId set
      */
-    private List<AccountReference> enrichAccountReferences(Xs2aAccountDetails xs2aAccountDetails, List<AccountReference> accountReferenceList) {
+    private List<Xs2aAccountReference> enrichAccountReferences(Xs2aAccountDetails xs2aAccountDetails, List<Xs2aAccountReference> accountReferenceList) {
         return accountReferenceList.stream()
                    .filter(ar -> ar.getUsedAccountReferenceSelector().equals(xs2aAccountDetails.getAccountSelector()))
-                   .map(ar -> new AccountReference(ar.getUsedAccountReferenceSelector().getAccountReferenceType(),
+                   .map(ar -> new Xs2aAccountReference(ar.getUsedAccountReferenceSelector().getAccountReferenceType(),
                                                    ar.getUsedAccountReferenceSelector().getAccountValue(),
                                                    ar.getCurrency(),
                                                    xs2aAccountDetails.getResourceId(),
@@ -187,10 +187,10 @@ public class AccountReferenceInConsentUpdater {
                    .collect(Collectors.toList());
     }
 
-    private List<AccountReference> enrichCardAccountReferences(Xs2aCardAccountDetails xs2aAccountDetails, List<AccountReference> accountReferenceList) {
+    private List<Xs2aAccountReference> enrichCardAccountReferences(Xs2aCardAccountDetails xs2aAccountDetails, List<Xs2aAccountReference> accountReferenceList) {
         return accountReferenceList.stream()
                    .filter(ar -> cardAccountHandler.areAccountsEqual(xs2aAccountDetails, ar))
-                   .map(ar -> new AccountReference(ar.getUsedAccountReferenceSelector().getAccountReferenceType(),
+                   .map(ar -> new Xs2aAccountReference(ar.getUsedAccountReferenceSelector().getAccountReferenceType(),
                                                    ar.getUsedAccountReferenceSelector().getAccountValue(),
                                                    ar.getCurrency(),
                                                    xs2aAccountDetails.getResourceId(),
@@ -198,9 +198,9 @@ public class AccountReferenceInConsentUpdater {
                    .collect(Collectors.toList());
     }
 
-    private List<AccountReference> enrichAccountReferencesGlobal(List<Xs2aAccountDetails> xs2aAccountDetails) {
+    private List<Xs2aAccountReference> enrichAccountReferencesGlobal(List<Xs2aAccountDetails> xs2aAccountDetails) {
         return xs2aAccountDetails.stream()
-                   .map(ad -> new AccountReference(ad.getAccountSelector().getAccountReferenceType(),
+                   .map(ad -> new Xs2aAccountReference(ad.getAccountSelector().getAccountReferenceType(),
                                                    ad.getAccountSelector().getAccountValue(),
                                                    ad.getCurrency(),
                                                    ad.getResourceId(),
@@ -208,9 +208,9 @@ public class AccountReferenceInConsentUpdater {
                    .collect(Collectors.toList());
     }
 
-    private List<AccountReference> enrichCardAccountReferencesGlobal(List<Xs2aCardAccountDetails> xs2aAccountDetails) {
+    private List<Xs2aAccountReference> enrichCardAccountReferencesGlobal(List<Xs2aCardAccountDetails> xs2aAccountDetails) {
         return xs2aAccountDetails.stream()
-                   .map(ad -> new AccountReference(AccountReferenceType.MASKED_PAN,
+                   .map(ad -> new Xs2aAccountReference(AccountReferenceType.MASKED_PAN,
                                                    ad.getMaskedPan(),
                                                    ad.getCurrency(),
                                                    ad.getResourceId(),

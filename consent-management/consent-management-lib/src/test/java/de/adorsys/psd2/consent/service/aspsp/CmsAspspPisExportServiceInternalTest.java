@@ -19,14 +19,14 @@ package de.adorsys.psd2.consent.service.aspsp;
 import de.adorsys.psd2.consent.api.pis.CmsBasePaymentResponse;
 import de.adorsys.psd2.consent.api.pis.CmsSinglePayment;
 import de.adorsys.psd2.consent.aspsp.api.PageData;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.domain.payment.PisPaymentData;
 import de.adorsys.psd2.consent.repository.PisCommonPaymentDataRepository;
 import de.adorsys.psd2.consent.repository.specification.PisCommonPaymentDataSpecification;
 import de.adorsys.psd2.consent.service.mapper.CmsPsuPisMapper;
 import de.adorsys.psd2.consent.service.psu.util.PageRequestBuilder;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import org.junit.jupiter.api.BeforeEach;
@@ -391,8 +391,8 @@ class CmsAspspPisExportServiceInternalTest {
         return new PsuIdData(null, null, null, null, null);
     }
 
-    private PsuData buildPsuData() {
-        return new PsuData(PSU_ID, null, null, null, null);
+    private CmsPsuData buildPsuData() {
+        return new CmsPsuData(PSU_ID, null, null, null, null);
     }
 
     private CmsBasePaymentResponse buildCmsBasePaymentResponse() {
@@ -404,7 +404,7 @@ class CmsAspspPisExportServiceInternalTest {
 
     private PisCommonPaymentData buildPisCommonPaymentData() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RCVD);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisCommonPaymentData.setPsuDataList(Collections.singletonList(buildPsuData()));
         pisCommonPaymentData.setPaymentType(PaymentType.SINGLE);
         pisCommonPaymentData.setPaymentProduct(PAYMENT_PRODUCT);

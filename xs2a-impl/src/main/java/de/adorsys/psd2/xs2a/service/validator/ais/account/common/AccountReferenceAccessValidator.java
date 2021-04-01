@@ -21,7 +21,7 @@ import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.xs2a.core.ais.AccountAccessType;
 import de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
@@ -37,7 +37,7 @@ import static de.adorsys.psd2.xs2a.core.error.MessageErrorCode.CONSENT_INVALID;
 @RequiredArgsConstructor
 public class AccountReferenceAccessValidator {
 
-    public ValidationResult validate(AisConsent aisConsent, List<AccountReference> references, String accountId, AisConsentRequestType consentRequestType) {
+    public ValidationResult validate(AisConsent aisConsent, List<Xs2aAccountReference> references, String accountId, AisConsentRequestType consentRequestType) {
         if (AisConsentRequestType.GLOBAL == consentRequestType) {
             return ValidationResult.valid();
         }
@@ -50,7 +50,7 @@ public class AccountReferenceAccessValidator {
         return ValidationResult.valid();
     }
 
-    private boolean isValidAccountByAccess(String accountId, List<AccountReference> allowedAccountData) {
+    private boolean isValidAccountByAccess(String accountId, List<Xs2aAccountReference> allowedAccountData) {
         return CollectionUtils.isNotEmpty(allowedAccountData)
                    && allowedAccountData.stream()
                           .anyMatch(a -> StringUtils.equals(a.getResourceId(), accountId));

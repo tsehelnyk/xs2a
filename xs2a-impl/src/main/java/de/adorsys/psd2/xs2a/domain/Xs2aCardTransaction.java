@@ -25,7 +25,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
-public class CardTransaction {
+public class Xs2aCardTransaction {
     private String cardTransactionId;
     private String terminalId;
     private LocalDate transactionDate;

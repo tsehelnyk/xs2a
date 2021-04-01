@@ -23,7 +23,7 @@ import de.adorsys.psd2.consent.api.ais.CmsConsent;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.ConsentService;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.TppInfoEntity;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.AisConsentVerifyingRepository;
@@ -35,7 +35,7 @@ import de.adorsys.psd2.consent.service.mapper.PsuDataMapper;
 import de.adorsys.psd2.consent.service.migration.AisConsentLazyMigrationService;
 import de.adorsys.psd2.consent.service.psu.CmsPsuService;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
 
 import static de.adorsys.psd2.consent.api.CmsError.LOGICAL_ERROR;
 import static de.adorsys.psd2.consent.api.CmsError.TECHNICAL_ERROR;
-import static de.adorsys.psd2.xs2a.core.consent.ConsentStatus.*;
+import static de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus.*;
 
 @Slf4j
 @Service
@@ -115,18 +115,18 @@ public class ConsentServiceInternal implements ConsentService {
      */
     @Override
     @Transactional
-    public CmsResponse<ConsentStatus> getConsentStatusById(String consentId) {
-        Optional<ConsentStatus> consentStatusOptional = consentJpaRepository.findByExternalId(consentId)
+    public CmsResponse<Xs2aConsentStatus> getConsentStatusById(String consentId) {
+        Optional<Xs2aConsentStatus> consentStatusOptional = consentJpaRepository.findByExternalId(consentId)
                                                             .map(aisConsentConfirmationExpirationService::checkAndUpdateOnConfirmationExpiration)
                                                             .map(this::checkAndUpdateOnExpiration)
                                                             .map(ConsentEntity::getConsentStatus);
         if (consentStatusOptional.isPresent()) {
-            return CmsResponse.<ConsentStatus>builder()
+            return CmsResponse.<Xs2aConsentStatus>builder()
                        .payload(consentStatusOptional.get())
                        .build();
         } else {
             log.info("Consent ID: [{}]. Get consent status failed, because consent not found", consentId);
-            return CmsResponse.<ConsentStatus>builder()
+            return CmsResponse.<Xs2aConsentStatus>builder()
                        .error(LOGICAL_ERROR)
                        .build();
         }
@@ -141,7 +141,7 @@ public class ConsentServiceInternal implements ConsentService {
      */
     @Override
     @Transactional(rollbackFor = WrongChecksumException.class)
-    public CmsResponse<Boolean> updateConsentStatusById(String consentId, ConsentStatus status) throws WrongChecksumException {
+    public CmsResponse<Boolean> updateConsentStatusById(String consentId, Xs2aConsentStatus status) throws WrongChecksumException {
         Optional<ConsentEntity> consentOptional = getActualAisConsent(consentId);
 
         if (consentOptional.isPresent()) {
@@ -217,10 +217,10 @@ public class ConsentServiceInternal implements ConsentService {
             throw new IllegalArgumentException("Wrong consent data");
         }
 
-        List<PsuData> psuDataList = newConsent.getPsuDataList();
+        List<CmsPsuData> psuDataList = newConsent.getPsuDataList();
         Set<String> psuIds = psuDataList.stream()
                                  .filter(Objects::nonNull)
-                                 .map(PsuData::getPsuId)
+                                 .map(CmsPsuData::getPsuId)
                                  .collect(Collectors.toSet());
         TppInfoEntity tppInfo = newConsent.getTppInformation().getTppInfo();
 
@@ -301,7 +301,7 @@ public class ConsentServiceInternal implements ConsentService {
                    .filter(c -> !c.getConsentStatus().isFinalisedStatus());
     }
 
-    private boolean setStatusAndSaveConsent(ConsentEntity consent, ConsentStatus status) throws WrongChecksumException {
+    private boolean setStatusAndSaveConsent(ConsentEntity consent, Xs2aConsentStatus status) throws WrongChecksumException {
         consent.setLastActionDate(LocalDate.now());
         consent.setConsentStatus(status);
 

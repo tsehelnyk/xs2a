@@ -18,15 +18,15 @@ package de.adorsys.psd2.xs2a.web.controller;
 
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.model.*;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.AdditionalPsuIdData;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -132,7 +132,7 @@ class ConsentControllerTest {
         //Then:
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(resp).isNotNull();
-        assertThat(resp.getConsentStatus()).hasToString(ConsentStatus.RECEIVED.getValue());
+        assertThat(resp.getConsentStatus()).hasToString(Xs2aConsentStatus.RECEIVED.getValue());
         assertThat(resp.getConsentId()).isEqualTo(CONSENT_ID);
         assertThat(resp.getPsuMessage()).isEqualTo(PSU_MESSAGE_RESPONSE);
     }
@@ -178,10 +178,10 @@ class ConsentControllerTest {
         // Given
         when(consentService.getAccountConsentsStatusById(CONSENT_ID))
             .thenReturn(ResponseObject.<ConsentStatusResponse>builder()
-                            .body(new ConsentStatusResponse(ConsentStatus.RECEIVED, PSU_MESSAGE_RESPONSE))
+                            .body(new ConsentStatusResponse(Xs2aConsentStatus.RECEIVED, PSU_MESSAGE_RESPONSE))
                             .build());
 
-        doReturn(new ResponseEntity<>(ConsentStatus.RECEIVED, HttpStatus.OK)).when(responseMapper).ok(any(), any());
+        doReturn(new ResponseEntity<>(Xs2aConsentStatus.RECEIVED, HttpStatus.OK)).when(responseMapper).ok(any(), any());
 
         //When:
         ResponseEntity responseEntity = consentController.getConsentStatus(CONSENT_ID, null,
@@ -190,7 +190,7 @@ class ConsentControllerTest {
                                                                            null, null);
         //Then:
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isEqualTo(ConsentStatus.RECEIVED);
+        assertThat(responseEntity.getBody()).isEqualTo(Xs2aConsentStatus.RECEIVED);
     }
 
     @Test
@@ -338,7 +338,7 @@ class ConsentControllerTest {
     @Test
     void getConsentScaStatus_success() {
         // Given
-        Xs2aScaStatusResponse xs2aScaStatusResponse = new Xs2aScaStatusResponse(ScaStatus.RECEIVED, true, "psu message");
+        Xs2aScaStatusResponse xs2aScaStatusResponse = new Xs2aScaStatusResponse(Xs2aScaStatus.RECEIVED, true, "psu message");
         ResponseObject<Xs2aScaStatusResponse> responseObject = ResponseObject.<Xs2aScaStatusResponse>builder()
                                                                    .body(xs2aScaStatusResponse)
                                                                    .build();
@@ -401,9 +401,9 @@ class ConsentControllerTest {
         if (isEmpty(consentId)) {
             return ResponseObject.<CreateConsentResponse>builder().fail(MESSAGE_ERROR_AIS_404).build();
         }
-        CreateConsentResponse consentResponse = new CreateConsentResponse(ConsentStatus.RECEIVED.getValue(), consentId, null, null, null, null, false, INTERNAL_REQUEST_ID, null);
+        CreateConsentResponse consentResponse = new CreateConsentResponse(Xs2aConsentStatus.RECEIVED.getValue(), consentId, null, null, null, null, false, INTERNAL_REQUEST_ID, null);
         Links links = new Links();
-        links.setSelf(new HrefType("type"));
+        links.setSelf(new Xs2aHrefType("type"));
         consentResponse.setLinks(links);
         return ResponseObject.<CreateConsentResponse>builder().body(consentResponse).build();
     }
@@ -412,7 +412,7 @@ class ConsentControllerTest {
         if (isEmpty(CONSENT_ID)) {
             return ResponseObject.<CreateConsentResponse>builder().fail(MESSAGE_ERROR_AIS_404).build();
         }
-        CreateConsentResponse consentResponse = new CreateConsentResponse(ConsentStatus.RECEIVED.getValue(), ConsentControllerTest.CONSENT_ID, null, null, null, null, false, INTERNAL_REQUEST_ID, null);
+        CreateConsentResponse consentResponse = new CreateConsentResponse(Xs2aConsentStatus.RECEIVED.getValue(), ConsentControllerTest.CONSENT_ID, null, null, null, null, false, INTERNAL_REQUEST_ID, null);
         return ResponseObject.<CreateConsentResponse>builder().body(consentResponse).build();
     }
 
@@ -456,7 +456,7 @@ class ConsentControllerTest {
         CreateConsentAuthorizationResponse response = new CreateConsentAuthorizationResponse();
         response.setConsentId(CONSENT_ID);
         response.setAuthorisationId(AUTHORISATION_ID);
-        response.setScaStatus(ScaStatus.RECEIVED);
+        response.setScaStatus(Xs2aScaStatus.RECEIVED);
         return response;
     }
 

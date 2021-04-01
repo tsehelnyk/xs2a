@@ -19,7 +19,7 @@ package de.adorsys.psd2.xs2a.service.validator.ais.account.common;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.consent.AisConsentRequestType;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +39,7 @@ class AccountReferenceAccessValidatorTest {
     private JsonReader jsonReader;
 
     private AisConsent aisConsent;
-    private AccountReference accountReference;
+    private Xs2aAccountReference accountReference;
 
     @BeforeEach
     void setUp() {
@@ -47,7 +47,7 @@ class AccountReferenceAccessValidatorTest {
         jsonReader = new JsonReader();
 
         aisConsent = jsonReader.getObjectFromFile("json/service/validator/ais/account/xs2a-account-consent.json", AisConsent.class);
-        accountReference = jsonReader.getObjectFromFile("json/service/validator/ais/account/xs2a-account-reference.json", AccountReference.class);
+        accountReference = jsonReader.getObjectFromFile("json/service/validator/ais/account/xs2a-account-reference.json", Xs2aAccountReference.class);
     }
 
     @Test
@@ -93,7 +93,7 @@ class AccountReferenceAccessValidatorTest {
 
     @Test
     void validate_AccountReferenceWithoutResourceId() {
-        AccountReference accountReference = jsonReader.getObjectFromFile("json/service/validator/ais/account/xs2a-account-reference-without-resource-id.json", AccountReference.class);
+        Xs2aAccountReference accountReference = jsonReader.getObjectFromFile("json/service/validator/ais/account/xs2a-account-reference-without-resource-id.json", Xs2aAccountReference.class);
         ValidationResult validationResult = validator.validate(aisConsent, Collections.singletonList(accountReference), ACCOUNT_ID, AisConsentRequestType.DEDICATED_ACCOUNTS);
 
         assertTrue(validationResult.isNotValid());

@@ -22,7 +22,7 @@ import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.service.validator.AisPsuDataUpdateAuthorisationCheckerValidator;
@@ -110,7 +110,7 @@ class UpdateConsentPsuDataValidatorTest {
 
         when(aisAuthorisationValidator.validate(AUTHORISATION_ID, accountConsent))
             .thenReturn(ValidationResult.valid());
-        when(aisAuthorisationStatusValidator.validate(ScaStatus.RECEIVED, false))
+        when(aisAuthorisationStatusValidator.validate(Xs2aScaStatus.RECEIVED, false))
             .thenReturn(ValidationResult.valid());
         when(aisConsentTppInfoValidator.validateTpp(accountConsent.getConsentTppInformation().getTppInfo()))
             .thenReturn(ValidationResult.valid());
@@ -153,7 +153,7 @@ class UpdateConsentPsuDataValidatorTest {
 
         when(aisAuthorisationValidator.validate(AUTHORISATION_ID, accountConsent))
             .thenReturn(ValidationResult.valid());
-        when(aisAuthorisationStatusValidator.validate(ScaStatus.FAILED, false))
+        when(aisAuthorisationStatusValidator.validate(Xs2aScaStatus.FAILED, false))
             .thenReturn(ValidationResult.invalid(STATUS_VALIDATION_ERROR));
         when(aisConsentTppInfoValidator.validateTpp(accountConsent.getTppInfo()))
             .thenReturn(ValidationResult.valid());
@@ -177,7 +177,7 @@ class UpdateConsentPsuDataValidatorTest {
 
         when(aisAuthorisationValidator.validate(AUTHORISATION_ID, accountConsent))
             .thenReturn(ValidationResult.valid());
-        when(aisAuthorisationStatusValidator.validate(ScaStatus.FAILED, true))
+        when(aisAuthorisationStatusValidator.validate(Xs2aScaStatus.FAILED, true))
             .thenReturn(ValidationResult.invalid(SCA_VALIDATION_ERROR));
         when(aisConsentTppInfoValidator.validateTpp(accountConsent.getTppInfo()))
             .thenReturn(ValidationResult.valid());
@@ -287,9 +287,9 @@ class UpdateConsentPsuDataValidatorTest {
 
         when(aisAuthorisationValidator.validate(AUTHORISATION_ID, aisConsent))
             .thenReturn(ValidationResult.valid());
-        when(aisAuthorisationStatusValidator.validate(ScaStatus.RECEIVED, false))
+        when(aisAuthorisationStatusValidator.validate(Xs2aScaStatus.RECEIVED, false))
             .thenReturn(ValidationResult.valid());
-        when(authorisationStageCheckValidator.validate(updateRequest, ScaStatus.RECEIVED, AIS))
+        when(authorisationStageCheckValidator.validate(updateRequest, Xs2aScaStatus.RECEIVED, AIS))
             .thenReturn(ValidationResult.invalid(ErrorType.AIS_400, SERVICE_INVALID_400));
         when(aisConsentTppInfoValidator.validateTpp(aisConsent.getTppInfo()))
             .thenReturn(ValidationResult.valid());
@@ -316,9 +316,9 @@ class UpdateConsentPsuDataValidatorTest {
 
         when(aisAuthorisationValidator.validate(AUTHORISATION_ID, aisConsent))
             .thenReturn(ValidationResult.valid());
-        when(aisAuthorisationStatusValidator.validate(ScaStatus.PSUIDENTIFIED, false))
+        when(aisAuthorisationStatusValidator.validate(Xs2aScaStatus.PSUIDENTIFIED, false))
             .thenReturn(ValidationResult.valid());
-        when(authorisationStageCheckValidator.validate(updateRequest, ScaStatus.PSUIDENTIFIED, AIS))
+        when(authorisationStageCheckValidator.validate(updateRequest, Xs2aScaStatus.PSUIDENTIFIED, AIS))
             .thenReturn(ValidationResult.invalid(ErrorType.AIS_400, SERVICE_INVALID_400));
         when(aisConsentTppInfoValidator.validateTpp(aisConsent.getTppInfo()))
             .thenReturn(ValidationResult.valid());
@@ -345,9 +345,9 @@ class UpdateConsentPsuDataValidatorTest {
 
         when(aisAuthorisationValidator.validate(AUTHORISATION_ID, aisConsent))
             .thenReturn(ValidationResult.valid());
-        when(aisAuthorisationStatusValidator.validate(ScaStatus.PSUAUTHENTICATED, false))
+        when(aisAuthorisationStatusValidator.validate(Xs2aScaStatus.PSUAUTHENTICATED, false))
             .thenReturn(ValidationResult.valid());
-        when(authorisationStageCheckValidator.validate(updateRequest, ScaStatus.PSUAUTHENTICATED, AIS))
+        when(authorisationStageCheckValidator.validate(updateRequest, Xs2aScaStatus.PSUAUTHENTICATED, AIS))
             .thenReturn(ValidationResult.invalid(ErrorType.AIS_400, SERVICE_INVALID_400));
         when(aisConsentTppInfoValidator.validateTpp(aisConsent.getTppInfo()))
             .thenReturn(ValidationResult.valid());
@@ -374,9 +374,9 @@ class UpdateConsentPsuDataValidatorTest {
 
         when(aisAuthorisationValidator.validate(AUTHORISATION_ID, aisConsent))
             .thenReturn(ValidationResult.valid());
-        when(aisAuthorisationStatusValidator.validate(ScaStatus.SCAMETHODSELECTED, false))
+        when(aisAuthorisationStatusValidator.validate(Xs2aScaStatus.SCAMETHODSELECTED, false))
             .thenReturn(ValidationResult.valid());
-        when(authorisationStageCheckValidator.validate(updateRequest, ScaStatus.SCAMETHODSELECTED, AIS))
+        when(authorisationStageCheckValidator.validate(updateRequest, Xs2aScaStatus.SCAMETHODSELECTED, AIS))
             .thenReturn(ValidationResult.invalid(ErrorType.AIS_400, SERVICE_INVALID_400));
 
         when(aisConsentTppInfoValidator.validateTpp(aisConsent.getTppInfo())).thenReturn(ValidationResult.valid());

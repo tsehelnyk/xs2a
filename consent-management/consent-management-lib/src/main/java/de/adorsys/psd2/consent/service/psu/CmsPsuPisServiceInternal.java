@@ -22,7 +22,7 @@ import de.adorsys.psd2.consent.api.pis.CmsCommonPayment;
 import de.adorsys.psd2.consent.api.pis.CmsPaymentResponse;
 import de.adorsys.psd2.consent.api.service.PisCommonPaymentService;
 import de.adorsys.psd2.consent.domain.AuthorisationEntity;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.payment.PisCommonPaymentData;
 import de.adorsys.psd2.consent.domain.payment.PisPaymentData;
 import de.adorsys.psd2.consent.psu.api.CmsPsuAuthorisation;
@@ -43,10 +43,10 @@ import de.adorsys.psd2.consent.service.psu.util.PsuDataUpdater;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -107,7 +107,7 @@ public class CmsPsuPisServiceInternal implements CmsPsuPisService {
             if (!authorisation.isRedirectUrlNotExpired()) {
                 log.info("Authorisation ID [{}], Instance ID: [{}]. Check redirect URL and get payment failed, because redirect URL is expired",
                          authorisation.getExternalId(), instanceId);
-                authorisation.setScaStatus(ScaStatus.FAILED);
+                authorisation.setScaStatus(Xs2aScaStatus.FAILED);
 
                 throw new RedirectUrlIsExpiredException(authorisation.getTppNokRedirectUri());
             }
@@ -155,7 +155,7 @@ public class CmsPsuPisServiceInternal implements CmsPsuPisService {
             if (!authorisation.isRedirectUrlNotExpired()) {
                 log.info("Authorisation ID [{}], Instance ID: [{}]. Check redirect URL and get payment cancellation failed, because authorisation not found or has finalised status",
                          redirectId, instanceId);
-                authorisation.setScaStatus(ScaStatus.FAILED);
+                authorisation.setScaStatus(Xs2aScaStatus.FAILED);
 
                 throw new RedirectUrlIsExpiredException(authorisation.getTppNokRedirectUri());
             }
@@ -185,7 +185,7 @@ public class CmsPsuPisServiceInternal implements CmsPsuPisService {
     @Override
     @Transactional
     public boolean updateAuthorisationStatus(@NotNull PsuIdData psuIdData, @NotNull String paymentId,
-                                             @NotNull String authorisationId, @NotNull ScaStatus status,
+                                             @NotNull String authorisationId, @NotNull Xs2aScaStatus status,
                                              @NotNull String instanceId, AuthenticationDataHolder authenticationDataHolder) throws AuthorisationIsExpiredException {
         Optional<AuthorisationEntity> pisAuthorisation = getAuthorisationByExternalId(authorisationId, instanceId);
 
@@ -211,7 +211,7 @@ public class CmsPsuPisServiceInternal implements CmsPsuPisService {
 
     @Override
     @Transactional
-    public boolean updatePaymentStatus(@NotNull String paymentId, @NotNull TransactionStatus status, @NotNull String instanceId) {
+    public boolean updatePaymentStatus(@NotNull String paymentId, @NotNull Xs2aTransactionStatus status, @NotNull String instanceId) {
         Optional<PisCommonPaymentData> paymentDataOptional = commonPaymentDataService.getPisCommonPaymentData(paymentId, instanceId);
 
         return paymentDataOptional
@@ -254,14 +254,14 @@ public class CmsPsuPisServiceInternal implements CmsPsuPisService {
     }
 
     private boolean updatePsuData(AuthorisationEntity authorisation, PsuIdData psuIdData) {
-        PsuData newPsuData = psuDataMapper.mapToPsuData(psuIdData, authorisation.getInstanceId());
+        CmsPsuData newPsuData = psuDataMapper.mapToPsuData(psuIdData, authorisation.getInstanceId());
         if (newPsuData == null || StringUtils.isBlank(newPsuData.getPsuId())) {
             log.info("Authorisation ID [{}]. Update PSU in payment failed in updatePsuData method, because newPsuData or psuId in newPsuData is empty or null",
                      authorisation.getExternalId());
             return false;
         }
 
-        Optional<PsuData> optionalPsuData = Optional.ofNullable(authorisation.getPsuData());
+        Optional<CmsPsuData> optionalPsuData = Optional.ofNullable(authorisation.getPsuData());
         if (optionalPsuData.isPresent()) {
             newPsuData = psuDataUpdater.updatePsuDataEntity(optionalPsuData.get(), newPsuData);
         } else {
@@ -274,8 +274,8 @@ public class CmsPsuPisServiceInternal implements CmsPsuPisService {
             }
 
             PisCommonPaymentData commonPayment = commonPaymentOptional.get();
-            List<PsuData> paymentPsuList = commonPayment.getPsuDataList();
-            Optional<PsuData> psuDataOptional = cmsPsuService.definePsuDataForAuthorisation(newPsuData, paymentPsuList);
+            List<CmsPsuData> paymentPsuList = commonPayment.getPsuDataList();
+            Optional<CmsPsuData> psuDataOptional = cmsPsuService.definePsuDataForAuthorisation(newPsuData, paymentPsuList);
             if (psuDataOptional.isPresent()) {
                 newPsuData = psuDataOptional.get();
                 if (AuthorisationType.PIS_CANCELLATION != authorisation.getType()) {
@@ -300,7 +300,7 @@ public class CmsPsuPisServiceInternal implements CmsPsuPisService {
                    });
     }
 
-    private boolean updateAuthorisationStatusAndSaveAuthorisation(AuthorisationEntity pisAuthorisation, ScaStatus status,
+    private boolean updateAuthorisationStatusAndSaveAuthorisation(AuthorisationEntity pisAuthorisation, Xs2aScaStatus status,
                                                                   AuthenticationDataHolder authenticationDataHolder) {
         if (pisAuthorisation.getScaStatus().isFinalisedStatus()) {
             log.info("Authorisation ID [{}], SCA status: [{}]. Update authorisation status failed in updateAuthorisationStatusAndSaveAuthorisation method, " +

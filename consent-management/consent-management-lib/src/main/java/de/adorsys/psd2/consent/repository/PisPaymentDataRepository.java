@@ -17,7 +17,7 @@
 package de.adorsys.psd2.consent.repository;
 
 import de.adorsys.psd2.consent.domain.payment.PisPaymentData;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PisPaymentDataRepository extends CrudRepository<PisPaymentData, Long>, JpaSpecificationExecutor<PisPaymentData> {
-    Optional<List<PisPaymentData>> findByPaymentIdAndPaymentDataTransactionStatusIn(String paymentId, List<TransactionStatus> statuses);
+    Optional<List<PisPaymentData>> findByPaymentIdAndPaymentDataTransactionStatusIn(String paymentId, List<Xs2aTransactionStatus> statuses);
 
     Optional<List<PisPaymentData>> findByPaymentId(String paymentId);
 }

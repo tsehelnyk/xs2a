@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.validator.ais.account;
 
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
 import de.adorsys.psd2.xs2a.service.validator.ais.account.common.AccountConsentValidator;
@@ -79,7 +79,7 @@ public class GetTrustedBeneficiariesListValidator extends AbstractAccountTppVali
     }
 
     private boolean doesNotDedicatedConsentHaveRights(AisConsent aisConsent) {
-        AdditionalInformationAccess additionalInformationAccess = aisConsent.getAccess().getAdditionalInformationAccess();
+        Xs2aAdditionalInformationAccess additionalInformationAccess = aisConsent.getAccess().getAdditionalInformationAccess();
 
         boolean isConsentDedicated = aisConsent.isConsentForDedicatedAccounts();
         boolean isNotTrustedBeneficiariesSupported = additionalInformationAccess == null ||

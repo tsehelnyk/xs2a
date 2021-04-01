@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.authorization.piis;
 
 import de.adorsys.psd2.consent.api.service.AuthorisationServiceEncrypted;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.service.authorization.ConsentAuthorisationConfirmationService;
@@ -66,7 +66,7 @@ public class PiisAuthorisationConfirmationService extends ConsentAuthorisationCo
     }
 
     @Override
-    protected void updateConsentStatus(String consentId, ConsentStatus consentStatus) {
+    protected void updateConsentStatus(String consentId, Xs2aConsentStatus consentStatus) {
         xs2aPiisConsentService.updateConsentStatus(consentId, consentStatus);
     }
 

@@ -17,7 +17,7 @@
 package de.adorsys.psd2.consent.service.mapper;
 
 import de.adorsys.psd2.consent.domain.AccountReferenceEntity;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -26,9 +26,9 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class AccountReferenceMapper {
-    AccountReference mapToAccountReference(AccountReferenceEntity accountReferenceEntity) {
+    Xs2aAccountReference mapToAccountReference(AccountReferenceEntity accountReferenceEntity) {
         return Optional.ofNullable(accountReferenceEntity)
-                   .map(ref -> new AccountReference(null, null,
+                   .map(ref -> new Xs2aAccountReference(null, null,
                                                     ref.getIban(),
                                                     ref.getBban(),
                                                     ref.getPan(),

@@ -24,7 +24,7 @@ import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.service.validator.ais.consent.dto.CreateConsentAuthorisationObject;
@@ -223,7 +223,7 @@ class CreateConsentAuthorisationValidatorTest {
 
     private AisConsent buildAccountConsentWithPsuIdDataAndAuthorisation() {
         ConsentAuthorization authorisation = new ConsentAuthorization();
-        authorisation.setScaStatus(ScaStatus.FINALISED);
+        authorisation.setScaStatus(Xs2aScaStatus.FINALISED);
         authorisation.setPsuIdData(PSU_DATA);
         AisConsent aisConsent = new AisConsent();
         aisConsent.setAuthorisations(Collections.singletonList(authorisation));

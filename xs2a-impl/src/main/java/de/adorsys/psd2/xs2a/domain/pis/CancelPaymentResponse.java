@@ -17,13 +17,13 @@
 package de.adorsys.psd2.xs2a.domain.pis;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ChallengeData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aChosenScaMethod;
 import lombok.Data;
@@ -35,16 +35,16 @@ import java.util.Set;
 @Data
 public class CancelPaymentResponse {
     private boolean startAuthorisationRequired;
-    private TransactionStatus transactionStatus;
-    private List<AuthenticationObject> scaMethods;
+    private Xs2aTransactionStatus transactionStatus;
+    private List<Xs2aAuthenticationObject> scaMethods;
     private Xs2aChosenScaMethod chosenScaMethod;
-    private ChallengeData challengeData;
+    private Xs2aChallengeData challengeData;
 
     private String paymentId;
     private PaymentType paymentType;
     private String paymentProduct;
     private String authorizationId;
-    private ScaStatus scaStatus;
+    private Xs2aScaStatus scaStatus;
     private PsuIdData psuData;
 
     @NotNull

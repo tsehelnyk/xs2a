@@ -18,7 +18,7 @@ package de.adorsys.psd2.xs2a.service.validator.pis.authorisation.initiation;
 
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.service.validator.authorisation.AuthorisationPsuDataChecker;
@@ -88,7 +88,7 @@ public class CreatePisAuthorisationValidator extends AbstractPisValidator<Create
             return ValidationResult.invalid(PIS_409, STATUS_INVALID);
         }
 
-        if (pisCommonPaymentResponse.getTransactionStatus() == TransactionStatus.RJCT) {
+        if (pisCommonPaymentResponse.getTransactionStatus() == Xs2aTransactionStatus.RJCT) {
             log.info("Payment ID: [{}]. Creation of PIS authorisation has failed: payment has been rejected", pisCommonPaymentResponse.getExternalId());
             return ValidationResult.invalid(PIS_403, RESOURCE_EXPIRED_403);
         }

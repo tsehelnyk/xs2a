@@ -33,12 +33,12 @@ import de.adorsys.psd2.xs2a.config.CorsConfigurationProperties;
 import de.adorsys.psd2.xs2a.config.WebConfig;
 import de.adorsys.psd2.xs2a.config.Xs2aEndpointPathConstant;
 import de.adorsys.psd2.xs2a.config.Xs2aInterfaceConfig;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
-import de.adorsys.psd2.xs2a.domain.CashAccountType;
-import de.adorsys.psd2.xs2a.domain.account.AccountStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aCashAccountType;
+import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountStatus;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountDetails;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aUsageType;
 import de.adorsys.psd2.xs2a.integration.builder.AspspSettingsBuilder;
@@ -334,8 +334,8 @@ class AccountControllerIT {
     @NotNull
     private Xs2aAccountDetails buildXs2aAccountDetails() {
         return new Xs2aAccountDetails("accountDetail", "y1", "y2", "y3", "y4",
-                                      "y5", "y6", Currency.getInstance("EUR"), "y8", "y9", "product", CashAccountType.CACC,
-                                      AccountStatus.ENABLED, "y11", "linked3", Xs2aUsageType.PRIV, "details3", new ArrayList<>(), null, null);
+                                      "y5", "y6", Currency.getInstance("EUR"), "y8", "y9", "product", Xs2aCashAccountType.CACC,
+                                      Xs2aAccountStatus.ENABLED, "y11", "linked3", Xs2aUsageType.PRIV, "details3", new ArrayList<>(), null, null);
     }
 
     private SpiResponse<List<SpiAccountDetails>> buildListSpiResponse() {
@@ -359,7 +359,7 @@ class AccountControllerIT {
     private AisConsent createConsent() {
         AisConsent aisConsent = jsonReader.getObjectFromFile("json/consent/xs2a-account-consent.json", AisConsent.class);
         aisConsent.setConsentTppInformation(buildConsentTppInformation());
-        aisConsent.setConsentStatus(ConsentStatus.VALID);
+        aisConsent.setConsentStatus(Xs2aConsentStatus.VALID);
         return aisConsent;
     }
 

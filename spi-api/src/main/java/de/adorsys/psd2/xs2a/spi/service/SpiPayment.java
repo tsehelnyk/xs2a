@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.spi.service;
 
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.spi.domain.psu.SpiPsuData;
 
@@ -30,9 +30,9 @@ public interface SpiPayment {
 
     String getPaymentProduct();
 
-    TransactionStatus getPaymentStatus();
+    Xs2aTransactionStatus getPaymentStatus();
 
-    void setPaymentStatus(TransactionStatus paymentStatus);
+    void setPaymentStatus(Xs2aTransactionStatus paymentStatus);
 
     OffsetDateTime getStatusChangeTimestamp();
 

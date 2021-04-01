@@ -16,9 +16,9 @@
 
 package de.adorsys.psd2.consent.service.account;
 
-import de.adorsys.psd2.core.data.AccountAccess;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
-import de.adorsys.psd2.xs2a.core.profile.AdditionalInformationAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAdditionalInformationAccess;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -31,30 +31,30 @@ import java.util.stream.Collectors;
 @Service
 public class AccountAccessUpdater {
     @NotNull
-    public AccountAccess updateAccountReferencesInAccess(@NotNull AccountAccess existingAccess,
-                                                         @NotNull AccountAccess newAccess) {
+    public Xs2aConsentAccountAccess updateAccountReferencesInAccess(@NotNull Xs2aConsentAccountAccess existingAccess,
+                                                                    @NotNull Xs2aConsentAccountAccess newAccess) {
         if (hasNoAccountReferences(existingAccess)) {
-            return new AccountAccess(newAccess.getAccounts(), newAccess.getBalances(), newAccess.getTransactions(), newAccess.getAdditionalInformationAccess());
+            return new Xs2aConsentAccountAccess(newAccess.getAccounts(), newAccess.getBalances(), newAccess.getTransactions(), newAccess.getAdditionalInformationAccess());
         }
 
-        List<AccountReference> updatedAccounts = existingAccess.getAccounts().stream()
+        List<Xs2aAccountReference> updatedAccounts = existingAccess.getAccounts().stream()
                                                      .map(ref -> updateAccountReference(ref, newAccess.getAccounts()))
                                                      .collect(Collectors.toList());
-        List<AccountReference> updatedBalances = existingAccess.getBalances().stream()
+        List<Xs2aAccountReference> updatedBalances = existingAccess.getBalances().stream()
                                                      .map(ref -> updateAccountReference(ref, newAccess.getBalances()))
                                                      .collect(Collectors.toList());
-        List<AccountReference> updatedTransactions = existingAccess.getTransactions().stream()
+        List<Xs2aAccountReference> updatedTransactions = existingAccess.getTransactions().stream()
                                                          .map(ref -> updateAccountReference(ref, newAccess.getTransactions()))
                                                          .collect(Collectors.toList());
 
-        AdditionalInformationAccess updatedAdditionalInformation = updateAccountReferencesInAdditionalInformation(existingAccess.getAdditionalInformationAccess(),
+        Xs2aAdditionalInformationAccess updatedAdditionalInformation = updateAccountReferencesInAdditionalInformation(existingAccess.getAdditionalInformationAccess(),
                                                                                                                   newAccess.getAdditionalInformationAccess());
 
-        return new AccountAccess(updatedAccounts, updatedBalances, updatedTransactions, updatedAdditionalInformation);
+        return new Xs2aConsentAccountAccess(updatedAccounts, updatedBalances, updatedTransactions, updatedAdditionalInformation);
     }
 
-    private boolean hasNoAccountReferences(AccountAccess accountAccess) {
-        AdditionalInformationAccess additionalInformationAccess = accountAccess.getAdditionalInformationAccess();
+    private boolean hasNoAccountReferences(Xs2aConsentAccountAccess accountAccess) {
+        Xs2aAdditionalInformationAccess additionalInformationAccess = accountAccess.getAdditionalInformationAccess();
         boolean hasNoAdditionalInformationReferences = additionalInformationAccess == null
                                                            || CollectionUtils.isEmpty(additionalInformationAccess.getOwnerName());
 
@@ -64,16 +64,16 @@ public class AccountAccessUpdater {
                    && hasNoAdditionalInformationReferences;
     }
 
-    private AdditionalInformationAccess updateAccountReferencesInAdditionalInformation(AdditionalInformationAccess existingAccess,
-                                                                                       AdditionalInformationAccess requestedAccess) {
+    private Xs2aAdditionalInformationAccess updateAccountReferencesInAdditionalInformation(Xs2aAdditionalInformationAccess existingAccess,
+                                                                                           Xs2aAdditionalInformationAccess requestedAccess) {
         if (isAdditionalInformationAbsent(existingAccess) || isAdditionalInformationAbsent(requestedAccess)) {
             return existingAccess;
         }
-        return new AdditionalInformationAccess(getAccountReferences(existingAccess.getOwnerName(), requestedAccess.getOwnerName()),
+        return new Xs2aAdditionalInformationAccess(getAccountReferences(existingAccess.getOwnerName(), requestedAccess.getOwnerName()),
                                                getAccountReferences(existingAccess.getTrustedBeneficiaries(), requestedAccess.getTrustedBeneficiaries()));
     }
 
-    private List<AccountReference> getAccountReferences(List<AccountReference> existing, List<AccountReference> requested){
+    private List<Xs2aAccountReference> getAccountReferences(List<Xs2aAccountReference> existing, List<Xs2aAccountReference> requested){
         if (existing != null && requested != null) {
             return existing.stream()
                        .map(ref -> updateAccountReference(ref, requested))
@@ -82,23 +82,23 @@ public class AccountAccessUpdater {
         return Collections.emptyList();
     }
 
-    private boolean isAdditionalInformationAbsent(AdditionalInformationAccess additionalInformationAccess) {
+    private boolean isAdditionalInformationAbsent(Xs2aAdditionalInformationAccess additionalInformationAccess) {
         return additionalInformationAccess == null || isAdditionalInformationEmpty(additionalInformationAccess);
     }
 
-    private boolean isAdditionalInformationEmpty(AdditionalInformationAccess additionalInformationAccess) {
+    private boolean isAdditionalInformationEmpty(Xs2aAdditionalInformationAccess additionalInformationAccess) {
         return isOwnerNameAbsent(additionalInformationAccess) && isTrustedBeneficiariesAbsent(additionalInformationAccess);
     }
 
-    private boolean isOwnerNameAbsent(AdditionalInformationAccess additionalInformationAccess) {
+    private boolean isOwnerNameAbsent(Xs2aAdditionalInformationAccess additionalInformationAccess) {
         return additionalInformationAccess.getOwnerName() == null;
     }
 
-    private boolean isTrustedBeneficiariesAbsent(AdditionalInformationAccess additionalInformationAccess) {
+    private boolean isTrustedBeneficiariesAbsent(Xs2aAdditionalInformationAccess additionalInformationAccess) {
         return additionalInformationAccess.getTrustedBeneficiaries() == null;
     }
 
-    private AccountReference updateAccountReference(AccountReference existingReference, List<AccountReference> requestedAspspReferences) {
+    private Xs2aAccountReference updateAccountReference(Xs2aAccountReference existingReference, List<Xs2aAccountReference> requestedAspspReferences) {
         return requestedAspspReferences.stream()
                    .filter(aspsp -> aspsp.getUsedAccountReferenceSelector().equals(existingReference.getUsedAccountReferenceSelector()))
                    .filter(aspsp -> Objects.equals(aspsp.getCurrency(), existingReference.getCurrency()))

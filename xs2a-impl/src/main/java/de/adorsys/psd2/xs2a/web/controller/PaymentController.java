@@ -26,7 +26,7 @@ import de.adorsys.psd2.xs2a.core.psu.AdditionalPsuIdData;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.tpp.TppAttributes;
 import de.adorsys.psd2.xs2a.core.tpp.TppNotificationData;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.NotificationModeResponseHeaders;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.authorisation.AuthorisationResponse;
@@ -422,7 +422,7 @@ public class PaymentController implements PaymentApi {
         NotificationModeResponseHeaders notificationHeaders = notificationSupportedModeService.resolveNotificationHeaders(paymentInitiationResponse.getTppNotificationContentPreferred());
 
         String selfLink = Optional.ofNullable(paymentInitiationResponse.getLinks().getSelf())
-                              .map(HrefType::getHref)
+                              .map(Xs2aHrefType::getHref)
                               .orElseThrow(() -> new IllegalArgumentException("Wrong href type in self link"));
 
         return paymentInitiationHeadersBuilder.buildInitiatePaymentHeaders(paymentInitiationResponse.getAuthorizationId(), selfLink, notificationHeaders);

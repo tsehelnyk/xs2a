@@ -30,8 +30,8 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Optional;
 
-import static de.adorsys.psd2.xs2a.core.pis.TransactionStatus.PATC;
-import static de.adorsys.psd2.xs2a.core.pis.TransactionStatus.RCVD;
+import static de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus.PATC;
+import static de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus.RCVD;
 
 @Slf4j
 @Service

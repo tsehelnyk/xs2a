@@ -36,7 +36,7 @@ import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.integration.builder.*;
 import de.adorsys.psd2.xs2a.integration.builder.ais.AisConsentAuthorizationResponseBuilder;
@@ -154,7 +154,7 @@ class ConsentUpdateAuthorisationIT {
         PsuIdData psuIdDataAuthorisation = buildPsuIdDataAuthorisation(psuIdAuthorisation);
         HttpHeadersMock httpHeaders = buildHttpHeaders(psuIdHeader);
 
-        Authorisation authorisation = new Authorisation(AUTHORISATION_ID, psuIdDataAuthorisation, CONSENT_ID, AuthorisationType.CONSENT, ScaStatus.RECEIVED);
+        Authorisation authorisation = new Authorisation(AUTHORISATION_ID, psuIdDataAuthorisation, CONSENT_ID, AuthorisationType.CONSENT, Xs2aScaStatus.RECEIVED);
         CmsConsent cmsConsent = CmsConsentBuilder.buildCmsConsent(CONSENT_PATH, scaApproach, CONSENT_ID, xs2aObjectMapper, authorisation);
 
 

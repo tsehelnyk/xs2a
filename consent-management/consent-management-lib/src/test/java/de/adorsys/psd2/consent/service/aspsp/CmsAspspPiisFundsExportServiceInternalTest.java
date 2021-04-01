@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.service.aspsp;
 
 import de.adorsys.psd2.consent.api.piis.v1.CmsPiisConsent;
 import de.adorsys.psd2.consent.aspsp.api.PageData;
-import de.adorsys.psd2.consent.domain.PsuData;
+import de.adorsys.psd2.consent.domain.CmsPsuData;
 import de.adorsys.psd2.consent.domain.consent.ConsentEntity;
 import de.adorsys.psd2.consent.repository.ConsentJpaRepository;
 import de.adorsys.psd2.consent.repository.specification.PiisConsentEntitySpecification;
@@ -464,7 +464,7 @@ class CmsAspspPiisFundsExportServiceInternalTest {
         return new PsuIdData(null, null, null, null, null);
     }
 
-    private PsuData buildPsuData() {
-        return new PsuData(PSU_ID, null, null, null, null);
+    private CmsPsuData buildPsuData() {
+        return new CmsPsuData(PSU_ID, null, null, null, null);
     }
 }

@@ -16,7 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aBalancesReport;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountBalance;
 import de.adorsys.psd2.xs2a.spi.domain.account.SpiAccountReference;
@@ -35,6 +35,6 @@ public interface SpiToXs2aBalanceReportMapper {
 
     @Mapping(target = "balances", source = "balances")
     @Mapping(target = "xs2aAccountReference", source = "accountReference")
-    Xs2aBalancesReport mapToXs2aBalancesReport(AccountReference accountReference, List<SpiAccountBalance> balances);
+    Xs2aBalancesReport mapToXs2aBalancesReport(Xs2aAccountReference accountReference, List<SpiAccountBalance> balances);
 
 }

@@ -43,11 +43,11 @@ import de.adorsys.psd2.consent.service.psu.util.PsuDataUpdater;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
 import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -116,7 +116,7 @@ class CmsPsuPisServiceInternalTest {
     private PageRequestBuilder pageRequestBuilder;
 
     private AuthenticationDataHolder authenticationDataHolder;
-    private PsuData psuData;
+    private CmsPsuData psuData;
     private PsuIdData psuIdData;
     private CmsBasePaymentResponse cmsPayment;
 
@@ -413,7 +413,7 @@ class CmsPsuPisServiceInternalTest {
         when(authorisationRepository.findOne(any(Specification.class))).thenReturn(Optional.of(pisAuthorization));
 
         // When
-        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
+        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
                                                                                   authenticationDataHolder);
 
         // Then
@@ -432,12 +432,12 @@ class CmsPsuPisServiceInternalTest {
         when(authorisationSpecification.byExternalIdAndInstanceId(AUTHORISATION_ID, DEFAULT_SERVICE_INSTANCE_ID))
             .thenReturn((root, criteriaQuery, criteriaBuilder) -> null);
         AuthorisationEntity pisAuthorization = buildPisAuthorisation();
-        pisAuthorization.setScaStatus(ScaStatus.FAILED);
+        pisAuthorization.setScaStatus(Xs2aScaStatus.FAILED);
         //noinspection unchecked
         when(authorisationRepository.findOne(any(Specification.class))).thenReturn(Optional.of(pisAuthorization));
 
         // When
-        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
+        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
                                                                                   authenticationDataHolder);
 
         // Then
@@ -460,7 +460,7 @@ class CmsPsuPisServiceInternalTest {
         when(authorisationRepository.findOne(any(Specification.class))).thenReturn(Optional.of(pisAuthorization));
 
         // When
-        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, WRONG_PAYMENT_ID, AUTHORISATION_ID, ScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
+        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, WRONG_PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
                                                                                   authenticationDataHolder);
 
         // Then
@@ -474,7 +474,7 @@ class CmsPsuPisServiceInternalTest {
         // Given
 
         // When
-        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, WRONG_PAYMENT_ID, AUTHORISATION_ID, ScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
+        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, WRONG_PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
                                                                                   authenticationDataHolder);
 
         // Then
@@ -488,7 +488,7 @@ class CmsPsuPisServiceInternalTest {
         // Given
 
         // When
-        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(WRONG_PSU_ID_DATA, PAYMENT_ID, AUTHORISATION_ID, ScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
+        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(WRONG_PSU_ID_DATA, PAYMENT_ID, AUTHORISATION_ID, Xs2aScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
                                                                                   authenticationDataHolder);
 
         // Then
@@ -502,7 +502,7 @@ class CmsPsuPisServiceInternalTest {
         // Given
 
         // When
-        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, PAYMENT_ID, WRONG_AUTHORISATION_ID, ScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
+        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, PAYMENT_ID, WRONG_AUTHORISATION_ID, Xs2aScaStatus.FAILED, DEFAULT_SERVICE_INSTANCE_ID,
                                                                                   authenticationDataHolder);
 
         // Then
@@ -516,10 +516,10 @@ class CmsPsuPisServiceInternalTest {
         // Given
         when(commonPaymentDataService.getPisCommonPaymentData(PAYMENT_ID, DEFAULT_SERVICE_INSTANCE_ID))
             .thenReturn(Optional.of(buildPisCommonPaymentData()));
-        when(commonPaymentDataService.updateStatusInPaymentData(buildPisCommonPaymentData(), TransactionStatus.RCVD)).thenReturn(true);
+        when(commonPaymentDataService.updateStatusInPaymentData(buildPisCommonPaymentData(), Xs2aTransactionStatus.RCVD)).thenReturn(true);
 
         // When
-        boolean actualResult = cmsPsuPisServiceInternal.updatePaymentStatus(PAYMENT_ID, TransactionStatus.RCVD, DEFAULT_SERVICE_INSTANCE_ID);
+        boolean actualResult = cmsPsuPisServiceInternal.updatePaymentStatus(PAYMENT_ID, Xs2aTransactionStatus.RCVD, DEFAULT_SERVICE_INSTANCE_ID);
 
         // Then
         assertTrue(actualResult);
@@ -532,7 +532,7 @@ class CmsPsuPisServiceInternalTest {
             .thenReturn(Optional.empty());
 
         // When
-        boolean actualResult = cmsPsuPisServiceInternal.updatePaymentStatus(WRONG_PAYMENT_ID, TransactionStatus.CANC, DEFAULT_SERVICE_INSTANCE_ID);
+        boolean actualResult = cmsPsuPisServiceInternal.updatePaymentStatus(WRONG_PAYMENT_ID, Xs2aTransactionStatus.CANC, DEFAULT_SERVICE_INSTANCE_ID);
 
         // Then
         assertFalse(actualResult);
@@ -592,7 +592,7 @@ class CmsPsuPisServiceInternalTest {
         // Given
 
         // When
-        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, PAYMENT_ID, FINALISED_AUTHORISATION_ID, ScaStatus.SCAMETHODSELECTED, DEFAULT_SERVICE_INSTANCE_ID, authenticationDataHolder);
+        boolean actualResult = cmsPsuPisServiceInternal.updateAuthorisationStatus(PSU_ID_DATA, PAYMENT_ID, FINALISED_AUTHORISATION_ID, Xs2aScaStatus.SCAMETHODSELECTED, DEFAULT_SERVICE_INSTANCE_ID, authenticationDataHolder);
 
         // Then
         assertFalse(actualResult);
@@ -607,7 +607,7 @@ class CmsPsuPisServiceInternalTest {
             .thenReturn(Optional.of(buildFinalisedPisCommonPaymentData()));
 
         // When
-        boolean actualResult = cmsPsuPisServiceInternal.updatePaymentStatus(FINALISED_PAYMENT_ID, TransactionStatus.CANC, DEFAULT_SERVICE_INSTANCE_ID);
+        boolean actualResult = cmsPsuPisServiceInternal.updatePaymentStatus(FINALISED_PAYMENT_ID, Xs2aTransactionStatus.CANC, DEFAULT_SERVICE_INSTANCE_ID);
 
         // Then
         assertFalse(actualResult);
@@ -789,14 +789,14 @@ class CmsPsuPisServiceInternalTest {
 
     private CmsPsuAuthorisation buildCmsPsuAuthorisation() {
         CmsPsuAuthorisation cmsPsuAuthorisation = new CmsPsuAuthorisation();
-        cmsPsuAuthorisation.setScaStatus(ScaStatus.FAILED);
+        cmsPsuAuthorisation.setScaStatus(Xs2aScaStatus.FAILED);
         return cmsPsuAuthorisation;
     }
 
     private AuthorisationEntity buildPisAuthorisation() {
         AuthorisationEntity pisAuthorisation = new AuthorisationEntity();
         pisAuthorisation.setType(AuthorisationType.PIS_CREATION);
-        pisAuthorisation.setScaStatus(ScaStatus.PSUAUTHENTICATED);
+        pisAuthorisation.setScaStatus(Xs2aScaStatus.PSUAUTHENTICATED);
         pisAuthorisation.setParentExternalId(PAYMENT_ID);
         pisAuthorisation.setExternalId(AUTHORISATION_ID);
         pisAuthorisation.setPsuData(buildPsuData());
@@ -810,7 +810,7 @@ class CmsPsuPisServiceInternalTest {
 
     private PisCommonPaymentData buildPisCommonPaymentData() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RCVD);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisCommonPaymentData.setPsuDataList(Collections.singletonList(buildPsuData()));
         pisCommonPaymentData.setPaymentType(PaymentType.SINGLE);
         pisCommonPaymentData.setPaymentProduct(PAYMENT_PRODUCT);
@@ -824,7 +824,7 @@ class CmsPsuPisServiceInternalTest {
 
     private PisCommonPaymentData buildPisCommonPaymentDataWithAuthorisationEmptyPsuData() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RCVD);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RCVD);
         pisCommonPaymentData.setPaymentType(PaymentType.SINGLE);
         pisCommonPaymentData.setPaymentProduct(PAYMENT_PRODUCT);
         pisCommonPaymentData.setPayments(buildPisPaymentDataListForCommonData());
@@ -837,7 +837,7 @@ class CmsPsuPisServiceInternalTest {
 
     private PisCommonPaymentData buildFinalisedPisCommonPaymentData() {
         PisCommonPaymentData pisCommonPaymentData = new PisCommonPaymentData();
-        pisCommonPaymentData.setTransactionStatus(TransactionStatus.RJCT);
+        pisCommonPaymentData.setTransactionStatus(Xs2aTransactionStatus.RJCT);
         pisCommonPaymentData.setPsuDataList(Collections.singletonList(buildPsuData()));
         pisCommonPaymentData.setPaymentType(PaymentType.SINGLE);
         pisCommonPaymentData.setPaymentProduct(PAYMENT_PRODUCT);
@@ -857,9 +857,9 @@ class CmsPsuPisServiceInternalTest {
         return entity;
     }
 
-    private PsuData buildPsuData() {
+    private CmsPsuData buildPsuData() {
         PsuIdData psuIdData = buildPsuIdData();
-        PsuData psuData = new PsuData(
+        CmsPsuData psuData = new CmsPsuData(
             psuIdData.getPsuId(),
             psuIdData.getPsuIdType(),
             psuIdData.getPsuCorporateId(),
@@ -871,9 +871,9 @@ class CmsPsuPisServiceInternalTest {
         return psuData;
     }
 
-    private PsuData buildEmptyPsuData() {
+    private CmsPsuData buildEmptyPsuData() {
         PsuIdData emptyPsuIdData = buildEmptyPsuIdData();
-        PsuData emptyPsuData = new PsuData(
+        CmsPsuData emptyPsuData = new CmsPsuData(
             emptyPsuIdData.getPsuId(),
             emptyPsuIdData.getPsuIdType(),
             emptyPsuIdData.getPsuCorporateId(),
@@ -926,7 +926,7 @@ class CmsPsuPisServiceInternalTest {
     private AuthorisationEntity buildExpiredAuthorisation() {
         AuthorisationEntity pisAuthorisation = new AuthorisationEntity();
         pisAuthorisation.setType(AuthorisationType.PIS_CREATION);
-        pisAuthorisation.setScaStatus(ScaStatus.RECEIVED);
+        pisAuthorisation.setScaStatus(Xs2aScaStatus.RECEIVED);
         pisAuthorisation.setExternalId(EXPIRED_AUTHORISATION_ID);
         pisAuthorisation.setPsuData(buildPsuData());
         pisAuthorisation.setRedirectUrlExpirationTimestamp(OffsetDateTime.now().minusDays(1));

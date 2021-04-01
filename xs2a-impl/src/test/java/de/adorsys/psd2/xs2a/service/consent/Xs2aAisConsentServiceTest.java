@@ -27,11 +27,11 @@ import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
 import de.adorsys.psd2.consent.api.consent.CmsCreateConsentResponse;
 import de.adorsys.psd2.consent.api.service.AisConsentServiceEncrypted;
 import de.adorsys.psd2.consent.api.service.ConsentServiceEncrypted;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.profile.NotificationSupportedMode;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -70,7 +70,7 @@ class Xs2aAisConsentServiceTest {
     private static final PsuIdData PSU_DATA = new PsuIdData("psuId", "psuIdType", "psuCorporateId", "psuCorporateIdType", "psuIpAddress");
     private static final TppInfo TPP_INFO = buildTppInfo();
     private static final CmsConsent CMS_CONSENT = new CmsConsent();
-    private static final ConsentStatus CONSENT_STATUS = ConsentStatus.VALID;
+    private static final Xs2aConsentStatus CONSENT_STATUS = Xs2aConsentStatus.VALID;
 
     @InjectMocks
     private Xs2aAisConsentService xs2aAisConsentService;
@@ -233,7 +233,7 @@ class Xs2aAisConsentServiceTest {
 
         // Then
         verify(consentServiceEncrypted, times(1)).updateConsentStatusById(CONSENT_ID, CONSENT_STATUS);
-        verify(loggingContextService, never()).storeConsentStatus(any(ConsentStatus.class));
+        verify(loggingContextService, never()).storeConsentStatus(any(Xs2aConsentStatus.class));
     }
 
     @Test
@@ -362,7 +362,7 @@ class Xs2aAisConsentServiceTest {
 
     @Test
     void updateAspspAccountAccess() throws WrongChecksumException {
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", Xs2aConsentAccountAccess.class);
 
         CmsConsent cmsConsent = new CmsConsent();
         when(aisConsentServiceEncrypted.updateAspspAccountAccess(CONSENT_ID, accountAccess))
@@ -377,7 +377,7 @@ class Xs2aAisConsentServiceTest {
 
     @Test
     void updateAspspAccountAccess_checksumError() throws WrongChecksumException {
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", Xs2aConsentAccountAccess.class);
 
         when(aisConsentServiceEncrypted.updateAspspAccountAccess(CONSENT_ID, accountAccess))
             .thenThrow(new WrongChecksumException());
@@ -390,7 +390,7 @@ class Xs2aAisConsentServiceTest {
 
     @Test
     void updateAspspAccountAccess_updateError() throws WrongChecksumException {
-        AccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", AccountAccess.class);
+        Xs2aConsentAccountAccess accountAccess = jsonReader.getObjectFromFile("json/aspect/account-access.json", Xs2aConsentAccountAccess.class);
 
         when(aisConsentServiceEncrypted.updateAspspAccountAccess(CONSENT_ID, accountAccess))
             .thenReturn(CmsResponse.<CmsConsent>builder().error(CmsError.TECHNICAL_ERROR).build());

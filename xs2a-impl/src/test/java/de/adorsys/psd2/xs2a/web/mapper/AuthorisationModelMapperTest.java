@@ -21,9 +21,10 @@ import de.adorsys.psd2.model.ChosenScaMethod;
 import de.adorsys.psd2.model.ScaMethods;
 import de.adorsys.psd2.model.StartScaprocessResponse;
 import de.adorsys.psd2.model.UpdatePsuAuthenticationResponse;
-import de.adorsys.psd2.xs2a.core.sca.ChallengeData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.core.authorisation.Xs2aAuthenticationObject;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aChallengeData;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.consent.CreateConsentAuthorizationResponse;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aCreatePisAuthorisationResponse;
@@ -67,23 +68,23 @@ class AuthorisationModelMapperTest {
 
     @BeforeEach
     void setUp() {
-        when(mockCoreObjectsMapper.mapToModelScaStatus(ScaStatus.RECEIVED)).thenReturn(de.adorsys.psd2.model.ScaStatus.RECEIVED);
+        when(mockCoreObjectsMapper.mapToModelScaStatus(Xs2aScaStatus.RECEIVED)).thenReturn(de.adorsys.psd2.model.ScaStatus.RECEIVED);
 
         //noinspection unchecked
-        Map<String, HrefType> links = jsonReader.getObjectFromFile("json/web/mapper/links.json", Map.class);
+        Map<String, Xs2aHrefType> links = jsonReader.getObjectFromFile("json/web/mapper/links.json", Map.class);
         Links xs2aLinks = jsonReader.getObjectFromFile("json/web/mapper/xs2a-links.json", Links.class);
         when(mockHrefLinkMapper.mapToLinksMap(xs2aLinks)).thenReturn(links);
 
-        de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject xs2aAuthenticationObject = jsonReader.getObjectFromFile("json/web/mapper/chosenScaMethod.json", de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject.class);
+        Xs2aAuthenticationObject xs2aAuthenticationObject = jsonReader.getObjectFromFile("json/web/mapper/chosenScaMethod.json", Xs2aAuthenticationObject.class);
         ChosenScaMethod chosenScaMethod = jsonReader.getObjectFromFile("json/web/mapper/chosenScaMethod.json", ChosenScaMethod.class);
         when(mockChosenScaMethodMapper.mapToChosenScaMethod(xs2aAuthenticationObject)).thenReturn(chosenScaMethod);
 
-        List<de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject> xs2aAuthenticationObjects = jsonReader.getObjectFromFile("json/web/mapper/scaMethods.json", new TypeReference<List<de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject>>() {
+        List<Xs2aAuthenticationObject> xs2aAuthenticationObjects = jsonReader.getObjectFromFile("json/web/mapper/scaMethods.json", new TypeReference<List<Xs2aAuthenticationObject>>() {
         });
         ScaMethods scaMethods = jsonReader.getObjectFromFile("json/web/mapper/scaMethods.json", ScaMethods.class);
         when(mockScaMethodsMapper.mapToScaMethods(xs2aAuthenticationObjects)).thenReturn(scaMethods);
 
-        ChallengeData xs2aChallengeData = jsonReader.getObjectFromFile("json/web/mapper/challengeData.json", ChallengeData.class);
+        Xs2aChallengeData xs2aChallengeData = jsonReader.getObjectFromFile("json/web/mapper/challengeData.json", Xs2aChallengeData.class);
         de.adorsys.psd2.model.ChallengeData modelChallengeData = jsonReader.getObjectFromFile("json/web/mapper/challengeData.json", de.adorsys.psd2.model.ChallengeData.class);
         when(mockCoreObjectsMapper.mapToChallengeData(xs2aChallengeData)).thenReturn(modelChallengeData);
     }
@@ -107,7 +108,7 @@ class AuthorisationModelMapperTest {
         // Then
         assertEquals(expected, actual);
 
-        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(ScaStatus.class));
+        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(Xs2aScaStatus.class));
         verify(mockHrefLinkMapper).mapToLinksMap(any(Links.class));
 
         assertNotNull(actual.getAuthorisationId());
@@ -137,7 +138,7 @@ class AuthorisationModelMapperTest {
         // Then
         assertEquals(expected, actual);
 
-        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(ScaStatus.class));
+        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(Xs2aScaStatus.class));
         verify(mockHrefLinkMapper).mapToLinksMap(any(Links.class));
 
         assertNotNull(actual.getAuthorisationId());
@@ -166,7 +167,7 @@ class AuthorisationModelMapperTest {
         // Then
         assertEquals(expected, actual);
 
-        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(ScaStatus.class));
+        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(Xs2aScaStatus.class));
         verify(mockHrefLinkMapper).mapToLinksMap(any(Links.class));
 
         assertNotNull(actual.getAuthorisationId());
@@ -195,7 +196,7 @@ class AuthorisationModelMapperTest {
         // Then
         assertEquals(expected, actual);
 
-        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(ScaStatus.class));
+        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(Xs2aScaStatus.class));
         verify(mockHrefLinkMapper).mapToLinksMap(any(Links.class));
 
         assertNotNull(actual.getChosenScaMethod());
@@ -231,7 +232,7 @@ class AuthorisationModelMapperTest {
         StartScaprocessResponse actualStartResponse = (StartScaprocessResponse) actual;
         assertEquals(expected, actual);
 
-        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(ScaStatus.class));
+        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(Xs2aScaStatus.class));
         verify(mockHrefLinkMapper).mapToLinksMap(any(Links.class));
 
         assertNotNull(actualStartResponse.getAuthorisationId());
@@ -254,7 +255,7 @@ class AuthorisationModelMapperTest {
         UpdatePsuAuthenticationResponse actualUpdateResponse = (UpdatePsuAuthenticationResponse) actual;
         assertEquals(expected, actual);
 
-        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(ScaStatus.class));
+        verify(mockCoreObjectsMapper).mapToModelScaStatus(any(Xs2aScaStatus.class));
         verify(mockHrefLinkMapper).mapToLinksMap(any(Links.class));
 
         assertNotNull(actualUpdateResponse.getChosenScaMethod());

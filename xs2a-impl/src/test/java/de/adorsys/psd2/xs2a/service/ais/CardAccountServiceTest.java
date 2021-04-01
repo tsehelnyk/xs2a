@@ -19,12 +19,12 @@ package de.adorsys.psd2.xs2a.service.ais;
 import de.adorsys.psd2.consent.api.ActionStatus;
 import de.adorsys.psd2.consent.api.CmsError;
 import de.adorsys.psd2.consent.api.CmsResponse;
-import de.adorsys.psd2.core.data.AccountAccess;
+import de.adorsys.psd2.core.data.Xs2aConsentAccountAccess;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.core.data.ais.AisConsentData;
 import de.adorsys.psd2.logger.context.LoggingContextService;
 import de.adorsys.psd2.xs2a.core.ais.AccountAccessType;
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
 import de.adorsys.psd2.xs2a.core.consent.ConsentTppInformation;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
@@ -33,7 +33,7 @@ import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.error.TppMessage;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.service.validator.ValidationResult;
 import de.adorsys.psd2.xs2a.core.tpp.TppInfo;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
@@ -97,8 +97,8 @@ class CardAccountServiceTest {
 
     private static final String REQUEST_URI = "request/uri";
     private static final SpiAccountConsent SPI_ACCOUNT_CONSENT = new SpiAccountConsent();
-    private static final AccountReference ACCOUNT_REFERENCE = jsonReader.getObjectFromFile("json/service/account/xs2a-account-reference-full.json", AccountReference.class);
-    private static final AccountReference ACCOUNT_REFERENCE_WITHOUT_ASPSP_IDS = jsonReader.getObjectFromFile("json/service/account/xs2a-account-reference-without-bank_ids.json", AccountReference.class);
+    private static final Xs2aAccountReference ACCOUNT_REFERENCE = jsonReader.getObjectFromFile("json/service/account/xs2a-account-reference-full.json", Xs2aAccountReference.class);
+    private static final Xs2aAccountReference ACCOUNT_REFERENCE_WITHOUT_ASPSP_IDS = jsonReader.getObjectFromFile("json/service/account/xs2a-account-reference-without-bank_ids.json", Xs2aAccountReference.class);
     private static final SpiContextData SPI_CONTEXT_DATA = TestSpiDataProvider.getSpiContextData();
     private static final MessageError VALIDATION_ERROR = buildMessageError();
 
@@ -406,14 +406,14 @@ class CardAccountServiceTest {
             .thenReturn(CmsResponse.<AisConsent>builder()
                             .payload(aisConsent)
                             .build());
-        ArgumentCaptor<ConsentStatus> argumentCaptor = ArgumentCaptor.forClass(ConsentStatus.class);
+        ArgumentCaptor<Xs2aConsentStatus> argumentCaptor = ArgumentCaptor.forClass(Xs2aConsentStatus.class);
 
         // When
         cardAccountService.getCardAccountList(CONSENT_ID, REQUEST_URI);
 
         // Then
         verify(loggingContextService).storeConsentStatus(argumentCaptor.capture());
-        assertThat(argumentCaptor.getValue()).isEqualTo(ConsentStatus.VALID);
+        assertThat(argumentCaptor.getValue()).isEqualTo(Xs2aConsentStatus.VALID);
     }
 
     private static Stream<Arguments> params() {
@@ -620,13 +620,13 @@ class CardAccountServiceTest {
                    .build();
     }
 
-    private static AisConsent createConsent(AccountAccess access) {
+    private static AisConsent createConsent(Xs2aConsentAccountAccess access) {
         AisConsent aisConsent = new AisConsent();
         aisConsent.setConsentData(buildAisConsentData());
         aisConsent.setId(CONSENT_ID);
         aisConsent.setValidUntil(LocalDate.now());
         aisConsent.setFrequencyPerDay(4);
-        aisConsent.setConsentStatus(ConsentStatus.VALID);
+        aisConsent.setConsentStatus(Xs2aConsentStatus.VALID);
         aisConsent.setAuthorisations(Collections.emptyList());
         aisConsent.setConsentTppInformation(buildConsentTppInformation());
         aisConsent.setStatusChangeTimestamp(OffsetDateTime.now());
@@ -660,8 +660,8 @@ class CardAccountServiceTest {
         return tppInfo;
     }
 
-    private static AccountAccess createAccountAccess(AccountReference accountReference) {
-        return new AccountAccess(Collections.singletonList(accountReference), Collections.singletonList(accountReference), Collections.singletonList(accountReference), null);
+    private static Xs2aConsentAccountAccess createAccountAccess(Xs2aAccountReference accountReference) {
+        return new Xs2aConsentAccountAccess(Collections.singletonList(accountReference), Collections.singletonList(accountReference), Collections.singletonList(accountReference), null);
     }
 
     @NotNull

@@ -24,7 +24,7 @@ import de.adorsys.psd2.consent.repository.PisPaymentDataRepository;
 import de.adorsys.psd2.consent.service.CorePaymentsConvertService;
 import de.adorsys.psd2.consent.service.PisCommonPaymentConfirmationExpirationService;
 import de.adorsys.psd2.consent.service.mapper.PisCommonPaymentMapper;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class CommonPaymentService {
         return corePaymentsConvertService.buildPaymentData(pisPayments, paymentType);
     }
 
-    public Optional<List<PisPaymentData>> findByPaymentIdAndPaymentDataTransactionStatusIn(String parentId, List<TransactionStatus> transactionStatuses) {
+    public Optional<List<PisPaymentData>> findByPaymentIdAndPaymentDataTransactionStatusIn(String parentId, List<Xs2aTransactionStatus> transactionStatuses) {
         return pisPaymentDataRepository.findByPaymentIdAndPaymentDataTransactionStatusIn(parentId, transactionStatuses);
     }
 
@@ -62,7 +62,7 @@ public class CommonPaymentService {
         return pisCommonPaymentConfirmationExpirationService.checkAndUpdateOnConfirmationExpiration(pisCommonPaymentData);
     }
 
-    public Optional<PisCommonPaymentData> findByPaymentIdAndTransactionStatusIn(String parentId, List<TransactionStatus> transactionStatuses) {
+    public Optional<PisCommonPaymentData> findByPaymentIdAndTransactionStatusIn(String parentId, List<Xs2aTransactionStatus> transactionStatuses) {
         return pisCommonPaymentDataRepository.findByPaymentIdAndTransactionStatusIn(parentId, transactionStatuses);
     }
 

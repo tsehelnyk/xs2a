@@ -27,7 +27,7 @@ import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageError;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
-import de.adorsys.psd2.xs2a.core.profile.AccountReference;
+import de.adorsys.psd2.xs2a.core.profile.Xs2aAccountReference;
 import de.adorsys.psd2.xs2a.core.profile.AccountReferenceSelector;
 import de.adorsys.psd2.xs2a.core.profile.PiisConsentSupported;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
@@ -99,7 +99,7 @@ public class FundsConfirmationService {
         PiisConsent consent = null;
         PiisConsentSupported piisConsentSupported = profileService.getPiisConsentSupported();
         if (piisConsentSupported == PiisConsentSupported.ASPSP_CONSENT_SUPPORTED) {
-            AccountReference accountReference = request.getPsuAccount();
+            Xs2aAccountReference accountReference = request.getPsuAccount();
             PiisConsentValidationResult validationResult = validateAccountReference(accountReference);
 
             if (validationResult.hasError()) {
@@ -149,7 +149,7 @@ public class FundsConfirmationService {
                    .build();
     }
 
-    private PiisConsentValidationResult validateAccountReference(AccountReference accountReference) {
+    private PiisConsentValidationResult validateAccountReference(Xs2aAccountReference accountReference) {
         AccountReferenceSelector selector = accountReference.getUsedAccountReferenceSelector();
 
         if (selector == null) {

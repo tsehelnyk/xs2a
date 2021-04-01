@@ -20,6 +20,7 @@ import de.adorsys.psd2.model.Balance;
 import de.adorsys.psd2.model.BalanceList;
 import de.adorsys.psd2.model.BalanceType;
 import de.adorsys.psd2.xs2a.domain.Xs2aBalance;
+import de.adorsys.psd2.xs2a.domain.Xs2aBalanceType;
 import de.adorsys.psd2.xs2a.service.mapper.AmountModelMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.Mapper;
@@ -52,7 +53,7 @@ public abstract class BalanceMapper {
         return balanceList;
     }
 
-    public BalanceType mapToBalanceType(de.adorsys.psd2.xs2a.domain.BalanceType balanceType) {
+    public BalanceType mapToBalanceType(Xs2aBalanceType balanceType) {
         if (balanceType == null) {
             return null;
         }

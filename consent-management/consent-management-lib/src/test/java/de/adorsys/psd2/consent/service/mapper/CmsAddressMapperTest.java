@@ -18,7 +18,7 @@ package de.adorsys.psd2.consent.service.mapper;
 
 import de.adorsys.psd2.consent.api.CmsAddress;
 import de.adorsys.psd2.consent.domain.payment.PisAddress;
-import de.adorsys.psd2.core.payment.model.Address;
+import de.adorsys.psd2.core.payment.model.Xs2aPisAddress;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,9 +41,9 @@ class CmsAddressMapperTest {
         //Given
         CmsAddress cmsAddress = jsonReader.getObjectFromFile("json/service/mapper/cms-address.json", CmsAddress.class);
         //When
-        Address actual = cmsAddressMapper.mapToAddress(cmsAddress);
+        Xs2aPisAddress actual = cmsAddressMapper.mapToAddress(cmsAddress);
         //Then
-        Address expected = jsonReader.getObjectFromFile("json/service/mapper/address.json", Address.class);
+        Xs2aPisAddress expected = jsonReader.getObjectFromFile("json/service/mapper/address.json", Xs2aPisAddress.class);
         assertEquals(expected, actual);
     }
 

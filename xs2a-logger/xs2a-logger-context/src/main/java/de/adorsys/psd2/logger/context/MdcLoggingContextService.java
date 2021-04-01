@@ -16,9 +16,9 @@
 
 package de.adorsys.psd2.logger.context;
 
-import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
-import de.adorsys.psd2.xs2a.core.pis.TransactionStatus;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.consent.Xs2aConsentStatus;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aTransactionStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.MDC;
@@ -34,7 +34,7 @@ public class MdcLoggingContextService implements LoggingContextService {
     private static final String INSTANCE_ID_KEY = "instance-id";
 
     @Override
-    public void storeConsentStatus(@NotNull ConsentStatus consentStatus) {
+    public void storeConsentStatus(@NotNull Xs2aConsentStatus consentStatus) {
         MDC.put(CONSENT_STATUS_KEY, consentStatus.getValue());
     }
 
@@ -44,7 +44,7 @@ public class MdcLoggingContextService implements LoggingContextService {
     }
 
     @Override
-    public void storeTransactionStatus(@NotNull TransactionStatus transactionStatus) {
+    public void storeTransactionStatus(@NotNull Xs2aTransactionStatus transactionStatus) {
         MDC.put(TRANSACTION_STATUS_KEY, transactionStatus.getTransactionStatus());
     }
 
@@ -54,12 +54,12 @@ public class MdcLoggingContextService implements LoggingContextService {
     }
 
     @Override
-    public void storeScaStatus(@NotNull ScaStatus scaStatus) {
+    public void storeScaStatus(@NotNull Xs2aScaStatus scaStatus) {
         MDC.put(SCA_STATUS_KEY, scaStatus.getValue());
     }
 
     @Override
-    public void storeTransactionAndScaStatus(@NotNull TransactionStatus transactionStatus, @Nullable ScaStatus scaStatus) {
+    public void storeTransactionAndScaStatus(@NotNull Xs2aTransactionStatus transactionStatus, @Nullable Xs2aScaStatus scaStatus) {
         storeTransactionStatus(transactionStatus);
         if (scaStatus != null) {
             storeScaStatus(scaStatus);

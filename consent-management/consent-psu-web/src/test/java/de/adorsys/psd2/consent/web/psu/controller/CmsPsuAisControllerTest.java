@@ -29,7 +29,7 @@ import de.adorsys.psd2.xs2a.core.exception.AuthorisationIsExpiredException;
 import de.adorsys.psd2.xs2a.core.exception.RedirectUrlIsExpiredException;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthenticationDataHolder;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
 import de.adorsys.xs2a.reader.JsonReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -158,7 +158,7 @@ class CmsPsuAisControllerTest {
     @Test
     void updateAuthorisationStatus_withValidRequest_shouldReturnOk() throws Exception {
         // Given
-        when(cmsPsuAisService.updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
+        when(cmsPsuAisService.updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
             .thenReturn(true);
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/ais/request/authentication-data-holder.json");
 
@@ -172,13 +172,13 @@ class CmsPsuAisControllerTest {
             .andExpect(content().bytes(EMPTY_BODY));
 
         // Then
-        verify(cmsPsuAisService).updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
+        verify(cmsPsuAisService).updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
     }
 
     @Test
     void updateAuthorisationStatus_withValidRequestAndLowercaseScaStatus_shouldReturnOk() throws Exception {
         // Given
-        when(cmsPsuAisService.updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
+        when(cmsPsuAisService.updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
             .thenReturn(true);
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/ais/request/authentication-data-holder.json");
         String lowercaseScaStatus = SCA_STATUS_RECEIVED.toLowerCase();
@@ -193,13 +193,13 @@ class CmsPsuAisControllerTest {
             .andExpect(content().bytes(EMPTY_BODY));
 
         // Then
-        verify(cmsPsuAisService).updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
+        verify(cmsPsuAisService).updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
     }
 
     @Test
     void updateAuthorisationStatus_withFalseServiceResponse_shouldReturnBadRequest() throws Exception {
         // Given
-        when(cmsPsuAisService.updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
+        when(cmsPsuAisService.updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
             .thenReturn(false);
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/ais/request/authentication-data-holder.json");
 
@@ -213,7 +213,7 @@ class CmsPsuAisControllerTest {
             .andExpect(content().bytes(EMPTY_BODY));
 
         // Then
-        verify(cmsPsuAisService).updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
+        verify(cmsPsuAisService).updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
     }
 
     @Test
@@ -238,7 +238,7 @@ class CmsPsuAisControllerTest {
     @Test
     void updateAuthorisationStatus_onExpiredAuthorisationException_shouldReturnNokLink() throws Exception {
         // Given
-        when(cmsPsuAisService.updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
+        when(cmsPsuAisService.updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER))
             .thenThrow(new AuthorisationIsExpiredException(NOK_REDIRECT_URI));
         String authenticationDataHolderContent = jsonReader.getStringFromFile("json/ais/request/authentication-data-holder.json");
         String timeoutResponse = jsonReader.getStringFromFile("json/ais/response/ais-consent-timeout.json");
@@ -253,7 +253,7 @@ class CmsPsuAisControllerTest {
             .andExpect(content().json(timeoutResponse));
 
         // Then
-        verify(cmsPsuAisService).updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, ScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
+        verify(cmsPsuAisService).updateAuthorisationStatus(PSU_ID_DATA, CONSENT_ID, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED, INSTANCE_ID, AUTHENTICATION_DATA_HOLDER);
     }
 
     @Test
@@ -652,7 +652,7 @@ class CmsPsuAisControllerTest {
     void psuDataAuthorisations_withValidRequest_shouldReturnOk() throws Exception {
         // Given
         String cmsAisPsuDataAuthorisationListJson = jsonReader.getStringFromFile("json/ais/response/cms-ais-psu-data-authorisation-list.json");
-        CmsAisPsuDataAuthorisation cmsAisPsuDataAuthorisation = new CmsAisPsuDataAuthorisation(PSU_ID_DATA, AUTHORISATION_ID, ScaStatus.RECEIVED);
+        CmsAisPsuDataAuthorisation cmsAisPsuDataAuthorisation = new CmsAisPsuDataAuthorisation(PSU_ID_DATA, AUTHORISATION_ID, Xs2aScaStatus.RECEIVED);
         when(cmsPsuAisService.getPsuDataAuthorisations(CONSENT_ID, INSTANCE_ID, null, null))
             .thenReturn(Optional.of(Collections.singletonList(cmsAisPsuDataAuthorisation)));
 

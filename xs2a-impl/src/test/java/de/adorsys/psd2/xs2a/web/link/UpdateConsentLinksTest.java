@@ -18,8 +18,8 @@ package de.adorsys.psd2.xs2a.web.link;
 
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
-import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
-import de.adorsys.psd2.xs2a.domain.HrefType;
+import de.adorsys.psd2.xs2a.core.sca.Xs2aScaStatus;
+import de.adorsys.psd2.xs2a.domain.Xs2aHrefType;
 import de.adorsys.psd2.xs2a.domain.Links;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
 import de.adorsys.psd2.xs2a.service.ScaApproachResolver;
@@ -52,20 +52,20 @@ class UpdateAisConsentLinksImplTest {
 
     @Test
     void isScaStatusMethodAuthenticated() {
-        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(ScaStatus.PSUAUTHENTICATED);
+        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(Xs2aScaStatus.PSUAUTHENTICATED);
         links = new UpdateAisConsentLinksImpl(HTTP_URL, scaApproachResolver, response);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
-        expectedLinks.setSelectAuthenticationMethod(new HrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setSelectAuthenticationMethod(new Xs2aHrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 
     @Test
     void isAnotherScaStatus_failed() {
-        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(ScaStatus.FAILED);
+        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(Xs2aScaStatus.FAILED);
         links = new UpdateAisConsentLinksImpl(HTTP_URL, scaApproachResolver, response);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 
@@ -73,10 +73,10 @@ class UpdateAisConsentLinksImplTest {
     void isScaStatusMethodSelectedAndDecoupleApproach() {
         when(scaApproachResolver.getScaApproach(AUTHORISATION_ID)).thenReturn(ScaApproach.DECOUPLED);
 
-        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(ScaStatus.SCAMETHODSELECTED);
+        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(Xs2aScaStatus.SCAMETHODSELECTED);
         links = new UpdateAisConsentLinksImpl(HTTP_URL, scaApproachResolver, response);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 
@@ -84,34 +84,34 @@ class UpdateAisConsentLinksImplTest {
     void isScaStatusMethodSelectedAndRedirectApproach() {
         when(scaApproachResolver.getScaApproach(AUTHORISATION_ID)).thenReturn(ScaApproach.REDIRECT);
 
-        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(ScaStatus.SCAMETHODSELECTED);
+        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(Xs2aScaStatus.SCAMETHODSELECTED);
         links = new UpdateAisConsentLinksImpl(HTTP_URL, scaApproachResolver, response);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
-        expectedLinks.setAuthoriseTransaction(new HrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setAuthoriseTransaction(new Xs2aHrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 
     @Test
     void isScaStatusFinalised() {
-        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(ScaStatus.FINALISED);
+        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(Xs2aScaStatus.FINALISED);
         links = new UpdateAisConsentLinksImpl(HTTP_URL, scaApproachResolver, response);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 
     @Test
     void isScaStatusMethodIdentified() {
-        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(ScaStatus.PSUIDENTIFIED);
+        UpdateConsentPsuDataResponse response = buildUpdateConsentPsuDataResponse(Xs2aScaStatus.PSUIDENTIFIED);
         links = new UpdateAisConsentLinksImpl(HTTP_URL, scaApproachResolver, response);
 
-        expectedLinks.setScaStatus(new HrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
-        expectedLinks.setUpdatePsuAuthentication(new HrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setScaStatus(new Xs2aHrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
+        expectedLinks.setUpdatePsuAuthentication(new Xs2aHrefType("http://url/v1/consents/9mp1PaotpXSToNCiu4GLwd6mq/authorisations/463318a0-1e33-45d8-8209-e16444b18dda"));
         assertEquals(expectedLinks, links);
     }
 
-    private UpdateConsentPsuDataResponse buildUpdateConsentPsuDataResponse(ScaStatus scaStatus) {
+    private UpdateConsentPsuDataResponse buildUpdateConsentPsuDataResponse(Xs2aScaStatus scaStatus) {
         return new UpdateConsentPsuDataResponse(scaStatus, CONSENT_ID, AUTHORISATION_ID, new PsuIdData());
     }
 }
