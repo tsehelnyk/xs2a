@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class AesEcbCryptoProviderImplTest {
     private final String SERVER_KEY_16 = "mvLBiZsiTbGwrfJB";
-    private final String SERVER_KEY_3 = "mvL";
+    private final String SERVER_KEY_3 = "mvL123";
     private final String SERVER_KEY_80 = "mvLBiZsiTbGwrfJBmvLBiZsiTbGwrfJBmvLBiZsiTbGwrfJBmvLBiZsiTbGwrfJBmvLBiZsiTbGwrfJB";
 
     AesEcbCryptoProviderImpl aesGcmCryptoProvider = new AesEcbCryptoProviderImpl("bS6p6XvTWI", "AES/ECB/PKCS5Padding", 256, 65536, "PBKDF2WithHmacSHA256");
