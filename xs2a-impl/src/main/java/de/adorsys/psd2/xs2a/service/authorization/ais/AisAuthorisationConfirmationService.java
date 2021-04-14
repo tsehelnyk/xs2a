@@ -16,17 +16,14 @@
 
 package de.adorsys.psd2.xs2a.service.authorization.ais;
 
-import de.adorsys.psd2.consent.api.service.AuthorisationServiceEncrypted;
 import de.adorsys.psd2.core.data.ais.AisConsent;
 import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.service.authorization.ConsentAuthorisationConfirmationService;
-import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
-import de.adorsys.psd2.xs2a.service.consent.Xs2aAisConsentService;
+import de.adorsys.psd2.xs2a.service.authorization.ConsentAuthorizationMappersHolder;
+import de.adorsys.psd2.xs2a.service.authorization.ConsentAuthorizationServicesHolder;
 import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
-import de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers.Xs2aAisConsentMapper;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
 import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
@@ -41,23 +38,20 @@ import java.util.Optional;
 
 @Component
 public class AisAuthorisationConfirmationService extends ConsentAuthorisationConfirmationService<AisConsent> {
-    private final Xs2aAisConsentService aisConsentService;
     private final AisConsentSpi aisConsentSpi;
-    private final Xs2aAisConsentMapper aisConsentMapper;
+    private final ConsentAuthorizationMappersHolder consentAuthorizationMappersHolder;
+    private final ConsentAuthorizationServicesHolder consentAuthorizationServicesHolder;
 
     public AisAuthorisationConfirmationService(AspspProfileServiceWrapper aspspProfileServiceWrapper,
                                                SpiContextDataProvider spiContextDataProvider,
                                                SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory,
-                                               Xs2aAuthorisationService authorisationService,
-                                               SpiErrorMapper spiErrorMapper,
-                                               AuthorisationServiceEncrypted authorisationServiceEncrypted,
-                                               Xs2aAisConsentService aisConsentService,
                                                AisConsentSpi aisConsentSpi,
-                                               Xs2aAisConsentMapper aisConsentMapper) {
-        super(aspspProfileServiceWrapper, spiContextDataProvider, aspspConsentDataProviderFactory, authorisationService, spiErrorMapper, authorisationServiceEncrypted);
-        this.aisConsentService = aisConsentService;
+                                               ConsentAuthorizationMappersHolder consentAuthorizationMappersHolder,
+                                               ConsentAuthorizationServicesHolder consentAuthorizationServicesHolder) {
+        super(aspspProfileServiceWrapper, spiContextDataProvider, aspspConsentDataProviderFactory, consentAuthorizationMappersHolder, consentAuthorizationServicesHolder);
         this.aisConsentSpi = aisConsentSpi;
-        this.aisConsentMapper = aisConsentMapper;
+        this.consentAuthorizationServicesHolder = consentAuthorizationServicesHolder;
+        this.consentAuthorizationMappersHolder = consentAuthorizationMappersHolder;
     }
 
     @Override
@@ -67,22 +61,22 @@ public class AisAuthorisationConfirmationService extends ConsentAuthorisationCon
 
     @Override
     protected void updateConsentStatus(String consentId, ConsentStatus consentStatus) {
-        aisConsentService.updateConsentStatus(consentId, consentStatus);
+        consentAuthorizationServicesHolder.updateConsentStatus(consentId, consentStatus);
     }
 
     @Override
     protected void findAndTerminateOldConsentsByNewConsentId(String consentId) {
-        aisConsentService.findAndTerminateOldConsentsByNewConsentId(consentId);
+        consentAuthorizationServicesHolder.findAndTerminateOldConsentsByNewConsentId(consentId);
     }
 
     @Override
     protected SpiResponse<SpiConsentConfirmationCodeValidationResponse> notifyConfirmationCodeValidation(SpiContextData spiContextData, boolean isCodeCorrect, AisConsent consent, SpiAspspConsentDataProvider spiAspspConsentDataProvider) {
-        return aisConsentSpi.notifyConfirmationCodeValidation(spiContextData, isCodeCorrect, aisConsentMapper.mapToSpiAccountConsent(consent), spiAspspConsentDataProvider);
+        return aisConsentSpi.notifyConfirmationCodeValidation(spiContextData, isCodeCorrect, consentAuthorizationMappersHolder.mapToSpiAccountConsent(consent), spiAspspConsentDataProvider);
     }
 
     @Override
     protected Optional<AisConsent> getConsentById(String consentId) {
-        return aisConsentService.getAccountConsentById(consentId);
+        return consentAuthorizationServicesHolder.getAccountConsentById(consentId);
     }
 
     @Override

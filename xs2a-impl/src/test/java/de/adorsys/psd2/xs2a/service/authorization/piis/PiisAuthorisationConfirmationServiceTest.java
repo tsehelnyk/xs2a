@@ -17,7 +17,6 @@
 package de.adorsys.psd2.xs2a.service.authorization.piis;
 
 import de.adorsys.psd2.consent.api.CmsResponse;
-import de.adorsys.psd2.consent.api.service.AuthorisationServiceEncrypted;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
@@ -30,11 +29,9 @@ import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataReq;
 import de.adorsys.psd2.xs2a.domain.consent.UpdateConsentPsuDataResponse;
-import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
-import de.adorsys.psd2.xs2a.service.consent.Xs2aPiisConsentService;
+import de.adorsys.psd2.xs2a.service.authorization.ConsentAuthorizationMappersHolder;
+import de.adorsys.psd2.xs2a.service.authorization.ConsentAuthorizationServicesHolder;
 import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPiisConsentMapper;
 import de.adorsys.psd2.xs2a.service.profile.AspspProfileServiceWrapper;
 import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
@@ -79,21 +76,15 @@ class PiisAuthorisationConfirmationServiceTest {
     @Mock
     private SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory;
     @Mock
-    private Xs2aAuthorisationService authorisationService;
-    @Mock
-    private Xs2aPiisConsentService piisConsentService;
-    @Mock
     private PiisConsentSpi piisConsentSpi;
-    @Mock
-    private Xs2aToSpiPiisConsentMapper piisConsentMapper;
-    @Mock
-    private SpiErrorMapper spiErrorMapper;
-    @Mock
-    private AuthorisationServiceEncrypted authorisationServiceEncrypted;
     @Mock
     private SpiPiisConsent spiPiisConsent;
     @Mock
     private SpiAspspConsentDataProvider aspspConsentDataProvider;
+    @Mock
+    private ConsentAuthorizationServicesHolder consentAuthorizationServicesHolder;
+    @Mock
+    private ConsentAuthorizationMappersHolder consentAuthorizationMappersHolder;
 
     @Test
     void processAuthorisationConfirmation_success_checkOnSpi() {
@@ -108,11 +99,11 @@ class PiisAuthorisationConfirmationServiceTest {
         PiisConsent consent = createConsent();
         Authorisation authorisationResponse = getConsentAuthorisationResponse();
 
-        when(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
+        when(consentAuthorizationServicesHolder.getAuthorisationById(AUTHORISATION_ID))
             .thenReturn(CmsResponse.<Authorisation>builder()
                             .payload(authorisationResponse)
                             .build());
-        when(piisConsentService.getPiisConsentById(CONSENT_ID))
+        when(consentAuthorizationServicesHolder.getPiisConsentById(CONSENT_ID))
             .thenReturn(Optional.of(consent));
         when(aspspProfileServiceWrapper.isAuthorisationConfirmationCheckByXs2a()).thenReturn(false);
         when(spiContextDataProvider.provideWithPsuIdData(psuIdData))
@@ -129,7 +120,7 @@ class PiisAuthorisationConfirmationServiceTest {
 
         // then
         assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
-        verify(authorisationService, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
+        verify(consentAuthorizationServicesHolder, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
     }
 
     @Test
@@ -143,7 +134,7 @@ class PiisAuthorisationConfirmationServiceTest {
 
         when(aspspProfileServiceWrapper.isAuthorisationConfirmationCheckByXs2a()).thenReturn(true);
         when(piisConsentSpi.checkConfirmationCodeInternally(AUTHORISATION_ID, CONFIRMATION_CODE, SCA_AUTHENTICATION_DATA, aspspConsentDataProvider)).thenReturn(true);
-        when(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
+        when(consentAuthorizationServicesHolder.getAuthorisationById(AUTHORISATION_ID))
             .thenReturn(CmsResponse.<Authorisation>builder()
                             .payload(authorisationResponse)
                             .build());
@@ -157,8 +148,8 @@ class PiisAuthorisationConfirmationServiceTest {
 
         // then
         assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
-        verify(authorisationService, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, spiConsentConfirmationCodeValidationResponse.getScaStatus());
-        verify(piisConsentService, times(1)).updateConsentStatus(CONSENT_ID, spiConsentConfirmationCodeValidationResponse.getConsentStatus());
+        verify(consentAuthorizationServicesHolder, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, spiConsentConfirmationCodeValidationResponse.getScaStatus());
+        verify(consentAuthorizationServicesHolder, times(1)).updateConsentStatus(CONSENT_ID, spiConsentConfirmationCodeValidationResponse.getConsentStatus());
         verify(piisConsentSpi, times(1)).checkConfirmationCodeInternally(AUTHORISATION_ID, CONFIRMATION_CODE, SCA_AUTHENTICATION_DATA, aspspConsentDataProvider);
     }
 
@@ -169,7 +160,7 @@ class PiisAuthorisationConfirmationServiceTest {
         ResponseObject<UpdateConsentPsuDataResponse> expectedResult = ResponseObject.<UpdateConsentPsuDataResponse>builder()
                                                                           .fail(ErrorType.PIIS_403, of(CONSENT_UNKNOWN_403)).build();
 
-        when(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
+        when(consentAuthorizationServicesHolder.getAuthorisationById(AUTHORISATION_ID))
             .thenReturn(CmsResponse.<Authorisation>builder()
                             .error(TECHNICAL_ERROR)
                             .build());
@@ -178,7 +169,7 @@ class PiisAuthorisationConfirmationServiceTest {
 
         // then
         assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
-        verify(authorisationService, times(0)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
+        verify(consentAuthorizationServicesHolder, times(0)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
     }
 
     @Test
@@ -195,7 +186,7 @@ class PiisAuthorisationConfirmationServiceTest {
         Authorisation authorisationResponse = getConsentAuthorisationResponse();
         authorisationResponse.setScaStatus(ScaStatus.FINALISED);
 
-        when(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
+        when(consentAuthorizationServicesHolder.getAuthorisationById(AUTHORISATION_ID))
             .thenReturn(CmsResponse.<Authorisation>builder()
                             .payload(authorisationResponse)
                             .build());
@@ -204,7 +195,7 @@ class PiisAuthorisationConfirmationServiceTest {
 
         // then
         assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
-        verify(authorisationService, times(0)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
+        verify(consentAuthorizationServicesHolder, times(0)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
     }
 
     @Test
@@ -222,7 +213,7 @@ class PiisAuthorisationConfirmationServiceTest {
                                                                           .build();
 
         when(aspspProfileServiceWrapper.isAuthorisationConfirmationCheckByXs2a()).thenReturn(true);
-        when(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
+        when(consentAuthorizationServicesHolder.getAuthorisationById(AUTHORISATION_ID))
             .thenReturn(CmsResponse.<Authorisation>builder()
                             .payload(authorisationResponse)
                             .build());
@@ -236,8 +227,8 @@ class PiisAuthorisationConfirmationServiceTest {
 
         // then
         assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
-        verify(authorisationService, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, spiConsentConfirmationCodeValidationResponse.getScaStatus());
-        verify(piisConsentService, times(1)).updateConsentStatus(CONSENT_ID, spiConsentConfirmationCodeValidationResponse.getConsentStatus());
+        verify(consentAuthorizationServicesHolder, times(1)).updateAuthorisationStatus(AUTHORISATION_ID, spiConsentConfirmationCodeValidationResponse.getScaStatus());
+        verify(consentAuthorizationServicesHolder, times(1)).updateConsentStatus(CONSENT_ID, spiConsentConfirmationCodeValidationResponse.getConsentStatus());
     }
 
     @Test
@@ -252,19 +243,17 @@ class PiisAuthorisationConfirmationServiceTest {
                                                                           .fail(errorHolder)
                                                                           .build();
         when(aspspProfileServiceWrapper.isAuthorisationConfirmationCheckByXs2a()).thenReturn(false);
-        when(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
+        when(consentAuthorizationServicesHolder.getAuthorisationById(AUTHORISATION_ID))
             .thenReturn(CmsResponse.<Authorisation>builder()
                             .payload(authorisationResponse)
                             .build());
-        when(piisConsentService.getPiisConsentById(CONSENT_ID))
-            .thenReturn(Optional.empty());
 
         // when
         ResponseObject<UpdateConsentPsuDataResponse> actualResult = piisAuthorisationConfirmationService.processAuthorisationConfirmation(request);
 
         // then
         assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
-        verify(authorisationService, never()).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
+        verify(consentAuthorizationServicesHolder, never()).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
     }
 
     @Test
@@ -280,18 +269,17 @@ class PiisAuthorisationConfirmationServiceTest {
                                                                           .build();
 
         when(aspspProfileServiceWrapper.isAuthorisationConfirmationCheckByXs2a()).thenReturn(true);
-        when(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
+        when(consentAuthorizationServicesHolder.getAuthorisationById(AUTHORISATION_ID))
             .thenReturn(CmsResponse.<Authorisation>builder()
                             .payload(authorisationResponse)
                             .build());
-        when(piisConsentService.getPiisConsentById(CONSENT_ID)).thenReturn(Optional.empty());
 
         // when
         ResponseObject<UpdateConsentPsuDataResponse> actualResult = piisAuthorisationConfirmationService.processAuthorisationConfirmation(request);
 
         // then
         assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
-        verify(authorisationService, never()).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
+        verify(consentAuthorizationServicesHolder, never()).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
     }
 
     @Test
@@ -309,27 +297,27 @@ class PiisAuthorisationConfirmationServiceTest {
                                                                           .build();
 
         when(aspspProfileServiceWrapper.isAuthorisationConfirmationCheckByXs2a()).thenReturn(true);
-        when(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
+        when(consentAuthorizationServicesHolder.getAuthorisationById(AUTHORISATION_ID))
             .thenReturn(CmsResponse.<Authorisation>builder()
                             .payload(authorisationResponse)
                             .build());
         PiisConsent consent = createConsent();
         SpiContextData contextData = getSpiContextData();
-        when(piisConsentService.getPiisConsentById(CONSENT_ID)).thenReturn(Optional.of(consent));
+        when(consentAuthorizationServicesHolder.getPiisConsentById(CONSENT_ID)).thenReturn(Optional.of(consent));
         when(spiContextDataProvider.provideWithPsuIdData(buildPsuIdData())).thenReturn(contextData);
-        when(piisConsentMapper.mapToSpiPiisConsent(consent)).thenReturn(spiPiisConsent);
+        when(consentAuthorizationMappersHolder.mapToSpiPiisConsent(consent)).thenReturn(spiPiisConsent);
         when(aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(CONSENT_ID)).thenReturn(aspspConsentDataProvider);
         SpiResponse<SpiConsentConfirmationCodeValidationResponse> spiResponse = SpiResponse.<SpiConsentConfirmationCodeValidationResponse>builder().error(new TppMessage(SCA_INVALID)).build();
         when(piisConsentSpi.notifyConfirmationCodeValidation(contextData, false, spiPiisConsent, aspspConsentDataProvider)).thenReturn(spiResponse);
-        when(spiErrorMapper.mapToErrorHolder(spiResponse, ServiceType.PIIS)).thenReturn(errorHolder);
+        when(consentAuthorizationMappersHolder.mapToErrorHolder(spiResponse, ServiceType.PIIS)).thenReturn(errorHolder);
 
         // when
         ResponseObject<UpdateConsentPsuDataResponse> actualResult = piisAuthorisationConfirmationService.processAuthorisationConfirmation(request);
 
         // then
         assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
-        verify(authorisationService, never()).updateAuthorisationStatus(any(), any());
-        verify(piisConsentService, never()).updateConsentStatus(any(), any());
+        verify(consentAuthorizationServicesHolder, never()).updateAuthorisationStatus(any(), any());
+        verify(consentAuthorizationServicesHolder, never()).updateConsentStatus(any(), any());
     }
 
     @Test
@@ -352,11 +340,11 @@ class PiisAuthorisationConfirmationServiceTest {
         PiisConsent consent = createConsent();
         Authorisation authorisationResponse = getConsentAuthorisationResponse();
 
-        when(authorisationServiceEncrypted.getAuthorisationById(AUTHORISATION_ID))
+        when(consentAuthorizationServicesHolder.getAuthorisationById(AUTHORISATION_ID))
             .thenReturn(CmsResponse.<Authorisation>builder()
                             .payload(authorisationResponse)
                             .build());
-        when(piisConsentService.getPiisConsentById(CONSENT_ID))
+        when(consentAuthorizationServicesHolder.getPiisConsentById(CONSENT_ID))
             .thenReturn(Optional.of(consent));
         when(aspspProfileServiceWrapper.isAuthorisationConfirmationCheckByXs2a()).thenReturn(false);
         when(spiContextDataProvider.provideWithPsuIdData(psuIdData))
@@ -365,14 +353,14 @@ class PiisAuthorisationConfirmationServiceTest {
             .thenReturn(aspspConsentDataProvider);
         when(piisConsentSpi.checkConfirmationCode(contextData, spiCheckConfirmationCodeRequest, aspspConsentDataProvider))
             .thenReturn(spiResponse);
-        when(spiErrorMapper.mapToErrorHolder(spiResponse, ServiceType.PIIS)).thenReturn(errorHolder);
+        when(consentAuthorizationMappersHolder.mapToErrorHolder(spiResponse, ServiceType.PIIS)).thenReturn(errorHolder);
 
         // when
         ResponseObject<UpdateConsentPsuDataResponse> actualResult = piisAuthorisationConfirmationService.processAuthorisationConfirmation(request);
 
         // then
         assertThat(actualResult).isEqualToComparingFieldByField(expectedResult);
-        verify(authorisationService, times(0)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
+        verify(consentAuthorizationServicesHolder, times(0)).updateAuthorisationStatus(AUTHORISATION_ID, ScaStatus.FINALISED);
     }
 
     @Test
@@ -418,9 +406,9 @@ class PiisAuthorisationConfirmationServiceTest {
         PiisConsent consent = createConsent();
         SpiContextData contextData = getSpiContextData();
 
-        when(piisConsentService.getPiisConsentById(CONSENT_ID)).thenReturn(Optional.of(consent));
+        when(consentAuthorizationServicesHolder.getPiisConsentById(CONSENT_ID)).thenReturn(Optional.of(consent));
         when(spiContextDataProvider.provideWithPsuIdData(buildPsuIdData())).thenReturn(contextData);
-        when(piisConsentMapper.mapToSpiPiisConsent(consent)).thenReturn(spiPiisConsent);
+        when(consentAuthorizationMappersHolder.mapToSpiPiisConsent(consent)).thenReturn(spiPiisConsent);
         when(aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(CONSENT_ID)).thenReturn(aspspConsentDataProvider);
 
         return confirmationCodeValidationResult
