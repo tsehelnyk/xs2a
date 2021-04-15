@@ -24,10 +24,7 @@ import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.consent.PaymentScaStatus;
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aScaStatusResponse;
-import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPaymentMapper;
 import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
@@ -43,10 +40,8 @@ import org.jetbrains.annotations.NotNull;
 public abstract class PaymentServiceForAuthorisation {
     private final SpiContextDataProvider spiContextDataProvider;
     private final SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory;
-    private final SpiErrorMapper spiErrorMapper;
-    private final RequestProviderService requestProviderService;
-    private final Xs2aAuthorisationService xs2aAuthorisationService;
-    private final Xs2aToSpiPaymentMapper xs2aToSpiPaymentMapper;
+    private final PaymentAuthorizationServicesHolder paymentAuthorizationHolder;
+    private final PaymentAuthorizationMappersHolder paymentAuthorizationMappersHolder;
 
     /**
      * Gets SCA status response of payment authorisation
@@ -67,12 +62,12 @@ public abstract class PaymentServiceForAuthorisation {
         SpiContextData contextData = getSpiContextData();
         SpiAspspConsentDataProvider spiAspspConsentDataProvider = aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(paymentId);
         ScaStatus scaStatus = paymentScaStatusResponse.getBody().getScaStatus();
-        SpiPayment spiPayment = xs2aToSpiPaymentMapper.mapToSpiPayment(paymentScaStatusResponse.getBody().getPisCommonPaymentResponse());
+        SpiPayment spiPayment = paymentAuthorizationMappersHolder.mapToSpiPayment(paymentScaStatusResponse.getBody().getPisCommonPaymentResponse());
 
         SpiResponse<SpiScaStatusResponse> spiScaStatusResponse = getScaStatus(scaStatus, contextData, authorisationId, spiPayment, spiAspspConsentDataProvider);
 
         if (spiScaStatusResponse.hasError()) {
-            ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(spiScaStatusResponse, ServiceType.PIS);
+            ErrorHolder errorHolder = paymentAuthorizationMappersHolder.mapToErrorHolder(spiScaStatusResponse, ServiceType.PIS);
             log.info("Authorisation-ID [{}], Payment-ID [{}]. Get SCA status failed.", authorisationId, paymentId);
             return ResponseObject.<Xs2aScaStatusResponse>builder()
                        .fail(errorHolder)
@@ -83,7 +78,7 @@ public abstract class PaymentServiceForAuthorisation {
 
         if (scaStatus.isNotFinalisedStatus() && scaStatus != spiScaInformationPayload.getScaStatus()) {
             scaStatus = spiScaInformationPayload.getScaStatus();
-            xs2aAuthorisationService.updateAuthorisationStatus(authorisationId, scaStatus);
+            paymentAuthorizationHolder.updateAuthorisationStatus(authorisationId, scaStatus);
             log.info("Authorisation-ID [{}], Payment-ID [{}]. SCA status was changed to [{}] from SPI.", authorisationId, paymentId, scaStatus);
         }
 
@@ -107,7 +102,7 @@ public abstract class PaymentServiceForAuthorisation {
                                                             @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider);
 
     private SpiContextData getSpiContextData() {
-        PsuIdData psuIdData = requestProviderService.getPsuIdData();
+        PsuIdData psuIdData = paymentAuthorizationHolder.getPsuIdData();
         log.info("Corresponding PSU-ID {} was provided from request.", psuIdData);
         return spiContextDataProvider.provideWithPsuIdData(psuIdData);
     }

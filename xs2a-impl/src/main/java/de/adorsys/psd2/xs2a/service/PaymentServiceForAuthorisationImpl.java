@@ -20,10 +20,7 @@ import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.domain.ResponseObject;
 import de.adorsys.psd2.xs2a.domain.consent.PaymentScaStatus;
-import de.adorsys.psd2.xs2a.service.authorization.Xs2aAuthorisationService;
 import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
-import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPaymentMapper;
 import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
@@ -41,11 +38,11 @@ public class PaymentServiceForAuthorisationImpl extends PaymentServiceForAuthori
 
     public PaymentServiceForAuthorisationImpl(SpiContextDataProvider spiContextDataProvider,
                                               SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory,
-                                              SpiErrorMapper spiErrorMapper, PaymentAuthorisationSpi paymentAuthorisationSpi,
+                                              PaymentAuthorisationSpi paymentAuthorisationSpi,
                                               PaymentAuthorisationService paymentAuthorisationService,
-                                              RequestProviderService requestProviderService, Xs2aAuthorisationService xs2aAuthorisationService,
-                                              Xs2aToSpiPaymentMapper xs2aToSpiPaymentMapper) {
-        super(spiContextDataProvider, aspspConsentDataProviderFactory, spiErrorMapper, requestProviderService, xs2aAuthorisationService, xs2aToSpiPaymentMapper);
+                                              PaymentAuthorizationServicesHolder paymentAuthorizationHolder,
+                                              PaymentAuthorizationMappersHolder paymentAuthorizationMappersHolder) {
+        super(spiContextDataProvider, aspspConsentDataProviderFactory, paymentAuthorizationHolder, paymentAuthorizationMappersHolder);
         this.paymentAuthorisationSpi = paymentAuthorisationSpi;
         this.paymentAuthorisationService = paymentAuthorisationService;
     }
