@@ -16,7 +16,6 @@
 
 package de.adorsys.psd2.xs2a.web.mapper;
 
-import de.adorsys.psd2.core.data.piis.PiisConsentData;
 import de.adorsys.psd2.core.data.piis.v1.PiisConsent;
 import de.adorsys.psd2.model.*;
 import de.adorsys.psd2.xs2a.core.consent.ConsentStatus;
