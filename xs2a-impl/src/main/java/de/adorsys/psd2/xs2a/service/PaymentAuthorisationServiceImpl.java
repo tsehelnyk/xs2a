@@ -16,6 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service;
 
+import de.adorsys.psd2.consent.api.authorisation.Xs2aStartAuthorisationResponse;
 import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.event.core.model.EventType;
 import de.adorsys.psd2.logger.context.LoggingContextService;
@@ -287,6 +288,22 @@ public class PaymentAuthorisationServiceImpl implements PaymentAuthorisationServ
         }
 
         PisScaAuthorisationService pisScaAuthorisationService = pisScaAuthorisationServiceResolver.getService();
+
+       Optional<Xs2aStartAuthorisationResponse> startAuthorisationResponse = pisScaAuthorisationServiceResolver.getService().startAuthorisation(paymentId, paymentService, psuDataFromRequest);
+
+       if(startAuthorisationResponse.isEmpty()){
+           return ResponseObject.<Xs2aCreatePisAuthorisationResponse>builder()
+                      .fail(PIS_404, of(RESOURCE_UNKNOWN_404_NO_PAYMENT))
+                      .build();
+       }
+
+        Xs2aStartAuthorisationResponse startAuthorisationResponse1 = startAuthorisationResponse.get();
+
+        if(startAuthorisationResponse1.hasError()){
+            return ResponseObject.<Xs2aCreatePisAuthorisationResponse>builder()
+                       .fail(startAuthorisationResponse1.getErrorHolder())
+                       .build();
+        }
 
         PsuIdData psuIdData = getActualPsuData(psuDataFromRequest, paymentId, pisCommonPayment.isMultilevelScaRequired());
         Optional<Xs2aCreatePisAuthorisationResponse> commonPaymentAuthorisation = pisScaAuthorisationService.createCommonPaymentAuthorisation(paymentId, paymentService, psuIdData);

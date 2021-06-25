@@ -18,6 +18,7 @@ package de.adorsys.psd2.xs2a.spi.service;
 
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
 import de.adorsys.psd2.xs2a.core.error.TppMessage;
+import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
@@ -26,6 +27,8 @@ import de.adorsys.psd2.xs2a.spi.domain.psu.SpiPsuData;
 import de.adorsys.psd2.xs2a.spi.domain.response.SpiResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collections;
 
 /**
  * Interface, that contains the method for the authorisation flow.
@@ -57,6 +60,20 @@ interface AuthorisationSpi<T> {
      * @return a list of SCA methods applicable for specified PSU
      */
     SpiResponse<SpiAvailableScaMethodsResponse> requestAvailableScaMethods(@NotNull SpiContextData contextData, T businessObject, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider);
+
+    /**
+     * Returns a list of SCA methods for PSU by its login. Used only with embedded SCA Approach.
+     *
+     * @param contextData              holder of call's context data (e.g. about PSU and TPP)
+     * @param businessObject           generic consent/payment object
+     * @param aspspConsentDataProvider Provides access to read/write encrypted data to be stored in the consent management system.
+     * @return a list of SCA methods applicable for specified PSU
+     */
+    default SpiResponse<SpiStartAuthorisationResponse> startAuthorization(@NotNull SpiContextData contextData, @NotNull ScaApproach scaApproach, T businessObject, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
+        return SpiResponse.<SpiStartAuthorisationResponse>builder()
+                   .payload(new SpiStartAuthorisationResponse(scaApproach, "mockedPSUmessage from xs2a", Collections.emptySet()))
+                   .build();
+    }
 
     /**
      * Performs strong customer authorisation depending on selected SCA method. Used only with embedded SCA Approach.

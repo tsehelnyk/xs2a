@@ -17,10 +17,8 @@
 package de.adorsys.psd2.xs2a.service.authorization.pis;
 
 import de.adorsys.psd2.consent.api.CmsResponse;
-import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
-import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationResponse;
-import de.adorsys.psd2.consent.api.authorisation.PisAuthorisationParentHolder;
-import de.adorsys.psd2.consent.api.authorisation.PisCancellationAuthorisationParentHolder;
+import de.adorsys.psd2.consent.api.authorisation.*;
+import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.service.AuthorisationServiceEncrypted;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthorisationType;
@@ -28,6 +26,7 @@ import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.ErrorType;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
+import de.adorsys.psd2.xs2a.core.mapper.ServiceType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.AuthorisationScaApproachResponse;
@@ -42,7 +41,18 @@ import de.adorsys.psd2.xs2a.service.authorization.AuthorisationChainResponsibili
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.PisAuthorisationProcessorRequest;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.PisCancellationAuthorisationProcessorRequest;
+import de.adorsys.psd2.xs2a.service.consent.Xs2aPisCommonPaymentService;
+import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
 import de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers.Xs2aPisCommonPaymentMapper;
+import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.SpiErrorMapper;
+import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPaymentMapper;
+import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
+import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
+import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
+import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiStartAuthorisationResponse;
+import de.adorsys.psd2.xs2a.spi.domain.response.SpiResponse;
+import de.adorsys.psd2.xs2a.spi.service.PaymentAuthorisationSpi;
+import de.adorsys.psd2.xs2a.spi.service.SpiPayment;
 import de.adorsys.psd2.xs2a.web.mapper.TppRedirectUriMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +71,12 @@ public class PisAuthorisationService {
     private final RequestProviderService requestProviderService;
     private final TppRedirectUriMapper tppRedirectUriMapper;
     private final AuthorisationChainResponsibilityService authorisationChainResponsibilityService;
+    private final PaymentAuthorisationSpi paymentAuthorisationSpi;
+    private final SpiContextDataProvider spiContextDataProvider;
+    private final Xs2aPisCommonPaymentService xs2aPisCommonPaymentService;
+    private final Xs2aToSpiPaymentMapper xs2aToSpiPaymentMapper;
+    private final SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory;
+    private final SpiErrorMapper spiErrorMapper;
 
     /**
      * Sends a POST request to CMS to store created pis authorisation
@@ -82,6 +98,20 @@ public class PisAuthorisationService {
         }
 
         return cmsResponse.getPayload();
+    }
+
+    public Xs2aStartAuthorisationResponse startAuthorisation (String paymentId, PsuIdData psuIdData) {
+
+        SpiContextData contextData = spiContextDataProvider.provideWithPsuIdData(psuIdData);
+        SpiPayment spiPayment = getSpiPayment(paymentId);
+        SpiAspspConsentDataProvider aspspConsentDataProvider = aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(paymentId);
+        SpiResponse<SpiStartAuthorisationResponse> spiResponse = paymentAuthorisationSpi.startAuthorization(contextData, scaApproachResolver.resolveScaApproach(), spiPayment, aspspConsentDataProvider);
+
+        if (spiResponse.hasError()) {
+            ErrorHolder errorHolder = spiErrorMapper.mapToErrorHolder(spiResponse, ServiceType.PIS);
+            return new Xs2aStartAuthorisationResponse(errorHolder);
+        }
+        return getResponse(spiResponse);
     }
 
     /**
@@ -266,5 +296,21 @@ public class PisAuthorisationService {
             authorisationServiceEncrypted.updateAuthorisation(request.getAuthorisationId(),
                                                               pisCommonPaymentMapper.mapToUpdateAuthorisationRequest(response, AuthorisationType.PIS_CANCELLATION));
         }
+    }
+
+    private SpiPayment getSpiPayment(String encryptedPaymentId) {
+        Optional<PisCommonPaymentResponse> commonPaymentById = xs2aPisCommonPaymentService.getPisCommonPaymentById(encryptedPaymentId);
+        return commonPaymentById
+                   .map(xs2aToSpiPaymentMapper::mapToSpiPayment)
+                   .orElse(null);
+    }
+
+    private Xs2aStartAuthorisationResponse getResponse(SpiResponse<SpiStartAuthorisationResponse> response) {
+        Xs2aStartAuthorisationResponse resultResponse = new Xs2aStartAuthorisationResponse();
+        resultResponse.setPsuMessage(response.getPayload().getPsuMessage());
+        resultResponse.setScaApproach(response.getPayload().getScaApproach());
+        resultResponse.setTppMessageInformation(response.getPayload().getTppMessageInformation());
+
+        return resultResponse;
     }
 }

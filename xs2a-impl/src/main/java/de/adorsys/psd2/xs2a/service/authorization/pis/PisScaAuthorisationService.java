@@ -16,6 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.authorization.pis;
 
+import de.adorsys.psd2.consent.api.authorisation.Xs2aStartAuthorisationResponse;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
@@ -42,6 +43,7 @@ public interface PisScaAuthorisationService extends ScaApproachServiceTypeProvid
      */
     Optional<Xs2aCreatePisAuthorisationResponse> createCommonPaymentAuthorisation(String paymentId, PaymentType paymentType, PsuIdData psuData);
 
+    Optional<Xs2aStartAuthorisationResponse> startAuthorisation(String paymentId, PaymentType paymentType, PsuIdData psuData);
     /**
      * Updates authorisation for the payment
      *

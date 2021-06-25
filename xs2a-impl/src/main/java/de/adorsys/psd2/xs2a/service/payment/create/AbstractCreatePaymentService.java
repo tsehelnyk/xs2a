@@ -16,6 +16,7 @@
 
 package de.adorsys.psd2.xs2a.service.payment.create;
 
+import de.adorsys.psd2.consent.api.authorisation.Xs2aStartAuthorisationResponse;
 import de.adorsys.psd2.consent.api.pis.CreatePisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
 import de.adorsys.psd2.xs2a.core.pis.InternalPaymentStatus;
@@ -104,7 +105,25 @@ public abstract class AbstractCreatePaymentService<P extends CommonPayment, S ex
         boolean implicitMethod = authorisationMethodDecider.isImplicitMethod(paymentInitiationParameters.isTppExplicitAuthorisationPreferred(), response.isMultilevelScaRequired());
         if (implicitMethod) {
             PisScaAuthorisationService pisScaAuthorisationService = pisScaAuthorisationServiceResolver.getService();
-            Optional<Xs2aCreatePisAuthorisationResponse> consentAuthorisation = pisScaAuthorisationService.createCommonPaymentAuthorisation(externalPaymentId, paymentRequest.getPaymentType(), paymentInitiationParameters.getPsuData());
+
+            Optional<Xs2aStartAuthorisationResponse> startAuthorisationResponse = pisScaAuthorisationServiceResolver.getService().startAuthorisation(pisPaymentInfo.getPaymentId(), pisPaymentInfo.getPaymentType(), psuData);
+
+            if (startAuthorisationResponse.isEmpty()) {
+                return ResponseObject.<PaymentInitiationResponse>builder()
+                           .fail(PIS_400, of(PAYMENT_FAILED))
+                           .build();
+            }
+
+            Xs2aStartAuthorisationResponse xs2aStartAuthorisationResponse = startAuthorisationResponse.get();
+
+            if(xs2aStartAuthorisationResponse.hasError()){
+                return buildErrorResponse(xs2aStartAuthorisationResponse.getErrorHolder());
+            }
+
+            Optional<Xs2aCreatePisAuthorisationResponse> consentAuthorisation =
+                pisScaAuthorisationService.createCommonPaymentAuthorisation(externalPaymentId,
+                                                                            paymentRequest.getPaymentType(),
+                                                                            paymentInitiationParameters.getPsuData());
             if (consentAuthorisation.isEmpty()) {
                 return ResponseObject.<PaymentInitiationResponse>builder()
                            .fail(PIS_400, of(PAYMENT_FAILED))
@@ -114,6 +133,7 @@ public abstract class AbstractCreatePaymentService<P extends CommonPayment, S ex
             Xs2aCreatePisAuthorisationResponse authorisationResponse = consentAuthorisation.get();
             response.setAuthorizationId(authorisationResponse.getAuthorisationId());
             response.setScaStatus(authorisationResponse.getScaStatus());
+            response.setPsuMessage(xs2aStartAuthorisationResponse.getPsuMessage());
         }
 
         return ResponseObject.<PaymentInitiationResponse>builder()

@@ -1,0 +1,52 @@
+/*
+ * Copyright 2018-2021 adorsys GmbH & Co KG
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package de.adorsys.psd2.consent.api.authorisation;
+
+import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
+import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
+import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+@ApiModel(description = "Start Authorisation response", value = "startAuthorisationResponse")
+public class Xs2aStartAuthorisationResponse {
+
+    @ApiModelProperty(value = "SCA approach")
+    ScaApproach scaApproach;
+
+    @ApiModelProperty(value = "Corresponding PSU", required = true)
+    String psuMessage;
+
+    @ApiModelProperty(value = "TPP redirect URIs")
+    Set<TppMessageInformation> tppMessageInformation;
+
+    private ErrorHolder errorHolder;
+
+    public Xs2aStartAuthorisationResponse(ErrorHolder errorHolder) {
+        this.errorHolder = errorHolder;
+    }
+
+    public boolean hasError() {
+        return errorHolder != null;
+    }
+}

@@ -16,9 +16,14 @@
 
 package de.adorsys.psd2.xs2a.service.authorization.pis;
 
+import de.adorsys.psd2.consent.api.authorisation.Xs2aStartAuthorisationResponse;
+import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
+import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers.Xs2aPisCommonPaymentMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 
@@ -31,5 +36,10 @@ public class EmbeddedPisScaAuthorisationService extends AbstractPisScaAuthorisat
     @Override
     public ScaApproach getScaApproachServiceType() {
         return ScaApproach.EMBEDDED;
+    }
+
+    @Override
+    public Optional<Xs2aStartAuthorisationResponse> startAuthorisation(String paymentId, PaymentType paymentType, PsuIdData psuData) {
+        return Optional.empty();
     }
 }
