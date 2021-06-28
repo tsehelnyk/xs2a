@@ -18,6 +18,7 @@ package de.adorsys.psd2.xs2a.spi.domain.authorisation;
 
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
+import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import lombok.Value;
 
 import java.util.Set;
@@ -27,4 +28,5 @@ public class SpiStartAuthorisationResponse {
     ScaApproach scaApproach;
     String psuMessage;
     Set<TppMessageInformation> tppMessageInformation;
+    ScaStatus scaStatus;
 }

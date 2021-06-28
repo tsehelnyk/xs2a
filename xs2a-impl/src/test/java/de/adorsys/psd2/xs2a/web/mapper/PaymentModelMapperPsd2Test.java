@@ -25,6 +25,7 @@ import de.adorsys.psd2.xs2a.core.profile.NotificationSupportedMode;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.ChallengeData;
+import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.core.tpp.TppAttributes;
 import de.adorsys.psd2.xs2a.core.tpp.TppNotificationData;
 import de.adorsys.psd2.xs2a.core.tpp.TppRedirectUri;
@@ -183,6 +184,7 @@ class PaymentModelMapperPsd2Test {
         when(paymentInitiationResponse.getCurrencyConversionFee()).thenReturn(new Xs2aAmount(Currency.getInstance("EUR"), "1200"));
         when(paymentInitiationResponse.getEstimatedTotalAmount()).thenReturn(new Xs2aAmount(Currency.getInstance("EUR"), "1300"));
         when(paymentInitiationResponse.getEstimatedInterbankSettlementAmount()).thenReturn(new Xs2aAmount(Currency.getInstance("EUR"), "1500"));
+        when(paymentInitiationResponse.getScaStatus()).thenReturn(ScaStatus.STARTED);
 
 
         PaymentInitationRequestResponse201 expected = jsonReader.getObjectFromFile("json/service/mapper/payment-initiation-response-201.json", PaymentInitationRequestResponse201.class);

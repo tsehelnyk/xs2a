@@ -2187,6 +2187,7 @@ paths:
         - $ref: "#/components/parameters/entryReferenceFrom"
         - $ref: "#/components/parameters/bookingStatusCard"
         - $ref: "#/components/parameters/deltaList"
+        - $ref: "#/components/parameters/withBalanceQuery"
       #header
           #common header parameter
         - $ref: "#/components/parameters/X-Request-ID"
@@ -6917,6 +6918,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/tppMessage201PaymentInitiation"
+        scaStatus:
+          $ref: "#/components/schemas/scaStatus"
 
 
     paymentInitiationCancelResponse-202:
@@ -6939,6 +6942,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/tppMessageGeneric"
+        scaStatus:
+          $ref: "#/components/schemas/scaStatus"
 
 
     paymentInitiationWithStatusResponse:
@@ -7368,6 +7373,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/tppMessageGeneric"
+        scaStatus:
+          $ref: "#/components/schemas/scaStatus"
 
 
     consentStatusResponse-200:

@@ -17,6 +17,7 @@
 package de.adorsys.psd2.xs2a.spi.domain.consent;
 
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
+import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiAuthenticationObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,4 +38,5 @@ public class SpiInitiateAisConsentResponse {
     private String psuMessage;
     private List<SpiAuthenticationObject> scaMethods;
     private Set<TppMessageInformation> tppMessages;
+    private ScaStatus scaStatus;
 }

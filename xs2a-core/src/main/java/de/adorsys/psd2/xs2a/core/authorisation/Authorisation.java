@@ -16,6 +16,7 @@
 
 package de.adorsys.psd2.xs2a.core.authorisation;
 
+import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
@@ -62,6 +63,16 @@ public class Authorisation {
         this.parentId = parentId;
         this.authorisationType = authorisationType;
         this.scaStatus = scaStatus;
+    }
+
+    private ErrorHolder errorHolder;
+
+    public Authorisation(ErrorHolder errorHolder) {
+        this.errorHolder = errorHolder;
+    }
+
+    public boolean hasError() {
+        return errorHolder != null;
     }
 
 }

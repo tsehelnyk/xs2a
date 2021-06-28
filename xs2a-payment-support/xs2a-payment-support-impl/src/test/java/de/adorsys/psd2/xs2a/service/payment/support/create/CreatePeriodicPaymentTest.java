@@ -18,6 +18,7 @@
 package de.adorsys.psd2.xs2a.service.payment.support.create;
 
 import de.adorsys.psd2.consent.api.AspspDataService;
+import de.adorsys.psd2.consent.api.authorisation.Xs2aStartAuthorisationResponse;
 import de.adorsys.psd2.consent.api.pis.CreatePisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
@@ -86,6 +87,7 @@ class CreatePeriodicPaymentTest {
     private static final Xs2aCreatePisAuthorisationResponse CREATE_PIS_AUTHORISATION_RESPONSE = new Xs2aCreatePisAuthorisationResponse(null, null, null, null, null, null);
     private static final String INTERNAL_REQUEST_ID = "5c2d5564-367f-4e03-a621-6bef76fa4208";
     private static final byte[] PAYMENT_BODY = "some payment body".getBytes();
+    private final Xs2aStartAuthorisationResponse START_AUTHORISATION_RESPONSE = new Xs2aStartAuthorisationResponse();
 
     @InjectMocks
     private CreatePeriodicPaymentService createPeriodicPaymentService;
@@ -189,6 +191,7 @@ class CreatePeriodicPaymentTest {
             .thenReturn(pisScaAuthorisationService);
         when(pisScaAuthorisationService.createCommonPaymentAuthorisation(PAYMENT_ID, PaymentType.PERIODIC, PARAM.getPsuData()))
             .thenReturn(Optional.of(CREATE_PIS_AUTHORISATION_RESPONSE));
+        when(pisScaAuthorisationService.startAuthorisation(any(), any(), any())).thenReturn(Optional.of(START_AUTHORISATION_RESPONSE));
 
         //When
         ResponseObject<PaymentInitiationResponse> actualResponse = createPeriodicPaymentService.createPayment(PAYMENT_BODY, buildPaymentInitiationParameters(), buildTppInfo());
@@ -214,6 +217,7 @@ class CreatePeriodicPaymentTest {
             .thenReturn(pisScaAuthorisationService);
         when(pisScaAuthorisationService.createCommonPaymentAuthorisation(PAYMENT_ID, PaymentType.PERIODIC, PARAM.getPsuData()))
             .thenReturn(Optional.empty());
+        when(pisScaAuthorisationService.startAuthorisation(any(), any(), any())).thenReturn(Optional.of(START_AUTHORISATION_RESPONSE));
 
         //When
         ResponseObject<PaymentInitiationResponse> actualResponse = createPeriodicPaymentService.createPayment(PAYMENT_BODY, buildPaymentInitiationParameters(), buildTppInfo());

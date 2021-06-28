@@ -17,10 +17,7 @@
 package de.adorsys.psd2.xs2a.service.authorization;
 
 import de.adorsys.psd2.consent.api.CmsResponse;
-import de.adorsys.psd2.consent.api.authorisation.AuthorisationParentHolder;
-import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationRequest;
-import de.adorsys.psd2.consent.api.authorisation.CreateAuthorisationResponse;
-import de.adorsys.psd2.consent.api.authorisation.UpdateAuthorisationRequest;
+import de.adorsys.psd2.consent.api.authorisation.*;
 import de.adorsys.psd2.consent.api.service.AuthorisationServiceEncrypted;
 import de.adorsys.psd2.xs2a.core.authorisation.AuthenticationObject;
 import de.adorsys.psd2.xs2a.core.authorisation.Authorisation;
@@ -43,6 +40,12 @@ public class Xs2aAuthorisationService {
 
     private final AuthorisationServiceEncrypted authorisationServiceEncrypted;
     private final Xs2aAuthenticationObjectToCmsScaMethodMapper xs2aAuthenticationObjectToCmsScaMethodMapper;
+
+    public Optional<Authorisation> startAuthorisation(String authorisationId){
+        CmsResponse<Authorisation> authorisationResponse = authorisationServiceEncrypted.getAuthorisationById(authorisationId);
+
+        return Optional.ofNullable(authorisationResponse.getPayload());
+    }
 
     /**
      * Stores created authorisation

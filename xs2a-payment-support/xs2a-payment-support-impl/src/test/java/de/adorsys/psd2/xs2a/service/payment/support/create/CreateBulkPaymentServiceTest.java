@@ -17,6 +17,7 @@
 
 package de.adorsys.psd2.xs2a.service.payment.support.create;
 
+import de.adorsys.psd2.consent.api.authorisation.Xs2aStartAuthorisationResponse;
 import de.adorsys.psd2.consent.api.pis.CreatePisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
@@ -77,6 +78,7 @@ class CreateBulkPaymentServiceTest {
     private static final String INTERNAL_REQUEST_ID = "5c2d5564-367f-4e03-a621-6bef76fa4208";
     private static final byte[] PAYMENT_BODY = "some payment body".getBytes();
     private static final String PAYMENT_PRODUCT = "sepa-credit-transfers";
+    private final Xs2aStartAuthorisationResponse START_AUTHORISATION_RESPONSE = new Xs2aStartAuthorisationResponse();
 
     @InjectMocks
     private CreateBulkPaymentService createBulkPaymentService;
@@ -179,6 +181,7 @@ class CreateBulkPaymentServiceTest {
             .thenReturn(pisScaAuthorisationService);
         when(pisScaAuthorisationService.createCommonPaymentAuthorisation(PAYMENT_ID, PaymentType.BULK, PARAM.getPsuData()))
             .thenReturn(Optional.empty());
+        when(pisScaAuthorisationService.startAuthorisation(any(), any(), any())).thenReturn(Optional.of(START_AUTHORISATION_RESPONSE));
 
         //When
         ResponseObject<PaymentInitiationResponse> actualResponse = createBulkPaymentService.createPayment(PAYMENT_BODY, buildPaymentInitiationParameters(), buildTppInfo());
@@ -205,6 +208,8 @@ class CreateBulkPaymentServiceTest {
             .thenReturn(pisScaAuthorisationService);
         when(pisScaAuthorisationService.createCommonPaymentAuthorisation(PAYMENT_ID, PaymentType.BULK, PARAM.getPsuData()))
             .thenReturn(Optional.of(CREATE_PIS_AUTHORISATION_RESPONSE));
+        when(pisScaAuthorisationService.startAuthorisation(any(), any(), any())).thenReturn(Optional.of(START_AUTHORISATION_RESPONSE));
+
 
         //When
         ResponseObject<PaymentInitiationResponse> actualResponse = createBulkPaymentService.createPayment(PAYMENT_BODY, buildPaymentInitiationParameters(), buildTppInfo());

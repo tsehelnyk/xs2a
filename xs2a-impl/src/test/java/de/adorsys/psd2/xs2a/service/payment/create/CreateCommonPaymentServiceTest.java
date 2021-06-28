@@ -18,6 +18,7 @@
 package de.adorsys.psd2.xs2a.service.payment.create;
 
 import de.adorsys.psd2.consent.api.AspspDataService;
+import de.adorsys.psd2.consent.api.authorisation.Xs2aStartAuthorisationResponse;
 import de.adorsys.psd2.consent.api.pis.CreatePisCommonPaymentResponse;
 import de.adorsys.psd2.consent.api.pis.proto.PisPaymentInfo;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
@@ -83,6 +84,7 @@ class CreateCommonPaymentServiceTest {
     private static final Xs2aCreatePisAuthorisationResponse CREATE_PIS_AUTHORISATION_RESPONSE = new Xs2aCreatePisAuthorisationResponse(null, null, null, null, null, null);
     private CommonPaymentInitiationResponse commonPaymentInitiationResponse;
     private static final String INTERNAL_REQUEST_ID = "5c2d5564-367f-4e03-a621-6bef76fa4208";
+    private final Xs2aStartAuthorisationResponse START_AUTHORISATION_RESPONSE = new Xs2aStartAuthorisationResponse();
 
     @InjectMocks
     private CreateCommonPaymentService createCommonPaymentService;
@@ -192,6 +194,7 @@ class CreateCommonPaymentServiceTest {
             .thenReturn(pisScaAuthorisationService);
         when(pisScaAuthorisationService.createCommonPaymentAuthorisation(PAYMENT_ID, PaymentType.SINGLE, PARAM.getPsuData()))
             .thenReturn(Optional.of(CREATE_PIS_AUTHORISATION_RESPONSE));
+        when(pisScaAuthorisationService.startAuthorisation(any(), any(), any())).thenReturn(Optional.of(START_AUTHORISATION_RESPONSE));
 
         //When
         ResponseObject<PaymentInitiationResponse> actualResponse = createCommonPaymentService.createPayment(PAYMENT_DATA_IN_BYTES, PARAM, TPP_INFO);
@@ -216,6 +219,7 @@ class CreateCommonPaymentServiceTest {
             .thenReturn(pisScaAuthorisationService);
         when(pisScaAuthorisationService.createCommonPaymentAuthorisation(PAYMENT_ID, PaymentType.SINGLE, PARAM.getPsuData()))
             .thenReturn(Optional.empty());
+        when(pisScaAuthorisationService.startAuthorisation(any(), any(), any())).thenReturn(Optional.of(START_AUTHORISATION_RESPONSE));
 
         //When
         ResponseObject<PaymentInitiationResponse> actualResponse = createCommonPaymentService.createPayment(PAYMENT_DATA_IN_BYTES, PARAM, TPP_INFO);

@@ -39,6 +39,21 @@ import java.util.Collections;
 interface AuthorisationSpi<T> {
 
     /**
+     * Returns a response in case of started authorisation.
+     *
+     * @param contextData              holder of call's context data (e.g. about PSU and TPP)
+     * @param scaApproach              required SCA approach
+     * @param businessObject           generic consent/payment object
+     * @param aspspConsentDataProvider Provides access to read/write encrypted data to be stored in the consent management system.
+     * @return a list of SCA methods applicable for specified PSU
+     */
+    default SpiResponse<SpiStartAuthorisationResponse> startAuthorization(@NotNull SpiContextData contextData, @NotNull ScaApproach scaApproach, T businessObject, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
+        return SpiResponse.<SpiStartAuthorisationResponse>builder()
+                   .payload(new SpiStartAuthorisationResponse(scaApproach, null, Collections.emptySet(), null))
+                   .build();
+    }
+
+    /**
      * Authorises psu and returns current authorisation status. Used only with embedded SCA Approach.
      *
      * @param contextData              holder of call's context data (e.g. about PSU and TPP)
@@ -60,20 +75,6 @@ interface AuthorisationSpi<T> {
      * @return a list of SCA methods applicable for specified PSU
      */
     SpiResponse<SpiAvailableScaMethodsResponse> requestAvailableScaMethods(@NotNull SpiContextData contextData, T businessObject, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider);
-
-    /**
-     * Returns a list of SCA methods for PSU by its login. Used only with embedded SCA Approach.
-     *
-     * @param contextData              holder of call's context data (e.g. about PSU and TPP)
-     * @param businessObject           generic consent/payment object
-     * @param aspspConsentDataProvider Provides access to read/write encrypted data to be stored in the consent management system.
-     * @return a list of SCA methods applicable for specified PSU
-     */
-    default SpiResponse<SpiStartAuthorisationResponse> startAuthorization(@NotNull SpiContextData contextData, @NotNull ScaApproach scaApproach, T businessObject, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
-        return SpiResponse.<SpiStartAuthorisationResponse>builder()
-                   .payload(new SpiStartAuthorisationResponse(scaApproach, "mockedPSUmessage from xs2a", Collections.emptySet()))
-                   .build();
-    }
 
     /**
      * Performs strong customer authorisation depending on selected SCA method. Used only with embedded SCA Approach.

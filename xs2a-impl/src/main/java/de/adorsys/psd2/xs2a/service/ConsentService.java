@@ -179,6 +179,7 @@ public class ConsentService {
                                         accountReferenceUpdater.rewriteAccountAccess(encryptedConsentId, accountAccess, ConsentType.AIS));
 
         ConsentStatus consentStatus = aisConsent.getConsentStatus();
+
         CreateConsentResponse createConsentResponse = new CreateConsentResponse(consentStatus.getValue(), encryptedConsentId,
                                                                                 scaMethodsMapper.mapToAuthenticationObjectList(spiResponsePayload.getScaMethods()), null, null,
                                                                                 spiResponsePayload.getPsuMessage(), multilevelScaRequired,
@@ -194,6 +195,8 @@ public class ConsentService {
         }
 
         loggingContextService.storeConsentStatus(consentStatus);
+
+        createConsentResponseObject.getBody().setScaStatus(spiResponsePayload.getScaStatus());
 
         return createConsentResponseObject;
     }

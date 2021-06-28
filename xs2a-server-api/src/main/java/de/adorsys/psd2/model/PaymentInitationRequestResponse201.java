@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 @ApiModel(description = "Body of the response for a successful payment initiation request.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-05-24T13:41:46.273636+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-28T12:20:50.463207+03:00[Europe/Kiev]")
 
 public class PaymentInitationRequestResponse201   {
   @JsonProperty("transactionStatus")
@@ -60,6 +60,9 @@ public class PaymentInitationRequestResponse201   {
   @JsonProperty("tppMessages")
   @Valid
   private List<TppMessage201PaymentInitiation> tppMessages = null;
+
+  @JsonProperty("scaStatus")
+  private ScaStatus scaStatus = null;
 
   public PaymentInitationRequestResponse201 transactionStatus(TransactionStatus transactionStatus) {
     this.transactionStatus = transactionStatus;
@@ -368,6 +371,29 @@ public class PaymentInitationRequestResponse201   {
     this.tppMessages = tppMessages;
   }
 
+  public PaymentInitationRequestResponse201 scaStatus(ScaStatus scaStatus) {
+    this.scaStatus = scaStatus;
+    return this;
+  }
+
+  /**
+   * Get scaStatus
+   * @return scaStatus
+  **/
+  @ApiModelProperty(value = "")
+
+  @Valid
+
+
+  @JsonProperty("scaStatus")
+  public ScaStatus getScaStatus() {
+    return scaStatus;
+  }
+
+  public void setScaStatus(ScaStatus scaStatus) {
+    this.scaStatus = scaStatus;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -389,12 +415,13 @@ public class PaymentInitationRequestResponse201   {
     Objects.equals(this.challengeData, paymentInitationRequestResponse201.challengeData) &&
     Objects.equals(this._links, paymentInitationRequestResponse201._links) &&
     Objects.equals(this.psuMessage, paymentInitationRequestResponse201.psuMessage) &&
-    Objects.equals(this.tppMessages, paymentInitationRequestResponse201.tppMessages);
+    Objects.equals(this.tppMessages, paymentInitationRequestResponse201.tppMessages) &&
+    Objects.equals(this.scaStatus, paymentInitationRequestResponse201.scaStatus);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(transactionStatus, paymentId, transactionFees, currencyConversionFee, estimatedTotalAmount, estimatedInterbankSettlementAmount, transactionFeeIndicator, scaMethods, chosenScaMethod, challengeData, _links, psuMessage, tppMessages);
+    return Objects.hash(transactionStatus, paymentId, transactionFees, currencyConversionFee, estimatedTotalAmount, estimatedInterbankSettlementAmount, transactionFeeIndicator, scaMethods, chosenScaMethod, challengeData, _links, psuMessage, tppMessages, scaStatus);
   }
 
   @Override
@@ -415,6 +442,7 @@ public class PaymentInitationRequestResponse201   {
     sb.append("    _links: ").append(toIndentedString(_links)).append("\n");
     sb.append("    psuMessage: ").append(toIndentedString(psuMessage)).append("\n");
     sb.append("    tppMessages: ").append(toIndentedString(tppMessages)).append("\n");
+    sb.append("    scaStatus: ").append(toIndentedString(scaStatus)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -289,7 +289,7 @@ public class PaymentAuthorisationServiceImpl implements PaymentAuthorisationServ
 
         PisScaAuthorisationService pisScaAuthorisationService = pisScaAuthorisationServiceResolver.getService();
 
-       Optional<Xs2aStartAuthorisationResponse> startAuthorisationResponse = pisScaAuthorisationServiceResolver.getService().startAuthorisation(paymentId, paymentService, psuDataFromRequest);
+       Optional<Xs2aStartAuthorisationResponse> startAuthorisationResponse = pisScaAuthorisationService.startAuthorisation(paymentId, paymentService, psuDataFromRequest);
 
        if(startAuthorisationResponse.isEmpty()){
            return ResponseObject.<Xs2aCreatePisAuthorisationResponse>builder()

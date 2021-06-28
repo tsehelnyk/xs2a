@@ -106,7 +106,7 @@ public abstract class AbstractCreatePaymentService<P extends CommonPayment, S ex
         if (implicitMethod) {
             PisScaAuthorisationService pisScaAuthorisationService = pisScaAuthorisationServiceResolver.getService();
 
-            Optional<Xs2aStartAuthorisationResponse> startAuthorisationResponse = pisScaAuthorisationServiceResolver.getService().startAuthorisation(pisPaymentInfo.getPaymentId(), pisPaymentInfo.getPaymentType(), psuData);
+            Optional<Xs2aStartAuthorisationResponse> startAuthorisationResponse = pisScaAuthorisationService.startAuthorisation(pisPaymentInfo.getPaymentId(), pisPaymentInfo.getPaymentType(), psuData);
 
             if (startAuthorisationResponse.isEmpty()) {
                 return ResponseObject.<PaymentInitiationResponse>builder()
@@ -120,20 +120,24 @@ public abstract class AbstractCreatePaymentService<P extends CommonPayment, S ex
                 return buildErrorResponse(xs2aStartAuthorisationResponse.getErrorHolder());
             }
 
-            Optional<Xs2aCreatePisAuthorisationResponse> consentAuthorisation =
+            Optional<Xs2aCreatePisAuthorisationResponse> paymentAuthorisation =
                 pisScaAuthorisationService.createCommonPaymentAuthorisation(externalPaymentId,
                                                                             paymentRequest.getPaymentType(),
                                                                             paymentInitiationParameters.getPsuData());
-            if (consentAuthorisation.isEmpty()) {
+            if (paymentAuthorisation.isEmpty()) {
                 return ResponseObject.<PaymentInitiationResponse>builder()
                            .fail(PIS_400, of(PAYMENT_FAILED))
                            .build();
             }
 
-            Xs2aCreatePisAuthorisationResponse authorisationResponse = consentAuthorisation.get();
+            Xs2aCreatePisAuthorisationResponse authorisationResponse = paymentAuthorisation.get();
             response.setAuthorizationId(authorisationResponse.getAuthorisationId());
-            response.setScaStatus(authorisationResponse.getScaStatus());
             response.setPsuMessage(xs2aStartAuthorisationResponse.getPsuMessage());
+            if (xs2aStartAuthorisationResponse.getScaStatus() == null) {
+                response.setScaStatus(authorisationResponse.getScaStatus());
+            } else {
+                response.setScaStatus(xs2aStartAuthorisationResponse.getScaStatus());
+            }
         }
 
         return ResponseObject.<PaymentInitiationResponse>builder()

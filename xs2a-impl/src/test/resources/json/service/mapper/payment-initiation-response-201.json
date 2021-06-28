@@ -22,5 +22,6 @@
   "estimatedInterbankSettlementAmount": {
     "currency": "EUR",
     "amount": "1500"
-  }
+  },
+  "scaStatus": "started"
 }

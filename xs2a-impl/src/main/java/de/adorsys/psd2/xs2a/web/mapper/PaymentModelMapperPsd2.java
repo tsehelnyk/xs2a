@@ -101,6 +101,7 @@ public class PaymentModelMapperPsd2 {
         response201.setCurrencyConversionFee(amountModelMapper.mapToAmount(response.getCurrencyConversionFee()));
         response201.setEstimatedTotalAmount(amountModelMapper.mapToAmount(response.getEstimatedTotalAmount()));
         response201.setEstimatedInterbankSettlementAmount(amountModelMapper.mapToAmount(response.getEstimatedInterbankSettlementAmount()));
+        response201.scaStatus(ScaStatus.valueOf(response.getScaStatus().name()));
 
         return response201;
     }

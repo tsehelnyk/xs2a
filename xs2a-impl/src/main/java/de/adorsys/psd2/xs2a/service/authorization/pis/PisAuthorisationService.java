@@ -100,11 +100,11 @@ public class PisAuthorisationService {
         return cmsResponse.getPayload();
     }
 
-    public Xs2aStartAuthorisationResponse startAuthorisation (String paymentId, PsuIdData psuIdData) {
+    public Xs2aStartAuthorisationResponse startAuthorisation(String externalPaymentId, PsuIdData psuIdData) {
 
         SpiContextData contextData = spiContextDataProvider.provideWithPsuIdData(psuIdData);
-        SpiPayment spiPayment = getSpiPayment(paymentId);
-        SpiAspspConsentDataProvider aspspConsentDataProvider = aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(paymentId);
+        SpiPayment spiPayment = getSpiPayment(externalPaymentId);
+        SpiAspspConsentDataProvider aspspConsentDataProvider = aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(externalPaymentId);
         SpiResponse<SpiStartAuthorisationResponse> spiResponse = paymentAuthorisationSpi.startAuthorization(contextData, scaApproachResolver.resolveScaApproach(), spiPayment, aspspConsentDataProvider);
 
         if (spiResponse.hasError()) {

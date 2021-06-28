@@ -61,6 +61,7 @@ public class AisConsentSpiMockImpl implements AisConsentSpi {
         response.setPsuMessage(SpiMockData.PSU_MESSAGE);
         response.setTppMessages(SpiMockData.TPP_MESSAGES);
         response.setScaMethods(SpiMockData.SCA_METHODS);
+        response.setScaStatus(SpiMockData.SCA_STATUS);
         response.setAccountAccess(access);
 
         return SpiResponse.<SpiInitiateAisConsentResponse>builder()

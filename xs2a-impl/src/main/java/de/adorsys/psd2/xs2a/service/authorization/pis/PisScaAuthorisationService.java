@@ -34,6 +34,17 @@ import java.util.Optional;
 
 public interface PisScaAuthorisationService extends ScaApproachServiceTypeProvider {
     /**
+     * Starts authorisation for a payment
+     *
+     * @param paymentId   ASPSP identifier of a payment
+     * @param paymentType Type of payment
+     * @param psuData     PsuIdData container of authorisation data about PSU
+     * @return create payment authorisation response
+     */
+
+    Optional<Xs2aStartAuthorisationResponse> startAuthorisation(String paymentId, PaymentType paymentType, PsuIdData psuData);
+
+    /**
      * Creates authorisation for a payment
      *
      * @param paymentId   ASPSP identifier of a payment
@@ -42,8 +53,6 @@ public interface PisScaAuthorisationService extends ScaApproachServiceTypeProvid
      * @return create payment authorisation response
      */
     Optional<Xs2aCreatePisAuthorisationResponse> createCommonPaymentAuthorisation(String paymentId, PaymentType paymentType, PsuIdData psuData);
-
-    Optional<Xs2aStartAuthorisationResponse> startAuthorisation(String paymentId, PaymentType paymentType, PsuIdData psuData);
     /**
      * Updates authorisation for the payment
      *

@@ -16,6 +16,8 @@
 
 package de.adorsys.psd2.xs2a.service.authorization.pis;
 
+import de.adorsys.psd2.consent.api.authorisation.Xs2aStartAuthorisationResponse;
+import de.adorsys.psd2.consent.api.pis.PisCommonPaymentResponse;
 import de.adorsys.psd2.xs2a.core.profile.PaymentType;
 import de.adorsys.psd2.xs2a.core.psu.PsuIdData;
 import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
@@ -26,8 +28,19 @@ import de.adorsys.psd2.xs2a.domain.consent.Xs2aCreatePisCancellationAuthorisatio
 import de.adorsys.psd2.xs2a.domain.consent.Xs2aPaymentCancellationAuthorisationSubResource;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataRequest;
 import de.adorsys.psd2.xs2a.domain.consent.pis.Xs2aUpdatePisCommonPaymentPsuDataResponse;
+import de.adorsys.psd2.xs2a.service.ScaApproachResolver;
 import de.adorsys.psd2.xs2a.service.authorization.processor.model.AuthorisationProcessorResponse;
+import de.adorsys.psd2.xs2a.service.consent.Xs2aPisCommonPaymentService;
+import de.adorsys.psd2.xs2a.service.context.SpiContextDataProvider;
 import de.adorsys.psd2.xs2a.service.mapper.cms_xs2a_mappers.Xs2aPisCommonPaymentMapper;
+import de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers.Xs2aToSpiPaymentMapper;
+import de.adorsys.psd2.xs2a.service.spi.SpiAspspConsentDataProviderFactory;
+import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
+import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
+import de.adorsys.psd2.xs2a.spi.domain.authorisation.SpiStartAuthorisationResponse;
+import de.adorsys.psd2.xs2a.spi.domain.response.SpiResponse;
+import de.adorsys.psd2.xs2a.spi.service.PaymentAuthorisationSpi;
+import de.adorsys.psd2.xs2a.spi.service.SpiPayment;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
@@ -36,6 +49,40 @@ import java.util.Optional;
 public abstract class AbstractPisScaAuthorisationService implements PisScaAuthorisationService {
     private final PisAuthorisationService authorisationService;
     private final Xs2aPisCommonPaymentMapper pisCommonPaymentMapper;
+    private final ScaApproachResolver scaApproachResolver;
+    private final PaymentAuthorisationSpi paymentAuthorisationSpi;
+    private final SpiContextDataProvider spiContextDataProvider;
+    private final Xs2aPisCommonPaymentService xs2aPisCommonPaymentService;
+    private final Xs2aToSpiPaymentMapper xs2aToSpiPaymentMapper;
+    private final SpiAspspConsentDataProviderFactory aspspConsentDataProviderFactory;
+
+    @Override
+    public Optional<Xs2aStartAuthorisationResponse> startAuthorisation(String externalPaymentId, PaymentType paymentType, PsuIdData psuData) {
+
+        SpiContextData contextData = spiContextDataProvider.provideWithPsuIdData(psuData);
+        SpiPayment spiPayment = getSpiPayment(externalPaymentId);
+        SpiAspspConsentDataProvider aspspConsentDataProvider = aspspConsentDataProviderFactory.getSpiAspspDataProviderFor(externalPaymentId);
+        SpiResponse<SpiStartAuthorisationResponse> spiResponse = paymentAuthorisationSpi.startAuthorization(contextData, scaApproachResolver.resolveScaApproach(), spiPayment, aspspConsentDataProvider);
+
+        return Optional.of(getResponse(spiResponse));
+    }
+
+    private SpiPayment getSpiPayment(String encryptedPaymentId) {
+        Optional<PisCommonPaymentResponse> commonPaymentById = xs2aPisCommonPaymentService.getPisCommonPaymentById(encryptedPaymentId);
+        return commonPaymentById
+                   .map(xs2aToSpiPaymentMapper::mapToSpiPayment)
+                   .orElse(null);
+    }
+
+    private Xs2aStartAuthorisationResponse getResponse(SpiResponse<SpiStartAuthorisationResponse> response) {
+        Xs2aStartAuthorisationResponse resultResponse = new Xs2aStartAuthorisationResponse();
+        resultResponse.setPsuMessage(response.getPayload().getPsuMessage());
+        resultResponse.setScaApproach(response.getPayload().getScaApproach());
+        resultResponse.setTppMessageInformation(response.getPayload().getTppMessageInformation());
+        resultResponse.setScaStatus(response.getPayload().getScaStatus());
+
+        return resultResponse;
+    }
 
     @Override
     public Optional<Xs2aCreatePisAuthorisationResponse> createCommonPaymentAuthorisation(String paymentId, PaymentType paymentType, PsuIdData psuData) {

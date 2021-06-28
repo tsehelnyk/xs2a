@@ -19,6 +19,7 @@ package de.adorsys.psd2.consent.api.authorisation;
 import de.adorsys.psd2.xs2a.core.domain.ErrorHolder;
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.profile.ScaApproach;
+import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -39,6 +40,9 @@ public class Xs2aStartAuthorisationResponse {
 
     @ApiModelProperty(value = "TPP redirect URIs")
     Set<TppMessageInformation> tppMessageInformation;
+
+    @ApiModelProperty(value = "SCA status")
+    ScaStatus scaStatus;
 
     private ErrorHolder errorHolder;
 

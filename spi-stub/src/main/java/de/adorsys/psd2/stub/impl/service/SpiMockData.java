@@ -18,6 +18,7 @@ package de.adorsys.psd2.stub.impl.service;
 
 import de.adorsys.psd2.xs2a.core.domain.TppMessageInformation;
 import de.adorsys.psd2.xs2a.core.error.MessageErrorCode;
+import de.adorsys.psd2.xs2a.core.sca.ScaStatus;
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiAuthenticationObject;
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiHrefType;
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiLinks;
@@ -34,7 +35,8 @@ public class SpiMockData {
     public static final SpiLinks SPI_LINKS = buildSpiLinks();
     public static final Set<TppMessageInformation> TPP_MESSAGES = buildTppMessages();
     public static final List<SpiAuthenticationObject> SCA_METHODS = buildScaMethods();
-    public static final String PSU_MESSAGE = "mocked PSU message";
+    public static final String PSU_MESSAGE = "mocked PSU message 3";
+    public static final ScaStatus SCA_STATUS = ScaStatus.STARTED;
 
     private static SpiLinks buildSpiLinks() {
         SpiLinks spiLinks = new SpiLinks();
