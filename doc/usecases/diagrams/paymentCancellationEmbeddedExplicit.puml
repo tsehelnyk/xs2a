@@ -82,14 +82,14 @@ SPI-->XS2A: SpiPsuAuthorisationResponse\n(SCA status)
 deactivate SPI
 XS2A->CMS: Update SCA status
 |||
-XS2A-->TPP: Update PSU data response
+XS2A-->TPP: Update PSU data response (cancellation SCA status)
 deactivate XS2A
 activate TPP
 |||
-TPP-->PSU: Message to the customer\n"Cancellation successful"
+TPP-->PSU: Message to the customer\n"Payment cancellation status"
 deactivate TPP
 |||
-ref over PSU, Ledgers
+ref over PSU, ASPSP
 
 For all GET requests see Payment Initiation diagram for Embedded approach
 
