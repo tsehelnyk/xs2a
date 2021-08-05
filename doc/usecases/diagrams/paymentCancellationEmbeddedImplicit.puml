@@ -5,7 +5,7 @@ entity XS2A
 entity CMS
 entity SPI
 entity ASPSP
-== Payment Cancellation with Embedded approach, explicit authorisation mode==
+== Payment Cancellation with Embedded approach, implicit authorisation mode==
 
 PSU->TPP: Cancel payment
 
@@ -33,28 +33,17 @@ SPI-->XS2A: initPaymentCancellation response (payment status)
 deactivate SPI
 |||
 XS2A->CMS: Update payment status
-|||
 XS2A-->TPP: Return HTTP code 400 "RESOURCE BLOCKED"
-note right
+note left
          If payment status is finalized
 end note
 TPP-->PSU: Message to the customer\n"Payment can't be cancelled"
-
-XS2A-->TPP: Payment cancellation initiation response \n(start authorisation link)
-note right
+XS2A->SPI: Start cancellation authorisation request \n(payment, Authorisation ID, SCA status, resolved SCA approach)
+note left
          If payment status is not finalized
 end note
-|||
-TPP->XS2A: REST Call Start cancellation authorisation\nPOST"/v1/{payment-service }/{payment-product}/\n{paymentId}/cancellation-authorisations"
-note left
-         in case of Multilevel SCA
-         the authorisation steps
-         should be repeated for each PSU
-end note
-|||
-XS2A->SPI: Start cancellation authorisation request \n(payment, Authorisation ID, SCA status, resolved SCA approach)
 activate SPI
-SPI->ASPSP: Cancellation authorisation request
+SPI->ASPSP: Execute payment cancellation
 activate ASPSP
 ASPSP-->SPI: Cancellation authorisation response \n(chosen SCA approach, PSU message, SCA status)
 deactivate ASPSP
@@ -91,6 +80,7 @@ SPI-->XS2A: SpiPsuAuthorisationResponse\n(SCA status)
 deactivate SPI
 XS2A->CMS: Update SCA status
 XS2A->CMS: Update payment status
+|||
 XS2A-->TPP: Update PSU data response (cancellation SCA status)
 deactivate XS2A
 activate TPP
