@@ -150,4 +150,7 @@
     <include relativeToChangelogFile="true" file="migration/0122-added-total-pages-and-booking-status-columns.xml"/>
     <include relativeToChangelogFile="true" file="migration/0123-add-additional-info-to-consent-tpp-information.xml"/>
     <include relativeToChangelogFile="true" file="migration/0124-add-unique-constraint-to-aspsp-account-access-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0125-drop-unique-constraint-from-aspsp-account-access-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0126-refactor-aspsp-account-access-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0127-refactor-account-access-table.xml"/>
 </databaseChangeLog>

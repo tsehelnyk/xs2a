@@ -72,12 +72,14 @@ public abstract class ConsentFilterableSpecification {
                                                                                           @Nullable PsuIdData psuIdData,
                                                                                           @Nullable String instanceId,
                                                                                           @Nullable String additionalTppInfo) {
-        return Optional.ofNullable(
-            consentSpecification
-                .byTppIdAndCreationPeriodAndPsuIdDataAndInstanceId(tppAuthorisationNumber, createDateFrom, createDateTo, psuIdData, instanceId))
-                   .map(s -> s.and(byConsentType()))
-                   .map(s -> s.and(byAdditionalTppInfo(additionalTppInfo)))
-                   .orElse(null);
+        return (root, query, cb) -> {
+            root.fetch(ASPSP_ACCOUNT_ACCESSES_ATTRIBUTE);
+            return Specification
+                       .where(consentSpecification.byTppIdAndCreationPeriodAndPsuIdDataAndInstanceId(tppAuthorisationNumber, createDateFrom, createDateTo, psuIdData, instanceId))
+                       .and(byConsentType())
+                       .and(byAdditionalTppInfo(additionalTppInfo))
+                       .toPredicate(root, query, cb);
+        };
     }
 
     public Specification<ConsentEntity> byPsuDataInListAndInstanceIdAndAdditionalTppInfo(PsuIdData psuIdData, String instanceId,
@@ -139,11 +141,18 @@ public abstract class ConsentFilterableSpecification {
                                                                                                       @Nullable LocalDate createDateTo,
                                                                                                       @Nullable String instanceId,
                                                                                                       @Nullable String additionalTppInfo) {
-        return Optional.ofNullable(commonSpecification
-                                       .byPsuIdDataAndCreationPeriodAndInstanceId(psuIdData, createDateFrom, createDateTo, instanceId))
-                   .map(s -> s.and(byConsentType()))
-                   .map(s -> s.and(byAdditionalTppInfo(additionalTppInfo)))
-                   .orElse(null);
+        return (root, query, cb) -> {
+            root.fetch(ASPSP_ACCOUNT_ACCESSES_ATTRIBUTE);
+            return Specification.where(commonSpecification.byPsuIdDataAndCreationPeriodAndInstanceId(psuIdData, createDateFrom, createDateTo, instanceId))
+                                      .and(byConsentType())
+                                      .and(byAdditionalTppInfo(additionalTppInfo))
+                                      .toPredicate(root, query, cb);
+        };
+//        return Optional.ofNullable(commonSpecification
+//                                       .byPsuIdDataAndCreationPeriodAndInstanceId(psuIdData, createDateFrom, createDateTo, instanceId))
+//                   .map(s -> s.and(byConsentType()))
+//                   .map(s -> s.and(byAdditionalTppInfo(additionalTppInfo)))
+//                   .orElse(null);
     }
 
     /**

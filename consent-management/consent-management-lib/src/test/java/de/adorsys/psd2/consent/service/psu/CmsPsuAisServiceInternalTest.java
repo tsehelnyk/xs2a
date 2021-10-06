@@ -929,7 +929,7 @@ class CmsPsuAisServiceInternalTest {
             .thenReturn(mappedAccountAccess);
         List<AspspAccountAccess> aspspAccountAccesses = jsonReader.getObjectFromFile("json/service/psu/aspsp-account-access-list.json", new TypeReference<List<AspspAccountAccess>>() {
         });
-        when(accessMapper.mapToAspspAccountAccess(mappedAccountAccess))
+        when(accessMapper.mapToAspspAccountAccess(consentEntity, mappedAccountAccess))
             .thenReturn(aspspAccountAccesses);
         when(aisConsentLazyMigrationService.migrateIfNeeded(consentEntity))
             .thenReturn(consentEntity);
@@ -987,7 +987,7 @@ class CmsPsuAisServiceInternalTest {
             .thenReturn(mappedAccountAccess);
         List<AspspAccountAccess> aspspAccountAccesses = jsonReader.getObjectFromFile("json/service/psu/aspsp-account-access-list-owner-name.json", new TypeReference<List<AspspAccountAccess>>() {
         });
-        when(accessMapper.mapToAspspAccountAccess(mappedAccountAccess))
+        when(accessMapper.mapToAspspAccountAccess(consentEntity, mappedAccountAccess))
             .thenReturn(aspspAccountAccesses);
         when(aisConsentLazyMigrationService.migrateIfNeeded(consentEntity))
             .thenReturn(consentEntity);
@@ -1042,7 +1042,7 @@ class CmsPsuAisServiceInternalTest {
             .thenReturn(mappedAccountAccess);
         List<AspspAccountAccess> aspspAccountAccesses = jsonReader.getObjectFromFile("json/service/psu/aspsp-account-access-list.json", new TypeReference<List<AspspAccountAccess>>() {
         });
-        when(accessMapper.mapToAspspAccountAccess(mappedAccountAccess))
+        when(accessMapper.mapToAspspAccountAccess(consentEntity, mappedAccountAccess))
             .thenReturn(aspspAccountAccesses);
         when(aisConsentLazyMigrationService.migrateIfNeeded(consentEntity))
             .thenReturn(consentEntity);
