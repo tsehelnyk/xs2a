@@ -37,6 +37,7 @@ import de.adorsys.psd2.consent.repository.specification.AisConsentSpecification;
 import de.adorsys.psd2.consent.repository.specification.AuthorisationSpecification;
 import de.adorsys.psd2.consent.service.AisConsentConfirmationExpirationService;
 import de.adorsys.psd2.consent.service.AisConsentUsageService;
+import de.adorsys.psd2.consent.service.account.AccountAccessUpdater;
 import de.adorsys.psd2.consent.service.authorisation.CmsConsentAuthorisationServiceInternal;
 import de.adorsys.psd2.consent.service.mapper.AccessMapper;
 import de.adorsys.psd2.consent.service.mapper.AisConsentMapper;
@@ -101,6 +102,7 @@ public class CmsPsuAisServiceInternal implements CmsPsuAisService {
     private final CmsConsentAuthorisationServiceInternal consentAuthorisationService;
     private final CmsPsuConsentServiceInternal cmsPsuConsentServiceInternal;
     private final PageRequestBuilder pageRequestBuilder;
+    private final AccountAccessUpdater accountAccessUpdater;
 
     @Override
     @Transactional
@@ -313,8 +315,14 @@ public class CmsPsuAisServiceInternal implements CmsPsuAisService {
 
         byte[] data = consentDataMapper.getBytesFromConsentData(aisConsentDataNew);
 
-        AccountAccess requestedAccountAccess = consentMapper.mapToAccountAccess(requestedAisAccountAccess);
-        List<AspspAccountAccess> aspspAccountAccesses = accessMapper.mapToAspspAccountAccess(consent, requestedAccountAccess);
+        AccountAccess requestedAccountAccess = consentMapper.mapToAccountAccess(requestedAisAccountAccess);//new accesses
+        List<AspspAccountAccess> aspspAccountAccessesExisted = consent.getAspspAccountAccesses();
+        AccountAccess existingAccess = accessMapper.mapAspspAccessesToAccountAccess(aspspAccountAccessesExisted,
+                                                                                    consent.getOwnerNameType(),
+                                                                                    consent.getTrustedBeneficiariesType());
+        AccountAccess updatedAccesses = accountAccessUpdater.updateAccountReferencesInAccess(existingAccess, requestedAccountAccess);
+
+        List<AspspAccountAccess> aspspAccountAccesses = accessMapper.mapToAspspAccountAccess(consent, updatedAccesses);
 
         consent.setData(data);
         consent.setAspspAccountAccesses(aspspAccountAccesses);
