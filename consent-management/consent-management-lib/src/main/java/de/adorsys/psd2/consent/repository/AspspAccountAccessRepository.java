@@ -17,7 +17,14 @@
 package de.adorsys.psd2.consent.repository;
 
 import de.adorsys.psd2.consent.domain.account.AspspAccountAccess;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 public interface AspspAccountAccessRepository extends CrudRepository<AspspAccountAccess, Long> {
+
+    @Query("DELETE FROM aspsp_account_access WHERE consent_id=:consentId")
+    @Modifying
+    void deleteByConsentId(@Param("consentId")Long consentId);
 }
