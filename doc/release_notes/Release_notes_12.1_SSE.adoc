@@ -14,4 +14,4 @@ Fixed bug with `Broken pipe` exception in CMS during multithreading read account
 
 Embedded relations were replaced by simple OneToMany mapping. This resulted in performance increasing during
 `getAccountList` request. According changes were also implemented in DB structure. Additional required changes were made
-for PIIS V1 consents flow
+for PIIS V1 consents flow. Postman tests were fixed and updated.
