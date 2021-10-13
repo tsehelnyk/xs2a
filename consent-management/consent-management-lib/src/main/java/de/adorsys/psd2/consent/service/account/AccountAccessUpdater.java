@@ -104,7 +104,7 @@ public class AccountAccessUpdater {
                    .filter(aspsp -> Objects.equals(aspsp.getCurrency(), existingReference.getCurrency()))
                    .findFirst()
                    .orElse(existingReference);
-        reference.setId(existingReference.getId());//todo:
+        reference.setId(existingReference.getId());
         return reference;
     }
 }
