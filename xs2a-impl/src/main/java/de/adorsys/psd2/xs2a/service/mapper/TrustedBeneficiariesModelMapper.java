@@ -22,6 +22,7 @@ import de.adorsys.psd2.xs2a.domain.account.Xs2aTrustedBeneficiaries;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aTrustedBeneficiariesList;
 import de.adorsys.psd2.xs2a.web.mapper.Xs2aAddressMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +42,8 @@ public interface TrustedBeneficiariesModelMapper {
         return result;
     }
 
+    @Mapping(target = "debtorAccount.other.identification", source = "debtorAccount.other")
+    @Mapping(target = "creditorAccount.other.identification", source = "creditorAccount.other")
     TrustedBeneficiary mapToTrustedBeneficiaries(Xs2aTrustedBeneficiaries trustedBeneficiaries);
 }
 

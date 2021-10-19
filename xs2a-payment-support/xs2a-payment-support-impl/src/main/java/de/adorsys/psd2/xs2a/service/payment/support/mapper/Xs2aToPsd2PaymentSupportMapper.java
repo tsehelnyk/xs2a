@@ -16,17 +16,18 @@
 
 package de.adorsys.psd2.xs2a.service.payment.support.mapper;
 
-import de.adorsys.psd2.model.BulkPaymentInitiationJson;
-import de.adorsys.psd2.model.DayOfExecution;
-import de.adorsys.psd2.model.PaymentInitiationJson;
-import de.adorsys.psd2.model.PeriodicPaymentInitiationJson;
+import de.adorsys.psd2.model.*;
 import de.adorsys.psd2.xs2a.core.domain.address.Xs2aCountryCode;
 import de.adorsys.psd2.xs2a.core.pis.PisDayOfExecution;
 import de.adorsys.psd2.xs2a.domain.pis.BulkPayment;
 import de.adorsys.psd2.xs2a.domain.pis.PeriodicPayment;
 import de.adorsys.psd2.xs2a.domain.pis.SinglePayment;
+import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface Xs2aToPsd2PaymentSupportMapper {
@@ -34,6 +35,7 @@ public interface Xs2aToPsd2PaymentSupportMapper {
     PaymentInitiationJson mapToPaymentInitiationJson(SinglePayment singlePayment);
 
     @Mapping(target = "dayOfExecution", expression = "java(mapDayOfExecution(xs2aPeriodicPayment.getDayOfExecution()))")
+    @Mapping(target = "remittanceInformationStructuredArray", expression = "java(mapToRemittanceInformationStructuredArray(xs2aPeriodicPayment.getRemittanceInformationStructuredArray()))")
     PeriodicPaymentInitiationJson mapToPeriodicPaymentInitiationJson(PeriodicPayment xs2aPeriodicPayment);
 
     BulkPaymentInitiationJson mapToBulkPaymentInitiationJson(BulkPayment xs2aBulkPayment);
@@ -46,5 +48,18 @@ public interface Xs2aToPsd2PaymentSupportMapper {
         return dayOfExecution != null
                    ? DayOfExecution.fromValue(dayOfExecution.toString())
                    : null;
+    }
+
+    default RemittanceInformationStructuredArray mapToRemittanceInformationStructuredArray(List<String> remittanceInformationStructuredArray) {
+        if (CollectionUtils.isEmpty(remittanceInformationStructuredArray)) {
+            return null;
+        }
+
+        List<RemittanceInformationStructured> remittanceInfoStructuredList = remittanceInformationStructuredArray.stream()
+                                                                                 .map(s -> new RemittanceInformationStructured().reference(s))
+                                                                                 .collect(Collectors.toList());
+        RemittanceInformationStructuredArray remittanceInfoStructuredArray = new RemittanceInformationStructuredArray();
+        remittanceInfoStructuredArray.addAll(remittanceInfoStructuredList);
+        return remittanceInfoStructuredArray;
     }
 }

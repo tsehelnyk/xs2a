@@ -54,6 +54,7 @@ public abstract class AccountModelMapper {
     protected BalanceMapper balanceMapper;
 
     @Mapping(target = "currency", source = "currency.currencyCode")
+    @Mapping(target = "other.identification", source = "other")
     public abstract de.adorsys.psd2.model.AccountReference mapToAccountReference(AccountReference accountReference);
 
     public abstract List<de.adorsys.psd2.model.AccountReference> mapToAccountReferences(List<AccountReference> accountReferences);

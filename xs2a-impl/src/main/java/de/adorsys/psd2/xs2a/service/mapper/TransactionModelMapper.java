@@ -17,6 +17,7 @@
 package de.adorsys.psd2.xs2a.service.mapper;
 
 import de.adorsys.psd2.model.*;
+import de.adorsys.psd2.xs2a.domain.TransactionInfo;
 import de.adorsys.psd2.xs2a.domain.Transactions;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aAccountReport;
 import de.adorsys.psd2.xs2a.domain.account.Xs2aTransactionsReport;
@@ -54,6 +55,7 @@ public abstract class TransactionModelMapper {
     @Mapping(target = "links", expression = "java(hrefLinkMapper.mapToLinksMap(transactionsReport.getLinks()))")
     @Mapping(target = "transactions", source = "accountReport")
     @Mapping(target = "account", source = "accountReference")
+    @Mapping(target = "account.other.identification", source = "accountReference.other")
     public abstract TransactionsResponse200Json mapToTransactionsResponse200Json(Xs2aTransactionsReport transactionsReport);
 
     public byte[] mapToTransactionsResponseRaw(Xs2aTransactionsReport transactionsReport) {
@@ -77,8 +79,10 @@ public abstract class TransactionModelMapper {
     @Mapping(target = "remittanceInformationUnstructured", source = "transactionInfo.remittanceInformationUnstructured")
     @Mapping(target = "remittanceInformationUnstructuredArray", source = "transactionInfo.remittanceInformationUnstructuredArray")
     @Mapping(target = "remittanceInformationStructured", source = "transactionInfo.remittanceInformationStructured")
-    @Mapping(target = "remittanceInformationStructuredArray", source = "transactionInfo.remittanceInformationStructuredArray")
+    @Mapping(target = "remittanceInformationStructuredArray", expression = "java(mapToRemittanceInformationStructuredArray(transactions.getTransactionInfo()))")
     @Mapping(target = "purposeCode", source = "transactionInfo.purposeCode")
+    @Mapping(target = "creditorAccount.other.identification", source = "transactionInfo.creditorAccount.other")
+    @Mapping(target = "debtorAccount.other.identification", source = "transactionInfo.debtorAccount.other")
     public abstract de.adorsys.psd2.model.Transactions mapToTransactions(Transactions transactions);
 
     @Mapping(target = "creditorName", source = "transactionInfo.creditorName")
@@ -91,9 +95,11 @@ public abstract class TransactionModelMapper {
     @Mapping(target = "ultimateDebtor", source = "transactionInfo.ultimateDebtor")
     @Mapping(target = "remittanceInformationUnstructured", source = "transactionInfo.remittanceInformationUnstructured")
     @Mapping(target = "remittanceInformationUnstructuredArray", source = "transactionInfo.remittanceInformationUnstructuredArray")
-    @Mapping(target = "remittanceInformationStructured", source = "transactionInfo.remittanceInformationStructured")
-    @Mapping(target = "remittanceInformationStructuredArray", source = "transactionInfo.remittanceInformationStructuredArray")
+    @Mapping(target = "remittanceInformationStructured", expression = "java(mapToRemittanceInformationStructured(entryDetails.getTransactionInfo()))")
+    @Mapping(target = "remittanceInformationStructuredArray", expression = "java(mapToRemittanceInformationStructuredArray(entryDetails.getTransactionInfo()))")
     @Mapping(target = "purposeCode", source = "transactionInfo.purposeCode")
+    @Mapping(target = "creditorAccount.other.identification", source = "transactionInfo.creditorAccount.other")
+    @Mapping(target = "debtorAccount.other.identification", source = "transactionInfo.debtorAccount.other")
     public abstract de.adorsys.psd2.model.EntryDetailsElement mapToEntryDetailsElement(de.adorsys.psd2.xs2a.domain.EntryDetails entryDetails);
 
     public InlineResponse2001 mapToTransactionDetails(Transactions transactions) {
@@ -114,5 +120,32 @@ public abstract class TransactionModelMapper {
         TransactionList transactionList = new TransactionList();
         transactionList.addAll(transactionDetails);
         return transactionList;
+    }
+
+    protected RemittanceInformationStructuredArray mapToRemittanceInformationStructuredArray(TransactionInfo transactionInfo) {
+
+        if (transactionInfo == null) {
+            return null;
+        }
+
+        List<String> remittanceInformationStructuredArray = transactionInfo.getRemittanceInformationStructuredArray();
+
+        if (CollectionUtils.isEmpty(remittanceInformationStructuredArray)) {
+            return null;
+        }
+
+        List<RemittanceInformationStructured> remittanceInfoStructuredList = remittanceInformationStructuredArray.stream()
+                                                                                 .map(s -> new RemittanceInformationStructured().reference(s))
+                                                                                 .collect(Collectors.toList());
+        RemittanceInformationStructuredArray remittanceInfoStructuredArray = new RemittanceInformationStructuredArray();
+        remittanceInfoStructuredArray.addAll(remittanceInfoStructuredList);
+        return remittanceInfoStructuredArray;
+    }
+
+    protected RemittanceInformationStructured mapToRemittanceInformationStructured(TransactionInfo transactionInfo) {
+        if (transactionInfo == null || transactionInfo.getRemittanceInformationStructured() == null) {
+            return null;
+        }
+        return new RemittanceInformationStructured().reference(transactionInfo.getRemittanceInformationStructured());
     }
 }
