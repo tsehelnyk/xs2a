@@ -463,9 +463,6 @@ paths:
         '200':
           $ref: "#/components/responses/OK_200_PaymentInitiationStatus"
 
-        '202':
-          $ref: "#/components/responses/OK_202_PaymentInitiationStatus"
-
         '400':
           $ref: "#/components/responses/BAD_REQUEST_400_PIS"
         '401':
@@ -6863,7 +6860,7 @@ components:
         tppMessage:
           type: array
           items:
-            $ref: "#/components/schemas/tppMessageInitiationStatusResponse-200"
+            $ref: "#/components/schemas/tppMessageGeneric"
           description: Messages to the TPP on operational issues.
 
 
@@ -6877,29 +6874,6 @@ components:
 
         The chosen XML schema of the status request is following the XML schema definitions of the original pain.001 schema.
       type: string
-
-
-    paymentInitiationStatusResponse-202_json:
-      description: Body of the response for a successful payment initiation status request in case of an JSON based endpoint.
-      type: object
-      required:
-        - transactionStatus
-        - tppMessage
-      properties:
-        transactionStatus:
-          $ref: "#/components/schemas/transactionStatus"
-        fundsAvailable:
-          $ref: "#/components/schemas/fundsAvailable"
-        psuMessage:
-          $ref: "#/components/schemas/psuMessageText"
-        _links:
-          $ref: "#/components/schemas/_linksPaymentInitiationStatus"
-        tppMessage:
-          type: array
-          items:
-            $ref: "#/components/schemas/tppMessageInitiationStatusResponse-200"
-          description: Messages to the TPP on operational issues.
-
 
 
     paymentInitationRequestResponse-201:
@@ -12277,31 +12251,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/paymentInitiationStatusResponse-200_json"
-          examples:
-            simple:
-              $ref: "#/components/examples/paymentInitiationStatusResponse_json_Simple"
-            extended:
-              $ref: "#/components/examples/paymentInitiationStatusResponse_json_Extended"
-
-        application/xml:
-          schema:
-            $ref: "#/components/schemas/paymentInitiationStatusResponse-200_xml"
-          examples:
-            "Payment Initiation Status Response Body XML for SCT":
-              $ref: "#/components/examples/pain.002.001_SCT_singleTransaction"
-
-
-    OK_202_PaymentInitiationStatus:
-      description: OK
-
-      headers:
-        X-Request-ID:
-          $ref: "#/components/headers/X-Request-ID"
-
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/paymentInitiationStatusResponse-202_json"
           examples:
             simple:
               $ref: "#/components/examples/paymentInitiationStatusResponse_json_Simple"
