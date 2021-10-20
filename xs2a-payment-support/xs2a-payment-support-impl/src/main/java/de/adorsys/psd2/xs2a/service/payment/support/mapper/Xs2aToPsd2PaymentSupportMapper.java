@@ -26,12 +26,15 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Currency;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface Xs2aToPsd2PaymentSupportMapper {
     @Mapping(target = "creditorAgentName", ignore = true)
+    @Mapping(target = "creditorAccount", expression = "java(mapToAccountReference(singlePayment.getCreditorAccount()))")
+    @Mapping(target = "debtorAccount", expression = "java(mapToAccountReference(singlePayment.getDebtorAccount()))")
     PaymentInitiationJson mapToPaymentInitiationJson(SinglePayment singlePayment);
 
     @Mapping(target = "dayOfExecution", expression = "java(mapDayOfExecution(xs2aPeriodicPayment.getDayOfExecution()))")
@@ -61,5 +64,29 @@ public interface Xs2aToPsd2PaymentSupportMapper {
         RemittanceInformationStructuredArray remittanceInfoStructuredArray = new RemittanceInformationStructuredArray();
         remittanceInfoStructuredArray.addAll(remittanceInfoStructuredList);
         return remittanceInfoStructuredArray;
+    }
+
+    default AccountReference mapToAccountReference(de.adorsys.psd2.xs2a.core.profile.AccountReference value) {
+        if (value == null ) {
+            return null;
+        }
+        AccountReference accountReference = new AccountReference();
+        accountReference.setIban(value.getIban());
+        accountReference.setBban(value.getBban());
+        accountReference.setPan(value.getPan());
+        accountReference.setMaskedPan(value.getMaskedPan());
+        accountReference.setMsisdn(value.getMsisdn());
+        accountReference.setCurrency(mapToCurrency(value.getCurrency()));
+        accountReference.setOther(mapToOtherType(value.getOther()));
+        accountReference.cashAccountType(value.getCashAccountType());
+        return accountReference;
+    }
+
+    default OtherType mapToOtherType(String other){
+        return other == null ? null : new OtherType().identification(other);
+    }
+
+    default String mapToCurrency(Currency value){
+        return value == null ? null : value.getCurrencyCode();
     }
 }

@@ -169,9 +169,7 @@ public abstract class CardAccountModelMapper {
         accountReference.setMaskedPan(xs2aAccountReference.getMaskedPan());
         accountReference.setPan(xs2aAccountReference.getPan());
         accountReference.setMsisdn(xs2aAccountReference.getMsisdn());
-        OtherType otherType = new OtherType();
-        otherType.setIdentification(xs2aAccountReference.getOther());
-        accountReference.setOther(otherType);
+        accountReference.setOther(mapToOtherType(xs2aAccountReference.getOther()));
         accountReference.setCashAccountType(xs2aAccountReference.getCashAccountType());
 
         return accountReference;
@@ -179,6 +177,10 @@ public abstract class CardAccountModelMapper {
 
     private String getMulticurrencyRepresentationOrNull() {
         return MULTICURRENCY_ACCOUNT_AGGREGATION_LEVELS.contains(aspspProfileServiceWrapper.getMulticurrencyAccountLevel()) ? "XXX" : null;
+    }
+
+    protected OtherType mapToOtherType(String other){
+        return other == null ? null : new OtherType().identification(other);
     }
 }
 
