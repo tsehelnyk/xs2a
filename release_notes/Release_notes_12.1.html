@@ -445,13 +445,64 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_table_of_contents">Table of Contents</h2>
 <div class="sectionbody">
-
+<div class="ulist">
+<ul>
+<li>
+<p>Fixed bug with broken pipe during read account list request</p>
+</li>
+<li>
+<p>Refactored <code>ConsentEntity</code> child entities and their relations - <code>AspspAccountAccess</code> and <code>TppAccountAccess</code></p>
+</li>
+<li>
+<p>Removed Trusted Beneficiaries endpoint and models from main BG .yaml file</p>
+</li>
+<li>
+<p>Fixed minor bugs with non correct BG .yaml file implementation</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_fixed_bug_with_broken_pipe_during_read_account_list_request">Fixed bug with broken pipe during read account list request</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fixed bug with <code>Broken pipe</code> exception in CMS during multithreading read account list request on PostgreSQL DB.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_refactored_consententity_child_entities_and_their_relations_aspspaccountaccess_and_tppaccountaccess">Refactored ConsentEntity child entities and their relations - AspspAccountAccess and TppAccountAccess</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Embedded relations were replaced by simple OneToMany mapping. This resulted in performance increasing during
+<code>getAccountList</code> request. According changes were also implemented in DB structure. Additional required changes were made
+for PIIS V1 consents flow. Postman tests were fixed and updated.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_removed_trusted_beneficiaries_endpoint_and_models_from_main_bg_yaml_file">Removed Trusted Beneficiaries endpoint and models from main BG .yaml file</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Trusted Beneficiaries specific models and endpoint were removed from main BG .yaml file, separate .yaml for
+<code>trusted beneficiaries</code> endpoint was added into project.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_fixed_minor_bugs_with_non_correct_bg_yaml_file_implementation">Fixed minor bugs with non correct BG .yaml file implementation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Added correct implementation of BG .yaml file v. 1.3.9 with errata models, mappers refactored according to changes,
+postman tests updated</p>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-11-03 11:06:08 UTC
+Last updated 2021-11-03 13:40:34 UTC
 </div>
 </div>
 </body>
