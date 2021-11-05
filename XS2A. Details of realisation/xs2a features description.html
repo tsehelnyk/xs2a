@@ -462,6 +462,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_sca_approaches_fo_pis">SCA Approaches fo PIS</a></li>
 <li><a href="#_payment_statuses">Payment statuses</a></li>
 <li><a href="#_payment_cancellation">Payment Cancellation</a></li>
+<li><a href="#_sca_approaches_for_payment_cancellation">SCA Approaches for Payment Cancellation</a></li>
 </ul>
 </li>
 <li><a href="#_account_information_service">Account Information Service</a>
@@ -956,18 +957,33 @@ Parameter <strong>"countryValidationSupported"</strong> in the ASPSP-Profile, de
 </div>
 </div>
 <div class="sect3">
+<h4 id="_payment_initiation_service_in_oauth2_approach">Payment Initiation Service in OAuth2 Approach</h4>
+<div class="imageblock text-center">
+<div class="content">
+<img src="../usecases/images/paymentInitOAuthIntegrated.png" alt="Payment Initiation in OAuth2 Approach">
+</div>
+<div class="title">Figure 4. Payment Initiation in OAuth Integrated</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="../usecases/images/paymentInitOAuthPreStep.png" alt="Payment Initiation in OAuth2 Approach">
+</div>
+<div class="title">Figure 5. Payment Initiation in OAuth Pre-step</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_payment_initiation_service_in_embedded_approach">Payment Initiation Service in Embedded Approach</h4>
 <div class="imageblock text-center">
 <div class="content">
 <img src="../usecases/images/paymentInitEmbeddedImplicit.png" alt="Payment Initiation in Embedded Approach">
 </div>
-<div class="title">Figure 4. Payment Initiation in Embedded Approach, implicit authorisation mode</div>
+<div class="title">Figure 6. Payment Initiation in Embedded Approach, implicit authorisation mode</div>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="../usecases/images/paymentInitEmbeddedExplicit.png" alt="Payment Initiation in Embedded Approach">
 </div>
-<div class="title">Figure 5. Payment Initiation in Embedded Approach, explicit authorisation mode</div>
+<div class="title">Figure 7. Payment Initiation in Embedded Approach, explicit authorisation mode</div>
 </div>
 </div>
 <div class="sect3">
@@ -976,13 +992,13 @@ Parameter <strong>"countryValidationSupported"</strong> in the ASPSP-Profile, de
 <div class="content">
 <img src="../usecases/images/paymentInitEmbeddedDecoupledImplicit.png" alt="Payment Initiation in Embedded Decopled Approach">
 </div>
-<div class="title">Figure 6. Payment Initiation in Embedded Decoupled Approach, implicit authorisation mode</div>
+<div class="title">Figure 8. Payment Initiation in Embedded Decoupled Approach, implicit authorisation mode</div>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="../usecases/images/paymentInitEmbeddedDecoupledExplicit.png" alt="Payment Initiation in Embedded Decopled Approach">
 </div>
-<div class="title">Figure 7. Payment Initiation in Embedded Decoupled Approach, explicit authorisation mode</div>
+<div class="title">Figure 9. Payment Initiation in Embedded Decoupled Approach, explicit authorisation mode</div>
 </div>
 </div>
 <div class="sect3">
@@ -991,13 +1007,13 @@ Parameter <strong>"countryValidationSupported"</strong> in the ASPSP-Profile, de
 <div class="content">
 <img src="../usecases/images/paymentInitPureDecoupledImplicit.png" alt="Payment Initiation in Pure Decopled Approach">
 </div>
-<div class="title">Figure 8. Payment Initiation in Pure Decoupled Approach, implicit authorisation mode</div>
+<div class="title">Figure 10. Payment Initiation in Pure Decoupled Approach, implicit authorisation mode</div>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="../usecases/images/paymentInitPureDecoupledExplicit.png" alt="Payment Initiation in Pure Decopled Approach">
 </div>
-<div class="title">Figure 9. Payment Initiation in Pure Decoupled Approach, explicit authorisation mode</div>
+<div class="title">Figure 11. Payment Initiation in Pure Decoupled Approach, explicit authorisation mode</div>
 </div>
 </div>
 </div>
@@ -1058,8 +1074,10 @@ Parameter <strong>"countryValidationSupported"</strong> in the ASPSP-Profile, de
 <div class="sect2">
 <h3 id="_payment_cancellation">Payment Cancellation</h3>
 <div class="paragraph">
-<p>The support of this use case at the XS2A interface is optional.
-A TPP may execute a transaction according to this use case to cancel a (still pending) payment, which has been initiated before. Only future dated payments and recurring payments may be cancelled.</p>
+<p>The support of this use case at the XS2A interface is optional.</p>
+</div>
+<div class="paragraph">
+<p>A TPP may execute a transaction according to this use case to cancel a (still pending, with payment status not finalized) payment, which has been initiated before. Also future dated payments and recurring payments may be cancelled.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1133,6 +1151,69 @@ It is up to the ASPSP to decide if a given payment can still be cancelled or not
 </tbody>
 </table>
 </div>
+<div class="sect2">
+<h3 id="_sca_approaches_for_payment_cancellation">SCA Approaches for Payment Cancellation</h3>
+<div class="sect3">
+<h4 id="_payment_cancellation_service_in_redirect_approach">Payment Cancellation Service in Redirect Approach</h4>
+<div class="imageblock text-center">
+<div class="content">
+<img src="../usecases/images/paymentCancellationRedirectImplicit.png" alt="paymentCancellationRedirectImplicit">
+</div>
+<div class="title">Figure 12. Payment Cancellation in Redirect Approach, implicit authorisation mode</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="../usecases/images/paymentCancellationRedirectExplicit.png" alt="paymentCancellationRedirectExplicit">
+</div>
+<div class="title">Figure 13. Payment Cancellation Service in Redirect Approach, explicit authorisation mode</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_payment_cancellation_service_in_embedded_approach">Payment Cancellation Service in Embedded Approach</h4>
+<div class="imageblock text-center">
+<div class="content">
+<img src="../usecases/images/paymentCancellationEmbeddedImplicit.png" alt="paymentCancellationEmbeddedImplicit">
+</div>
+<div class="title">Figure 14. Payment Cancellation in Embedded Approach, implicit authorisation mode</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="../usecases/images/paymentCancellationEmbeddedExplicit.png" alt="paymentCancellationEmbeddedExplicit">
+</div>
+<div class="title">Figure 15. Payment Cancellation in Embedded Approach, explicit authorisation mode</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_payment_cancellation_service_in_embedded_decoupled_approach_decoupled_approach_as_a_second_sca_factor">Payment Cancellation Service in Embedded Decoupled Approach (Decoupled approach as a second SCA factor)</h4>
+<div class="imageblock text-center">
+<div class="content">
+<img src="../usecases/images/paymentCancellationEmbeddedDecoupledImplicit.png" alt="paymentCancellationEmbeddedDecoupledImplicit">
+</div>
+<div class="title">Figure 16. Payment Cancellation in Embedded Decoupled Approach, implicit authorisation mode</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="../usecases/images/paymentCancellationEmbeddedDecoupledExplicit.png" alt="paymentCancellationEmbeddedDecoupledExplicit">
+</div>
+<div class="title">Figure 17. Payment Cancellation in Embedded Decoupled Approach, explicit authorisation mode</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_payment_cancellation_service_in_pure_decoupled_approach">Payment Cancellation Service in Pure Decoupled Approach</h4>
+<div class="imageblock text-center">
+<div class="content">
+<img src="../usecases/images/paymentCancellationPureDecoupledImplicit.png" alt="paymentCancellationPureDecoupledImplicit">
+</div>
+<div class="title">Figure 18. Payment Cancellation in Pure Decoupled Approach, implicit authorisation mode</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="../usecases/images/paymentCancellationPureDecoupledExplicit.png" alt="paymentCancellationPureDecoupledExplicit">
+</div>
+<div class="title">Figure 19. Payment Cancellation in Pure Decoupled Approach, explicit authorisation mode</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1186,7 +1267,7 @@ A TPP may execute transactions according to this use case to receive the right t
 <div class="content">
 <img src="../usecases/diagrams/ConsentInitRedirect.png" alt="Consent Initiation in Redirect Approach">
 </div>
-<div class="title">Figure 10. Consent Initiation in Redirect Approach</div>
+<div class="title">Figure 20. Consent Initiation in Redirect Approach</div>
 </div>
 </div>
 <div class="sect3">
@@ -1195,7 +1276,7 @@ A TPP may execute transactions according to this use case to receive the right t
 <div class="content">
 <img src="../usecases/diagrams/ConsentInitEmbedded.png" alt="Consent Initiation in Embedded Approach">
 </div>
-<div class="title">Figure 11. Consent Initiation in Embedded Approach</div>
+<div class="title">Figure 21. Consent Initiation in Embedded Approach</div>
 </div>
 </div>
 <div class="sect3">
@@ -1204,7 +1285,7 @@ A TPP may execute transactions according to this use case to receive the right t
 <div class="content">
 <img src="../usecases/diagrams/ConsentInitDecoupled.png" alt="Consent Initiation in Decoupled Approach">
 </div>
-<div class="title">Figure 12. Consent Initiation in Decoupled Approach</div>
+<div class="title">Figure 22. Consent Initiation in Decoupled Approach</div>
 </div>
 </div>
 </div>
@@ -2072,7 +2153,7 @@ This feature is optional for the ASPSP and configures in ASPSP-Profile by parame
 <div class="content">
 <img src="../usecases/diagrams/ReadTransactionList.png" alt="Read Transaction List">
 </div>
-<div class="title">Figure 13. Read Transaction List</div>
+<div class="title">Figure 23. Read Transaction List</div>
 </div>
 </div>
 </div>
@@ -3062,7 +3143,7 @@ base 64 encoding of the signature.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-11-03 13:40:34 UTC
+Last updated 2021-11-05 16:17:25 UTC
 </div>
 </div>
 </body>
