@@ -7,35 +7,27 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * List of accounts with details.
+ * Transaction details.
  */
-@ApiModel(description = "List of accounts with details. ")
+@ApiModel(description = "Transaction details.")
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-11-05T12:22:49.487689+02:00[Europe/Kiev]")
 
-public class AccountList   {
-  @JsonProperty("accounts")
-  @Valid
-  private List<AccountDetails> accounts = new ArrayList<>();
+public class TransactionDetailsBody   {
+  @JsonProperty("transactionDetails")
+  private Transactions transactionDetails = null;
 
-  public AccountList accounts(List<AccountDetails> accounts) {
-    this.accounts = accounts;
-    return this;
-  }
-
-  public AccountList addAccountsItem(AccountDetails accountsItem) {
-    this.accounts.add(accountsItem);
+  public TransactionDetailsBody transactionDetails(Transactions transactionDetails) {
+    this.transactionDetails = transactionDetails;
     return this;
   }
 
   /**
-   * Get accounts
-   * @return accounts
+   * Get transactionDetails
+   * @return transactionDetails
   **/
   @ApiModelProperty(required = true, value = "")
   @NotNull
@@ -43,13 +35,13 @@ public class AccountList   {
   @Valid
 
 
-  @JsonProperty("accounts")
-  public List<AccountDetails> getAccounts() {
-    return accounts;
+  @JsonProperty("transactionDetails")
+  public Transactions getTransactionDetails() {
+    return transactionDetails;
   }
 
-  public void setAccounts(List<AccountDetails> accounts) {
-    this.accounts = accounts;
+  public void setTransactionDetails(Transactions transactionDetails) {
+    this.transactionDetails = transactionDetails;
   }
 
 
@@ -60,21 +52,21 @@ public class AccountList   {
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
-}    AccountList accountList = (AccountList) o;
-    return Objects.equals(this.accounts, accountList.accounts);
+}    TransactionDetailsBody transactionDetailsBody = (TransactionDetailsBody) o;
+    return Objects.equals(this.transactionDetails, transactionDetailsBody.transactionDetails);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(accounts);
+    return Objects.hash(transactionDetails);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountList {\n");
+    sb.append("class TransactionDetailsBody {\n");
 
-    sb.append("    accounts: ").append(toIndentedString(accounts)).append("\n");
+    sb.append("    transactionDetails: ").append(toIndentedString(transactionDetails)).append("\n");
     sb.append("}");
     return sb.toString();
   }
