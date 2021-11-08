@@ -88,7 +88,9 @@ public abstract class AccountModelMapper {
     }
 
     protected OtherType mapToOtherType(String other){
-        return other == null ? null : new OtherType().identification(other);
+        return other == null
+                   ? null
+                   : new OtherType().identification(other);
     }
 
     private String getMulticurrencyRepresentationOrNull() {

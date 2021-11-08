@@ -124,9 +124,7 @@ public abstract class TransactionModelMapper {
             return null;
         }
 
-        List<String> remittanceInformationStructuredArray = transactionInfo.getRemittanceInformationStructuredArray();
-
-        List<RemittanceInformationStructured> remittanceInfoStructuredList = remittanceInformationStructuredArray.stream()
+        List<RemittanceInformationStructured> remittanceInfoStructuredList = transactionInfo.getRemittanceInformationStructuredArray().stream()
                                                                                  .map(s -> new RemittanceInformationStructured().reference(s))
                                                                                  .collect(Collectors.toList());
         RemittanceInformationStructuredArray remittanceInfoStructuredArray = new RemittanceInformationStructuredArray();
@@ -141,35 +139,29 @@ public abstract class TransactionModelMapper {
         return new RemittanceInformationStructured().reference(transactionInfo.getRemittanceInformationStructured());
     }
 
-    protected AccountReference mapToAccountReference(de.adorsys.psd2.xs2a.core.profile.AccountReference value) {
-        if (value == null ) {
-            return null;
-        }
-        AccountReference accountReference = new AccountReference();
-        accountReference.setIban(value.getIban());
-        accountReference.setBban(value.getBban());
-        accountReference.setPan(value.getPan());
-        accountReference.setMaskedPan(value.getMaskedPan());
-        accountReference.setMsisdn(value.getMsisdn());
-        accountReference.setCurrency(mapToCurrency(value.getCurrency()));
-        accountReference.setOther(mapToOtherType(value.getOther()));
-        accountReference.cashAccountType(value.getCashAccountType());
-        return accountReference;
-    }
+    @Mapping(target = "currency", expression = "java(mapToCurrency(value.getCurrency()))")
+    @Mapping(target = "other", expression = "java(mapToOtherType(value.getOther()))")
+    public abstract AccountReference mapToAccountReference(de.adorsys.psd2.xs2a.core.profile.AccountReference value);
 
     protected AccountReference mapToAccountReference(de.adorsys.psd2.xs2a.domain.TransactionInfo transactionInfo, boolean isCreditorAccount) {
         if (transactionInfo == null ) {
             return null;
         }
-        de.adorsys.psd2.xs2a.core.profile.AccountReference value = isCreditorAccount ? transactionInfo.getCreditorAccount() : transactionInfo.getDebtorAccount();
+        de.adorsys.psd2.xs2a.core.profile.AccountReference value = isCreditorAccount
+                                                                       ? transactionInfo.getCreditorAccount()
+                                                                       : transactionInfo.getDebtorAccount();
         return mapToAccountReference(value);
     }
 
     protected OtherType mapToOtherType(String other){
-        return other == null ? null : new OtherType().identification(other);
+        return other == null
+                   ? null
+                   : new OtherType().identification(other);
     }
 
     protected String mapToCurrency(Currency value){
-        return value == null ? null : value.getCurrencyCode();
+        return value == null
+                   ? null
+                   : value.getCurrencyCode();
     }
 }

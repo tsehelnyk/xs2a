@@ -180,6 +180,8 @@ public class CmsConsentBuilder {
     }
 
     private static String mapFromOtherType(OtherType other) {
-        return other == null ? null : other.getIdentification();
+        return other == null
+                   ? null
+                   : other.getIdentification();
     }
 }

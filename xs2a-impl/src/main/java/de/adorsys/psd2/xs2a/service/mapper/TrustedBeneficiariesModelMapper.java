@@ -49,28 +49,20 @@ public interface TrustedBeneficiariesModelMapper {
     @Mapping(target = "debtorAccount", expression = "java(mapToAccountReference(trustedBeneficiaries.getDebtorAccount()))")
     TrustedBeneficiary mapToTrustedBeneficiaries(Xs2aTrustedBeneficiaries trustedBeneficiaries);
 
-    default AccountReference mapToAccountReference(de.adorsys.psd2.xs2a.core.profile.AccountReference value) {
-        if (value == null) {
-            return null;
-        }
-        AccountReference accountReference = new AccountReference();
-        accountReference.setIban(value.getIban());
-        accountReference.setBban(value.getBban());
-        accountReference.setPan(value.getPan());
-        accountReference.setMaskedPan(value.getMaskedPan());
-        accountReference.setMsisdn(value.getMsisdn());
-        accountReference.setCurrency(mapToCurrency(value.getCurrency()));
-        accountReference.setOther(mapToOtherType(value.getOther()));
-        accountReference.cashAccountType(value.getCashAccountType());
-        return accountReference;
-    }
+    @Mapping(target = "currency", expression = "java(mapToCurrency(value.getCurrency()))")
+    @Mapping(target = "other", expression = "java(mapToOtherType(value.getOther()))")
+    AccountReference mapToAccountReference(de.adorsys.psd2.xs2a.core.profile.AccountReference value);
 
     default OtherType mapToOtherType(String other){
-        return other == null ? null : new OtherType().identification(other);
+        return other == null
+                   ? null
+                   : new OtherType().identification(other);
     }
 
     default String mapToCurrency(Currency value){
-        return value == null ? null : value.getCurrencyCode();
+        return value == null
+                   ? null
+                   : value.getCurrencyCode();
     }
 }
 

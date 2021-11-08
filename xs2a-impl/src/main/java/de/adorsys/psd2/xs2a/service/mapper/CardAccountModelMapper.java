@@ -96,6 +96,10 @@ public abstract class CardAccountModelMapper {
     @Mapping(target = "currencyExchange", expression = "java(mapToReportExchanges(transactions.getCurrencyExchange()))")
     public abstract CardTransaction mapToCardTransaction(de.adorsys.psd2.xs2a.domain.CardTransaction transactions);
 
+    @Mapping(target = "currency", source = "currency.currencyCode")
+    @Mapping(target = "other", expression = "java(mapToOtherType(xs2aAccountReference.getOther()))")
+    public abstract de.adorsys.psd2.model.AccountReference mapToCardAccount(de.adorsys.psd2.xs2a.core.profile.AccountReference xs2aAccountReference);
+
     protected OffsetDateTime mapToOffsetDateTime(LocalDateTime localDateTime) {
         if (localDateTime == null) {
             return null;
@@ -157,25 +161,10 @@ public abstract class CardAccountModelMapper {
                    .orElseGet(this::getMulticurrencyRepresentationOrNull);
     }
 
-    protected de.adorsys.psd2.model.AccountReference mapToCardAccount(de.adorsys.psd2.xs2a.core.profile.AccountReference xs2aAccountReference) {
-        if (xs2aAccountReference == null) {
-            return null;
-        }
-        de.adorsys.psd2.model.AccountReference accountReference = new de.adorsys.psd2.model.AccountReference();
-        accountReference.setIban(xs2aAccountReference.getIban());
-        accountReference.setBban(xs2aAccountReference.getBban());
-        accountReference.setCurrency(xs2aAccountReference.getCurrency().getCurrencyCode());
-        accountReference.setMaskedPan(xs2aAccountReference.getMaskedPan());
-        accountReference.setPan(xs2aAccountReference.getPan());
-        accountReference.setMsisdn(xs2aAccountReference.getMsisdn());
-        accountReference.setOther(mapToOtherType(xs2aAccountReference.getOther()));
-        accountReference.setCashAccountType(xs2aAccountReference.getCashAccountType());
-
-        return accountReference;
-    }
-
     protected OtherType mapToOtherType(String other){
-        return other == null ? null : new OtherType().identification(other);
+        return other == null
+                   ? null
+                   : new OtherType().identification(other);
     }
 
     private String getMulticurrencyRepresentationOrNull() {

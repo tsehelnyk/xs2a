@@ -43,14 +43,18 @@ public interface Xs2aToPsd2PaymentSupportMapper {
 
     BulkPaymentInitiationJson mapToBulkPaymentInitiationJson(BulkPayment xs2aBulkPayment);
 
+    @Mapping(target = "currency", expression = "java(mapToCurrency(value.getCurrency()))")
+    @Mapping(target = "other", expression = "java(mapToOtherType(value.getOther()))")
+    AccountReference mapToAccountReference(de.adorsys.psd2.xs2a.core.profile.AccountReference value);
+
     default String mapToCountry(Xs2aCountryCode xs2aCountryCode) {
         return xs2aCountryCode.getCode();
     }
 
     default DayOfExecution mapDayOfExecution(PisDayOfExecution dayOfExecution) {
-        return dayOfExecution != null
-                   ? DayOfExecution.fromValue(dayOfExecution.toString())
-                   : null;
+        return dayOfExecution == null
+                   ? null
+                   : DayOfExecution.fromValue(dayOfExecution.toString());
     }
 
     default RemittanceInformationStructuredArray mapToRemittanceInformationStructuredArray(List<String> remittanceInformationStructuredArray) {
@@ -66,27 +70,15 @@ public interface Xs2aToPsd2PaymentSupportMapper {
         return remittanceInfoStructuredArray;
     }
 
-    default AccountReference mapToAccountReference(de.adorsys.psd2.xs2a.core.profile.AccountReference value) {
-        if (value == null ) {
-            return null;
-        }
-        AccountReference accountReference = new AccountReference();
-        accountReference.setIban(value.getIban());
-        accountReference.setBban(value.getBban());
-        accountReference.setPan(value.getPan());
-        accountReference.setMaskedPan(value.getMaskedPan());
-        accountReference.setMsisdn(value.getMsisdn());
-        accountReference.setCurrency(mapToCurrency(value.getCurrency()));
-        accountReference.setOther(mapToOtherType(value.getOther()));
-        accountReference.cashAccountType(value.getCashAccountType());
-        return accountReference;
-    }
-
     default OtherType mapToOtherType(String other){
-        return other == null ? null : new OtherType().identification(other);
+        return other == null
+                   ? null
+                   : new OtherType().identification(other);
     }
 
     default String mapToCurrency(Currency value){
-        return value == null ? null : value.getCurrencyCode();
+        return value == null
+                   ? null
+                   : value.getCurrencyCode();
     }
 }
