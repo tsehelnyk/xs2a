@@ -188,7 +188,7 @@ public enum MessageErrorCode {
             return FORMAT_ERROR_NAME;
         }
     },
-    // Value 'monthsOfExecution' should be non empty array of of maximum 11 distinct numbers
+    // Value 'monthsOfExecution' should be non empty array of maximum 11 distinct numbers
     FORMAT_ERROR_INVALID_SIZE_MONTHS_OF_EXECUTION(400) {
         @Override
         public String getName() {
