@@ -33,10 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.Currency;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -110,6 +107,7 @@ public class PaymentMapper {
         payment.setEndDate(paymentRequest.getEndDate());
         payment.setFrequency(mapToFrequencyCode(paymentRequest.getFrequency()));
         payment.setDayOfExecution(mapToPisDayOfExecution(paymentRequest.getDayOfExecution()).orElse(null));
+        payment.setMonthsOfExecution(mapToMonthsOfExecution(paymentRequest.getMonthsOfExecution()));
         payment.setUltimateDebtor(paymentRequest.getUltimateDebtor());
         payment.setUltimateCreditor(paymentRequest.getUltimateCreditor());
         payment.setPurposeCode(purposeCodeMapper.mapToPurposeCode(paymentRequest.getPurposeCode()));
@@ -129,6 +127,12 @@ public class PaymentMapper {
         return Optional.ofNullable(rule)
                    .map(ExecutionRule::toString)
                    .flatMap(PisExecutionRule::getByValue);
+    }
+
+    private List<String> mapToMonthsOfExecution(MonthsOfExecution monthsOfExecution) {
+        return monthsOfExecution == null
+                   ? null
+                   : new ArrayList<>(monthsOfExecution);
     }
 
     private de.adorsys.psd2.xs2a.core.pis.FrequencyCode mapToFrequencyCode(FrequencyCode frequency) {
