@@ -17,7 +17,9 @@
 package de.adorsys.psd2.xs2a.service.mapper;
 
 import de.adorsys.psd2.model.Amount;
+import de.adorsys.psd2.model.GrandTotalAmount;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
+import de.adorsys.psd2.xs2a.core.pis.Xs2aGrandTotalAmount;
 import de.adorsys.psd2.xs2a.service.validator.ValueValidatorService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -43,6 +45,17 @@ public class AmountModelMapper {
                    .orElse(null);
     }
 
+    public Xs2aGrandTotalAmount mapToXs2aGrandTotalAmount(GrandTotalAmount amount) {
+        return Optional.ofNullable(amount)
+                   .map(a -> {
+                       Xs2aGrandTotalAmount amountTarget = new Xs2aGrandTotalAmount();
+                       amountTarget.setAmount(mapToXs2aAmount(a.getAmount()));
+                       amountTarget.setDescription(a.getDescription());
+                       return amountTarget;
+                   })
+                   .orElse(null);
+    }
+
     public Amount mapToAmount(Xs2aAmount amount) {
         return Optional.ofNullable(amount)
                    .map(a -> {
@@ -51,6 +64,17 @@ public class AmountModelMapper {
                        if (a.getCurrency() != null) {
                            amountTarget.setCurrency(a.getCurrency().getCurrencyCode());
                        }
+                       return amountTarget;
+                   })
+                   .orElse(null);
+    }
+
+    public GrandTotalAmount mapToGrandTotalAmount(Xs2aGrandTotalAmount amount) {
+        return Optional.ofNullable(amount)
+                   .map(a -> {
+                       GrandTotalAmount amountTarget = new GrandTotalAmount();
+                       amountTarget.setAmount(mapToAmount(a.getAmount()));
+                       amountTarget.setDescription(a.getDescription());
                        return amountTarget;
                    })
                    .orElse(null);
