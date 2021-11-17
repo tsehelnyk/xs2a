@@ -2,9 +2,9 @@
 
 == Table of Contents
 
-* Implemented validation for the field `monthOfExecution` for Periodic payments
+* Implemented validation for the field `monthsOfExecution` for Periodic payments
 
-== Implemented validation for the field `monthOfExecution` for Periodic payments
+== Implemented validation for the field `monthsOfExecution` for Periodic payments
 
-From now on validation for the field `monthOfExecution` is being performed in case of `frequency = MonthlyVariable`
+From now on validation for the field `monthsOfExecution` is being performed in case of `frequency = MonthlyVariable`
 for periodic payments initiation.
