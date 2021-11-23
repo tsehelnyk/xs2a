@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.16">
-<title>Release notes v.9.10</title>
+<title>Release notes v.13.3</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Release notes v.9.10</h1>
+<h1>Release notes v.13.3</h1>
 </div>
 <div id="content">
 <div class="sect1">
@@ -448,88 +448,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>Removed @NotNull from TppDomainValidator#validate</p>
-</li>
-<li>
-<p>Added additional query parameters for <code>/psu-api/v1/ais/consent/consents</code></p>
-</li>
-<li>
-<p>Added validation certificate roles for PIIS consent v2</p>
-</li>
-<li>
-<p>Updated jackson version to 2.12.1</p>
-</li>
-<li>
-<p>Changed response type for getting payment in CMS-PSU-API: <code>/psu-api/v1/payment/{payment-id}</code></p>
-</li>
-<li>
-<p>Removed deprecated method <code>requestTrustedBeneficiaryFlag</code> from <code>AuthorisationSpi</code> class.</p>
+<p>Added CardAccount to CashAccountType and SpiAccountType</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_removed_notnull_from_tppdomainvalidatorvalidate">Removed @NotNull from TppDomainValidator#validate</h2>
+<h2 id="_added_cardaccount_to_cashaccounttype_and_spiaccounttype">Added CardAccount to CashAccountType and SpiAccountType</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>From now on, @NotNull is removed from TppDomainValidator#validate.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_added_additional_query_parameters_for_psu_apiv1aisconsentconsents">Added additional query parameters for <code>/psu-api/v1/ais/consent/consents</code></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, getting consent by PSU can be filtered by query parameters:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>status</code> - list of consent statuses, i.e. status=VALID,EXPIRED</p>
-</li>
-<li>
-<p><code>accountNumber</code> - list of account numbers, i.e. accountNumber=CH0900784152046193205,CH0900784152046193206</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>All of these query parameters are optional, if they are empty it will mean ALL.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_added_validation_certificate_roles_for_piis_consent_v2">Added validation certificate roles for PIIS consent v2</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, certificate roles will be applied for all <code>/v2/consents/confirmation-of-funds/**</code> endpoints.</p>
-</div>
-<div class="paragraph">
-<p>To enable certificate roles validation set flag <code>setting.common.checkTppRolesFromCertificateSupported: TRUE</code></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_updated_jackson_version_to_2_12_1">Updated jackson version to 2.12.1</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Fixed severe security vulnerability detected in com.fasterxml.jackson.core:jackson-databind &lt; 2.12.1 defined in pom.xml.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_changed_response_type_for_getting_payment_in_cms_psu_api_psu_apiv1paymentpayment_id">Changed response type for getting payment in CMS-PSU-API: <code>/psu-api/v1/payment/{payment-id}</code></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, this endpoint returns the <code>CmsBasePaymentResponse</code> class instead of the <code>CmsPayment</code> interface.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_removed_deprecated_method_requesttrustedbeneficiaryflag_from_authorisationspi_class">Removed deprecated method <code>requestTrustedBeneficiaryFlag</code> from <code>AuthorisationSpi</code> class.</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The method is removed from the AuthorisationSpi class. This flag is currently available in the <code>AuthorisationSpi#getScaStatus</code> method.</p>
+<p>From now on, new value <code>CARD</code> is added to enums CashAccountType and SpiAccountType.</p>
 </div>
 </div>
 </div>
