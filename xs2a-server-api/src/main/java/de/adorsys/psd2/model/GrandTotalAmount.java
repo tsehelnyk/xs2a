@@ -1,50 +1,52 @@
 package de.adorsys.psd2.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 /**
- * GrandTotalAmount
+ * Total amount of the instalment including charges, insurance and taxes in addition to the funded amount.
  */
+@ApiModel(description = "Total amount of the instalment including charges, insurance and taxes in addition to the funded amount. ")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-11-16T16:54:38.691901+02:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-12-21T12:57:45.981967+02:00[Europe/Kiev]")
 
 public class GrandTotalAmount   {
-  @JsonProperty("description")
-  private String description = null;
+  @JsonProperty("currency")
+  private String currency = null;
 
   @JsonProperty("amount")
-  private Amount amount = null;
+  private String amount = null;
 
-  public GrandTotalAmount description(String description) {
-    this.description = description;
+  public GrandTotalAmount currency(String currency) {
+    this.currency = currency;
     return this;
   }
 
   /**
-   * Total amount of the instalment including charges, insurance and taxes in addition to the funded amount.
-   * @return description
+   * Get currency
+   * @return currency
   **/
-  @ApiModelProperty(required = true, value = "Total amount of the instalment including charges, insurance and taxes in addition to the funded amount. ")
+  @ApiModelProperty(required = true, value = "")
   @NotNull
 
+@Pattern(regexp="[A-Z]{3}")
 
-
-  @JsonProperty("description")
-  public String getDescription() {
-    return description;
+  @JsonProperty("currency")
+  public String getCurrency() {
+    return currency;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setCurrency(String currency) {
+    this.currency = currency;
   }
 
-  public GrandTotalAmount amount(Amount amount) {
+  public GrandTotalAmount amount(String amount) {
     this.amount = amount;
     return this;
   }
@@ -56,15 +58,14 @@ public class GrandTotalAmount   {
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
-  @Valid
-
+@Pattern(regexp="-?[0-9]{1,14}(\\.[0-9]{1,3})?")
 
   @JsonProperty("amount")
-  public Amount getAmount() {
+  public String getAmount() {
     return amount;
   }
 
-  public void setAmount(Amount amount) {
+  public void setAmount(String amount) {
     this.amount = amount;
   }
 
@@ -77,13 +78,13 @@ public class GrandTotalAmount   {
     if (o == null || getClass() != o.getClass()) {
       return false;
 }    GrandTotalAmount grandTotalAmount = (GrandTotalAmount) o;
-    return Objects.equals(this.description, grandTotalAmount.description) &&
+    return Objects.equals(this.currency, grandTotalAmount.currency) &&
     Objects.equals(this.amount, grandTotalAmount.amount);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, amount);
+    return Objects.hash(currency, amount);
   }
 
   @Override
@@ -91,7 +92,7 @@ public class GrandTotalAmount   {
     StringBuilder sb = new StringBuilder();
     sb.append("class GrandTotalAmount {\n");
 
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    currency: ").append(toIndentedString(currency)).append("\n");
     sb.append("    amount: ").append(toIndentedString(amount)).append("\n");
     sb.append("}");
     return sb.toString();

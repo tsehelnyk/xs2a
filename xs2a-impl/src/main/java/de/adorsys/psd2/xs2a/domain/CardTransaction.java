@@ -18,7 +18,6 @@ package de.adorsys.psd2.xs2a.domain;
 
 import de.adorsys.psd2.xs2a.core.domain.address.Xs2aAddress;
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.pis.Xs2aGrandTotalAmount;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -34,7 +33,7 @@ public class CardTransaction {
     private LocalDate bookingDate;
     private LocalDate valueDate;
     private Xs2aAmount transactionAmount;
-    private Xs2aGrandTotalAmount grandTotalAmount;
+    private Xs2aAmount grandTotalAmount;
     private List<Xs2aExchangeRate> currencyExchange;
     private Xs2aAmount originalAmount;
     private Xs2aAmount markupFee;

@@ -17,15 +17,11 @@
 package de.adorsys.psd2.xs2a.service.mapper.spi_xs2a_mappers;
 
 import de.adorsys.psd2.xs2a.core.pis.Xs2aAmount;
-import de.adorsys.psd2.xs2a.core.pis.Xs2aGrandTotalAmount;
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiAmount;
-import de.adorsys.psd2.xs2a.spi.domain.common.SpiGrandTotalAmount;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface SpiToXs2aAmountMapper {
 
     Xs2aAmount mapToXs2aAmount(SpiAmount spiAmount);
-
-    Xs2aGrandTotalAmount mapToXs2aGrandTotalAmount(SpiGrandTotalAmount spiAmount);
 }

@@ -17,7 +17,6 @@
 package de.adorsys.psd2.xs2a.spi.domain.account;
 
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiAmount;
-import de.adorsys.psd2.xs2a.spi.domain.common.SpiGrandTotalAmount;
 import de.adorsys.psd2.xs2a.spi.domain.payment.SpiAddress;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,7 @@ public class SpiCardTransaction {
     private final LocalDate bookingDate;
     private final LocalDate valueDate;
     private final SpiAmount transactionAmount;
-    private final SpiGrandTotalAmount grandTotalAmount;
+    private final SpiAmount grandTotalAmount;
     private final List<SpiExchangeRate> currencyExchange;
     private final SpiAmount originalAmount;
     private final SpiAmount markupFee;

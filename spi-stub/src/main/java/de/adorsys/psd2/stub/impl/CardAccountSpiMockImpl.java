@@ -21,7 +21,6 @@ import de.adorsys.psd2.xs2a.spi.domain.SpiAspspConsentDataProvider;
 import de.adorsys.psd2.xs2a.spi.domain.SpiContextData;
 import de.adorsys.psd2.xs2a.spi.domain.account.*;
 import de.adorsys.psd2.xs2a.spi.domain.common.SpiAmount;
-import de.adorsys.psd2.xs2a.spi.domain.common.SpiGrandTotalAmount;
 import de.adorsys.psd2.xs2a.spi.domain.response.SpiResponse;
 import de.adorsys.psd2.xs2a.spi.service.CardAccountSpi;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,6 @@ import java.util.List;
 public class CardAccountSpiMockImpl implements CardAccountSpi {
     private static final LocalDate DATE = LocalDate.of(2019, Month.JANUARY, 4);
     private static final String NAME = "Müller";
-    public static final String GRAND_TOTAL_AMOUNT_DESCRIPTION = "mocked grand total amount";
 
     @Override
     public SpiResponse<List<SpiCardAccountDetails>> requestCardAccountList(@NotNull SpiContextData contextData, @NotNull SpiAccountConsent accountConsent, @NotNull SpiAspspConsentDataProvider aspspConsentDataProvider) {
@@ -127,7 +125,7 @@ public class CardAccountSpiMockImpl implements CardAccountSpi {
                                       DATE,
                                       DATE.plusDays(1),
                                       new SpiAmount(Currency.getInstance("EUR"), new BigDecimal(200)),
-                                      new SpiGrandTotalAmount(new SpiAmount(Currency.getInstance("EUR"), new BigDecimal(2)), GRAND_TOTAL_AMOUNT_DESCRIPTION),
+                                      new SpiAmount(Currency.getInstance("EUR"), new BigDecimal(2)),
                                       new ArrayList<>(),
                                       new SpiAmount(Currency.getInstance("EUR"), new BigDecimal(200)),
                                       new SpiAmount(Currency.getInstance("EUR"), new BigDecimal(200)),
