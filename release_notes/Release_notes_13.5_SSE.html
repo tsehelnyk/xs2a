@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.16">
-<title>Release notes v.5.2</title>
+<title>Release notes v.13.5</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Release notes v.5.2</h1>
+<h1>Release notes v.13.5</h1>
 </div>
 <div id="content">
 <div class="sect1">
@@ -448,247 +448,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>Added integration test for embedded mode for XS2A</p>
-</li>
-<li>
-<p>Bugfix: the field <code>lastActionDate</code> was not updated in piis_consent DB table</p>
-</li>
-<li>
-<p>Removed redundant request to delete ASPSP consent data on consent creation</p>
-</li>
-<li>
-<p>Created Bulk Payment validators</p>
-</li>
-<li>
-<p>Removed TppRedirectUri from TppInfo</p>
-</li>
-<li>
-<p>Removed redundant request to retrieve the consent from the database on consent creation</p>
-</li>
-<li>
-<p>Implemented support country specific extensions for payments in the ASPSP profile</p>
-</li>
-<li>
-<p>Implemented support Additional Account Information in AIS</p>
-</li>
-<li>
-<p>Checked incoming requests to have required information</p>
-</li>
-<li>
-<p>Refactoring: moved CMS scheduler tasks into separate module</p>
-</li>
-<li>
-<p>Bugfix: incorrect link in response to create consent authorisation request in Oauth SCA Redirect flow</p>
-</li>
-<li>
-<p>Removed PSU Data from update consent status requests in cms-psu-api</p>
-</li>
-<li>
-<p>Bugfix: error on initiating payment with custom payment product and JSON body</p>
-</li>
-<li>
-<p>Bugfix: array "account" in Read Balances and Read Transaction List responses is empty for Global consent</p>
-</li>
-<li>
-<p>Created common class for Jackson functionality</p>
-</li>
-<li>
-<p>Added Internal Request-ID (inr-id) as additional parameter in scaRedirect URI</p>
-</li>
-<li>
-<p>Refactoring: use PaymentType enum instead of string values in Xs2aCreatePisAuthorisationRequest and Xs2aUpdatePisCommonPaymentPsuDataRequest</p>
-</li>
-<li>
-<p>Added special mapping for <code>dayOfExecution</code> in periodic payments</p>
-</li>
-<li>
-<p>Removed JsonReader duplicates</p>
+<p>Finalisation of BG yaml file v.1.3.11 implementation</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_added_integration_test_for_embedded_mode_for_xs2a">Added integration test for embedded mode for XS2A</h2>
+<h2 id="_finalisation_of_bg_yaml_file_v_1_3_11_implementation">Finalisation of BG yaml file v.1.3.11 implementation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Integration test has been added for XS2A to ensure that application correctly starts with embedded CMS and ASPSP Profile.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_bugfix_the_field_lastactiondate_was_not_updated_in_piis_consent_db_table">Bugfix: the field <code>lastActionDate</code> was not updated in piis_consent DB table</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, initial value is set to the field <code>lastActionDate</code> in case of PIIS consent creation.
-Also, new value is set if the consent was revoked.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_removed_redundant_request_to_delete_aspsp_consent_data_on_consent_creation">Removed redundant request to delete ASPSP consent data on consent creation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, XS2A won&#8217;t try to delete ASPSP consent data in CMS for newly created AIS consent before the consent was passed to SPI.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_created_bulk_payment_validators">Created Bulk Payment validators</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on all fields of bulk payments are validated according to specification.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_removed_tppredirecturi_from_tppinfo">Removed TppRedirectUri from TppInfo</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on deprecated field <code>tppRedirectUri</code> is removed from <code>TppInfo</code>. And  fields <code>redirectUri</code>, <code>nokRedirectUri</code>,
-<code>cancelRedirectUri</code>, <code>cancelNokRedirectUri</code> are removed from <code>TppInfoEntity</code>. Columns <code>redirect_uri</code>, <code>nok_redirect_uri</code>,
-<code>cancel_redirect_uri</code>, <code>cancel_nok_redirect_uri</code> from <code>tpp_info table</code> will be removed in v.4.5.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_removed_redundant_request_to_retrieve_the_consent_from_the_database_on_consent_creation">Removed redundant request to retrieve the consent from the database on consent creation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, XS2A won&#8217;t retrieve AIS consent from the CMS immediately after its creation.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_implemented_support_country_specific_extensions_for_payments_in_the_aspsp_profile">Implemented support country specific extensions for payments in the ASPSP profile</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, ASPSP is able to configure payment for different countries <code>countryValidationSupported</code> property in PIS block.
-The configuration parameter takes country as ISO 3166-1 alpha-2 code (DE, AT, UA, etc). Germany (DE) is supported by default and Austria (AT) is available to choose from.
-To extend existing configuration register custom implementation in <code>CountryPaymentValidatorResolver</code> for new country based on default one <code>DefaultPaymentValidationConfigImpl</code>.
-Previous validation payment configuration in <code>application.properties</code> file has been removed.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_implemented_support_additional_account_information_in_ais">Implemented support Additional Account Information in AIS</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, Additional Account Information is supported in AIS. To activate its support set property <code>accountOwnerInformationSupported</code> in ASPSP profile to "TRUE".
-After that, if TPP asks for additional account information during consent creation process it will be present in <code>SpiAdditionalInformationAccess</code> field in <code>SpiAccountConsent</code> object.
-Based on this information, when TPP makes request for retrieving information about PSU account (<code>GET /v1/accounts</code> or <code>GET /v1/accounts/{account-id}</code>),
-ASPSP can provide additional information in <code>ownerName</code> and <code>ownerAddress</code> fields in <code>SpiAccountDetails</code> object.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_checked_incoming_requests_to_have_required_information">Checked incoming requests to have required information</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, validation for update AIS, PIS and payment cancellation authorisation requests was added. It checks whether
-the provided authorisation data matches current authorisation stage. In negative case, <code>SERVICE_INVALID_400</code> is returned.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_refactoring_moved_cms_scheduler_tasks_in_separate_module">Refactoring: moved CMS scheduler tasks in separate module</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, all CMS scheduler tasks are moved into separate module <code>cms-scheduler-service</code>.
-Scheduler tasks will start automatically based on cron configuration in <code>application.properties</code> after adding dependency in standalone starter:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>&lt;dependency&gt;
-    &lt;groupId&gt;de.adorsys.psd2&lt;/groupId&gt;
-    &lt;artifactId&gt;cms-scheduler-service&lt;/artifactId&gt;
-    &lt;version&gt;${project.version}&lt;/version&gt;
-&lt;/dependency&gt;</pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_bugfix_incorrect_link_in_response_to_create_consent_authorisation_request_in_oauth_sca_redirect_flow">Bugfix: incorrect link in response to create consent authorisation request in Oauth SCA Redirect flow</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, response to create consent authorisation request in Oauth SCA Redirect flow
-<code>/v1/consents/{consentId}/authorisations</code> contains <code>scaOAuth</code> link instead of <code>scaRedirect</code> link.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_removed_psu_data_from_update_consent_status_requests_in_cms_psu_api">Removed PSU Data from update consent status requests in cms-psu-api</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, method <code>authorisePartiallyConsent(PsuIdData, String, String)</code> in <code>CmsPsuAisService</code> interface
-is deprecated, use overloaded version <code>authorisePartiallyConsent(String, String)</code> instead. Headers <code>psuI</code>, <code>psuIdType</code>,
-<code>psuCorporateId</code>, <code>psuCorporateIdType</code> from <code>CmsPsuAisController</code> <code>getConsentIdByRedirectId</code> method are deprecated too.
-It will be removed in v.5.5.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_bugfix_error_on_initiating_payment_with_custom_payment_product_and_json_body">Bugfix: error on initiating payment with custom payment product and JSON body</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, there is a possibility to create a custom payment product in the ASPSP profile and then initiate payments of
-such type with JSON body. As there is no common model for them - such payments will pass to SPI level with their bodies as
-byte arrays.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_bugfix_array_account_in_read_balances_and_read_transaction_list_responses_is_empty_for_global_consent">Bugfix: array "account" in Read Balances and Read Transaction List responses is empty for Global consent</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, the field <code>account</code> in read balances <code>GET /v1/accounts/{account-id}/balances</code> and read transactions
-<code>GET /v1/accounts/{account-id}/transactions</code> is not empty for global consent, and contains account reference.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_created_common_class_for_jackson_functionality">Created common class for Jackson functionality</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on Jackson functionality from ObjectMapper and JsonConverter is united into Xs2aObjectMapper class in xs2a-object-mapper module.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_added_internal_request_id_inr_id_as_additional_parameter_in_scaredirect_uri">Added Internal Request-ID (inr-id) as additional parameter in scaRedirect URI</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, ASPSP is able to modify redirect URLs for consent, payment and payment cancellation  with new parameter <code>{inr-id}</code>.
-This parameter will be filled with internal request ID during construction <code>scaRedirect</code> link.
-Also pay attention, if authorisation is created explicitly, value of this parameter
-will be fetched from previous request (consent creation, payment initiation or cancel payment).</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_refactoring_use_paymenttype_enum_instead_of_string_values_in_xs2acreatepisauthorisationrequest_and_xs2aupdatepiscommonpaymentpsudatarequest">Refactoring: use PaymentType enum instead of string values in Xs2aCreatePisAuthorisationRequest and Xs2aUpdatePisCommonPaymentPsuDataRequest</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, in classes <code>Xs2aCreatePisAuthorisationRequest</code> and <code>Xs2aUpdatePisCommonPaymentPsuDataRequest</code>
-<code>paymentService</code> field is PaymentType enum instead of string.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_added_special_mapping_for_dayofexecution_in_periodic_payments">Added special mapping for <code>dayOfExecution</code> in periodic payments</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on, while creating periodic payments, there is a possibility to pass the <code>dayOfExecution</code> value like <code>5</code> and
-<code>05</code>. Both these variants will be passed to the SPI level (leading zero is ignored).</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_removed_jsonreader_duplicates">Removed JsonReader duplicates</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>From now on there is only one JsonReader class located in json-reader module.</p>
+<p>XS2A completely implemented BG yaml v.1.3.11 changes, new fields of <code>CardTransaction</code> model (<code>valueDate</code> and <code>grandTotalAmount</code>)
+are passed to SPI level (to <code>SpiCardTransaction</code> class).</p>
 </div>
 </div>
 </div>
