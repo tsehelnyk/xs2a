@@ -72,7 +72,7 @@ public class Xs2aApiSwaggerConfig {
                    .title("XS2A CMS Internal API")
                    .contact(new Contact("adorsys GmbH & Co. KG", "https://adorsys-platform.de/solutions/", "psd2@adorsys.de"))
                    .version(buildProperties.getVersion() + " " + buildProperties.get("build.number"))
-                   .license("Apache License 2.0")
+                   .license("GNU Affero General Public License (AGPL) version 3.0")
                    .licenseUrl(licenseUrl)
                    .build();
     }
