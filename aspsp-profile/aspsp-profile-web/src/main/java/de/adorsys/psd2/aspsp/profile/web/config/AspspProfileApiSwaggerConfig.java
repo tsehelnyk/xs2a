@@ -65,7 +65,7 @@ public class AspspProfileApiSwaggerConfig {
                    .title("ASPSP Profile rest API")
                    .contact(new Contact("pru, adorsys GmbH & Co. KG", "http://www.adorsys.de", "pru@adorsys.com.ua"))
                    .version(buildProperties.getVersion() + " " + buildProperties.get("build.number"))
-                   .license("Apache License 2.0")
+                   .license("GNU Affero General Public License (AGPL) version 3.0")
                    .licenseUrl(licenseUrl)
                    .build();
     }

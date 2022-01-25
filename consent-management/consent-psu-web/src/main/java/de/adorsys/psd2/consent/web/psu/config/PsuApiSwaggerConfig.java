@@ -57,10 +57,10 @@ public class PsuApiSwaggerConfig {
 
     private ApiInfo getApiInfo() {
         return new ApiInfoBuilder()
-                   .title("XS2A CMS PSU REST API")
+                   .title("XS2A CMS-PSU REST API")
                    .contact(new Contact("adorsys GmbH & Co. KG", "https://adorsys-platform.de/solutions/", "psd2@adorsys.de"))
                    .version(buildProperties.getVersion() + " " + buildProperties.get("build.number"))
-                   .license("Apache License 2.0")
+                   .license("GNU Affero General Public License (AGPL) version 3.0")
                    .licenseUrl(licenseUrl)
                    .build();
     }
