@@ -482,58 +482,35 @@ Created by Dr. Peter Hruschka &amp; Dr. Gernot Starke.</p>
 <li><a href="#_stakeholders">1.3. Stakeholders</a></li>
 </ul>
 </li>
-<li><a href="#section-architecture-constraints">2. Architecture Constraints</a></li>
-<li><a href="#section-system-scope-and-context">3. System Scope and Context</a>
+<li><a href="#section-system-scope-and-context">2. System Scope and Context</a>
 <ul class="sectlevel2">
-<li><a href="#_business_context">3.1. Business Context</a></li>
-<li><a href="#_technical_context">3.2. Technical Context</a></li>
+<li><a href="#_business_context">2.1. Business Context</a></li>
 </ul>
 </li>
-<li><a href="#section-solution-strategy">4. Solution Strategy</a></li>
-<li><a href="#_building_block_view">5. Building Block View</a>
+<li><a href="#_building_block_view">3. Building Block View</a>
 <ul class="sectlevel2">
-<li><a href="#_whitebox_overall_system">5.1. Whitebox Overall System</a></li>
-<li><a href="#_level_2">5.2. Level 2</a></li>
-<li><a href="#_level_3">5.3. Level 3</a></li>
+<li><a href="#_whitebox_overall_system">3.1. Whitebox Overall System</a></li>
 </ul>
 </li>
-<li><a href="#section-runtime-view">6. Runtime View</a>
+<li><a href="#section-deployment-view">4. Deployment View</a>
 <ul class="sectlevel2">
-<li><a href="#_runtime_scenario_1">6.1. &lt;Runtime Scenario 1&gt;</a></li>
-<li><a href="#_runtime_scenario_2">6.2. &lt;Runtime Scenario 2&gt;</a></li>
-<li><a href="#">6.3. &#8230;&#8203;</a></li>
-<li><a href="#_runtime_scenario_n">6.4. &lt;Runtime Scenario n&gt;</a></li>
+<li><a href="#_infrastructure_level_1_multiservice_deployment">4.1. Infrastructure Level 1 - Multiservice deployment</a></li>
+<li><a href="#_infrastructure_level_2_multiservice_deployment">4.2. Infrastructure Level 2 - Multiservice deployment</a></li>
+<li><a href="#_infrastructure_level_1_single_service_deployment">4.3. Infrastructure Level 1 - Single service deployment</a></li>
+<li><a href="#_infrastructure_level_1_multiple_instances_deployment_with_one_database">4.4. Infrastructure Level 1 - Multiple instances deployment with one database</a></li>
 </ul>
 </li>
-<li><a href="#section-deployment-view">7. Deployment View</a>
+<li><a href="#section-concepts">5. Cross-cutting Concepts</a>
 <ul class="sectlevel2">
-<li><a href="#_infrastructure_level_1_multiservice_deployment">7.1. Infrastructure Level 1 - Multiservice deployment</a></li>
-<li><a href="#_infrastructure_level_2_multiservice_deployment">7.2. Infrastructure Level 2 - Multiservice deployment</a></li>
-<li><a href="#_infrastructure_level_1_single_service_deployment">7.3. Infrastructure Level 1 - Single service deployment</a></li>
-<li><a href="#_infrastructure_level_1_multiple_instances_deployment_with_one_database">7.4. Infrastructure Level 1 - Multiple instances deployment with one database</a></li>
+<li><a href="#_event_api_structure">5.1. Event API structure</a></li>
 </ul>
 </li>
-<li><a href="#section-concepts">8. Cross-cutting Concepts</a>
+<li><a href="#section-design-decisions">6. Design Decisions</a>
 <ul class="sectlevel2">
-<li><a href="#_embeddable_services">8.1. Embeddable services</a></li>
-<li><a href="#_multi_tenancy_for_cms_database">8.2. Multi-tenancy for CMS Database</a></li>
-<li><a href="#_database_schema_migrations">8.3. Database schema migrations</a></li>
-<li><a href="#_event_api_structure">8.4. Event API structure</a></li>
+<li><a href="#_aspsp_consent_data">6.1. ASPSP Consent Data</a></li>
 </ul>
 </li>
-<li><a href="#section-design-decisions">9. Design Decisions</a>
-<ul class="sectlevel2">
-<li><a href="#_aspsp_consent_data">9.1. ASPSP Consent Data</a></li>
-</ul>
-</li>
-<li><a href="#section-quality-scenarios">10. Quality Requirements</a>
-<ul class="sectlevel2">
-<li><a href="#_quality_tree">10.1. Quality Tree</a></li>
-<li><a href="#_quality_scenarios">10.2. Quality Scenarios</a></li>
-</ul>
-</li>
-<li><a href="#section-technical-risks">11. Risks and Technical Debts</a></li>
-<li><a href="#section-glossary">12. Glossary</a></li>
+<li><a href="#section-glossary">7. Glossary</a></li>
 </ul>
 </div>
 <div style="page-break-after: always;"></div>
@@ -600,45 +577,55 @@ providing capabilities to interoperate with TPP by defined XS2A Standard Interfa
 <h3 id="_stakeholders">1.3. Stakeholders</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
+<col style="width: 16.6666%;">
+<col style="width: 33.3333%;">
+<col style="width: 50.0001%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Role/Name</th>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Role</th>
 <th class="tableblock halign-left valign-top">Contact</th>
-<th class="tableblock halign-left valign-top">Expectations</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Role-1&gt;</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Contact-1&gt;</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Expectation-1&gt;</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Thilo Rottach</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CEO</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mailto:thilo.rottach@adorsys.com">thilo.rottach@adorsys.com</a></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Role-2&gt;</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Contact-2&gt;</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Expectation-2&gt;</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Denys Golubiev</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Architect</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mailto:denys.golubiev@adorsys.com">denys.golubiev@adorsys.com</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gatis Kalnins</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Product Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mailto:gatis.kalnins@adorsys.com">gatis.kalnins@adorsys.com</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Andre Achtstaetter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sales</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mailto:andre.achtstaetter@adorsys.com">andre.achtstaetter@adorsys.com</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maisoora Bichoo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Delivery Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="mailto:maisoora.bichoo@adorsys.com">maisoora.bichoo@adorsys.com</a></p></td>
 </tr>
 </tbody>
 </table>
 <div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="section-architecture-constraints">2. Architecture Constraints</h2>
-<div class="sectionbody">
 <div style="page-break-after: always;"></div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="section-system-scope-and-context">3. System Scope and Context</h2>
+<h2 id="section-system-scope-and-context">2. System Scope and Context</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_business_context">3.1. Business Context</h3>
+<h3 id="_business_context">2.1. Business Context</h3>
 <div class="imageblock text-center">
 <div class="content">
 <img src="images/L00-Context.png" alt="Business Context diagram">
@@ -679,25 +666,7 @@ providing capabilities to interoperate with TPP by defined XS2A Standard Interfa
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect2">
-<h3 id="_technical_context">3.2. Technical Context</h3>
-<div class="paragraph">
-<p><strong>&lt;Diagram or Table&gt;</strong></p>
-</div>
-<div class="paragraph">
-<p><strong>&lt;optionally: Explanation of technical interfaces&gt;</strong></p>
-</div>
-<div class="paragraph">
-<p><strong>&lt;Mapping Input/Output to Channels&gt;</strong></p>
-</div>
 <div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="section-solution-strategy">4. Solution Strategy</h2>
-<div class="sectionbody">
 <div style="page-break-after: always;"></div>
 <style>
 .tpp {
@@ -735,11 +704,12 @@ text-align: center;
 </style>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="_building_block_view">5. Building Block View</h2>
+<h2 id="_building_block_view">3. Building Block View</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_whitebox_overall_system">5.1. Whitebox Overall System</h3>
+<h3 id="_whitebox_overall_system">3.1. Whitebox Overall System</h3>
 <div class="imageblock text-center">
 <div class="content">
 <img src="images/L01-Whitebox.png" alt="Whitebox Overall System Level 1" width="80%">
@@ -877,169 +847,35 @@ Provides internal CMS-PSU-API and CMS-ASPSP-API interfaces for other internal AS
 </tr>
 </tbody>
 </table>
-<div class="sect3">
-<h4 id="_name_black_box_1">5.1.1. &lt;Name black box 1&gt;</h4>
-<div class="paragraph">
-<p><em>&lt;Purpose/Responsibility&gt;</em></p>
-</div>
-<div class="paragraph">
-<p><em>&lt;Interface(s)&gt;</em></p>
-</div>
-<div class="paragraph">
-<p><em>&lt;(Optional) Quality/Performance Characteristics&gt;</em></p>
-</div>
-<div class="paragraph">
-<p><em>&lt;(Optional) Directory/File Location&gt;</em></p>
-</div>
-<div class="paragraph">
-<p><em>&lt;(Optional) Fulfilled Requirements&gt;</em></p>
-</div>
-<div class="paragraph">
-<p><em>&lt;(optional) Open Issues/Problems/Risks&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_name_black_box_2">5.1.2. &lt;Name black box 2&gt;</h4>
-<div class="paragraph">
-<p><em>&lt;black box template&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_name_black_box_n">5.1.3. &lt;Name black box n&gt;</h4>
-<div class="paragraph">
-<p><em>&lt;black box template&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_name_interface_1">5.1.4. &lt;Name interface 1&gt;</h4>
-<div class="paragraph">
-<p>&#8230;&#8203;</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_name_interface_m">5.1.5. &lt;Name interface m&gt;</h4>
-
-</div>
-</div>
-<div class="sect2">
-<h3 id="_level_2">5.2. Level 2</h3>
-<div class="sect3">
-<h4 id="_white_box_building_block_1">5.2.1. White Box <em>&lt;building block 1&gt;</em></h4>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_white_box_building_block_2">5.2.2. White Box <em>&lt;building block 2&gt;</em></h4>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
-<div class="paragraph">
-<p>&#8230;&#8203;</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_white_box_building_block_m">5.2.3. White Box <em>&lt;building block m&gt;</em></h4>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_level_3">5.3. Level 3</h3>
-<div class="sect3">
-<h4 id="_white_box_building_block_x_1">5.3.1. White Box &lt;_building block x.1_&gt;</h4>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_white_box_building_block_x_2">5.3.2. White Box &lt;_building block x.2_&gt;</h4>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_white_box_building_block_y_1">5.3.3. White Box &lt;_building block y.1_&gt;</h4>
-<div class="paragraph">
-<p><em>&lt;white box template&gt;</em></p>
-</div>
 <div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="section-runtime-view">6. Runtime View</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_runtime_scenario_1">6.1. &lt;Runtime Scenario 1&gt;</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><em>&lt;insert runtime diagram or textual description of the scenario&gt;</em></p>
-</li>
-<li>
-<p><em>&lt;insert description of the notable aspects of the interactions between the
-building block instances depicted in this diagram.&gt;</em></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_2">6.2. &lt;Runtime Scenario 2&gt;</h3>
-
-</div>
-<div class="sect2">
-<h3 id="">6.3. &#8230;&#8203;</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_runtime_scenario_n">6.4. &lt;Runtime Scenario n&gt;</h3>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-deployment-view">7. Deployment View</h2>
+<h2 id="section-deployment-view">4. Deployment View</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>One of the main goals is to make this project adaptable to environment of customer.
-Therefore we provide a set of Java libraries dependent on spring framework.
+Therefore we provide a set of Java libraries dependent on Spring framework.
 The decision of the ways to include these libraries and how to deploy is on the integration project (SPI Development).</p>
 </div>
 <div class="paragraph">
 <p>Nevertheless we highlight some major scenarios how we see the possible deployment of the application.</p>
 </div>
 <div class="sect2">
-<h3 id="_infrastructure_level_1_multiservice_deployment">7.1. Infrastructure Level 1 - Multiservice deployment</h3>
+<h3 id="_infrastructure_level_1_multiservice_deployment">4.1. Infrastructure Level 1 - Multiservice deployment</h3>
 <div class="imageblock text-center">
 <div class="content">
 <img src="images/07_multiservice_deployment.png" alt="Multiservice deployment">
 </div>
 <div class="title">Figure 3. Multiservice deployment</div>
 </div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Motivation</dt>
-<dd>
-<p><em>&lt;explanation in text form&gt;</em></p>
-</dd>
-<dt class="hdlist1">Quality and/or Performance Features</dt>
-<dd>
-<p><em>&lt;explanation in text form&gt;</em></p>
-</dd>
-<dt class="hdlist1">Mapping of Building Blocks to Infrastructure</dt>
-<dd>
-<p><em>&lt;description of the mapping&gt;</em></p>
-</dd>
-</dl>
-</div>
 </div>
 <div class="sect2">
-<h3 id="_infrastructure_level_2_multiservice_deployment">7.2. Infrastructure Level 2 - Multiservice deployment</h3>
+<h3 id="_infrastructure_level_2_multiservice_deployment">4.2. Infrastructure Level 2 - Multiservice deployment</h3>
 <div class="sect3">
-<h4 id="_xs2a_service_deployment">7.2.1. XS2A Service Deployment</h4>
+<h4 id="_xs2a_service_deployment">4.2.1. XS2A Service Deployment</h4>
 <div class="imageblock text-center">
 <div class="content">
 <img src="images/07_multiservice_xs2a.png" alt="Multiservice deployment XS2A">
@@ -1048,7 +884,7 @@ The decision of the ways to include these libraries and how to deploy is on the 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_cms_service_deployment">7.2.2. CMS Service Deployment</h4>
+<h4 id="_cms_service_deployment">4.2.2. CMS Service Deployment</h4>
 <div class="imageblock text-center">
 <div class="content">
 <img src="images/07_multiservice_cms.png" alt="Multiservice deployment CMS">
@@ -1057,7 +893,7 @@ The decision of the ways to include these libraries and how to deploy is on the 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_aspsp_profile_service_deployment">7.2.3. ASPSP Profile Service Deployment</h4>
+<h4 id="_aspsp_profile_service_deployment">4.2.3. ASPSP Profile Service Deployment</h4>
 <div class="imageblock text-center">
 <div class="content">
 <img src="images/07_multiservice_profile.png" alt="Multiservice deployment CMS">
@@ -1067,7 +903,7 @@ The decision of the ways to include these libraries and how to deploy is on the 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_infrastructure_level_1_single_service_deployment">7.3. Infrastructure Level 1 - Single service deployment</h3>
+<h3 id="_infrastructure_level_1_single_service_deployment">4.3. Infrastructure Level 1 - Single service deployment</h3>
 <div class="imageblock text-center">
 <div class="content">
 <img src="images/07_allinone_deployment.png" alt="Single service deployment">
@@ -1076,49 +912,55 @@ The decision of the ways to include these libraries and how to deploy is on the 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_infrastructure_level_1_multiple_instances_deployment_with_one_database">7.4. Infrastructure Level 1 - Multiple instances deployment with one database</h3>
+<h3 id="_infrastructure_level_1_multiple_instances_deployment_with_one_database">4.4. Infrastructure Level 1 - Multiple instances deployment with one database</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The number of instances is extendable, system supports horizontal scaling.
+</td>
+</tr>
+</table>
+</div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="images/07_multiinstance_deployment.png" alt="Multiple instances deployment">
+<img src="images/07_multiinstance_embedded_deployment.png" alt="Multiple embedded instances deployment">
 </div>
-<div class="title">Figure 8. Multiple instances deployment</div>
+<div class="title">Figure 8. Multiple embedded instances deployment</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/07_multiinstance_single_aspsp_deployment.png" alt="Multiple instances deployment with single ASPSP profile">
+</div>
+<div class="title">Figure 9. Multiple instances deployment, single ASPSP profile</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/07_multiinstance_single_aspsp_and_multi_cms_deployment.png" alt="Multiple instances deployment with single ASPSP profile and CMS">
+</div>
+<div class="title">Figure 10. Multiple instances deployment, single ASPSP profile and CMS</div>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-concepts">8. Cross-cutting Concepts</h2>
+<h2 id="section-concepts">5. Cross-cutting Concepts</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_embeddable_services">8.1. Embeddable services</h3>
-<div class="paragraph">
-<p><em>&lt;explanation&gt;</em></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_multi_tenancy_for_cms_database">8.2. Multi-tenancy for CMS Database</h3>
-<div class="paragraph">
-<p><em>&lt;explanation&gt;</em></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_database_schema_migrations">8.3. Database schema migrations</h3>
-<div class="paragraph">
-<p><em>&lt;explanation&gt;</em></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_event_api_structure">8.4. Event API structure</h3>
+<h3 id="_event_api_structure">5.1. Event API structure</h3>
 <div class="paragraph">
 <p>Event functionality is extracted in separate module. There are <code>event-service-xs2a-api</code> and <code>event-service-aspsp-api</code> services are presented.
-Currently event module is a part of CMS and connects with XS2A using REST API. All events are stored to the database.</p>
+Currently, event module is a part of CMS and connects with XS2A using REST API. All events are stored to the database.</p>
 </div>
 <div class="imageblock text-center">
 <div class="content">
 <img src="images/08_XS2A_HTTP_Event_Service.png" alt="Event workflow using HTTP">
 </div>
-<div class="title">Figure 9. Event workflow using HTTP</div>
+<div class="title">Figure 11. Event workflow using HTTP</div>
 </div>
 <div class="paragraph">
 <p>Event service is able to work without CMS. In this case event service is linked as maven dependency directly in XS2A.</p>
@@ -1127,17 +969,17 @@ Currently event module is a part of CMS and connects with XS2A using REST API. A
 <div class="content">
 <img src="images/08_XS2A_Embedded_Event_Service.png" alt="Event workflow embedded mode">
 </div>
-<div class="title">Figure 10. Event workflow embedded mode</div>
+<div class="title">Figure 12. Event workflow embedded mode</div>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-design-decisions">9. Design Decisions</h2>
+<h2 id="section-design-decisions">6. Design Decisions</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_aspsp_consent_data">9.1. ASPSP Consent Data</h3>
+<h3 id="_aspsp_consent_data">6.1. ASPSP Consent Data</h3>
 <div class="paragraph">
 <p>ASPSP Consent Data represents a holder for session information storage between synchronous unauthorised API requests.</p>
 </div>
@@ -1183,10 +1025,10 @@ It is a decision of SPI-Connector developer what to put into the ASPSP Consent D
 <div class="content">
 <img src="images/09_AspspConsentDataProvider.png" alt="AspspConsentDataProvider">
 </div>
-<div class="title">Figure 11. AspspConsentDataProvider</div>
+<div class="title">Figure 13. AspspConsentDataProvider</div>
 </div>
 <div class="sect3">
-<h4 id="_encryption_of_aspsp_consent_data">9.1.1. Encryption of ASPSP Consent Data</h4>
+<h4 id="_encryption_of_aspsp_consent_data">6.1.1. Encryption of ASPSP Consent Data</h4>
 <div class="paragraph">
 <p><strong>Problem:</strong>
 Since ASPSP Consent Data might contain important customer information or access data (logins, passwords, tokens etc.),
@@ -1224,7 +1066,7 @@ Consent ID and encryption key are concatenated and encrypted again with second s
 <div class="content">
 <img src="images/09_AspspConsentData_Encryption.png" alt="AspspConsentData Encryption">
 </div>
-<div class="title">Figure 12. AspspConsentData Encryption</div>
+<div class="title">Figure 14. AspspConsentData Encryption</div>
 </div>
 </div>
 <div class="sect4">
@@ -1236,8 +1078,95 @@ Consent ID and encryption key are concatenated and encrypted again with second s
 <div class="content">
 <img src="images/09_AspspConsentData_Decryption.png" alt="AspspConsentData Decryption">
 </div>
-<div class="title">Figure 13. AspspConsentData Decryption</div>
+<div class="title">Figure 15. AspspConsentData Decryption</div>
 </div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Stick to a Tech-Stack Commonly Found in Banks</dt>
+<dd>
+<p>We try to be conservative in our tech choice. To reduce friction we use technologies that our potential
+customers know and can handle.</p>
+<div class="paragraph">
+<p>Right now we use:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Base technologies:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Java 11</p>
+</li>
+<li>
+<p>Spring Boot, Spring Data, Spring WebMVC</p>
+</li>
+<li>
+<p>Hibernate</p>
+</li>
+<li>
+<p>Mapstruct</p>
+</li>
+<li>
+<p>Jackson</p>
+</li>
+<li>
+<p>Maven</p>
+</li>
+<li>
+<p>Gitlab/Github</p>
+</li>
+<li>
+<p>PostgreSQL</p>
+</li>
+<li>
+<p>Liquibase</p>
+</li>
+<li>
+<p>Lombok</p>
+</li>
+<li>
+<p>Postman</p>
+</li>
+<li>
+<p>Docker</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Tests:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Mockito</p>
+</li>
+<li>
+<p>AssertJ</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Other:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>PMD Checkstyle</p>
+</li>
+<li>
+<p>SonarLint</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div style="page-break-after: always;"></div>
+<div style="page-break-after: always;"></div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -1245,26 +1174,7 @@ Consent ID and encryption key are concatenated and encrypted again with second s
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-quality-scenarios">10. Quality Requirements</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_quality_tree">10.1. Quality Tree</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_quality_scenarios">10.2. Quality Scenarios</h3>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="section-technical-risks">11. Risks and Technical Debts</h2>
-<div class="sectionbody">
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="section-glossary">12. Glossary</h2>
+<h2 id="section-glossary">7. Glossary</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1305,7 +1215,7 @@ Consent ID and encryption key are concatenated and encrypted again with second s
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-01-18 13:01:26 UTC
+Last updated 2022-02-15 12:45:56 UTC
 </div>
 </div>
 </body>

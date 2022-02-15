@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="paragraph">
 <p>One of the main goals is to make this project adaptable to environment of customer.
-Therefore we provide a set of Java libraries dependent on spring framework.
+Therefore we provide a set of Java libraries dependent on Spring framework.
 The decision of the ways to include these libraries and how to deploy is on the integration project (SPI Development).</p>
 </div>
 <div class="paragraph">
@@ -458,22 +458,6 @@ The decision of the ways to include these libraries and how to deploy is on the 
 <img src="images/07_multiservice_deployment.png" alt="Multiservice deployment">
 </div>
 <div class="title">Figure 1. Multiservice deployment</div>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Motivation</dt>
-<dd>
-<p><em>&lt;explanation in text form&gt;</em></p>
-</dd>
-<dt class="hdlist1">Quality and/or Performance Features</dt>
-<dd>
-<p><em>&lt;explanation in text form&gt;</em></p>
-</dd>
-<dt class="hdlist1">Mapping of Building Blocks to Infrastructure</dt>
-<dd>
-<p><em>&lt;description of the mapping&gt;</em></p>
-</dd>
-</dl>
 </div>
 </div>
 <div class="sect2">
@@ -517,11 +501,35 @@ The decision of the ways to include these libraries and how to deploy is on the 
 </div>
 <div class="sect2">
 <h3 id="_infrastructure_level_1_multiple_instances_deployment_with_one_database">Infrastructure Level 1 - Multiple instances deployment with one database</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The number of instances is extendable, system supports horizontal scaling.
+</td>
+</tr>
+</table>
+</div>
 <div class="imageblock text-center">
 <div class="content">
-<img src="images/07_multiinstance_deployment.png" alt="Multiple instances deployment">
+<img src="images/07_multiinstance_embedded_deployment.png" alt="Multiple embedded instances deployment">
 </div>
-<div class="title">Figure 6. Multiple instances deployment</div>
+<div class="title">Figure 6. Multiple embedded instances deployment</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/07_multiinstance_single_aspsp_deployment.png" alt="Multiple instances deployment with single ASPSP profile">
+</div>
+<div class="title">Figure 7. Multiple instances deployment, single ASPSP profile</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/07_multiinstance_single_aspsp_and_multi_cms_deployment.png" alt="Multiple instances deployment with single ASPSP profile and CMS">
+</div>
+<div class="title">Figure 8. Multiple instances deployment, single ASPSP profile and CMS</div>
 </div>
 </div>
 </div>
@@ -529,7 +537,7 @@ The decision of the ways to include these libraries and how to deploy is on the 
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-01-18 13:01:26 UTC
+Last updated 2022-02-15 12:45:56 UTC
 </div>
 </div>
 </body>
